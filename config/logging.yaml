@@ -1,0 +1,46 @@
+version: 1
+disable_existing_loggers: False
+formatters:
+    simple:
+        format: '%(levelname)s:%(name)s:%(funcName)s() - %(message)s'
+    detail:
+        format: '[%(levelname)s: %(asctime)s - %(filename)s:%(lineno)s:%(name)s:%(funcName)s()]  - %(message)s'
+        datefmt: '%Y-%m-%d %H:%M:%S'
+    threadded:
+        format: '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+
+handlers:
+    console:
+        class: logging.StreamHandler
+        level: DEBUG
+        formatter: detail
+        stream: ext://sys.stdout
+
+    debug_file_handler:
+        class: logging.handlers.RotatingFileHandler
+        level: DEBUG
+        formatter: detail
+        filename: log/{project_dir_name}.log
+        maxBytes: 10485760 # 10MB
+        backupCount: 20
+        encoding: utf8
+
+
+
+loggers:
+    main:
+        level: DEBUG
+        handlers: [console, debug_file_handler]
+        propagate: True
+
+    sqlalchemy.engine:
+        level: WARNING
+        handlers: [console, debug_file_handler]
+        propagate: True
+
+    sqlalchemy.orm:
+        level: WARNING
+        handlers: [console, debug_file_handler]
+        propagate: True
+
+
