@@ -8,7 +8,7 @@ from sqlalchemy.sql.functions import GenericFunction
 from sqlalchemy.types import Integer, String, UserDefinedType
 from sqlalchemy.event import listens_for
 from datetime import datetime
-from src.settings import DATABASE_URI,
+from src.settings import DATABASE_URI, LOGLEVEL
 import pandas as pd
 import logging
 
@@ -18,34 +18,11 @@ logger = logging.getLogger(__name__)
 # logging.getLogger('sqlalchemy.orm').setLevel(LOGLEVEL)
 
 
-class dbagent(object):
-
-    def __init__(self, dbname, tables: list = None):
-
-        self.engine = create_engine(DATABASE_URI+dbname)
-        self.factory = sessionmaker(bind=self.engine)
-        self.Session = scoped_session(self.factory)
-        self.s = self.Session()
-        self.meta = MetaData(bind = self.engine)
-        # if tables:
-        #     self.meta.reflect(only = tables, views = True)
-        # else:
-        #     self.meta.reflect(views = True)
-
-
-
-
-driftwood = dbagent(DRIFTWOOD)
-iwell = dbagent(IWELL)
-
-
-@listens_for(Table, "column_reflect")
-def column_reflect(inspector, table, column_info):
-    # set column.key = "attr_<lower_case_name>"
-    column_info['key'] = column_info['name'].lower()
-
-
-Base = declarative_base()
+db = create_engine(DATABASE_URI, logging_name = 'Production_Engine')
+metadata = MetaData(bind=db)
+session_factory = sessionmaker(bind=db)
+Session = scoped_session(session_factory)
+Base = declarative_base(bind=db)
 
 class Geometry(UserDefinedType):
 
@@ -91,6 +68,12 @@ class classproperty(object):
         self.f = f
     def __get__(self, obj, owner):
         return self.f(owner)
+
+
+# @listens_for(Table, "column_reflect")
+# def column_reflect(inspector, table, column_info):
+#     # set column.key = "attr_<lower_case_name>"
+#     column_info['key'] = column_info['name'].lower()
 
 class GenericTable(object):
 
@@ -169,6 +152,12 @@ class GenericTable(object):
     @classproperty
     def df(cls):
         query = cls.session.query(cls)
+        return pd.read_sql(query.statement, query.session.bind)
+
+    @classmethod
+    def head(cls, column_name: str = 'api14', order_by_name: str = 'priority', n:int = 100):
+        query = cls.session.query(getattr(cls, column_name)).order_by(getattr(cls, order_by_name).asc()).limit(n)
+
         return pd.read_sql(query.statement, query.session.bind)
 
     @classmethod
@@ -290,41 +279,25 @@ class GenericTable(object):
             logger.info(e)
             cls.session.rollback()
 
-class Flowback(GenericTable, Base):
-    """ Driftwood.dbo.flowback"""
-    __table_args__ = {'autoload': True,
-                      'autoload_with': driftwood.engine,
-                      'schema': 'dbo'
-                      }
-    __tablename__ = 'flowback'
-    s = driftwood.Session()
-    id = Column('id', Integer, primary_key = True)
-    api14 = Column('api14')
-
-
-
-'boph', 'gas', 'bwph',
-
-class Production(GenericTable, Base):
-    """ iWell.dbo.DEO_PRODUCTION_DAILY"""
-    __table_args__ = {'autoload': True,
-                      'autoload_with': iwell.engine,
-                      'schema': 'dbo',
-                      }
-
-    __tablename__ = 'DEO_PRODUCTION_DAILY'
-    s = iwell.Session()
-    id = Column('production_id', Integer, primary_key = True)
-
-
-
+class Queue(GenericTable, Base):
+    """ Production_Engine.dbo.well_priority_queue"""
+    __table_args__ = {'autoload': True}
+    __tablename__ = 'well_priority_queue'
+    api14 = Column('api14', Integer, primary_key=True)
+    session = Session()
 
 
 if __name__ == "__main__":
-    pass
+    from datetime import datetime
 
-    print(Production.cnames())
-    print(Flowback.cnames())
+    dt = datetime.strptime('2018-12-01', '%Y-%m-%d')
+
+    Queue.records_updated_since(dt)
+    Queue.get_last_update()
+
+    api14 = 'api14'
+    order_by = 'priority'
+
 
 
 
