@@ -26,9 +26,23 @@
 
 
 
-QUEUE_SIZE = 3
+QUEUE_SIZE = 1000
+CONCURRENCY = 100
 
-ROOT = '\\\\desktop-dellxps\\c$\\Users\\svc-auto\\Desktop\\Release-BF'
+ROOT = '\\\\desktop-dellxps\\c$\\Users\\svc-auto\\Desktop\\'
+
+def alternator():
+    """Infinite generator to alternate between endpoints.
+    """
+
+    toggle = True
+    while True:
+        if toggle:
+            toggle = not toggle
+            yield 'Release-BF'
+        else:
+            toggle = not toggle
+            yield 'Release-MF'
 
 
 from itertools import islice
@@ -36,48 +50,79 @@ import asyncio
 from src.tables import Queue
 from random import randint
 from subprocess import call
+import concurrent.futures
+import functools
 
-async def mycoro(number, api):
-    print(f"Starting {api} ({number})")
-    await asyncio.sleep(0)
-    c = call(['powershell.exe', 'scripts/run', ROOT, api])
+alt = alternator()
+
+
+async def run_command(api):
+
+    loop = asyncio.get_running_loop()
+
+    with concurrent.futures.ProcessPoolExecutor() as pool:
+        result = await loop.run_in_executor(pool,
+            functools.partial(call, ['powershell.exe', 'scripts/run', ROOT+next(alt), api])
+            # call(['powershell.exe', 'scripts/run', ROOT+next(alt), api])
+            )
+        return f"{api} ({result})"
+
+async def mycoro(api):
+    print(f"Starting {api}")
+    # await asyncio.sleep(0)
+
+    c = await run_command(api)
+    # c = await run_command('powershell.exe', 'scripts/run', ROOT+next(alt), api)
         # print(f"Finishing {api} ({number})")
-    return f"{api} ({number}) [{c}]"
+    return f"{api} ({c})"
 
 
 
 def wells_from_queue(n: int = 100):
 
+    # loop = asyncio.get_running_loop()
+    # print('Getting new wells.')
+    # func = lambda n: list(Queue.head(n = n).api14.values)
+
+    # with concurrent.futures.ProcessPoolExecutor() as pool:
+        # result = await loop.run_in_executor(pool, functools.partial(func, n))
+    # result = func(n)
+
     return list(Queue.head(n = n).api14.values)
 
+# asyncio.BaseEventLoop.run
+
+def corogen():
+
+    queue = wells_from_queue(QUEUE_SIZE)
+
+    while len(queue) > 0:
+
+        if len(queue) < QUEUE_SIZE/2:
+                queue +=  wells_from_queue(QUEUE_SIZE - len(queue))
+
+
+        print(f'Queue size: {len(queue)-1}')
+        yield mycoro(queue.pop(0))
 
 
 
-async def wells_to_coros(wells: list):
-        return [mycoro(i, x) for i, x in enumerate(wells)]
+def wells_to_coros(wells: list):
+        return [mycoro(x) for x in enumerate(wells)]
 
 def add_coros(coros, limit: int = None):
+
     return [
                 asyncio.ensure_future(c)
                 for c in islice(coros, 0, limit or QUEUE_SIZE)
             ]
 
 def limited_as_completed(coros, limit):
+
     futures = add_coros(coros, limit)
-    # [
-    #     asyncio.ensure_future(c)
-    #     for c in islice(coros, 0, limit)
-    # ]
+
     async def first_to_finish():
         while True:
-            if len(futures) < QUEUE_SIZE:
-                pass
-                #! Re-enable
-                # print(f'futures length: {len(futures)}')
-                # coros.append( await wells_to_coros(wells_from_queue(n = QUEUE_SIZE - len(futures))))
-                # print(new)
-                # await futures.append(add_coros(new))
-            # else:
             await asyncio.sleep(0) #! How exactly does this make the routine keep going?
             for f in futures:
                 if f.done():
@@ -94,15 +139,16 @@ def limited_as_completed(coros, limit):
         yield first_to_finish()
 
 
-async def print_when_done(tasks):
-    for res in limited_as_completed(tasks, 3):
+async def print_when_done(tasks, concurrency):
+    for res in limited_as_completed(tasks, concurrency):
         print("Result %s" % await res)
 
 
-coros = (mycoro(randint(1, 10), x) for i, x in enumerate(wells_from_queue(n = 100)))
+# coros = (mycoro(api) for api in wells_from_queue(n = 15))
+coros = corogen()
 
 loop = asyncio.get_event_loop()
 
-loop.run_until_complete(print_when_done(coros))
+loop.run_until_complete(print_when_done(coros, CONCURRENCY))
 
 # loop.close()

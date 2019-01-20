@@ -17,7 +17,7 @@ logger.info(f'Sentry configured: {__release__}')
 
 
 try:
-    src.conductor.send_production_updates()
+    # src.conductor.send_production_updates()
 
 except Exception as e:
     logger.exception(f'{__project__} exited abnormally. -- Error: {e}')
