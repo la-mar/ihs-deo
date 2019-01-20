@@ -156,7 +156,7 @@ class GenericTable(object):
 
     @classmethod
     def head(cls, column_name: str = 'api14', order_by_name: str = 'priority', n:int = 100):
-        query = cls.session.query(getattr(cls, column_name)).order_by(getattr(cls, order_by_name).asc()).limit(n)
+        query = cls.session.query(getattr(cls, column_name)).filter(getattr(cls, order_by_name) > 0).order_by(getattr(cls, order_by_name).asc()).limit(n)
 
         return pd.read_sql(query.statement, query.session.bind)
 

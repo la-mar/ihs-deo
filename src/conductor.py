@@ -29,7 +29,7 @@
 QUEUE_SIZE = 1000
 CONCURRENCY = 100
 
-ROOT = '\\\\desktop-dellxps\\c$\\Users\\svc-auto\\Desktop\\'
+ROOT = 'C:\\Users\\svc-auto\\Desktop\\'
 
 def alternator():
     """Infinite generator to alternate between endpoints.
