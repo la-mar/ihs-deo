@@ -26,8 +26,8 @@
 
 
 
-QUEUE_SIZE = 1000
-CONCURRENCY = 100
+QUEUE_SIZE = 50
+CONCURRENCY = 25
 
 ROOT = 'C:\\Users\\svc-auto\\Desktop\\'
 
@@ -99,7 +99,7 @@ def corogen():
     while len(queue) > 0:
 
         if len(queue) < QUEUE_SIZE/2:
-                queue +=  wells_from_queue(QUEUE_SIZE - len(queue))
+                queue =  wells_from_queue(QUEUE_SIZE)
 
 
         print(f'Queue size: {len(queue)-1}')

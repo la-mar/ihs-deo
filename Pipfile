@@ -15,6 +15,7 @@ python-language-server = "*"
 SQLAlchemy = "*"
 sentry-sdk = "*"
 pylint = "*"
+pyyaml = "*"
 
 [requires]
 python_version = "3.7"

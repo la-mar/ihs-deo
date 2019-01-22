@@ -16,12 +16,15 @@ setup_sentry(SENTRY_KEY, release = f'{__release__}')
 logger.info(f'Sentry configured: {__release__}')
 
 
-try:
-    # src.conductor.send_production_updates()
-    import src.conductor
 
-except Exception as e:
-    logger.exception(f'{__project__} exited abnormally. -- Error: {e}')
+if __name__ == "__main__":
+
+    try:
+        # src.conductor.send_production_updates()
+        import src.conductor
+
+    except Exception as e:
+        logger.exception(f'{__project__} exited abnormally. -- Error: {e}')
 
 
-logger.info('Finished')
+    logger.info('Finished')
