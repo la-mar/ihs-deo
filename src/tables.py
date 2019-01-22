@@ -161,6 +161,12 @@ class GenericTable(object):
         return pd.read_sql(query.statement, query.session.bind)
 
     @classmethod
+    def head2(cls, column_name: str = 'api14', order_by_name: str = 'priority', n:int = 100):
+        query = cls.session.query(getattr(cls, column_name)).filter(getattr(cls, order_by_name) > 0).order_by(getattr(cls, order_by_name).desc()).limit(n)
+
+        return pd.read_sql(query.statement, query.session.bind)
+
+    @classmethod
     def get_session_state(cls, count=True) -> dict:
         if cls.session is not None:
             if count:
