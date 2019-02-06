@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Energy Web Services: US - Release 2018 v10 -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.ihsenergy.com/Enerdeq/Schemas/Session" elementFormDefault="qualified">
+	<!--Login():boolean-->
+	<xs:element name="LoginRequest">
+			<xs:complexType>
+			<xs:sequence/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="LoginResponse">
+			<xs:complexType>
+				<xs:sequence>
+					<xs:element name="Result" type="xs:boolean"/>
+				</xs:sequence>
+			</xs:complexType>
+	</xs:element>
+	<!--Logout():boolean-->
+	<xs:element name="LogoutRequest">
+		<xs:complexType>
+			<xs:sequence/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="LogoutResponse">
+		<xs:complexType>
+			<xs:sequence/>
+		</xs:complexType>
+	</xs:element>
+    <!--getEntitlements():Entitlements-->
+    <xs:element name="EntitlementRequest">
+        <xs:complexType>
+            <xs:sequence/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="EntitlementResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Result" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+	<xs:element name="LatLongEntitlementRequest">
+		<xs:complexType>
+			<xs:sequence/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="LatLongEntitlementResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Result" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

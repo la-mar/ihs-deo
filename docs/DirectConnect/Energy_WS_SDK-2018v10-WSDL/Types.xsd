@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Energy Web Services: US - Release 2018 v10 -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:t="http://www.ihsenergy.com/Enerdeq/Schemas/Types" targetNamespace="http://www.ihsenergy.com/Enerdeq/Schemas/Types" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<xs:annotation>
+		<xs:documentation>Enerdeq Web Services common types.</xs:documentation>
+	</xs:annotation>
+	<xs:complexType name="ArrayOfId">
+		<xs:sequence>
+			<xs:element name="Id" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="OverwriteType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="True"/>
+			<xs:enumeration value="False"/>
+			<xs:enumeration value="Append"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StatusType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Done"/>
+			<xs:enumeration value="Failed"/>
+			<xs:enumeration value="Waiting"/>
+			<xs:enumeration value="In Progress..."/>
+			<xs:enumeration value="Canceled"/>
+			<xs:enumeration value="No Data"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="MyFilesTarget">
+		<xs:sequence>
+			<xs:element name="Filename" type="xs:string"/>
+			<xs:element name="Overwrite" type="t:OverwriteType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ArrayOfStrings">
+		<xs:sequence>
+			<xs:element name="Item" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- Common Messages -->
+	<!--GetDomains():string[]-->
+	<xs:element name="GetDomainsRequest">
+		<xs:complexType>
+			<xs:sequence/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetDomainsResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Domains" type="t:ArrayOfStrings"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--GetDatatypes(Domain:string):string[]-->
+	<xs:element name="GetDatatypesRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Domain" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetDatatypesResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Datatypes" type="t:ArrayOfStrings"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- IsComplete(JobID:string):boolean -->
+	<xs:element name="IsCompleteRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="JobID" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="IsCompleteResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Result" type="xs:boolean"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- Exists(JobID:string):boolean -->
+	<xs:element name="ExistsRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="JobID" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ExistsResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Result" type="xs:boolean"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="PagingResponse">
+		<xs:sequence>
+			<xs:element name="Page" type="xs:int"/>
+			<xs:element name="PageCount" type="xs:int"/>
+			<xs:element name="DefaultPageSize" type="xs:int"/>
+			<xs:element name="Pages" type="xs:int"/>
+			<xs:element name="TotalCount" type="xs:int"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

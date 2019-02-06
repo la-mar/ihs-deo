@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Energy Web Services: US - Release 2018 v10 -->
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:h="http://www.ihsenergy.com/Enerdeq/Schemas/Header" xmlns:gb="http://www.ihsenergy.com/Enerdeq/Schemas/GraphBuilder" xmlns:t="http://www.ihsenergy.com/Enerdeq/Schemas/Types" targetNamespace="http://www.ihsenergy.com/Enerdeq/Schemas/GraphBuilder">
+	<types>
+		<xs:schema>
+			<xs:import namespace="http://www.ihsenergy.com/Enerdeq/Schemas/Header" schemaLocation="Header.xsd"/>
+			<xs:import namespace="http://www.ihsenergy.com/Enerdeq/Schemas/GraphBuilder" schemaLocation="GraphBuilder.xsd"/>
+			<xs:import namespace="http://www.ihsenergy.com/Enerdeq/Schemas/Types" schemaLocation="Types.xsd"/>
+		</xs:schema>
+	</types>
+	<message name="BuildGraphSoapIn">
+		<part name="parameters" element="gb:BuildGraphRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="BuildGraphFromQuerySoapIn">
+		<part name="parameters" element="gb:BuildGraphFromQueryRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="BuildGraphSoapOut">
+		<part name="result" element="gb:BuildGraphResponse"/>
+	</message>
+	<message name="DeleteGraphSoapIn">
+		<part name="parameters" element="gb:DeleteGraphRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="DeleteGraphSoapOut">
+		<part name="result" element="gb:DeleteGraphResponse"/>
+	</message>
+	<message name="GetCompleteGraphsSoapIn">
+		<part name="parameters" element="gb:GetCompleteGraphsRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="GetCompleteGraphsSoapOut">
+		<part name="result" element="gb:GetCompleteGraphsResponse"/>
+	</message>
+	<message name="GetDatatypesSoapIn">
+		<part name="parameters" element="t:GetDatatypesRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="GetDatatypesSoapOut">
+		<part name="result" element="t:GetDatatypesResponse"/>
+	</message>
+	<message name="GetDomainsSoapIn">
+		<part name="parameters" element="t:GetDomainsRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="GetDomainsSoapOut">
+		<part name="result" element="t:GetDomainsResponse"/>
+	</message>
+	<message name="GetGraphStatusSoapIn">
+		<part name="parameters" element="gb:GetGraphStatusRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="GetGraphStatusSoapOut">
+		<part name="result" element="gb:GetGraphStatusResponse"/>
+	</message>
+	<message name="IsCompleteSoapIn">
+		<part name="parameters" element="t:IsCompleteRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="IsCompleteSoapOut">
+		<part name="result" element="t:IsCompleteResponse"/>
+	</message>
+	<message name="ExistsSoapIn">
+		<part name="parameters" element="t:ExistsRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="ExistsSoapOut">
+		<part name="result" element="t:ExistsResponse"/>
+	</message>
+	<message name="GetGraphTemplatesSoapIn">
+		<part name="parameters" element="gb:GetGraphTemplatesRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="GetGraphTemplatesSoapOut">
+		<part name="result" element="gb:GetGraphTemplatesResponse"/>
+	</message>
+	<message name="GetImageFormatsSoapIn">
+		<part name="parameters" element="gb:GetImageFormatsRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="GetImageFormatsSoapOut">
+		<part name="result" element="gb:GetImageFormatsResponse"/>
+	</message>
+	<message name="RetrieveGraphSoapIn">
+		<part name="parameters" element="gb:RetrieveGraphRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="RetrieveGraphSoapOut">
+		<part name="result" element="gb:RetrieveGraphResponse"/>
+	</message>
+	<portType name="GraphBuilderServiceSoap">
+		<operation name="BuildGraph">
+			<documentation>Returns the JobID corresponding for the given Graph parameters.</documentation>
+			<input message="gb:BuildGraphSoapIn"/>
+			<output message="gb:BuildGraphSoapOut"/>
+		</operation>
+		<operation name="BuildGraphFromQuery">
+			<documentation>Returns the JobID corresponding for the given Graph parameters.</documentation>
+			<input message="gb:BuildGraphFromQuerySoapIn"/>
+			<output message="gb:BuildGraphSoapOut"/>
+		</operation>
+		<operation name="DeleteGraph">
+			<documentation>Deletes the file corresponding to the specified JobID. This operation returns the status of the request.</documentation>
+			<input message="gb:DeleteGraphSoapIn"/>
+			<output message="gb:DeleteGraphSoapOut"/>
+		</operation>
+		<operation name="GetCompleteGraphs">
+			<documentation>Returns an array consisting of the names of completed graphs .</documentation>
+			<input message="gb:GetCompleteGraphsSoapIn"/>
+			<output message="gb:GetCompleteGraphsSoapOut"/>
+		</operation>
+		<operation name="GetDatatypes">
+			<documentation>Returns an array of datatypes supported by the specified domain.</documentation>
+			<input message="gb:GetDatatypesSoapIn"/>
+			<output message="gb:GetDatatypesSoapOut"/>
+		</operation>
+		<operation name="GetDomains">
+			<documentation>Returns an array of dmains supported by the graph service.</documentation>
+			<input message="gb:GetDomainsSoapIn"/>
+			<output message="gb:GetDomainsSoapOut"/>
+		</operation>
+		<operation name="GetGraphStatus">
+			<documentation>Returns the status for the given JobID.</documentation>
+			<input message="gb:GetGraphStatusSoapIn"/>
+			<output message="gb:GetGraphStatusSoapOut"/>
+		</operation>
+		<operation name="IsComplete">
+			<documentation>Return the status for the given JobID.</documentation>
+			<input message="gb:IsCompleteSoapIn"/>
+			<output message="gb:IsCompleteSoapOut"/>
+		</operation>
+		<operation name="Exists">
+			<documentation>Return the status for the given JobID.</documentation>
+			<input message="gb:ExistsSoapIn"/>
+			<output message="gb:ExistsSoapOut"/>
+		</operation>
+		<operation name="GetGraphTemplates">
+			<documentation>Returns an array of the available Graph Templates for the given domain and datatype.</documentation>
+			<input message="gb:GetGraphTemplatesSoapIn"/>
+			<output message="gb:GetGraphTemplatesSoapOut"/>
+		</operation>
+		<operation name="GetImageFormats">
+			<documentation>Returns supported images formats.</documentation>
+			<input message="gb:GetImageFormatsSoapIn"/>
+			<output message="gb:GetImageFormatsSoapOut"/>
+		</operation>
+		<operation name="RetrieveGraph">
+			<documentation>Returns the specified Graph in the form of a bytearray.</documentation>
+			<input message="gb:RetrieveGraphSoapIn"/>
+			<output message="gb:RetrieveGraphSoapOut"/>
+		</operation>
+	</portType>
+	<binding name="GraphBuilderServiceSoap" type="gb:GraphBuilderServiceSoap">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="BuildGraph">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/GraphBuilder/BuildGraph" style="document"/>
+			<input>
+				<soap:header message="gb:BuildGraphSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="BuildGraphFromQuery">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/GraphBuilder/BuildGraphFromQuery" style="document"/>
+			<input>
+				<soap:header message="gb:BuildGraphFromQuerySoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="DeleteGraph">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/GraphBuilder/DeleteGraph" style="document"/>
+			<input>
+				<soap:header message="gb:DeleteGraphSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetCompleteGraphs">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/GraphBuilder/GetCompleteGraphs" style="document"/>
+			<input>
+				<soap:header message="gb:GetCompleteGraphsSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetDatatypes">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/GraphBuilder/GetDatatypes" style="document"/>
+			<input>
+				<soap:header message="gb:GetDatatypesSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetDomains">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/GraphBuilder/GetDomains" style="document"/>
+			<input>
+				<soap:header message="gb:GetDomainsSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetGraphStatus">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/GraphBuilder/GetGraphStatus" style="document"/>
+			<input>
+				<soap:header message="gb:GetGraphStatusSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="IsComplete">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/GraphBuilder/IsComplete" style="document"/>
+			<input>
+				<soap:header message="gb:IsCompleteSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="Exists">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/GraphBuilder/Exists" style="document"/>
+			<input>
+				<soap:header message="gb:ExistsSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetGraphTemplates">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/GraphBuilder/GetGraphTemplates" style="document"/>
+			<input>
+				<soap:header message="gb:GetGraphTemplatesSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetImageFormats">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/GraphBuilder/GetImageFormats" style="document"/>
+			<input>
+				<soap:header message="gb:GetImageFormatsSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="RetrieveGraph">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/GraphBuilder/RetrieveGraph" style="document"/>
+			<input>
+				<soap:header message="gb:RetrieveGraphSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="GraphBuilderService">
+		<port name="GraphBuilderServiceSoap" binding="gb:GraphBuilderServiceSoap">
+			<soap:address location="https://webservices.ihsenergy.com/WebServices/GraphBuilder"/>
+		</port>
+	</service>
+</definitions>

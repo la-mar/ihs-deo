@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PublishUrlHistory>publish\</PublishUrlHistory>
+    <InstallUrlHistory />
+    <SupportUrlHistory />
+    <UpdateUrlHistory />
+    <BootstrapperUrlHistory />
+    <ErrorReportUrlHistory />
+    <FallbackCulture>en-US</FallbackCulture>
+    <VerifyUploadedFiles>false</VerifyUploadedFiles>
+    <ProjectView>ProjectFiles</ProjectView>
+  </PropertyGroup>
+  <PropertyGroup>
+    <EnableSecurityDebugging>false</EnableSecurityDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <StartArguments>
+    </StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <StartArguments>IHS.EnergyWebServices.ExportFromQuerySample.exe  -u gayani.gupta%40ihsmarkit.com -p Shiven%401978 -n "&lt;EXPORT&gt;&lt;TEXTUAL_EXPORTS&gt;&lt;WELL_XML INCLUDE_IHS_TOPS=%27TRUE%27 INCLUDE_SUBSCRIBED_LATLONG_SOURCES=%27TRUE%27 INCLUDE_PRODFIT=%27TRUE%27/&gt;&lt;/TEXTUAL_EXPORTS&gt;&lt;/EXPORT&gt;" -q "Test_Export" -f "Comma Separated" -d "Well" -l "https://webservices.ihsenergy.com/WebServices/" -m "US" -v</StartArguments>
+    <StartAction>Project</StartAction>
+  </PropertyGroup>
+</Project>

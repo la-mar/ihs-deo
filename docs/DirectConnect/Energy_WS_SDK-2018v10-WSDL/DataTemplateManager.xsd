@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Energy Web Services: US - Release 2018 v10 -->
+<xs:schema xmlns:t="http://www.ihsenergy.com/Enerdeq/Schemas/Types" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://www.ihsenergy.com/Enerdeq/Schemas/DataTemplateManager" elementFormDefault="qualified"
+           attributeFormDefault="unqualified" version="1.0">
+	<xs:import namespace="http://www.ihsenergy.com/Enerdeq/Schemas/Types" schemaLocation="Types.xsd"/>
+	<!-- SaveTemplate(string name, string templateXml) : string -->
+	<xs:element name="SaveTemplateRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="TemplateXML" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SaveTemplateResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Result" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- DeleteTemplate(string name) : string -->
+	<xs:element name="DeleteTemplateRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="TemplateName" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DeleteTemplateResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Result" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- GetTemplates(string domain, string datatype) : string[] -->
+	<xs:element name="GetTemplatesRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Domain" type="xs:string"/>
+				<xs:element name="Datatype" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- GetStandardTemplates(string domain, string datatype) : string[] -->
+	<xs:element name="GetStandardTemplatesRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Domain" type="xs:string"/>
+				<xs:element name="Datatype" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- GetCustomTemplates(string domain, string datatype) : string[] -->
+	<xs:element name="GetCustomTemplatesRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Domain" type="xs:string" />
+				<xs:element name="Datatype" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetTemplatesResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Templates" type="t:ArrayOfStrings"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- GetTemplateDefinition(string name) : string -->
+	<xs:element name="GetTemplateDefinitionRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="TemplateName" type="xs:string" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetTemplateDefinitionResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="TemplateXml" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- GetFileTypes() : string [] -->
+	<xs:element name="GetFileTypesRequest">
+		<xs:complexType>
+			<xs:sequence/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetFileTypesResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="FileTypes" type="t:ArrayOfStrings"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
