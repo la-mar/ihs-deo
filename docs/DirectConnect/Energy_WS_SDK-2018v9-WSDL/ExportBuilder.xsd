@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Energy Web Services: US Edition - Release 2018 v9 -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:eb="http://www.ihsenergy.com/Enerdeq/Schemas/ExportBuilder" xmlns:t="http://www.ihsenergy.com/Enerdeq/Schemas/Types" targetNamespace="http://www.ihsenergy.com/Enerdeq/Schemas/ExportBuilder" elementFormDefault="qualified">
+	<xs:import namespace="http://www.ihsenergy.com/Enerdeq/Schemas/Types" schemaLocation="Types.xsd"/>
+	<!-- BuildExport(parameters:ExportParameters, target:MyFilesTarget) : string -->
+	<xs:element name="BuildExportRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Parameters" type="eb:ExportParameters"/>
+				<xs:element name="Target" type="t:MyFilesTarget"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="ExportParameters">
+		<xs:sequence>
+			<xs:element name="Domain" type="xs:string"/>
+			<xs:element name="DataType" type="xs:string"/>
+			<xs:element name="Template" type="xs:string"/>
+			<xs:element name="Ids" type="t:ArrayOfId"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- BuildExportFromQuery(parameters:ExportParameters, target:MyFilesTarget) : string -->
+	<xs:element name="BuildExportFromQueryRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Parameters" type="eb:ExportParameters2"/>
+				<xs:element name="Target" type="t:MyFilesTarget"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="ExportParameters2">
+		<xs:sequence>
+			<xs:element name="Domain" type="xs:string"/>
+			<xs:element name="DataType" type="xs:string"/>
+			<xs:element name="Template" type="xs:string"/>
+			<xs:element name="Query" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="BuildSpatialExportRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Parameters" type="eb:SpatialExportParameters"/>
+				<xs:element name="Target" type="t:MyFilesTarget"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="SpatialExportParameters">
+		<xs:sequence>
+			<xs:element name="LatMin" type="xs:double"/>
+			<xs:element name="LatMax" type="xs:double"/>
+			<xs:element name="LongMin" type="xs:double"/>
+			<xs:element name="LongMax" type="xs:double"/>
+			<xs:element name="Layers" type="t:ArrayOfStrings"/>
+            <xs:element name="Format" type="xs:string" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="BuildExportResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="JobID" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+    <!--GetSpatialExportFormats():string[]-->
+    <xs:element name="GetSpatialExportFormatsRequest">
+        <xs:complexType>
+            <xs:sequence/>
+        </xs:complexType>
+	</xs:element>
+    <xs:element name="GetSpatialExportFormatsResponse">
+		<xs:complexType>
+			<xs:sequence>
+                <xs:element name="Formats" type="t:ArrayOfStrings"/>
+			</xs:sequence>
+		</xs:complexType>
+    </xs:element>
+    <!--GetExportTemplates(Domain:string, DataType:string):string[]-->
+    <xs:element name="GetExportTemplatesRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Domain" type="xs:string"/>
+                <xs:element name="DataType" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="GetExportTemplatesResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Templates" type="t:ArrayOfStrings"/>
+            </xs:sequence>
+        </xs:complexType>
+	</xs:element>
+	<!-- GetExportStatus(JobID:string):string -->
+	<xs:element name="GetExportStatusRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="JobID" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetExportStatusResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Status" type="t:StatusType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- RetrieveExport(JobID:string):byte[] -->
+	<xs:element name="RetrieveExportRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="JobID" type="xs:string"/>
+				<xs:element name="Compress" type="xs:boolean" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="RetrieveExportResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ByteArray" type="xs:base64Binary"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- DeleteExport(JobID:string):boolean -->
+	<xs:element name="DeleteExportRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="JobID" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DeleteExportResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Result" type="xs:boolean"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--GetCompleteExports():string[]-->
+	<xs:element name="GetCompleteExportsRequest">
+		<xs:complexType>
+			<xs:sequence/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetCompleteExportsResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ExportNames" type="t:ArrayOfStrings"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--GetLayers():string[]-->
+	<xs:element name="GetLayersRequest">
+		<xs:complexType>
+			<xs:sequence/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetLayersResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Layers" type="t:ArrayOfStrings"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+    <!-- BuildOnelineExport(parameters: OnelineExportParameters, target:MyFilesTarget) : string -->
+    <xs:element name="BuildOnelineExportRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Parameters" type="eb:OnelineExportParameters"/>
+				<xs:element name="Target" type="t:MyFilesTarget"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="BuildProdSummaryReportRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Parameters" type="eb:OnelineExportParameters"/>
+				<xs:element name="Target" type="t:MyFilesTarget"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="OnelineExportParameters">
+		<xs:sequence>
+			<xs:element name="Domain" type="xs:string"/>
+			<xs:element name="DataType" type="xs:string"/>
+			<xs:element name="Ids" type="t:ArrayOfId"/>
+            <xs:element name="Template" type="xs:string"/>
+            <xs:element name="FileType" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name="BuildOnelineExportFromQueryRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Parameters" type="eb:OnelineExportParameters2"/>
+				<xs:element name="Target" type="t:MyFilesTarget"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="BuildProdSummaryFromQueryRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Parameters" type="eb:OnelineExportParameters2"/>
+				<xs:element name="Target" type="t:MyFilesTarget"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="OnelineExportParameters2">
+		<xs:sequence>
+			<xs:element name="Query" type="xs:string"/>
+			<xs:element name="Template" type="xs:string"/>
+            <xs:element name="FileType" type="xs:string"/>
+			<xs:element name="Domain" type="xs:string" minOccurs="0"/>
+
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>

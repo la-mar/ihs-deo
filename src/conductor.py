@@ -26,8 +26,8 @@
 
 
 
-QUEUE_SIZE = 50
-CONCURRENCY = 25
+QUEUE_SIZE = 100
+CONCURRENCY = 50
 
 ROOT = 'C:\\Users\\svc-auto\\Desktop\\'
 
@@ -88,7 +88,7 @@ def wells_from_queue(n: int = 100):
         # result = await loop.run_in_executor(pool, functools.partial(func, n))
     # result = func(n)
 
-    return list(Queue.head(n = n).api14.values)
+    return list(Queue.head2(n = n, order_by_name = 'days_since_last_update').api14.values)
 
 # asyncio.BaseEventLoop.run
 
