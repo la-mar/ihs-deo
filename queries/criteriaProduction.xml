@@ -1,0 +1,12 @@
+﻿<criterias>
+  <criteria type="value">
+    <domain>US</domain>
+    <datatype>Production Allocated</datatype>
+    <attribute_group>Location</attribute_group>
+    <attribute>Basin</attribute>
+    <type>name</type>
+    <filter logic="equals">
+      <value  actual="PERMIAN BASIN"/>
+    </filter>
+  </criteria>
+</criterias>
