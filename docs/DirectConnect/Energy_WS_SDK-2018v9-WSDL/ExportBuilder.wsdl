@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Energy Web Services: US Edition - Release 2018 v9 -->
+<definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+             xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:h="http://www.ihsenergy.com/Enerdeq/Schemas/Header"
+             xmlns:eb="http://www.ihsenergy.com/Enerdeq/Schemas/ExportBuilder"
+             xmlns:t="http://www.ihsenergy.com/Enerdeq/Schemas/Types" xmlns="http://schemas.xmlsoap.org/wsdl/"
+             targetNamespace="http://www.ihsenergy.com/Enerdeq/Schemas/ExportBuilder">
+	<types>
+		<xs:schema>
+			<xs:import namespace="http://www.ihsenergy.com/Enerdeq/Schemas/Header" schemaLocation="Header.xsd"/>
+			<xs:import namespace="http://www.ihsenergy.com/Enerdeq/Schemas/ExportBuilder" schemaLocation="ExportBuilder.xsd"/>
+			<xs:import namespace="http://www.ihsenergy.com/Enerdeq/Schemas/Types" schemaLocation="Types.xsd"/>
+		</xs:schema>
+	</types>
+	<message name="BuildExportSoapIn">
+		<part name="parameters" element="eb:BuildExportRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="BuildExportFromQuerySoapIn">
+		<part name="parameters" element="eb:BuildExportFromQueryRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="BuildSpatialExportSoapIn">
+		<part name="parameters" element="eb:BuildSpatialExportRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="BuildExportSoapOut">
+		<part name="result" element="eb:BuildExportResponse"/>
+	</message>
+	<message name="DeleteExportSoapIn">
+		<part name="parameters" element="eb:DeleteExportRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="DeleteExportSoapOut">
+		<part name="result" element="eb:DeleteExportResponse"/>
+	</message>
+	<message name="GetCompleteExportsSoapIn">
+		<part name="parameters" element="eb:GetCompleteExportsRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="GetCompleteExportsSoapOut">
+		<part name="result" element="eb:GetCompleteExportsResponse"/>
+	</message>
+	<message name="GetDatatypesSoapIn">
+		<part name="parameters" element="t:GetDatatypesRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="GetDatatypesSoapOut">
+		<part name="result" element="t:GetDatatypesResponse"/>
+	</message>
+	<message name="GetDomainsSoapIn">
+		<part name="parameters" element="t:GetDomainsRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="GetDomainsSoapOut">
+		<part name="result" element="t:GetDomainsResponse"/>
+	</message>
+    <message name="GetSpatialExportFormatsSoapIn">
+        <part name="parameters" element="eb:GetSpatialExportFormatsRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+    <message name="GetSpatialExportFormatsSoapOut">
+        <part name="result" element="eb:GetSpatialExportFormatsResponse"/>
+	</message>
+    <message name="GetExportTemplatesSoapIn">
+        <part name="parameters" element="eb:GetExportTemplatesRequest"/>
+        <part name="request_header" element="h:Header"/>
+    </message>
+    <message name="GetExportTemplatesSoapOut">
+        <part name="result" element="eb:GetExportTemplatesResponse"/>
+    </message>
+	<message name="GetExportStatusSoapIn">
+		<part name="parameters" element="eb:GetExportStatusRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="GetExportStatusSoapOut">
+		<part name="result" element="eb:GetExportStatusResponse"/>
+	</message>
+	<message name="IsCompleteSoapIn">
+		<part name="parameters" element="t:IsCompleteRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="IsCompleteSoapOut">
+		<part name="result" element="t:IsCompleteResponse"/>
+	</message>
+	<message name="ExistsSoapIn">
+		<part name="parameters" element="t:ExistsRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="ExistsSoapOut">
+		<part name="result" element="t:ExistsResponse"/>
+	</message>
+	<message name="RetrieveExportSoapIn">
+		<part name="parameters" element="eb:RetrieveExportRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="RetrieveExportSoapOut">
+		<part name="result" element="eb:RetrieveExportResponse"/>
+	</message>
+	<message name="GetLayersSoapIn">
+		<part name="parameters" element="eb:GetLayersRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="GetLayersSoapOut">
+		<part name="result" element="eb:GetLayersResponse"/>
+	</message>
+	<message name="BuildOnelineExportSoapIn">
+		<part name="parameters" element="eb:BuildOnelineExportRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="BuildOnelineExportFromQuerySoapIn">
+		<part name="parameters" element="eb:BuildOnelineExportFromQueryRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="BuildProdSummaryExportSoapIn">
+		<part name="parameters" element="eb:BuildProdSummaryReportRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="BuildProdSummaryExportFromQuerySoapIn">
+		<part name="parameters" element="eb:BuildProdSummaryFromQueryRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<portType name="ExportBuilderServiceSoap">
+		<operation name="BuildExport">
+			<documentation>Returns the JobID corresponding for the given Export parameters.</documentation>
+			<input message="eb:BuildExportSoapIn"/>
+			<output message="eb:BuildExportSoapOut"/>
+		</operation>
+		<operation name="BuildExportFromQuery">
+			<documentation>Returns the JobID corresponding for the given Export parameters.</documentation>
+			<input message="eb:BuildExportFromQuerySoapIn"/>
+			<output message="eb:BuildExportSoapOut"/>
+		</operation>
+		<operation name="BuildSpatialExport">
+			<input message="eb:BuildSpatialExportSoapIn"/>
+			<output message="eb:BuildExportSoapOut"/>
+		</operation>
+		<operation name="DeleteExport">
+			<documentation>Deletes the file corresponding to the specified JobID. This operation returns the status of the request.</documentation>
+			<input message="eb:DeleteExportSoapIn"/>
+			<output message="eb:DeleteExportSoapOut"/>
+		</operation>
+		<operation name="GetCompleteExports">
+			<documentation>Returns an array consisting of the names of completed exports .</documentation>
+			<input message="eb:GetCompleteExportsSoapIn"/>
+			<output message="eb:GetCompleteExportsSoapOut"/>
+		</operation>
+		<operation name="GetDatatypes">
+			<documentation>Returns an array of datatypes supported by the specified domain.</documentation>
+			<input message="eb:GetDatatypesSoapIn"/>
+			<output message="eb:GetDatatypesSoapOut"/>
+		</operation>
+		<operation name="GetDomains">
+			<documentation>Returns an array of dmains supported by the export service.</documentation>
+			<input message="eb:GetDomainsSoapIn"/>
+			<output message="eb:GetDomainsSoapOut"/>
+		</operation>
+		<operation name="GetExportStatus">
+			<documentation>Return the status for the given JobID.</documentation>
+			<input message="eb:GetExportStatusSoapIn"/>
+			<output message="eb:GetExportStatusSoapOut"/>
+		</operation>
+		<operation name="IsComplete">
+			<documentation>Return the status for the given JobID.</documentation>
+			<input message="eb:IsCompleteSoapIn"/>
+			<output message="eb:IsCompleteSoapOut"/>
+		</operation>
+		<operation name="Exists">
+			<documentation>Return the status for the given JobID.</documentation>
+			<input message="eb:ExistsSoapIn"/>
+			<output message="eb:ExistsSoapOut"/>
+		</operation>
+		<operation name="GetExportTemplates">
+			<documentation>Returns an array of the available Export Templates for the given domain and datatype.</documentation>
+			<input message="eb:GetExportTemplatesSoapIn"/>
+			<output message="eb:GetExportTemplatesSoapOut"/>
+		</operation>
+        <operation name="GetSpatialExportFormats">
+            <documentation>Returns an array of the available file formats for Spatial Export.</documentation>
+            <input message="eb:GetSpatialExportFormatsSoapIn"/>
+            <output message="eb:GetSpatialExportFormatsSoapOut"/>
+        </operation>
+		<operation name="RetrieveExport">
+			<documentation>Returns the specified Export in the form of a bytearray.</documentation>
+			<input message="eb:RetrieveExportSoapIn"/>
+			<output message="eb:RetrieveExportSoapOut"/>
+		</operation>
+		<operation name="GetLayers">
+			<documentation>Returns an array of Layers.</documentation>
+			<input message="eb:GetLayersSoapIn"/>
+			<output message="eb:GetLayersSoapOut"/>
+		</operation>
+		<operation name="BuildOnelineExport">
+			<documentation>Returns the JobID corresponding for the given Oneline Export parameters.</documentation>
+			<input message="eb:BuildOnelineExportSoapIn"/>
+			<output message="eb:BuildExportSoapOut"/>
+		</operation>
+		<operation name="BuildProdSummaryExport">
+			<documentation>Returns the JobID corresponding for the given Oneline Export parameters.</documentation>
+			<input message="eb:BuildProdSummaryExportSoapIn"/>
+			<output message="eb:BuildExportSoapOut"/>
+		</operation>
+		<operation name="BuildOnelineExportFromQuery">
+			<documentation>Returns the JobID corresponding for the given Oneline Export parameters.</documentation>
+			<input message="eb:BuildOnelineExportFromQuerySoapIn"/>
+			<output message="eb:BuildExportSoapOut"/>
+		</operation>
+		<operation name="BuildProdSummaryExportFromQuery">
+			<documentation>Returns the JobID corresponding for the given Oneline Export parameters.</documentation>
+			<input message="eb:BuildProdSummaryExportFromQuerySoapIn"/>
+			<output message="eb:BuildExportSoapOut"/>
+		</operation>
+	</portType>
+	<binding name="ExportBuilderServiceSoap" type="eb:ExportBuilderServiceSoap">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="BuildExport">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ExportBuilder/BuildExport" style="document"/>
+			<input>
+				<soap:header message="eb:BuildExportSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="BuildExportFromQuery">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ExportBuilder/BuildExportFromQuery" style="document"/>
+			<input>
+				<soap:header message="eb:BuildExportFromQuerySoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="BuildSpatialExport">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ExportBuilder/BuildSpatialExport" style="document"/>
+			<input>
+				<soap:header message="eb:BuildSpatialExportSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="DeleteExport">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ExportBuilder/DeleteExport" style="document"/>
+			<input>
+				<soap:header message="eb:DeleteExportSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetCompleteExports">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ExportBuilder/GetCompleteExports" style="document"/>
+			<input>
+				<soap:header message="eb:GetCompleteExportsSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetDatatypes">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ExportBuilder/GetDatatypes" style="document"/>
+			<input>
+				<soap:header message="eb:GetDatatypesSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetDomains">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ExportBuilder/GetDomains" style="document"/>
+			<input>
+				<soap:header message="eb:GetDomainsSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetExportStatus">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ExportBuilder/GetExportStatus" style="document"/>
+			<input>
+				<soap:header message="eb:GetExportStatusSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="IsComplete">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ExportBuilder/IsComplete" style="document"/>
+			<input>
+				<soap:header message="eb:IsCompleteSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="Exists">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ExportBuilder/Exists" style="document"/>
+			<input>
+				<soap:header message="eb:ExistsSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+        <operation name="GetSpatialExportFormats">
+            <soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ExportBuilder/GetSpatialExportFormats"
+                            style="document"/>
+            <input>
+                <soap:header message="eb:GetSpatialExportFormatsSoapIn" part="request_header" use="literal"/>
+                <soap:body parts="parameters" use="literal"/>
+            </input>
+            <output>
+                <soap:body parts="result" use="literal"/>
+            </output>
+        </operation>
+		<operation name="GetExportTemplates">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ExportBuilder/GetExportTemplates" style="document"/>
+			<input>
+				<soap:header message="eb:GetExportTemplatesSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="RetrieveExport">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ExportBuilder/RetrieveExport" style="document"/>
+			<input>
+				<soap:header message="eb:RetrieveExportSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetLayers">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ExportBuilder/GetLayers" style="document"/>
+			<input>
+				<soap:header message="eb:GetLayersSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="BuildOnelineExport">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ExportBuilder/BuildOnelineExport" style="document"/>
+			<input>
+				<soap:header message="eb:BuildOnelineExportSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="BuildProdSummaryExport">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ExportBuilder/BuildOnelineExport" style="document"/>
+			<input>
+				<soap:header message="eb:BuildProdSummaryExportSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="BuildOnelineExportFromQuery">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ExportBuilder/BuildOnelineExportFromQuery" style="document"/>
+			<input>
+				<soap:header message="eb:BuildOnelineExportFromQuerySoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="BuildProdSummaryExportFromQuery">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ExportBuilder/BuildOnelineExportFromQuery" style="document"/>
+			<input>
+				<soap:header message="eb:BuildProdSummaryExportFromQuerySoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="ExportBuilderService">
+		<port name="ExportBuilderServiceSoap" binding="eb:ExportBuilderServiceSoap">
+			<soap:address location="https://webservices.ihsenergy.com/WebServices/ExportBuilder"/>
+		</port>
+	</service>
+</definitions>

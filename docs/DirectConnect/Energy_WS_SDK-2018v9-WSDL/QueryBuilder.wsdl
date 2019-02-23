@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Energy Web Services: US - Release 2018 v9 -->
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+             xmlns:qb="http://www.ihsenergy.com/Enerdeq/Schemas/QueryBuilder"
+             xmlns:h="http://www.ihsenergy.com/Enerdeq/Schemas/Header"
+             targetNamespace="http://www.ihsenergy.com/Enerdeq/Schemas/QueryBuilder">
+	<types>
+		<xs:schema>
+			<xs:import namespace="http://www.ihsenergy.com/Enerdeq/Schemas/Header" schemaLocation="Header.xsd"/>
+			<xs:import namespace="http://www.ihsenergy.com/Enerdeq/Schemas/Types" schemaLocation="Types.xsd"/>
+			<xs:import namespace="http://www.ihsenergy.com/Enerdeq/Schemas/QueryBuilder" schemaLocation="QueryBuilder.xsd"/>
+		</xs:schema>
+	</types>
+	<message name="GetAttributesSoapIn">
+		<part name="parameter" element="qb:GetAttributesRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="GetAttributesSoapOut">
+		<part name="result" element="qb:GetAttributesResponse"/>
+	</message>
+	<message name="GetCountSoapIn">
+		<part name="parameter" element="qb:GetCountRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="GetCountSoapOut">
+		<part name="result" element="qb:GetCountResponse"/>
+	</message>
+	<message name="GetKeysSoapIn">
+		<part name="parameter" element="qb:GetKeysRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="GetKeysSoapOut">
+		<part name="result" element="qb:GetKeysResponse"/>
+	</message>
+	<message name="GetSavedQueriesSoapIn">
+		<part name="parameter" element="qb:GetSavedQueriesRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="GetSavedQueriesSoapOut">
+		<part name="result" element="qb:GetSavedQueriesResponse"/>
+	</message>
+	<message name="GetQueryDefinitionSoapIn">
+		<part name="parameter" element="qb:GetQueryDefinitionRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="GetQueryDefinitionSoapOut">
+		<part name="result" element="qb:GetQueryDefinitionResponse"/>
+	</message>
+	<message name="SaveQuerySoapIn">
+		<part name="parameter" element="qb:SaveQueryRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="SaveQuerySoapOut">
+		<part name="result" element="qb:SaveQueryResponse"/>
+	</message>
+	<message name="DeleteQuerySoapIn">
+		<part name="parameter" element="qb:DeleteQueryRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="DeleteQuerySoapOut">
+		<part name="result" element="qb:DeleteQueryResponse"/>
+	</message>
+	<message name="GetSQLSoapIn">
+		<part name="parameter" element="qb:GetSQLRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="GetSQLSoapOut">
+		<part name="result" element="qb:GetSQLResponse"/>
+	</message>
+	<message name="GetEntityTypeSoapIn">
+		<part name="parameter" element="qb:GetEntityTypeRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="GetEntityTypeSoapOut">
+		<part name="result" element="qb:GetEntityTypeResponse"/>
+	</message>
+	<message name="LookupAttributesSoapIn">
+		<part name="parameter" element="qb:LookupAttributesRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="LookupAttributesSoapOut">
+		<part name="result" element="qb:LookupAttributesResponse"/>
+	</message>
+	<message name="LookupNameSoapIn">
+		<part name="parameter" element="qb:LookupNameRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="LookupNameSoapOut">
+		<part name="result" element="qb:LookupNameResponse"/>
+	</message>
+	<message name="LookupCodeSoapIn">
+		<part name="parameter" element="qb:LookupCodeRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="LookupCodeSoapOut">
+		<part name="result" element="qb:LookupCodeResponse"/>
+	</message>
+	<message name="LookupNameCodeSoapIn">
+		<part name="parameter" element="qb:LookupNameCodeRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="LookupNameCodeSoapOut">
+		<part name="result" element="qb:LookupNameCodeResponse"/>
+	</message>
+	<message name="LookupStateCountySoapIn">
+		<part name="parameter" element="qb:LookupStateCountyRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="LookupStateCountySoapOut">
+		<part name="result" element="qb:LookupStateCountyResponse"/>
+	</message>
+	<message name="GetAttributesFaultMessage">
+		<part name="fault" element="qb:QueryBuilderFault"/>
+	</message>
+	<message name="GetProductionEntityAttributesSoapIn">
+		<part name="parameter" element="qb:GetProductionEntityAttributesRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="GetProductionEntityAttributesSoapOut">
+		<part name="result" element="qb:GetProductionEntityAttributesResponse"/>
+	</message>
+	<message name="GetChangesAndDeletesSoapIn">
+		<part name="parameter" element="qb:GetChangesAndDeletesRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="GetChangesAndDeletesFromIdsSoapIn">
+		<part name="parameter" element="qb:GetChangesAndDeletesFromIdsRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="GetChangesAndDeletesSoapOut">
+		<part name="result" element="qb:GetChangesAndDeletesResponse"/>
+	</message>
+    <message name="GetDailyUpdateIntervalSoapIn">
+        <part name="parameter" element="qb:GetDailyUpdateIntervalRequest" />
+        <part name="request_header" element="h:Header" />
+    </message>
+    <message name="GetDailyUpdateIntervalSoapOut">
+        <part name="result" element="qb:GetDailyUpdateIntervalResponse" />
+    </message>
+    <message name="GetLookupsSoapIn">
+        <part name="parameter" element="qb:GetLookupsRequest"/>
+        <part name="request_header" element="h:Header"/>
+    </message>
+    <message name="GetLookupsSoapOut">
+        <part name="result" element="qb:GetLookupsResponse"/>
+    </message>
+	<message name="GetCurrentIdsSoapIn">
+		<part name="parameter" element="qb:GetCurrentIdsRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="GetCurrentIdsSoapOut">
+		<part name="result" element="qb:GetCurrentIdsResponse"/>
+	</message>
+	<message name="ValidateIdsSoapIn">
+		<part name="parameter" element="qb:ValidateIdsRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="ValidateIdsSoapOut">
+		<part name="result" element="qb:ValidateIdsResponse"/>
+	</message>
+	<portType name="QueryBuilderServiceSoap">
+		<operation name="GetAttributes">
+			<input message="qb:GetAttributesSoapIn"/>
+			<output message="qb:GetAttributesSoapOut"/>
+			<fault name="fault" message="qb:GetAttributesFaultMessage"/>
+		</operation>
+		<operation name="GetCount">
+			<input message="qb:GetCountSoapIn"/>
+			<output message="qb:GetCountSoapOut"/>
+		</operation>
+		<operation name="GetKeys">
+			<input message="qb:GetKeysSoapIn"/>
+			<output message="qb:GetKeysSoapOut"/>
+		</operation>
+		<operation name="GetSavedQueries">
+			<input message="qb:GetSavedQueriesSoapIn"/>
+			<output message="qb:GetSavedQueriesSoapOut"/>
+		</operation>
+		<operation name="GetQueryDefinition">
+			<input message="qb:GetQueryDefinitionSoapIn"/>
+			<output message="qb:GetQueryDefinitionSoapOut"/>
+		</operation>
+		<operation name="SaveQuery">
+			<input message="qb:SaveQuerySoapIn"/>
+			<output message="qb:SaveQuerySoapOut"/>
+		</operation>
+		<operation name="DeleteQuery">
+			<input message="qb:DeleteQuerySoapIn"/>
+			<output message="qb:DeleteQuerySoapOut"/>
+		</operation>
+		<operation name="GetSQL">
+			<input message="qb:GetSQLSoapIn"/>
+			<output message="qb:GetSQLSoapOut"/>
+		</operation>
+		<operation name="GetEntityType">
+			<input message="qb:GetEntityTypeSoapIn"/>
+			<output message="qb:GetEntityTypeSoapOut"/>
+		</operation>
+		<operation name="LookupAttributes">
+			<input message="qb:LookupAttributesSoapIn"/>
+			<output message="qb:LookupAttributesSoapOut"/>
+		</operation>
+		<operation name="LookupName">
+			<input message="qb:LookupNameSoapIn"/>
+			<output message="qb:LookupNameSoapOut"/>
+		</operation>
+		<operation name="LookupCode">
+			<input message="qb:LookupCodeSoapIn"/>
+			<output message="qb:LookupCodeSoapOut"/>
+		</operation>
+		<operation name="LookupNameCode">
+			<input message="qb:LookupNameCodeSoapIn"/>
+			<output message="qb:LookupNameCodeSoapOut"/>
+		</operation>
+		<operation name="LookupStateCounty">
+			<input message="qb:LookupStateCountySoapIn"/>
+			<output message="qb:LookupStateCountySoapOut"/>
+		</operation>
+		<operation name="GetProductionEntityAttributes">
+			<input message="qb:GetProductionEntityAttributesSoapIn"/>
+			<output message="qb:GetProductionEntityAttributesSoapOut"/>
+		</operation>
+		<operation name="GetChangesAndDeletes">
+			<input message="qb:GetChangesAndDeletesSoapIn"/>
+			<output message="qb:GetChangesAndDeletesSoapOut"/>
+		</operation>
+		<operation name="GetChangesAndDeletesFromIds">
+			<input message="qb:GetChangesAndDeletesFromIdsSoapIn"/>
+			<output message="qb:GetChangesAndDeletesSoapOut"/>
+		</operation>
+        <operation name="GetDailyUpdateInterval">
+            <input message="qb:GetDailyUpdateIntervalSoapIn" />
+            <output message="qb:GetDailyUpdateIntervalSoapOut" />
+        </operation>
+        <operation name="GetLookups">
+            <input message="qb:GetLookupsSoapIn"/>
+            <output message="qb:GetLookupsSoapOut"/>
+        </operation>
+		<operation name="GetCurrentIds">
+			<input message="qb:GetCurrentIdsSoapIn"/>
+			<output message="qb:GetCurrentIdsSoapOut"/>
+		</operation>
+		<operation name="ValidateIds">
+			<input message="qb:ValidateIdsSoapIn"/>
+			<output message="qb:ValidateIdsSoapOut"/>
+		</operation>
+	</portType>
+	<binding name="QueryBuilderServiceSoap" type="qb:QueryBuilderServiceSoap">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="GetAttributes">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/QueryBuilder/GetAttributes" style="document"/>
+			<input>
+				<soap:body parts="parameter" use="literal"/>
+				<soap:header message="qb:GetAttributesSoapIn" part="request_header" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+			<fault name="fault">
+				<soap:fault name="fault" use="literal"/>
+			</fault>
+		</operation>
+		<operation name="GetCount">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/QueryBuilder/GetCount" style="document"/>
+			<input>
+				<soap:body parts="parameter" use="literal"/>
+				<soap:header message="qb:GetCountSoapIn" part="request_header" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetKeys">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/QueryBuilder/GetKeys" style="document"/>
+			<input>
+				<soap:body parts="parameter" use="literal"/>
+				<soap:header message="qb:GetKeysSoapIn" part="request_header" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetSavedQueries">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/QueryBuilder/GetSavedQueries" style="document"/>
+			<input>
+				<soap:body parts="parameter" use="literal"/>
+				<soap:header message="qb:GetSavedQueriesSoapIn" part="request_header" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetQueryDefinition">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/QueryBuilder/GetQueryDefinition" style="document"/>
+			<input>
+				<soap:body parts="parameter" use="literal"/>
+				<soap:header message="qb:GetQueryDefinitionSoapIn" part="request_header" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="SaveQuery">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/QueryBuilder/SaveQuery" style="document"/>
+			<input>
+				<soap:body parts="parameter" use="literal"/>
+				<soap:header message="qb:SaveQuerySoapIn" part="request_header" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="DeleteQuery">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/QueryBuilder/DeleteQuery" style="document"/>
+			<input>
+				<soap:body parts="parameter" use="literal"/>
+				<soap:header message="qb:DeleteQuerySoapIn" part="request_header" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetSQL">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/QueryBuilder/GetSQL" style="document"/>
+			<input>
+				<soap:body parts="parameter" use="literal"/>
+				<soap:header message="qb:GetSQLSoapIn" part="request_header" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetEntityType">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/QueryBuilder/GetEntityType" style="document"/>
+			<input>
+				<soap:body parts="parameter" use="literal"/>
+				<soap:header message="qb:GetEntityTypeSoapIn" part="request_header" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="LookupAttributes">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/QueryBuilder/LookupAttributes" style="document"/>
+			<input>
+				<soap:body parts="parameter" use="literal"/>
+				<soap:header message="qb:LookupAttributesSoapIn" part="request_header" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="LookupName">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/QueryBuilder/LookupName" style="document"/>
+			<input>
+				<soap:body parts="parameter" use="literal"/>
+				<soap:header message="qb:LookupNameSoapIn" part="request_header" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="LookupCode">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/QueryBuilder/LookupCode" style="document"/>
+			<input>
+				<soap:body parts="parameter" use="literal"/>
+				<soap:header message="qb:LookupCodeSoapIn" part="request_header" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="LookupNameCode">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/QueryBuilder/LookupNameCode" style="document"/>
+			<input>
+				<soap:body parts="parameter" use="literal"/>
+				<soap:header message="qb:LookupNameCodeSoapIn" part="request_header" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="LookupStateCounty">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/QueryBuilder/LookupStateCounty" style="document"/>
+			<input>
+				<soap:body parts="parameter" use="literal"/>
+				<soap:header message="qb:LookupStateCountySoapIn" part="request_header" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetProductionEntityAttributes">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/QueryBuilder/GetProductionEntityAttributes" style="document"/>
+			<input>
+				<soap:body parts="parameter" use="literal"/>
+				<soap:header message="qb:GetProductionEntityAttributesSoapIn" part="request_header" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetChangesAndDeletes">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/QueryBuilder/GetChangesAndDeletes" style="document"/>
+			<input>
+				<soap:body parts="parameter" use="literal"/>
+				<soap:header message="qb:GetChangesAndDeletesSoapIn" part="request_header" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetChangesAndDeletesFromIds">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/QueryBuilder/GetChangesAndDeletesFromIds" style="document"/>
+			<input>
+				<soap:body parts="parameter" use="literal"/>
+				<soap:header message="qb:GetChangesAndDeletesFromIdsSoapIn" part="request_header" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+        <operation name="GetDailyUpdateInterval">
+            <soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/QueryBuilder/GetDailyUpdateInterval" style="document"/>
+            <input>
+                <soap:body parts="parameter" use="literal" />
+                <soap:header message="qb:GetDailyUpdateIntervalSoapIn" part="request_header" use="literal"/>
+            </input>
+            <output>
+                <soap:body parts="result" use="literal"/>
+            </output>
+        </operation>
+        <operation name="GetLookups">
+            <soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/QueryBuilder/GetLookups" style="document"/>
+            <input>
+                <soap:body parts="parameter" use="literal"/>
+                <soap:header message="qb:GetLookupsSoapIn" part="request_header" use="literal"/>
+            </input>
+            <output>
+                <soap:body parts="result" use="literal"/>
+            </output>
+        </operation>
+		<operation name="GetCurrentIds">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/QueryBuilder/GetCurrentIds" style="document"/>
+			<input>
+				<soap:body parts="parameter" use="literal"/>
+				<soap:header message="qb:GetCurrentIdsSoapIn" part="request_header" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="ValidateIds">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/QueryBuilder/ValidateIds" style="document"/>
+			<input>
+				<soap:body parts="parameter" use="literal"/>
+				<soap:header message="qb:ValidateIdsSoapIn" part="request_header" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="QueryBuilderService">
+		<port name="QueryBuilderServiceSoap" binding="qb:QueryBuilderServiceSoap">
+			<soap:address location="https://webservices.ihsenergy.com/WebServices/QueryBuilder"/>
+		</port>
+	</service>
+</definitions>

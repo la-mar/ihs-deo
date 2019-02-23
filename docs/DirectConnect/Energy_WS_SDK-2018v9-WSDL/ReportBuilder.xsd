@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Energy Web Services: US Edition - Release 2018 v9 -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:rb="http://www.ihsenergy.com/Enerdeq/Schemas/ReportBuilder" xmlns:t="http://www.ihsenergy.com/Enerdeq/Schemas/Types" targetNamespace="http://www.ihsenergy.com/Enerdeq/Schemas/ReportBuilder" elementFormDefault="qualified">
+    <xs:import namespace="http://www.ihsenergy.com/Enerdeq/Schemas/Types" schemaLocation="Types.xsd"/>
+    <!-- BuildReport(parameters:ReportParameters, target:MyFilesTarget) : string -->
+    <xs:element name="BuildReportRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Parameters" type="rb:ReportParameters"/>
+                <xs:element name="Target" type="t:MyFilesTarget"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="ReportParameters">
+        <xs:sequence>
+            <xs:element name="Domain" type="xs:string"/>
+            <xs:element name="DataType" type="xs:string"/>
+            <xs:element name="Template" type="xs:string"/>
+            <xs:element name="Ids" type="t:ArrayOfId"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="BuildReportFromQueryRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Parameters" type="rb:ReportParameters2"/>
+                <xs:element name="Target" type="t:MyFilesTarget"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="ReportParameters2">
+        <xs:sequence>
+            <xs:element name="Domain" type="xs:string"/>
+            <xs:element name="DataType" type="xs:string"/>
+            <xs:element name="Template" type="xs:string"/>
+            <xs:element name="Query" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="BuildReportResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="JobID" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <!--GetReportTemplates(Domain:string, DataType:string):string[]-->
+    <xs:element name="GetReportTemplatesRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Domain" type="xs:string"/>
+                <xs:element name="DataType" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="GetReportTemplatesResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Templates" type="t:ArrayOfStrings"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <!-- GetReportStatus(JobID:string):string -->
+    <xs:element name="GetReportStatusRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="JobID" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="GetReportStatusResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Status" type="t:StatusType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <!-- RetrieveReport(JobID:string):byte[] -->
+    <xs:element name="RetrieveReportRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="JobID" type="xs:string"/>
+                <xs:element name="Compress" type="xs:boolean" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="RetrieveReportResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="ByteArray" type="xs:base64Binary"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <!-- DeleteReport(JobID:string):boolean -->
+    <xs:element name="DeleteReportRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="JobID" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="DeleteReportResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Result" type="xs:boolean"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <!--GetCompleteReports():string[]-->
+    <xs:element name="GetCompleteReportsRequest">
+        <xs:complexType>
+            <xs:sequence/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="GetCompleteReportsResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="ReportNames" type="t:ArrayOfStrings"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

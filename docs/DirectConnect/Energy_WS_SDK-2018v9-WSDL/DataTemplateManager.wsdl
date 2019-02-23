@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Energy Web Services: US - Release 2018 v9 -->
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+             xmlns:dtm="http://www.ihsenergy.com/Enerdeq/Schemas/DataTemplateManager"
+             xmlns:h="http://www.ihsenergy.com/Enerdeq/Schemas/Header"
+             targetNamespace="http://www.ihsenergy.com/Enerdeq/Schemas/DataTemplateManager">
+	<types>
+		<xs:schema>
+			<xs:import namespace="http://www.ihsenergy.com/Enerdeq/Schemas/Header" schemaLocation="Header.xsd"/>
+			<xs:import namespace="http://www.ihsenergy.com/Enerdeq/Schemas/Types" schemaLocation="Types.xsd"/>
+			<xs:import namespace="http://www.ihsenergy.com/Enerdeq/Schemas/DataTemplateManager" schemaLocation="DataTemplateManager.xsd"/>
+		</xs:schema>
+	</types>
+	<message name="SaveTemplateSoapIn">
+		<part name="parameter" element="dtm:SaveTemplateRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="SaveTemplateSoapOut">
+		<part name="result" element="dtm:SaveTemplateResponse"/>
+	</message>
+	<message name="DeleteTemplateSoapIn">
+		<part name="parameter" element="dtm:DeleteTemplateRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="DeleteTemplateSoapOut">
+		<part name="result" element="dtm:DeleteTemplateResponse"/>
+	</message>
+	<message name="GetTemplatesSoapIn">
+		<part name="parameter" element="dtm:GetTemplatesRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="GetTemplatesSoapOut">
+		<part name="result" element="dtm:GetTemplatesResponse"/>
+	</message>
+	<message name="GetStandardTemplatesSoapIn">
+		<part name="parameter" element="dtm:GetStandardTemplatesRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+
+	<message name="GetCustomTemplatesSoapIn">
+		<part name="parameter" element="dtm:GetCustomTemplatesRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="GetTemplateDefinitionSoapIn">
+		<part name="parameter" element="dtm:GetTemplateDefinitionRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="GetTemplateDefinitionSoapOut">
+		<part name="result" element="dtm:GetTemplateDefinitionResponse"/>
+	</message>
+	<message name="GetFileTypesSoapIn">
+		<part name="parameter" element="dtm:GetFileTypesRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="GetFileTypesSoapOut">
+		<part name="result" element="dtm:GetFileTypesResponse"/>
+	</message>
+	<portType name="DataTemplateManagerServiceSoap">
+		<operation name="SaveTemplate">
+			<input message="dtm:SaveTemplateSoapIn"/>
+			<output message="dtm:SaveTemplateSoapOut"/>
+		</operation>
+		<operation name="DeleteTemplate">
+			<input message="dtm:DeleteTemplateSoapIn"/>
+			<output message="dtm:DeleteTemplateSoapOut"/>
+		</operation>
+		<operation name="GetTemplates">
+			<input message="dtm:GetTemplatesSoapIn"/>
+			<output message="dtm:GetTemplatesSoapOut"/>
+		</operation>
+		<operation name="GetStandardTemplates">
+			<input message="dtm:GetStandardTemplatesSoapIn"/>
+			<output message="dtm:GetTemplatesSoapOut"/>
+		</operation>
+		<operation name="GetCustomTemplates">
+			<input message="dtm:GetCustomTemplatesSoapIn"/>
+			<output message="dtm:GetTemplatesSoapOut"/>
+		</operation>
+		<operation name="GetTemplateDefinition">
+			<input message="dtm:GetTemplateDefinitionSoapIn"/>
+			<output message="dtm:GetTemplateDefinitionSoapOut"/>
+		</operation>
+		<operation name="GetFileTypes">
+			<input message="dtm:GetFileTypesSoapIn"/>
+			<output message="dtm:GetFileTypesSoapOut"/>
+		</operation>
+	</portType>
+	<binding name="DataTemplateManagerServiceSoap" type="dtm:DataTemplateManagerServiceSoap">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="SaveTemplate">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/DataTemplateManager/SaveTemplate" style="document"/>
+			<input>
+				<soap:body parts="parameter" use="literal"/>
+				<soap:header message="dtm:SaveTemplateSoapIn" part="request_header" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="DeleteTemplate">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/DataTemplateManager/DeleteTemplate" style="document"/>
+			<input>
+				<soap:body parts="parameter" use="literal"/>
+				<soap:header message="dtm:DeleteTemplateSoapIn" part="request_header" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetTemplates">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/DataTemplateManager/GetTemplates" style="document"/>
+			<input>
+				<soap:body parts="parameter" use="literal"/>
+				<soap:header message="dtm:GetTemplatesSoapIn" part="request_header" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetStandardTemplates">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/DataTemplateManager/GetStandardTemplates" style="document"/>
+			<input>
+				<soap:body parts="parameter" use="literal"/>
+				<soap:header message="dtm:GetStandardTemplatesSoapIn" part="request_header" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetCustomTemplates">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/DataTemplateManager/GetCustomTemplates" style="document"/>
+			<input>
+				<soap:body parts="parameter" use="literal"/>
+				<soap:header message="dtm:GetCustomTemplatesSoapIn" part="request_header" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetTemplateDefinition">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/DataTemplateManager/GetTemplateDefinition" style="document"/>
+			<input>
+				<soap:body parts="parameter" use="literal"/>
+				<soap:header message="dtm:GetTemplateDefinitionSoapIn" part="request_header" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetFileTypes">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/DataTemplateManager/GetFileTypes" style="document"/>
+			<input>
+				<soap:body parts="parameter" use="literal"/>
+				<soap:header message="dtm:GetFileTypesSoapIn" part="request_header" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="DataTemplateManagerService">
+		<port name="DataTemplateManagerServiceSoap" binding="dtm:DataTemplateManagerServiceSoap">
+			<soap:address location="https://webservices.ihsenergy.com/WebServices/DataTemplateManager"/>
+		</port>
+	</service>
+</definitions>

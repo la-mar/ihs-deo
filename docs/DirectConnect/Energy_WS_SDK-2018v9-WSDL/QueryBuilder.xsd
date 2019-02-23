@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Energy Web Services: US - Release 2018 v9 -->
+<xs:schema xmlns:t="http://www.ihsenergy.com/Enerdeq/Schemas/Types" xmlns:qb="http://www.ihsenergy.com/Enerdeq/Schemas/QueryBuilder" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.ihsenergy.com/Enerdeq/Schemas/QueryBuilder" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<xs:import namespace="http://www.ihsenergy.com/Enerdeq/Schemas/Types" schemaLocation="Types.xsd"/>
+	<!--GetAttributes(in Query : string) : string -->
+	<xs:element name="GetAttributesRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Query" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetAttributesResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Result" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--getCount(in Query : string) : string -->
+	<xs:element name="GetCountRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Query" type="xs:string"/>
+				<xs:element name="TagrgetDatatype" type="xs:string" minOccurs="0"/>
+				<xs:element name="Domain" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetCountResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Result" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--getKeys(in Query : string) : string-->
+	<xs:element name="GetKeysRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Query" type="xs:string"/>
+				<xs:element name="TagrgetDatatype" type="xs:string" minOccurs="0"/>
+				<xs:element name="Domain" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetKeysResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Result" type="t:ArrayOfStrings"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--getSQL(in Query : string, in Type : string) : string-->
+	<xs:element name="GetSQLRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Query" type="xs:string"/>
+				<xs:element name="Type" type="qb:SQLType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetSQLResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Result" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:annotation>
+		<xs:documentation>Type of SQL to be returned from the GetSQL message</xs:documentation>
+	</xs:annotation>
+	<xs:simpleType name="SQLType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Attributes"/>
+			<xs:enumeration value="Count"/>
+			<xs:enumeration value="Keys"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="QueryBuilderFault">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="message" type="xs:string" nillable="true"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--GetSavedQueries():string[]-->
+	<xs:element name="GetSavedQueriesRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Domain" type="xs:string" minOccurs="0"/>
+				<xs:element name="Datatype" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetSavedQueriesResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Queries" type="t:ArrayOfStrings"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--GetQueryDefinition:string-->
+	<xs:element name="GetQueryDefinitionRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="QueryName" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetQueryDefinitionResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Result" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--SaveQuery:string-->
+	<xs:element name="SaveQueryRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="QueryName" type="xs:string" minOccurs="0"/>
+				<xs:element name="CriteriaXML" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SaveQueryResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Result" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+		<!--DeleteQuery:string-->
+	<xs:element name="DeleteQueryRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="QueryName" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DeleteQueryResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Result" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--GetEntityTypeType:string-->
+	<xs:element name="GetEntityTypeRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:sequence>
+					<xs:element name="Parameters" type="qb:GetEntityTypeParameters"/>
+				</xs:sequence>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetEntityTypeResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Result" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--LookupAttributes(parameters: Parameters) : string-->
+	<xs:element name="LookupAttributesRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Parameters" type="qb:LookupAttrsParameters"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="LookupAttributesResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Result" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--LookupName(parameters: Parameters) : string-->
+	<xs:element name="LookupNameRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Parameters" type="qb:LookupParameters"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="LookupNameResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Names" type="t:ArrayOfStrings"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--LookupCode(parameters: Parameters) : string-->
+	<xs:element name="LookupCodeRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Parameters" type="qb:LookupParameters"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="LookupCodeResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Codes" type="t:ArrayOfStrings"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--LookupNameCode(parameters: Parameters, SearchType) : NameCode-->
+	<xs:element name="LookupNameCodeRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Parameters" type="qb:LookupParameters"/>
+				<xs:element name="SearchType" type="qb:NameCodeType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="LookupNameCodeResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="NameCodes" type="qb:ArrayOfNameCodes"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--LookupStateCounty(parameters: Parameters) : string-->
+	<xs:element name="LookupStateCountyRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Parameters" type="qb:StateCountyParameters"/>
+				<xs:element name="SearchType" type="qb:StateCountyType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="LookupStateCountyResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="StateCounty" type="qb:ArrayOfStateCounty"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--GetProductionEntityAttributes:string-->
+	<xs:element name="GetProductionEntityAttributesRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:sequence>
+					<xs:element name="Parameters" type="qb:GetProductionEntityAttributesParameters"/>
+				</xs:sequence>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetProductionEntityAttributesResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Result" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- GetChangesAndDeletes(date, page): object(page, pages, count, string) -->
+	<xs:element name="GetChangesAndDeletesRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:sequence>
+					<xs:element name="DataType" type="xs:string"/>
+					<xs:element name="FromDate" type="xs:string"/>
+					<xs:element name="ToDate" type="xs:string"/>
+					<xs:element name="Page" type="xs:int"/>
+					<xs:element name="Domain" type="xs:string" minOccurs="0"/>
+				</xs:sequence>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetChangesAndDeletesResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:sequence>
+					<xs:element name="PagingDetails" type="t:PagingResponse"/>
+					<xs:element name="Result" type="xs:string"/>
+				</xs:sequence>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- GetChangesAndDeletesFromIds(ids, date) : string -->
+	<xs:element name="GetChangesAndDeletesFromIdsRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:sequence>
+					<xs:element name="DataType" type="xs:string"/>
+					<xs:element name="Ids" type="t:ArrayOfId"/>
+					<xs:element name="FromDate" type="xs:string"/>
+					<xs:element name="ToDate" type="xs:string"/>
+					<xs:element name="Domain" type="xs:string" minOccurs="0"/>
+				</xs:sequence>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+    <xs:element name="GetDailyUpdateIntervalRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:sequence>
+                    <xs:element name="UpdateDate" type="xs:string"/>
+                </xs:sequence>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="GetDailyUpdateIntervalResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:sequence>
+                    <xs:element name="UpdateStarted" type="xs:dateTime"/>
+                    <xs:element name="UpdateEnded" type="xs:dateTime"/>
+                </xs:sequence>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+	<xs:element name="GetLookupsRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="DataType" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetLookupsResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Result" type="qb:ArrayOfLookupTypes"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetCurrentIdsRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Domain" type="xs:string"/>
+				<xs:element name="DataType" type="xs:string"/>
+				<xs:element name="Page" type="xs:int"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetCurrentIdsResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Ids" type="t:ArrayOfId"/>
+				<xs:element name="PagingDetails" type="t:PagingResponse"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ValidateIdsRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Domain" type="xs:string"/>
+				<xs:element name="DataType" type="xs:string"/>
+				<xs:element name="Ids" type="t:ArrayOfId"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ValidateIdsResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Ids" type="t:ArrayOfId"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="StateCountyParameters">
+		<xs:sequence>
+			<xs:element name="Domain" type="xs:string"/>
+			<xs:element name="DataType" type="xs:string"/>
+			<xs:element name="SearchValue" type="xs:string"/>
+			<xs:element name="Operator" type="qb:Operator"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="LookupAttrsParameters">
+		<xs:sequence>
+			<xs:element name="Domain" type="xs:string"/>
+			<xs:element name="DataType" type="xs:string"/>
+			<xs:element name="Attrs" type="t:ArrayOfStrings"/>
+			<xs:element name="IDs" type="t:ArrayOfId"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="LookupParameters">
+		<xs:sequence>
+			<xs:element name="Domain" type="xs:string"/>
+			<xs:element name="DataType" type="xs:string"/>
+			<xs:element name="Attr" type="xs:string"/>
+			<xs:element name="SearchValue" type="xs:string"/>
+			<xs:element name="Operator" type="qb:Operator"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GetEntityTypeParameters">
+		<xs:sequence>
+			<xs:element name="Domain" type="xs:string"/>
+			<xs:element name="DataType" type="xs:string"/>
+			<xs:element name="IDs" type="t:ArrayOfId"/>
+			<xs:element name="StartDate" type="xs:string"/>
+			<xs:element name="EndDate" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="Operator">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Exact"/>
+			<xs:enumeration value="StartsWith"/>
+			<xs:enumeration value="Contains"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="NameCode">
+		<xs:sequence>
+			<xs:element name="Name" type="xs:string"/>
+			<xs:element name="Code" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StateCounty">
+		<xs:sequence>
+			<xs:element name="StateCode" type="xs:string"/>
+			<xs:element name="StateName" type="xs:string"/>
+			<xs:element name="CountyName" type="xs:string"/>
+			<xs:element name="CountyCode" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+    <xs:complexType name="LookupType">
+        <xs:sequence>
+            <xs:element name="Lookup" type="xs:string"/>
+            <xs:element name="Type" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+	<xs:complexType name="ArrayOfStateCounty">
+		<xs:sequence>
+			<xs:element name="Item" type="qb:StateCounty" nillable="false" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ArrayOfNameCodes">
+		<xs:sequence>
+			<xs:element name="Item" type="qb:NameCode" nillable="false" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+    <xs:complexType name="ArrayOfLookupTypes">
+        <xs:sequence>
+            <xs:element name="Item" type="qb:LookupType" nillable="false" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+	<xs:simpleType name="NameCodeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Name"/>
+			<xs:enumeration value="Code"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StateCountyType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="CountyName"/>
+			<xs:enumeration value="StateCode"/>
+		</xs:restriction>
+	</xs:simpleType>
+    <xs:complexType name="ArrayOfLayers">
+		<xs:sequence>
+			<xs:element name="Layer" type="xs:string" nillable="false" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GetProductionEntityAttributesParameters">
+		<xs:sequence>
+			<xs:element name="Domain" type="xs:string"/>
+			<xs:element name="DataType" type="xs:string"/>
+			<xs:element name="IDs" type="t:ArrayOfId"/>
+			<xs:element name="Attrs" type="t:ArrayOfStrings"/>
+			<xs:element name="StartDate" type="xs:string"/>
+			<xs:element name="EndDate" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+    <!--getLookups(in Query : string) : string-->
+
+</xs:schema>
