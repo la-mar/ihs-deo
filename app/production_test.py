@@ -1,16 +1,9 @@
-
-
-
 import zeep
 wsdl = 'C:\Repositories\Collector-IHS\docs\DirectConnect\wsdl.v10\Session.wsdl'
 qb_wsdl = 'C:\Repositories\Collector-IHS\docs\DirectConnect\wsdl.v10\QueryBuilder.wsdl'
 eb_wsdl = 'C:\Repositories\Collector-IHS\docs\DirectConnect\wsdl.v10\ExportBuilder.wsdl'
 
 client = zeep.Client(wsdl=wsdl)
-
-
-def get_count():
-  print(qb_client.service.GetCount(qb_query, "Well", "US", _soapheaders=[header_value]))
 
 from zeep import xsd
 
@@ -37,14 +30,25 @@ header_value = header(Username=user, Password = password, Application = appName)
 
 client.service.Login(_soapheaders=[header_value])
 
-# qb_client = zeep.Client(wsdl = qb_wsdl)
+eb_client = zeep.Client(eb_wsdl)
 
-well_query = """<criterias>
+
+prod_template = """
+<EXPORT>
+    <TEXTUAL_EXPORTS>
+        <PRODUCTION_XML>
+            <BRANCH NAME="/PRODUCTION_SET/PRODUCING_ENTITY/PRODUCTION " />
+        </PRODUCTION_XML>
+    </TEXTUAL_EXPORTS>
+</EXPORT>"""
+
+prod_query = """
+<criterias>
     <criteria type="group" groupId="" ignored="false">
         <domain>US</domain>
-        <datatype>Well</datatype>
+        <datatype>Production Allocated</datatype>
         <attribute_group>Identification</attribute_group>
-        <attribute>Current Operator</attribute>
+        <attribute>Operator</attribute>
         <filter logic="include">
             <value id="0" ignored="false">
                 <group_actual>
@@ -61,29 +65,25 @@ well_query = """<criterias>
             </value>
         </filter>
     </criteria>
-</criterias>"""
+    <criteria type="value" ignored="false">
+        <domain>US</domain>
+        <datatype>Production Allocated</datatype>
+        <attribute_group>Date</attribute_group>
+        <attribute>Last Update</attribute>
+        <type>date</type>
+        <displaytype />
+        <filter logic="between">
+            <value id="0" ignored="false" display="between 2/1/2019 and 2/23/2019" actual="2019/2/1 00:00:00--2019/2/23 23:59:59.999999999" />
+        </filter>
+    </criteria>
 
-#print(qb_client.service.GetCount(qb_query, "Well", "US", _soapheaders=[header_value]))
-
-eb_client = zeep.Client(eb_wsdl)
-#14207C0183842
-#42461343350001
-
-well_template = """
-<EXPORT>
-    <TEXTUAL_EXPORTS>
-        <WELL_XML EXCLUDE_MISSING_LATLONGS="TRUE" INCLUDE_PRODFIT="TRUE" INCLUDE_SUBSCRIBED_LATLONG_SOURCES="TRUE">
-            <BRANCH NAME="/WELL_SET/WELLBORE/TESTS" />
-        </WELL_XML>
-    </TEXTUAL_EXPORTS>
-</EXPORT>"""
-
-
-params_well = {
+</criterias>
+"""
+params_prod = {
 'Domain':'US',
-'DataType': 'Well',
-'Template': well_template,
-'Query': well_query
+'DataType': 'Production Allocated',
+'Template': 'EnerdeqML Production',
+'Query': prod_query
 }
 
 target = {
@@ -91,9 +91,9 @@ target = {
 'Overwrite': 'True'
 }
 
-job_id = eb_client.service.BuildExportFromQuery(params_well, target, _soapheaders=[header_value])
+prod_job_id = eb_client.service.BuildExportFromQuery(params_prod, target, _soapheaders=[header_value])
 
-data = eb_client.service.RetrieveExport(job_id, _soapheaders=[header_value])
+prod_data = eb_client.service.RetrieveExport(prod_job_id, _soapheaders=[header_value])
 
-with open("sample.xml", "w") as f :
-  f.writelines(data.decode("utf-8"))
+with open("sample_prod_2011_10.xml", "w") as f :
+  f.writelines(prod_data.decode("utf-8"))
