@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Energy Web Services: US Edition - Release 2018 v10 -->
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:h="http://www.ihsenergy.com/Enerdeq/Schemas/Header" xmlns:rb="http://www.ihsenergy.com/Enerdeq/Schemas/ReportBuilder" xmlns:t="http://www.ihsenergy.com/Enerdeq/Schemas/Types" targetNamespace="http://www.ihsenergy.com/Enerdeq/Schemas/ReportBuilder">
+    <types>
+        <xs:schema>
+            <xs:import namespace="http://www.ihsenergy.com/Enerdeq/Schemas/Header" schemaLocation="Header.xsd"/>
+            <xs:import namespace="http://www.ihsenergy.com/Enerdeq/Schemas/ReportBuilder" schemaLocation="ReportBuilder.xsd"/>
+            <xs:import namespace="http://www.ihsenergy.com/Enerdeq/Schemas/Types" schemaLocation="Types.xsd"/>
+        </xs:schema>
+    </types>
+    <message name="BuildReportSoapIn">
+        <part name="parameters" element="rb:BuildReportRequest"/>
+        <part name="request_header" element="h:Header"/>
+    </message>
+    <message name="BuildReportFromQuerySoapIn">
+        <part name="parameters" element="rb:BuildReportFromQueryRequest"/>
+        <part name="request_header" element="h:Header"/>
+    </message>
+    <message name="BuildReportSoapOut">
+        <part name="result" element="rb:BuildReportResponse"/>
+    </message>
+    <message name="DeleteReportSoapIn">
+        <part name="parameters" element="rb:DeleteReportRequest"/>
+        <part name="request_header" element="h:Header"/>
+    </message>
+    <message name="DeleteReportSoapOut">
+        <part name="result" element="rb:DeleteReportResponse"/>
+    </message>
+    <message name="GetCompleteReportsSoapIn">
+        <part name="parameters" element="rb:GetCompleteReportsRequest"/>
+        <part name="request_header" element="h:Header"/>
+    </message>
+    <message name="GetCompleteReportsSoapOut">
+        <part name="result" element="rb:GetCompleteReportsResponse"/>
+    </message>
+    <message name="GetDatatypesSoapIn">
+        <part name="parameters" element="t:GetDatatypesRequest"/>
+        <part name="request_header" element="h:Header"/>
+    </message>
+    <message name="GetDatatypesSoapOut">
+        <part name="result" element="t:GetDatatypesResponse"/>
+    </message>
+    <message name="GetDomainsSoapIn">
+        <part name="parameters" element="t:GetDomainsRequest"/>
+        <part name="request_header" element="h:Header"/>
+    </message>
+    <message name="GetDomainsSoapOut">
+        <part name="result" element="t:GetDomainsResponse"/>
+    </message>
+    <message name="GetReportStatusSoapIn">
+        <part name="parameters" element="rb:GetReportStatusRequest"/>
+        <part name="request_header" element="h:Header"/>
+    </message>
+    <message name="GetReportStatusSoapOut">
+        <part name="result" element="rb:GetReportStatusResponse"/>
+    </message>
+    <message name="IsCompleteSoapIn">
+        <part name="parameters" element="t:IsCompleteRequest"/>
+        <part name="request_header" element="h:Header"/>
+    </message>
+    <message name="IsCompleteSoapOut">
+        <part name="result" element="t:IsCompleteResponse"/>
+    </message>
+    <message name="ExistsSoapIn">
+        <part name="parameters" element="t:ExistsRequest"/>
+        <part name="request_header" element="h:Header"/>
+    </message>
+    <message name="ExistsSoapOut">
+        <part name="result" element="t:ExistsResponse"/>
+    </message>
+    <message name="GetReportTemplatesSoapIn">
+        <part name="parameters" element="rb:GetReportTemplatesRequest"/>
+        <part name="request_header" element="h:Header"/>
+    </message>
+    <message name="GetReportTemplatesSoapOut">
+        <part name="result" element="rb:GetReportTemplatesResponse"/>
+    </message>
+    <message name="RetrieveReportSoapIn">
+        <part name="parameters" element="rb:RetrieveReportRequest"/>
+        <part name="request_header" element="h:Header"/>
+    </message>
+    <message name="RetrieveReportSoapOut">
+        <part name="result" element="rb:RetrieveReportResponse"/>
+    </message>
+    <portType name="ReportBuilderServiceSoap">
+        <operation name="BuildReport">
+            <documentation>Returns the JobID corresponding for the given report parameters.</documentation>
+            <input message="rb:BuildReportSoapIn"/>
+            <output message="rb:BuildReportSoapOut"/>
+        </operation>
+        <operation name="BuildReportFromQuery">
+            <documentation>Returns the JobID corresponding for the given report parameters.</documentation>
+            <input message="rb:BuildReportFromQuerySoapIn"/>
+            <output message="rb:BuildReportSoapOut"/>
+        </operation>
+        <operation name="DeleteReport">
+            <documentation>Deletes the file corresponding to the specified JobID. This operation returns the status of the request.</documentation>
+            <input message="rb:DeleteReportSoapIn"/>
+            <output message="rb:DeleteReportSoapOut"/>
+        </operation>
+        <operation name="GetCompleteReports">
+            <documentation>Returns an array consisting of the names of completed reports .</documentation>
+            <input message="rb:GetCompleteReportsSoapIn"/>
+            <output message="rb:GetCompleteReportsSoapOut"/>
+        </operation>
+        <operation name="GetDatatypes">
+            <documentation>Returns an array of datatypes supported by the specified domain.</documentation>
+            <input message="rb:GetDatatypesSoapIn"/>
+            <output message="rb:GetDatatypesSoapOut"/>
+        </operation>
+        <operation name="GetDomains">
+            <documentation>Returns an array of dmains supported by the report service.</documentation>
+            <input message="rb:GetDomainsSoapIn"/>
+            <output message="rb:GetDomainsSoapOut"/>
+        </operation>
+        <operation name="GetReportStatus">
+            <documentation>Return the status for the given JobID.</documentation>
+            <input message="rb:GetReportStatusSoapIn"/>
+            <output message="rb:GetReportStatusSoapOut"/>
+        </operation>
+        <operation name="IsComplete">
+            <documentation>Return the status for the given JobID.</documentation>
+            <input message="rb:IsCompleteSoapIn"/>
+            <output message="rb:IsCompleteSoapOut"/>
+        </operation>
+        <operation name="Exists">
+            <documentation>Return the status for the given JobID.</documentation>
+            <input message="rb:ExistsSoapIn"/>
+            <output message="rb:ExistsSoapOut"/>
+        </operation>
+        <operation name="GetReportTemplates">
+            <documentation>Returns an array of the available Report Templates for the given domain and datatype.</documentation>
+            <input message="rb:GetReportTemplatesSoapIn"/>
+            <output message="rb:GetReportTemplatesSoapOut"/>
+        </operation>
+        <operation name="RetrieveReport">
+            <documentation>Returns the specified report in the form of a bytearray.</documentation>
+            <input message="rb:RetrieveReportSoapIn"/>
+            <output message="rb:RetrieveReportSoapOut"/>
+        </operation>
+    </portType>
+    <binding name="ReportBuilderServiceSoap" type="rb:ReportBuilderServiceSoap">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="BuildReport">
+            <soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ReportBuilder/BuildReport" style="document"/>
+            <input>
+                <soap:header message="rb:BuildReportSoapIn" part="request_header" use="literal"/>
+                <soap:body parts="parameters" use="literal"/>
+            </input>
+            <output>
+                <soap:body parts="result" use="literal"/>
+            </output>
+        </operation>
+        <operation name="BuildReportFromQuery">
+            <soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ReportBuilder/BuildReportFromQuery" style="document"/>
+            <input>
+                <soap:header message="rb:BuildReportFromQuerySoapIn" part="request_header" use="literal"/>
+                <soap:body parts="parameters" use="literal"/>
+            </input>
+            <output>
+                <soap:body parts="result" use="literal"/>
+            </output>
+        </operation>
+        <operation name="DeleteReport">
+            <soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ReportBuilder/DeleteReport" style="document"/>
+            <input>
+                <soap:header message="rb:DeleteReportSoapIn" part="request_header" use="literal"/>
+                <soap:body parts="parameters" use="literal"/>
+            </input>
+            <output>
+                <soap:body parts="result" use="literal"/>
+            </output>
+        </operation>
+        <operation name="GetCompleteReports">
+            <soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ReportBuilder/GetCompleteReports" style="document"/>
+            <input>
+                <soap:header message="rb:GetCompleteReportsSoapIn" part="request_header" use="literal"/>
+                <soap:body parts="parameters" use="literal"/>
+            </input>
+            <output>
+                <soap:body parts="result" use="literal"/>
+            </output>
+        </operation>
+        <operation name="GetDatatypes">
+            <soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ReportBuilder/GetDatatypes" style="document"/>
+            <input>
+                <soap:header message="rb:GetDatatypesSoapIn" part="request_header" use="literal"/>
+                <soap:body parts="parameters" use="literal"/>
+            </input>
+            <output>
+                <soap:body parts="result" use="literal"/>
+            </output>
+        </operation>
+        <operation name="GetDomains">
+            <soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ReportBuilder/GetDomains" style="document"/>
+            <input>
+                <soap:header message="rb:GetDomainsSoapIn" part="request_header" use="literal"/>
+                <soap:body parts="parameters" use="literal"/>
+            </input>
+            <output>
+                <soap:body parts="result" use="literal"/>
+            </output>
+        </operation>
+        <operation name="GetReportStatus">
+            <soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ReportBuilder/GetReportStatus" style="document"/>
+            <input>
+                <soap:header message="rb:GetReportStatusSoapIn" part="request_header" use="literal"/>
+                <soap:body parts="parameters" use="literal"/>
+            </input>
+            <output>
+                <soap:body parts="result" use="literal"/>
+            </output>
+        </operation>
+        <operation name="IsComplete">
+            <soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ReportBuilder/IsComplete" style="document"/>
+            <input>
+                <soap:header message="rb:IsCompleteSoapIn" part="request_header" use="literal"/>
+                <soap:body parts="parameters" use="literal"/>
+            </input>
+            <output>
+                <soap:body parts="result" use="literal"/>
+            </output>
+        </operation>
+        <operation name="Exists">
+            <soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ReportBuilder/Exists" style="document"/>
+            <input>
+                <soap:header message="rb:ExistsSoapIn" part="request_header" use="literal"/>
+                <soap:body parts="parameters" use="literal"/>
+            </input>
+            <output>
+                <soap:body parts="result" use="literal"/>
+            </output>
+        </operation>
+        <operation name="GetReportTemplates">
+            <soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ReportBuilder/GetReportTemplates" style="document"/>
+            <input>
+                <soap:header message="rb:GetReportTemplatesSoapIn" part="request_header" use="literal"/>
+                <soap:body parts="parameters" use="literal"/>
+            </input>
+            <output>
+                <soap:body parts="result" use="literal"/>
+            </output>
+        </operation>
+        <operation name="RetrieveReport">
+            <soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/ReportBuilder/RetrieveReport" style="document"/>
+            <input>
+                <soap:header message="rb:RetrieveReportSoapIn" part="request_header" use="literal"/>
+                <soap:body parts="parameters" use="literal"/>
+            </input>
+            <output>
+                <soap:body parts="result" use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="ReportBuilderService">
+        <port name="ReportBuilderServiceSoap" binding="rb:ReportBuilderServiceSoap">
+            <soap:address location="https://webservices.ihsenergy.com/WebServices/ReportBuilder"/>
+        </port>
+    </service>
+</definitions>

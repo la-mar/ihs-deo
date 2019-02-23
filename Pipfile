@@ -13,5 +13,8 @@ pandas = "*"
 pymssql = "*"
 SQLAlchemy = "*"
 pylint = "*"
+pyyaml = "*"
+zeep = "*"
+
 [requires]
 python_version = "3.7"

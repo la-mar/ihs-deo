@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Energy Web Services: US - Release 2018 v10 -->
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:a="http://www.ihsenergy.com/Enerdeq/Schemas/Session" xmlns:h="http://www.ihsenergy.com/Enerdeq/Schemas/Header" targetNamespace="http://www.ihsenergy.com/Enerdeq/Schemas/Session">
+	<types>
+		<xs:schema>
+			<xs:import namespace="http://www.ihsenergy.com/Enerdeq/Schemas/Header" schemaLocation="Header.xsd"/>
+			<xs:import namespace="http://www.ihsenergy.com/Enerdeq/Schemas/Session" schemaLocation="Session.xsd"/>
+		</xs:schema>
+	</types>
+	<message name="LoginSoapIn">
+		<part name="parameters" element="a:LoginRequest"/>
+		<part name="request_header" element="h:Header"/>
+	</message>
+	<message name="LoginSoapOut">
+		<part name="result" element="a:LoginResponse"/>
+	</message>
+	<message name="LogoutSoapIn">
+		<part name="parameters" element="a:LogoutRequest"/>
+		<!--<part name="request_header" element="h:Header"/>-->
+	</message>
+	<message name="LogoutSoapOut">
+		<part name="result" element="a:LogoutResponse"/>
+	</message>
+	<message name="GetEntitlementsSoapIn">
+		<part name="parameters" element="a:EntitlementRequest"/>
+        <part name="request_header" element="h:Header"/>
+		<!--<part name="request_header" element="h:Header"/>-->
+	</message>
+	<message name="GetEntitlementsSoapOut">
+		<part name="result" element="a:EntitlementResponse"/>
+	</message>
+	<message name="GetLatLongEntitlementsSoapIn">
+		<part name="parameters" element="a:LatLongEntitlementRequest"/>
+		<part name="request_header" element="h:Header"/>
+		<!--<part name="request_header" element="h:Header"/>-->
+	</message>
+	<message name="GetLatLongEntitlementsSoapOut">
+		<part name="result" element="a:LatLongEntitlementResponse"/>
+	</message>
+	<portType name="SessionServiceSoap">
+		<operation name="Login">
+			<documentation>Authenticate to webservices</documentation>
+			<input message="a:LoginSoapIn"/>
+			<output message="a:LoginSoapOut"/>
+		</operation>
+		<operation name="Logout">
+			<documentation>Log out webservices</documentation>
+			<input message="a:LogoutSoapIn"/>
+			<output message="a:LogoutSoapOut"/>
+		</operation>
+		<operation name="GetEntitlements">
+			<documentation>Get company's entitlements</documentation>
+			<input message="a:GetEntitlementsSoapIn"/>
+			<output message="a:GetEntitlementsSoapOut"/>
+		</operation>
+		<operation name="GetLatLongEntitlements">
+			<documentation>Get company's lat/long entitlements</documentation>
+			<input message="a:GetLatLongEntitlementsSoapIn"/>
+			<output message="a:GetLatLongEntitlementsSoapOut"/>
+		</operation>
+	</portType>
+	<binding name="SessionServiceSoap" type="a:SessionServiceSoap">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="Login">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/Session/Login" style="document"/>
+			<input>
+				<soap:header message="a:LoginSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="Logout">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/Session/Logout" style="document"/>
+			<input>
+				<soap:header message="a:LogoutSoapIn" part="parameters" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetEntitlements">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/Session/GetEntitlements" style="document"/>
+			<input>
+				<soap:header message="a:GetEntitlementsSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+		<operation name="GetLatLongEntitlements">
+			<soap:operation soapAction="http://www.ihsenergy.com/Enerdeq/Schemas/Session/GetLatLongEntitlements" style="document"/>
+			<input>
+				<soap:header message="a:GetLatLongEntitlementsSoapIn" part="request_header" use="literal"/>
+				<soap:body parts="parameters" use="literal"/>
+			</input>
+			<output>
+				<soap:body parts="result" use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="SessionService">
+		<port name="SessionServiceSoap" binding="a:SessionServiceSoap">
+			<soap:address location="https://webservices.ihsenergy.com/WebServices/Session"/>
+		</port>
+	</service>
+</definitions>

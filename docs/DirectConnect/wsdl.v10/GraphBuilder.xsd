@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Energy Web Services: US - Release 2018 v10 -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:gb="http://www.ihsenergy.com/Enerdeq/Schemas/GraphBuilder" xmlns:t="http://www.ihsenergy.com/Enerdeq/Schemas/Types" targetNamespace="http://www.ihsenergy.com/Enerdeq/Schemas/GraphBuilder" elementFormDefault="qualified">
+	<xs:import namespace="http://www.ihsenergy.com/Enerdeq/Schemas/Types" schemaLocation="Types.xsd"/>
+	<xs:complexType name="GraphParameters">
+		<xs:sequence>
+			<xs:element name="Domain" type="xs:string"/>
+			<xs:element name="DataType" type="xs:string"/>
+			<xs:element name="Template" type="xs:string"/>
+			<xs:element name="Ids" type="t:ArrayOfId"/>
+			<xs:element name="ImageFormat" type="xs:string"/>
+			<xs:element name="Height" type="xs:int"/>
+			<xs:element name="Width" type="xs:int"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GraphParameters2">
+		<xs:sequence>
+			<xs:element name="Domain" type="xs:string"/>
+			<xs:element name="DataType" type="xs:string"/>
+			<xs:element name="Template" type="xs:string"/>
+			<xs:element name="Query" type="xs:string"/>
+			<xs:element name="ImageFormat" type="xs:string"/>
+			<xs:element name="Height" type="xs:int"/>
+			<xs:element name="Width" type="xs:int"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- BuildGraph(parameters:GraphParameters, target:MyFilesTarget) : string -->
+	<xs:element name="BuildGraphRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Parameters" type="gb:GraphParameters"/>
+				<xs:element name="Target" type="t:MyFilesTarget"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- BuildGraphFromQuery(parameters:GraphParameters, target:MyFilesTarget) : string -->
+	<xs:element name="BuildGraphFromQueryRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Parameters" type="gb:GraphParameters2"/>
+				<xs:element name="Target" type="t:MyFilesTarget"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="BuildGraphResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="JobIDs" type="t:ArrayOfStrings"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--GetGraphTemplates(Domain:string, DataType:string):string[]-->
+	<xs:element name="GetGraphTemplatesRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Domain" type="xs:string"/>
+				<xs:element name="DataType" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetGraphTemplatesResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Templates" type="t:ArrayOfStrings"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--GetGraphSizes(Domain:string, DataType:string):string[]-->
+	<!--
+	<xs:element name="GetGraphSizesRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Domain" type="xs:string"/>
+				<xs:element name="DataType" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetGraphSizesResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Sizes" type="t:ArrayOfStrings"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+-->
+	<!--GetImageFormats():string[]-->
+	<xs:element name="GetImageFormatsRequest">
+		<xs:complexType>
+			<xs:sequence/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetImageFormatsResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Formats" type="t:ArrayOfStrings"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- GetGraphStatus(JobID:string):string -->
+	<xs:element name="GetGraphStatusRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="JobID" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetGraphStatusResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Status" type="t:StatusType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- RetrieveGraph(JobID:string):byte[] -->
+	<xs:element name="RetrieveGraphRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="JobID" type="xs:string"/>
+				<xs:element name="Compress" type="xs:boolean" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="RetrieveGraphResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ByteArray" type="xs:base64Binary"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- DeleteGraph(JobID:string):boolean -->
+	<xs:element name="DeleteGraphRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="JobID" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DeleteGraphResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Result" type="xs:boolean"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--GetCompleteGraphs():string[]-->
+	<xs:element name="GetCompleteGraphsRequest">
+		<xs:complexType>
+			<xs:sequence/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetCompleteGraphsResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="GraphNames" type="t:ArrayOfStrings"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
