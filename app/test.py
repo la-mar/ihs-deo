@@ -2,35 +2,35 @@
 
 
 import zeep
-
 wsdl = 'C:\Repositories\Collector-IHS\docs\DirectConnect\wsdl.v10\Session.wsdl'
 client = zeep.Client(wsdl=wsdl)
 
-proxy = client.bind()
+from zeep import xsd
 
 user = 'brock@driftwoodenergy.com'
 password = 'YrUs0LAME!'
+appName = 'driftwood_wellprod_digest'
 
-from requests import Session
-from requests.auth import HTTPBasicAuth  # or HTTPDigestAuth, or OAuth1, etc.
-from zeep import Client
-from zeep.transports import Transport
+header = xsd.Element(
+    '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Header',
+    xsd.ComplexType([
+        xsd.Element(
+            '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Username',
+            xsd.String()),
+            xsd.Element(
+            '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Password',
+            xsd.String()),
+            xsd.Element(
+            '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Application',
+            xsd.String())
+    ])
+)
 
-session = Session()
-session.auth = HTTPBasicAuth(user, password)
-c = Client(wsdl,
-    transport=Transport(session=session))
+header_value = header(Username=user, Password = password, Application = appName)
 
-# s = c.wsdl.services
-# s = s['SessionService']
-
-c.service.Login()
-
-b = c.bind()
-
-b.Login()
+client.service.Login(_soapheaders=[header_value])
 
 
-
+ebWsdl = 'C:\Repositories\Collector-IHS\docs\DirectConnect\wsdl.v10\ExportBuilder.wsdl'
 
 
