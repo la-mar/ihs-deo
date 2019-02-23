@@ -16,6 +16,7 @@ SQLAlchemy = "*"
 sentry-sdk = "*"
 pylint = "*"
 pyyaml = "*"
+zeep = "*"
 
 [requires]
 python_version = "3.7"
