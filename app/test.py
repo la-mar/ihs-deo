@@ -6,7 +6,16 @@ wsdl = 'C:\Repositories\Collector-IHS\docs\DirectConnect\wsdl.v10\Session.wsdl'
 qb_wsdl = 'C:\Repositories\Collector-IHS\docs\DirectConnect\wsdl.v10\QueryBuilder.wsdl'
 eb_wsdl = 'C:\Repositories\Collector-IHS\docs\DirectConnect\wsdl.v10\ExportBuilder.wsdl'
 
-client = zeep.Client(wsdl=wsdl)
+CC = zeep.Client(wsdl=wsdl)
+QB = zeep.Client(wsdl=qb_wsdl)
+EB = zeep.Client(wsdl=eb_wsdl)
+# client = zeep.Client(wsdl=wsdl)
+
+def methods(obj) -> None:
+    return [x for x in dir(obj) if not x.startswith('__')]
+
+def m(obj):
+    return methods(obj)
 
 from zeep import xsd
 
@@ -31,14 +40,15 @@ header = xsd.Element(
 
 header_value = header(Username=user, Password = password, Application = appName)
 
-client.service.Login(_soapheaders=[header_value])
+_soapheaders = [header_value]
+
+CC.service.Login(_soapheaders = _soapheaders)
 
 
-client.service
+c = EB
+s = EB.service
+
+s.GetEntitlements(_soapheaders = _soapheaders) # works
 
 
-zeep.wsdl.wsdl()
 
-dir(client)
-
-dir(client.service)
