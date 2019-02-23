@@ -53,12 +53,6 @@ _soapheaders = [header_value]
 
 CC.service.Login(_soapheaders = _soapheaders)
 
-CC.service.GetEntitlements(_soapheaders = _soapheaders) # works
-
-s = EB.service
-
-EB.service.GetExportTemplates(domain, 'Well', _soapheaders)
-
 wellquery = """
 <criterias>
   <criteria type="value">
@@ -75,57 +69,6 @@ wellquery = """
 """
 
 
-
-s = QB.service
-
-s.GetCount(wellquery, 'Well', 'US', _soapheaders = _soapheaders)
-
-s.ValidateIds(domain, "Well", "UWI", Ids = ["42383402790000"], _soapheaders = _soapheaders)
-
-lookup_parameters = {
-    'Domain': 'US',
-    'DataType': 'Well',
-    'Attr': 'Current Operator',#'API/IC Number',
-    'SearchValue': 'Driftwood',
-    'Operator': 'StartsWith'
-}
-
-x = s.LookupName(lookup_parameters, _soapheaders = _soapheaders)
-
-
-def lookup_name() -> list:
-    """Example output:
-        ['DRIFTWOOD ENERGY OPERATING LLC',
-        'DRIFTWOOD GERMANIA',
-        'DRIFTWOOD OIL COMPANY',
-        'DRIFTWOOD OIL LLC',
-        'DRIFTWOOD OPERATING COMPANY',
-        'DRIFTWOOD STORAGE LLC']
-    """
-    lookup_parameters = {
-        'Domain': 'US',
-        'DataType': 'Well',
-        'Attr': 'Current Operator',
-        'SearchValue': 'Driftwood',
-        'Operator': 'StartsWith'
-    }
-    return QB.service.LookupName(lookup_parameters, _soapheaders = _soapheaders)
-
-
-
-lookup_parameters = {
-    'Domain': 'US',
-    'DataType': 'Well',
-    'IDs': ['42461343350001'],
-    'Attrs': 'Operator Name',
-    'StartDate': '2018/10/01',
-    'EndDate': '2019/10/01',
-    # 'SearchValue': 'Driftwood',
-    # 'Operator': 'StartsWith'
-
-}
-
-# ns2: GetProductionEntityAttributesParameters(Domain: xsd: string, DataType: xsd: string, IDs: ns1: ArrayOfId, Attrs: ns1: ArrayOfStrings, StartDate: xsd: string, EndDate: xsd: string)
 
 wellquery2 = """
 <criterias>
@@ -158,10 +101,5 @@ xml = QB.service.GetAttributes(wellquery2, _soapheaders = _soapheaders)
 import pandas as pd
 import bs4
 
-from lxml import objectify
-xml = objectify.fromstring(xml)
-root = xml.getroottree().getroot()
 
-records = [child.text for child in root['record-meta'].getchildren()]
-
-soup = bs4.BeautifulSoup(xml, 'lxml')
+soup = bs4.BeautifulSoup(xml, 'lxml-xml')
