@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<criterias>
+  <criteria type="group" groupId="" ignored="false">
+    <domain>US</domain>
+    <datatype>Production Allocated</datatype>
+    <attribute_group>Location</attribute_group>
+    <attribute>State/County</attribute>
+    <filter logic="include">
+      <value id="0" ignored="false">
+        <group_actual>
+          <operator logic="and">
+            <condition logic="equals">
+              <attribute>state_code</attribute>
+              <value_list>
+                <value>42</value>
+              </value_list>
+            </condition>
+            <condition logic="like">
+              <attribute>county_name</attribute>
+              <value_list>
+                <value>GAINE%</value>
+              </value_list>
+            </condition>
+          </operator>
+        </group_actual>
+        <group_display>name starts with TX GAINE%</group_display>
+      </value>
+      <value id="1" ignored="false">
+        <group_actual>
+          <operator logic="and">
+            <condition logic="equals">
+              <attribute>state_code</attribute>
+              <value_list>
+                <value>42</value>
+              </value_list>
+            </condition>
+            <condition logic="like">
+              <attribute>county_name</attribute>
+              <value_list>
+                <value>DAW%</value>
+              </value_list>
+            </condition>
+          </operator>
+        </group_actual>
+        <group_display>name starts with TX DAW%</group_display>
+      </value>
+      <value id="2" ignored="false">
+        <group_actual>
+          <operator logic="and">
+            <condition logic="equals">
+              <attribute>state_code</attribute>
+              <value_list>
+                <value>42</value>
+              </value_list>
+            </condition>
+            <condition logic="like">
+              <attribute>county_name</attribute>
+              <value_list>
+                <value>BORDEN%</value>
+              </value_list>
+            </condition>
+          </operator>
+        </group_actual>
+        <group_display>name starts with TX BORDEN%</group_display>
+      </value>
+      <value id="3" ignored="false">
+        <group_actual>
+          <operator logic="and">
+            <condition logic="equals">
+              <attribute>state_code</attribute>
+              <value_list>
+                <value>42</value>
+              </value_list>
+            </condition>
+            <condition logic="like">
+              <attribute>county_name</attribute>
+              <value_list>
+                <value>ANDREWS%</value>
+              </value_list>
+            </condition>
+          </operator>
+        </group_actual>
+        <group_display>name starts with TX ANDREWS%</group_display>
+      </value>
+      <value id="4" ignored="false">
+        <group_actual>
+          <operator logic="and">
+            <condition logic="equals">
+              <attribute>state_code</attribute>
+              <value_list>
+                <value>42</value>
+              </value_list>
+            </condition>
+            <condition logic="like">
+              <attribute>county_name</attribute>
+              <value_list>
+                <value>MARTIN%</value>
+              </value_list>
+            </condition>
+          </operator>
+        </group_actual>
+        <group_display>name starts with TX MARTIN%</group_display>
+      </value>
+      <value id="5" ignored="false">
+        <group_actual>
+          <operator logic="and">
+            <condition logic="equals">
+              <attribute>state_code</attribute>
+              <value_list>
+                <value>42</value>
+              </value_list>
+            </condition>
+            <condition logic="like">
+              <attribute>county_name</attribute>
+              <value_list>
+                <value>HOWARD%</value>
+              </value_list>
+            </condition>
+          </operator>
+        </group_actual>
+        <group_display>name starts with TX HOWARD%</group_display>
+      </value>
+      <value id="6" ignored="false">
+        <group_actual>
+          <operator logic="and">
+            <condition logic="equals">
+              <attribute>state_code</attribute>
+              <value_list>
+                <value>42</value>
+              </value_list>
+            </condition>
+            <condition logic="like">
+              <attribute>county_name</attribute>
+              <value_list>
+                <value>ECTOR%</value>
+              </value_list>
+            </condition>
+          </operator>
+        </group_actual>
+        <group_display>name starts with TX ECTOR%</group_display>
+      </value>
+      <value id="7" ignored="false">
+        <group_actual>
+          <operator logic="and">
+            <condition logic="equals">
+              <attribute>state_code</attribute>
+              <value_list>
+                <value>42</value>
+              </value_list>
+            </condition>
+            <condition logic="like">
+              <attribute>county_name</attribute>
+              <value_list>
+                <value>MIDLAND%</value>
+              </value_list>
+            </condition>
+          </operator>
+        </group_actual>
+        <group_display>name starts with TX MIDLAND%</group_display>
+      </value>
+      <value id="8" ignored="false">
+        <group_actual>
+          <operator logic="and">
+            <condition logic="equals">
+              <attribute>state_code</attribute>
+              <value_list>
+                <value>42</value>
+              </value_list>
+            </condition>
+            <condition logic="like">
+              <attribute>county_name</attribute>
+              <value_list>
+                <value>GLASS%</value>
+              </value_list>
+            </condition>
+          </operator>
+        </group_actual>
+        <group_display>name starts with TX GLASS%</group_display>
+      </value>
+      <value id="9" ignored="false">
+        <group_actual>
+          <operator logic="and">
+            <condition logic="equals">
+              <attribute>state_code</attribute>
+              <value_list>
+                <value>42</value>
+              </value_list>
+            </condition>
+            <condition logic="like">
+              <attribute>county_name</attribute>
+              <value_list>
+                <value>UPTON%</value>
+              </value_list>
+            </condition>
+          </operator>
+        </group_actual>
+        <group_display>name starts with TX UPTON%</group_display>
+      </value>
+      <value id="10" ignored="false">
+        <group_actual>
+          <operator logic="and">
+            <condition logic="equals">
+              <attribute>state_code</attribute>
+              <value_list>
+                <value>42</value>
+              </value_list>
+            </condition>
+            <condition logic="like">
+              <attribute>county_name</attribute>
+              <value_list>
+                <value>REAGAN%</value>
+              </value_list>
+            </condition>
+          </operator>
+        </group_actual>
+        <group_display>name starts with TX REAGAN%</group_display>
+      </value>
+      <value id="11" ignored="false">
+        <group_actual>
+          <operator logic="and">
+            <condition logic="equals">
+              <attribute>state_code</attribute>
+              <value_list>
+                <value>42</value>
+              </value_list>
+            </condition>
+            <condition logic="like">
+              <attribute>county_name</attribute>
+              <value_list>
+                <value>CROCKETT%</value>
+              </value_list>
+            </condition>
+          </operator>
+        </group_actual>
+        <group_display>name starts with TX CROCKETT%</group_display>
+      </value>
+      <value id="12" ignored="false">
+        <group_actual>
+          <operator logic="and">
+            <condition logic="equals">
+              <attribute>state_code</attribute>
+              <value_list>
+                <value>42</value>
+              </value_list>
+            </condition>
+            <condition logic="like">
+              <attribute>county_name</attribute>
+              <value_list>
+                <value>SCHLEICHER%</value>
+              </value_list>
+            </condition>
+          </operator>
+        </group_actual>
+        <group_display>name starts with TX SCHLEICHER%</group_display>
+      </value>
+      <value id="13" ignored="false">
+        <group_actual>
+          <operator logic="and">
+            <condition logic="equals">
+              <attribute>state_code</attribute>
+              <value_list>
+                <value>42</value>
+              </value_list>
+            </condition>
+            <condition logic="like">
+              <attribute>county_name</attribute>
+              <value_list>
+                <value>IRION%</value>
+              </value_list>
+            </condition>
+          </operator>
+        </group_actual>
+        <group_display>name starts with TX IRION%</group_display>
+      </value>
+    </filter>
+  </criteria>
+  <criteria type="group" groupId="" ignored="false">
+    <domain>US</domain>
+    <datatype>Production Allocated</datatype>
+    <attribute_group>Well</attribute_group>
+    <attribute>Hole Direction</attribute>
+    <filter logic="include">
+      <value id="14" ignored="false">
+        <group_actual>
+          <operator logic="and">
+            <condition logic="equals">
+              <attribute>code</attribute>
+              <value_list>
+                <value>H</value>
+              </value_list>
+            </condition>
+          </operator>
+        </group_actual>
+        <group_display>name = HORIZONTAL</group_display>
+      </value>
+    </filter>
+  </criteria>
+</criterias>
