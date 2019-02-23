@@ -105,12 +105,77 @@ Bindings:
 Service: ExportBuilderService
      Port: ExportBuilderServiceSoap (Soap11Binding: {http://www.ihsenergy.com/Enerdeq/Schemas/ExportBuilder}ExportBuilderServiceSoap)
          Operations:
-            BuildExport(Parameters: ns1:ExportParameters, Target: ns2:MyFilesTarget,
-_soapheaders={request_header: ns0:Header}) -> JobID: xsd:string
- Target: ns2:MyFilesTarget, _soapheaders={request_header: ns0:Header}) -> JobID: xsd:string            BuildSpatialExport(Parameters: ns1:SpatialExportParameters, Target: ns2:MyFilesTarget, _soapheaders={request_header: ns0:Header}) -> JobID: xsd:string            DeleteExport(JobID: xsd:string, _soapheaders={request_header: ns0:Header}) -> Result: xsd:boolean
-            Exists(JobID: xsd:string, _soapheaders={request_header: ns0:Header}) -> Result: xsd:boolean            GetCompleteExports(_soapheaders={request_header: ns0:Header}) -> ExportNames: ns2:ArrayOfStrings
-            GetDatatypes(Domain: xsd:string, _soapheaders={request_header: ns0:Header}) -> Datatypes: ns2:ArrayOfStrings            GetDomains(_soapheaders={request_header: ns0:Header}) -> Domains: ns2:ArrayOfStrings
-            GetExportStatus(JobID: xsd:string, _soapheaders={request_header: ns0:Header}) -> Status: ns2:StatusType            GetExportTemplates(Domain: xsd:string, DataType: xsd:string, _soapheaders={request_header: ns0:Header}) -> Templates: ns2:ArrayOfStrings            GetLayers(_soapheaders={request_header: ns0:Header}) -> Layers: ns2:ArrayOfStrings
-            GetSpatialExportFormats(_soapheaders={request_header: ns0:Header}) -> Formats: ns2:ArrayOfStrings
-            IsComplete(JobID: xsd:string, _soapheaders={request_header: ns0:Header}) -> Result: xsd:boolean
-            RetrieveExport(JobID: xsd:string, Compress: xsd:boolean, _soapheaders={request_header: ns0:Header}) -> ByteArray: xsd:base64Binary
+
+          BuildExport(
+                    Parameters: ns1:ExportParameters,
+                    Target: ns2:MyFilesTarget,
+                    _soapheaders={request_header: ns0:Header}
+                    )
+                    -> JobID: xsd:string
+
+          BuildSpatialExport(
+                              Parameters: ns1:SpatialExportParameters,
+                              Target: ns2:MyFilesTarget,
+                              _soapheaders={request_header: ns0:Header}
+                              )
+                              -> JobID: xsd:string
+
+          DeleteExport(
+                       JobID: xsd:string,
+                       _soapheaders={request_header: ns0:Header}
+                       )
+                       -> Result: xsd:boolean
+
+          Exists(
+               JobID: xsd:string,
+                    _soapheaders={request_header: ns0:Header})
+                    -> Result: xsd:boolean
+
+               GetCompleteExports(
+                                   _soapheaders={request_header: ns0:Header}
+                                   )
+                                   -> ExportNames: ns2:ArrayOfStrings
+
+          GetDatatypes(
+               Domain: xsd:string,
+                    _soapheaders={request_header: ns0:Header}
+                    )
+                    -> Datatypes: ns2:ArrayOfStrings
+               GetDomains(
+                         _soapheaders={request_header: ns0:Header}
+                         ) -> Domains: ns2:ArrayOfStrings
+
+          GetExportStatus(
+               JobID: xsd:string,
+                    _soapheaders={request_header: ns0:Header}
+                    )
+                    -> Status: ns2:StatusType
+               GetExportTemplates(
+                              Domain: xsd:string,
+                              DataType: xsd:string,
+                              _soapheaders={request_header: ns0:Header}
+                              )
+                              -> Templates: ns2:ArrayOfStrings
+
+          GetLayers(
+               _soapheaders={request_header: ns0:Header}
+                    )
+                    -> Layers: ns2:ArrayOfStrings
+
+          GetSpatialExportFormats(
+               _soapheaders={request_header: ns0:Header}
+               )
+               -> Formats: ns2:ArrayOfStrings
+
+          IsComplete(
+          JobID: xsd:string,
+          _soapheaders={request_header: ns0:Header}
+          )
+          -> Result: xsd:boolean
+
+          RetrieveExport(
+               JobID: xsd:string,
+               Compress: xsd:boolean,
+               _soapheaders={request_header: ns0:Header}
+               )
+               -> ByteArray: xsd:base64Binary
