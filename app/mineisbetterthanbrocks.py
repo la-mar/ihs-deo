@@ -39,39 +39,41 @@ client.service.Login(_soapheaders=[header_value])
 
 # qb_client = zeep.Client(wsdl = qb_wsdl)
 
-# qb_query = """<criterias>
-#     <criteria type="group" groupId="" ignored="false">
-#         <domain>US</domain>
-#         <datatype>Well</datatype>
-#         <attribute_group>Identification</attribute_group>
-#         <attribute>Current Operator</attribute>
-#         <filter logic="include">
-#             <value id="0" ignored="false">
-#                 <group_actual>
-#                     <operator logic="and">
-#                         <condition logic="equals">
-#                             <attribute>code</attribute>
-#                             <value_list>
-#                                 <value>278107</value>
-#                             </value_list>
-#                         </condition>
-#                     </operator>
-#                 </group_actual>
-#                 <group_display>name = DRIFTWOOD ENERGY OPERATING LLC</group_display>
-#             </value>
-#         </filter>
-#     </criteria>
-# </criterias>"""
+qb_query = """<criterias>
+    <criteria type="group" groupId="" ignored="false">
+        <domain>US</domain>
+        <datatype>Well</datatype>
+        <attribute_group>Identification</attribute_group>
+        <attribute>Current Operator</attribute>
+        <filter logic="include">
+            <value id="0" ignored="false">
+                <group_actual>
+                    <operator logic="and">
+                        <condition logic="equals">
+                            <attribute>code</attribute>
+                            <value_list>
+                                <value>278107</value>
+                            </value_list>
+                        </condition>
+                    </operator>
+                </group_actual>
+                <group_display>name = DRIFTWOOD ENERGY OPERATING LLC</group_display>
+            </value>
+        </filter>
+    </criteria>
+</criterias>"""
 
 #print(qb_client.service.GetCount(qb_query, "Well", "US", _soapheaders=[header_value]))
 
 eb_client = zeep.Client(eb_wsdl)
+#14207C0183842
+#42461343350001
 
 params = {
 'Domain':'US',
 'DataType': 'Well',
 'Template': 'EnerdeqML Well',
-'Ids': ["42383402790000"]
+'Query': qb_query
 }
 
 target = {
@@ -79,4 +81,6 @@ target = {
 'Overwrite': 'False'
 }
 
-job_id = eb_client.service.BuildExport(params, target, _soapheaders=[header_value])
+job_id = eb_client.service.BuildExportFromQuery(params, target, _soapheaders=[header_value])
+
+data = eb_client.service.RetrieveExport(job_id, _soapheaders=[header_value])
