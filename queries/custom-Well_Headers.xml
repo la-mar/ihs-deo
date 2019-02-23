@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<custom_oneline domain="US" title="Well_Headers" datatype="Well" createdBy="brock@driftwoodenergy.com">
+    <attribute>UWI</attribute>
+    <attribute>Lease Name</attribute>
+    <attribute>Well Num</attribute>
+    <attribute>Current Operator</attribute>
+    <attribute>Operator Name</attribute>
+    <attribute>Permit Num</attribute>
+    <attribute>Form at TD Name</attribute>
+    <attribute>Proj Form</attribute>
+    <attribute>Abnd Date</attribute>
+    <attribute>Comp Date</attribute>
+    <attribute>Spud Date</attribute>
+    <attribute>Rig Release Date</attribute>
+    <attribute>Last Activity Date</attribute>
+    <attribute>Permit License Date</attribute>
+    <attribute>Basin</attribute>
+    <attribute>State Name</attribute>
+    <attribute>State Code</attribute>
+    <attribute>State</attribute>
+    <attribute>BH Latitude</attribute>
+    <attribute>BH Longitude</attribute>
+    <attribute>Latitude</attribute>
+    <attribute>Longitude</attribute>
+    <attribute>PBHL Latitude</attribute>
+    <attribute>PBHL Longitude</attribute>
+    <attribute>TVD</attribute>
+    <attribute>Hole Direction</attribute>
+    <attribute>Final Status</attribute>
+    <attribute>Final Status Code</attribute>
+    <attribute>Proj Depth</attribute>
+    <attribute>County Name</attribute>
+    <attribute>County Code</attribute>
+    <attribute>Datum</attribute>
+    <attribute>North Ref Name</attribute>
+    <attribute>LL Srce</attribute>
+    <attribute>Elevation Code</attribute>
+    <attribute>Elevation Gr</attribute>
+    <attribute>Elevation Kb</attribute>
+    <attribute>Ref Elev</attribute>
+</custom_oneline>

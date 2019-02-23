@@ -11,6 +11,8 @@ QB = zeep.Client(wsdl=qb_wsdl)
 EB = zeep.Client(wsdl=eb_wsdl)
 # client = zeep.Client(wsdl=wsdl)
 
+API = "42383402790000"
+
 domain = 'US'
 
 dtypes = ['Well', 'Production Allocated']
@@ -72,12 +74,93 @@ wellquery = """
 </criterias>
 """
 
+
+
 s = QB.service
 
 s.GetCount(wellquery, 'Well', 'US', _soapheaders = _soapheaders)
 
-s.LookupCode('UWI', )
+s.ValidateIds(domain, "Well", "UWI", Ids = ["42383402790000"], _soapheaders = _soapheaders)
 
-                         LookupCode(Parameters: ns2: LookupParameters, _soapheaders = {
-                              request_header: ns0: Header
-                         })
+lookup_parameters = {
+    'Domain': 'US',
+    'DataType': 'Well',
+    'Attr': 'Current Operator',#'API/IC Number',
+    'SearchValue': 'Driftwood',
+    'Operator': 'StartsWith'
+}
+
+x = s.LookupName(lookup_parameters, _soapheaders = _soapheaders)
+
+
+def lookup_name() -> list:
+    """Example output:
+        ['DRIFTWOOD ENERGY OPERATING LLC',
+        'DRIFTWOOD GERMANIA',
+        'DRIFTWOOD OIL COMPANY',
+        'DRIFTWOOD OIL LLC',
+        'DRIFTWOOD OPERATING COMPANY',
+        'DRIFTWOOD STORAGE LLC']
+    """
+    lookup_parameters = {
+        'Domain': 'US',
+        'DataType': 'Well',
+        'Attr': 'Current Operator',
+        'SearchValue': 'Driftwood',
+        'Operator': 'StartsWith'
+    }
+    return QB.service.LookupName(lookup_parameters, _soapheaders = _soapheaders)
+
+
+
+lookup_parameters = {
+    'Domain': 'US',
+    'DataType': 'Well',
+    'IDs': ['42461343350001'],
+    'Attrs': 'Operator Name',
+    'StartDate': '2018/10/01',
+    'EndDate': '2019/10/01',
+    # 'SearchValue': 'Driftwood',
+    # 'Operator': 'StartsWith'
+
+}
+
+# ns2: GetProductionEntityAttributesParameters(Domain: xsd: string, DataType: xsd: string, IDs: ns1: ArrayOfId, Attrs: ns1: ArrayOfStrings, StartDate: xsd: string, EndDate: xsd: string)
+
+wellquery2 = """
+<criterias>
+    <criteria type="group" groupId="" ignored="false">
+        <domain>US</domain>
+        <datatype>Production Allocated</datatype>
+        <attribute_group>Identification</attribute_group>
+        <attribute>Operator</attribute>
+        <filter logic="include">
+            <value id="0" ignored="false">
+                <group_actual>
+                    <operator logic="and">
+                        <condition logic="equals">
+                            <attribute>code</attribute>
+                            <value_list>
+                                <value>278107</value>
+                            </value_list>
+                        </condition>
+                    </operator>
+                </group_actual>
+                <group_display>name = DRIFTWOOD ENERGY OPERATING LLC</group_display>
+            </value>
+        </filter>
+    </criteria>
+</criterias>
+"""
+
+xml = QB.service.GetAttributes(wellquery2, _soapheaders = _soapheaders)
+
+import pandas as pd
+
+from lxml import objectify
+xml = objectify.fromstring(xml)
+root = xml.getroottree().getroot()
+
+records = [child.text for child in root['record-meta'].getchildren()]
+
+df = xml_dataframe
