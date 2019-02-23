@@ -102,4 +102,37 @@ import pandas as pd
 import bs4
 
 
-soup = bs4.BeautifulSoup(xml, 'lxml-xml')
+
+
+
+
+def production_header_xml_to_df(xml: str) -> pd.DataFrame:
+    soup = bs4.BeautifulSoup(xml, 'lxml-xml')
+
+    root = soup.find('result-set')
+
+    record_meta = soup.find('record-meta')
+    meta_attributes = record_meta.find_all('attribute')
+    column_names: list = [x.attrs['alias'] for x in meta_attributes if x.has_attr('alias')]
+
+    xml_records: list = soup.find_all('record')
+    values: list = []
+    for record in xml_records:
+        vals = []
+        for attribute in record:
+            text = attribute.text
+            if text == '':
+                text = None
+            vals.append(text)
+        values.append(vals)
+
+    return pd.DataFrame(data = values, columns = column_names)
+
+
+
+
+
+
+
+
+
