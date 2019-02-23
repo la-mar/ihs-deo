@@ -132,8 +132,10 @@ def production_header_xml_to_df(xml: str) -> pd.DataFrame:
 
     return pd.DataFrame(data = values, columns = column_names)
 
+# xml = data
 
-
+# with open('temp.xml', 'w') as f:
+#     f.writelines(xml)
 
 
 

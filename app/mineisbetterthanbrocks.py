@@ -78,9 +78,14 @@ params = {
 
 target = {
   'Filename':'Sample',
-'Overwrite': 'False'
+'Overwrite': 'True'
 }
 
 job_id = eb_client.service.BuildExportFromQuery(params, target, _soapheaders=[header_value])
 
 data = eb_client.service.RetrieveExport(job_id, _soapheaders=[header_value])
+
+data = data.decode('utf-8')
+
+
+
