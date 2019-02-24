@@ -18,12 +18,12 @@ def get_formats():
 #                               -> JobID: xsd:string
 
 param = {
-    'LatMin': 0,
-    'LatMax':0,
-    'LongMin': 0,
-    'LongMax' : 0,
-    'Layers' : get_layers(),
-    'Format' : get_formats()
+    'LatMin': 26.4465566,
+    'LatMax':36.9460185,
+    'LongMin': -108.1533238,
+    'LongMax' : -93.7819362,
+    'Layers' : ['Well (Surface)'],
+    'Format' : 'SHAPE'
 }
 
 target = {
