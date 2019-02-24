@@ -1,34 +1,6 @@
-import zeep
-wsdl = 'C:\Repositories\Collector-IHS\docs\DirectConnect\wsdl.v10\Session.wsdl'
-qb_wsdl = 'C:\Repositories\Collector-IHS\docs\DirectConnect\wsdl.v10\QueryBuilder.wsdl'
-eb_wsdl = 'C:\Repositories\Collector-IHS\docs\DirectConnect\wsdl.v10\ExportBuilder.wsdl'
 
-client = zeep.Client(wsdl=wsdl)
-
-from zeep import xsd
-
-user = 'brock@driftwoodenergy.com'
-password = 'YrUs0LAME!'
-appName = 'driftwood_wellprod_digest'
-
-header = xsd.Element(
-    '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Header',
-    xsd.ComplexType([
-        xsd.Element(
-            '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Username',
-            xsd.String()),
-            xsd.Element(
-            '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Password',
-            xsd.String()),
-            xsd.Element(
-            '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Application',
-            xsd.String())
-    ])
-)
-
-header_value = header(Username=user, Password = password, Application = appName)
-
-client.service.Login(_soapheaders=[header_value])
+from app.connection import *
+from time import sleep
 
 eb_client = zeep.Client(eb_wsdl)
 
@@ -73,10 +45,31 @@ prod_query = """
         <type>date</type>
         <displaytype />
         <filter logic="between">
-            <value id="0" ignored="false" display="between 2/1/2019 and 2/23/2019" actual="2019/2/1 00:00:00--2019/2/23 23:59:59.999999999" />
+            <value id="1" ignored="false" actual="2013/2/1 00:00:00--2019/2/23 23:59:59.999999999" />
         </filter>
     </criteria>
-
+    <criteria type="value" ignored="false">
+        <domain>US</domain>
+        <datatype>Production Allocated</datatype>
+        <attribute_group>Date</attribute_group>
+        <attribute>Production Start Date</attribute>
+        <type>date</type>
+        <displaytype />
+        <filter logic="between">
+            <value id="2" ignored="false" actual="2012/1/1 00:00:00--2019/2/23 23:59:59.999999999" />
+        </filter>
+    </criteria>
+    <criteria type="value" ignored="false">
+        <domain>US</domain>
+        <datatype>Production Allocated</datatype>
+        <attribute_group>Date</attribute_group>
+        <attribute>Production Stop Date</attribute>
+        <type>date</type>
+        <displaytype />
+        <filter logic="between">
+            <value id="2" ignored="false" actual="2018/2/1 00:00:00--2019/2/28 23:59:59.999999999" display="between 2/1/2018 and 2/28/2019" />
+        </filter>
+    </criteria>
 </criterias>
 """
 params_prod = {
@@ -91,7 +84,15 @@ target = {
 'Overwrite': 'True'
 }
 
+def is_complete(job_id):
+    return EB.service.IsComplete(job_id, _soapheaders=[header_value])
+
 prod_job_id = eb_client.service.BuildExportFromQuery(params_prod, target, _soapheaders=[header_value])
+
+while not is_complete(prod_job_id):
+        n = 5
+        print(f'Sleeping for {n} secs')
+        sleep(n)
 
 prod_data = eb_client.service.RetrieveExport(prod_job_id, _soapheaders=[header_value])
 
