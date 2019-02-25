@@ -57,23 +57,23 @@ def names(attribute_group: list) ->  list:
 
 
 
-[c.attrs.update({'type': 'attribute_group'}) for c in subgroups]
+# [c.attrs.update({'type': 'attribute_group'}) for c in subgroups]
 
-record_meta = soup.find('record-meta')
-meta_attributes = record_meta.find_all('attribute')
-column_names: list = [x.attrs['alias'] for x in meta_attributes if x.has_attr('alias')]
+# record_meta = soup.find('record-meta')
+# meta_attributes = record_meta.find_all('attribute')
+# column_names: list = [x.attrs['alias'] for x in meta_attributes if x.has_attr('alias')]
 
-xml_records: list = soup.find_all('record')
+# xml_records: list = soup.find_all('record')
 
-values: list = []
-for record in xml_records:
-    vals = []
-    for attribute in record:
-        text = attribute.text
-        if text == '':
-            text = None
-        vals.append(text)
-    values.append(vals)
+# values: list = []
+# for record in xml_records:
+#     vals = []
+#     for attribute in record:
+#         text = attribute.text
+#         if text == '':
+#             text = None
+#         vals.append(text)
+#     values.append(vals)
 
 def recurse_group(group):
     if isinstance(group, bs4.element.Tag):
@@ -88,31 +88,74 @@ def recurse(tag):
             return recurse(child)
 
 
-def dictify(group):
+def dictify(group): #! Nope
     result = {}
     for li in list(group.children):
         key = li.name
         if key is not None:
-            if isinstance(li, bs4.element.Tag):
-                result[key] = dictify(li)
+            if key in list(result.keys()): # key exists
+                if isinstance(li, bs4.element.Tag): # is tag
+                    if isinstance(result[key], list): # is list
+                        result[key].append(li.name)
+                    else:
+                        result[key] = dictify(li)
+
+                elif isinstance(result[key], list): # is list
+                        result[key].append(li.name)
+                else: # is str
+                    result[key] = [result[key], li.name]
             else:
-                result[key] = li
+                if isinstance(li, bs4.element.Tag): # is tag
+                    result[key] = dictify(li)
+                elif isinstance(result[key], list): # is list
+                        result[key].append(li.name)
+                else:
+                    result[key] = li
         else:
             return li
     return result
 
 
-def dictify(ul):
-    result = {}
-    flat = []
-    for li in list(ul.children):
-        key = li.name
-        if key is not None:
-            if isinstance(li, bs4.element.Tag):
-                flat += dictify(li)
-            else:
-                flat += li
-        else:
-            return li
 
-    return flat
+
+ops = group.contents[2]
+ops = group
+
+# data = {}
+
+# ls = list(reversed([x.name for x in sg.parents]))
+# list(reversed(ls))
+
+
+def flatten(xml:bs4.element.Tag, table_name: str):
+    data = []
+    for g in ops.recursiveChildGenerator():
+        if isinstance(g, bs4.element.Tag):
+            d = '/'.join(list(reversed([x.name for x in g.parents])))
+            d += '/' + g.name + '/' + g.text
+            data.append(d)
+
+    tokens = [x.split('/') for x in data]
+
+    # table_name = 'HEADER'
+    final = {}
+    for _set in tokens:
+        # _ = None
+        while(_set[0] != table_name):
+            _set.pop(0)
+
+        final['_'.join([x for x in _set[:-1] if x != table_name]).lower()] = _set[-1]
+        # _set = '_'.join(_set[])
+        # print(_set)
+    return data
+
+flatten(group.contents[0], 'HEADER')
+    # _set = '_'.join(_set[])
+    # print(_set)
+
+
+
+# from xmljson import badgerfish as bf
+# from xml.etree.ElementTree import fromstring
+
+# x = bf.data(fromstring(xml))
