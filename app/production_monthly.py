@@ -1,144 +1,99 @@
 
+from app.connection import *
+from time import sleep
 
+eb_client = zeep.Client(eb_wsdl)
 
-import zeep
-wsdl = 'C:\Repositories\Collector-IHS\docs\DirectConnect\wsdl.v10\Session.wsdl'
-qb_wsdl = 'C:\Repositories\Collector-IHS\docs\DirectConnect\wsdl.v10\QueryBuilder.wsdl'
-eb_wsdl = 'C:\Repositories\Collector-IHS\docs\DirectConnect\wsdl.v10\ExportBuilder.wsdl'
+# Braches can limit what sections of the data we pull
+prod_template = """
+<EXPORT>
+    <TEXTUAL_EXPORTS>
+        <PRODUCTION_XML>
+            <BRANCH NAME="/PRODUCTION_SET/PRODUCING_ENTITY/PRODUCTION"/>
+        </PRODUCTION_XML>
+    </TEXTUAL_EXPORTS>
+</EXPORT>"""
 
-CC = zeep.Client(wsdl=wsdl)
-QB = zeep.Client(wsdl=qb_wsdl)
-EB = zeep.Client(wsdl=eb_wsdl)
-# client = zeep.Client(wsdl=wsdl)
-
-API = "42383402790000"
-
-domain = 'US'
-
-dtypes = ['Well', 'Production Allocated']
-
-def methods(obj) -> None:
-    return [x for x in dir(obj) if not x.startswith('__')]
-
-def m(obj):
-    return methods(obj)
-
-def get_count():
-    'Put query that worked here'
-
-from zeep import xsd
-
-user = 'brock@driftwoodenergy.com'
-password = 'YrUs0LAME!'
-appName = 'driftwood_wellprod_digest'
-
-header = xsd.Element(
-    '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Header',
-    xsd.ComplexType([
-        xsd.Element(
-            '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Username',
-            xsd.String()),
-            xsd.Element(
-            '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Password',
-            xsd.String()),
-            xsd.Element(
-            '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Application',
-            xsd.String())
-    ])
-)
-
-header_value = header(Username=user, Password = password, Application = appName)
-
-_soapheaders = [header_value]
-
-CC.service.Login(_soapheaders = _soapheaders)
-
-wellquery = """
+prod_query = """
 <criterias>
-  <criteria type="value">
-    <domain>US</domain>
-    <datatype>Production Allocated</datatype>
-    <attribute_group>Location</attribute_group>
-    <attribute>Basin</attribute>
-    <type>name</type>
-    <filter logic="equals">
-      <value  actual="PERMIAN BASIN"/>
-    </filter>
-  </criteria>
+    <criteria type="group" groupId="" ignored="false">
+        <domain>US</domain>
+        <datatype>Production Allocated</datatype>
+        <attribute_group>Identification</attribute_group>
+        <attribute>Operator</attribute>
+        <filter logic="include">
+            <value id="0" ignored="false">
+                <group_actual>
+                    <operator logic="and">
+                        <condition logic="equals">
+                            <attribute>code</attribute>
+                            <value_list>
+                                <value>278107</value>
+                            </value_list>
+                        </condition>
+                    </operator>
+                </group_actual>
+                <group_display>name = DRIFTWOOD ENERGY OPERATING LLC</group_display>
+            </value>
+        </filter>
+    </criteria>
+    <criteria type="value" ignored="false">
+        <domain>US</domain>
+        <datatype>Production Allocated</datatype>
+        <attribute_group>Date</attribute_group>
+        <attribute>Last Update</attribute>
+        <type>date</type>
+        <displaytype />
+        <filter logic="between">
+            <value id="1" ignored="false" actual="2013/2/1 00:00:00--2019/2/23 23:59:59.999999999" />
+        </filter>
+    </criteria>
+    <criteria type="value" ignored="false">
+        <domain>US</domain>
+        <datatype>Production Allocated</datatype>
+        <attribute_group>Date</attribute_group>
+        <attribute>Production Start Date</attribute>
+        <type>date</type>
+        <displaytype />
+        <filter logic="between">
+            <value id="2" ignored="false" actual="2012/1/1 00:00:00--2019/2/23 23:59:59.999999999" />
+        </filter>
+    </criteria>
+    <criteria type="value" ignored="false">
+        <domain>US</domain>
+        <datatype>Production Allocated</datatype>
+        <attribute_group>Date</attribute_group>
+        <attribute>Production Stop Date</attribute>
+        <type>date</type>
+        <displaytype />
+        <filter logic="between">
+            <value id="2" ignored="false" actual="2018/2/1 00:00:00--2019/2/28 23:59:59.999999999" display="between 2/1/2018 and 2/28/2019" />
+        </filter>
+    </criteria>
 </criterias>
 """
+params_prod = {
+'Domain':'US',
+'DataType': 'Production Allocated',
+#'Template': prod_template,
+'Template': 'EnerdeqML Production',
+'Query': prod_query
+}
 
-def get_layers():
-    return EB.service.GetLayers(_soapheaders = _soapheaders)
+target = {
+  'Filename':'Sample',
+'Overwrite': 'True'
+}
 
+def is_complete(job_id):
+    return EB.service.IsComplete(job_id, _soapheaders=[header_value])
 
+prod_job_id = eb_client.service.BuildExportFromQuery(params_prod, target, _soapheaders=[header_value])
 
+while not is_complete(prod_job_id):
+        n = 5
+        print(f'Sleeping for {n} secs')
+        sleep(n)
 
-import pandas as pd
-import bs4
-
-
-def production_header_from_query_builder():
-    wellquery2 = """
-    <criterias>
-        <criteria type="group" groupId="" ignored="false">
-            <domain>US</domain>
-            <datatype>Production Allocated</datatype>
-            <attribute_group>Identification</attribute_group>
-            <attribute>Operator</attribute>
-            <filter logic="include">
-                <value id="0" ignored="false">
-                    <group_actual>
-                        <operator logic="and">
-                            <condition logic="equals">
-                                <attribute>code</attribute>
-                                <value_list>
-                                    <value>278107</value>
-                                </value_list>
-                            </condition>
-                        </operator>
-                    </group_actual>
-                    <group_display>name = DRIFTWOOD ENERGY OPERATING LLC</group_display>
-                </value>
-            </filter>
-        </criteria>
-    </criterias>
-    """
-
-    return QB.service.GetAttributes(wellquery2, _soapheaders = _soapheaders)
-
-
-
-
-def production_header_xml_to_df(xml: str) -> pd.DataFrame:
-    soup = bs4.BeautifulSoup(xml, 'lxml-xml')
-
-    root = soup.find('result-set')
-
-    record_meta = soup.find('record-meta')
-    meta_attributes = record_meta.find_all('attribute')
-    column_names: list = [x.attrs['alias'] for x in meta_attributes if x.has_attr('alias')]
-
-    xml_records: list = soup.find_all('record')
-
-    values: list = []
-    for record in xml_records:
-        vals = []
-        for attribute in record:
-            text = attribute.text
-            if text == '':
-                text = None
-            vals.append(text)
-        values.append(vals)
-
-
-    return pd.DataFrame(data = values, columns = column_names)
-
-
-
-
-
-
-
-
+prod_data = eb_client.service.RetrieveExport(prod_job_id, _soapheaders=[header_value])
 

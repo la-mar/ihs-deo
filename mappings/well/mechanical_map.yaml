@@ -1,0 +1,112 @@
+MECHANICAL/STRING/CEMENT/AMOUNT/UOM:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+MECHANICAL/STRING/CEMENT/AMOUNT/VALUE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+MECHANICAL/STRING/CEMENT/NUMBER:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+MECHANICAL/STRING/CEMENT/TYPE/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+MECHANICAL/STRING/HEADER/DATA_PROVIDER/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+MECHANICAL/STRING/HEADER/DEPTHS/BASE/UOM:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+MECHANICAL/STRING/HEADER/DEPTHS/BASE/VALUE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+MECHANICAL/STRING/HEADER/MATERIAL/WEIGHT/UOM:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+MECHANICAL/STRING/HEADER/MATERIAL/WEIGHT/VALUE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+MECHANICAL/STRING/HEADER/NUMBER:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+MECHANICAL/STRING/HEADER/SIZES/HOLE/UOM:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+MECHANICAL/STRING/HEADER/SIZES/HOLE/VALUE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+MECHANICAL/STRING/HEADER/SIZES/STRING/DESCRIPTION:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+MECHANICAL/STRING/HEADER/SIZES/STRING/UOM:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+MECHANICAL/STRING/HEADER/SIZES/STRING/VALUE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+MECHANICAL/STRING/HEADER/SOURCE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null

@@ -1,0 +1,70 @@
+TREATMENT_SUMMARY/FLUID_OTHER/UOM:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+TREATMENT_SUMMARY/FLUID_OTHER/VALUE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+TREATMENT_SUMMARY/NUM_TREATMENT_RECORDS:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+TREATMENT_SUMMARY/PROPPANT_FLUID_RATIO:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+TREATMENT_SUMMARY/PROPPANT_SAND/UOM:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+TREATMENT_SUMMARY/PROPPANT_SAND/VALUE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+TREATMENT_SUMMARY/TOTAL_FLUID/UOM:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+TREATMENT_SUMMARY/TOTAL_FLUID/VALUE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+TREATMENT_SUMMARY/TOTAL_PROPPANT/UOM:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+TREATMENT_SUMMARY/TOTAL_PROPPANT/VALUE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null

@@ -1,0 +1,133 @@
+GEOPHYSICS/LOG/HEADER/COMPANY/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+GEOPHYSICS/LOG/HEADER/COMPANY/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+GEOPHYSICS/LOG/HEADER/DATA_PROVIDER/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+GEOPHYSICS/LOG/HEADER/DATES/LOGGING/DAY:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+GEOPHYSICS/LOG/HEADER/DATES/LOGGING/MONTH_NUMBER:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+GEOPHYSICS/LOG/HEADER/DATES/LOGGING/STANDARD:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+GEOPHYSICS/LOG/HEADER/DATES/LOGGING/YEAR:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+GEOPHYSICS/LOG/HEADER/DEPTHS/BASE/UOM:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+GEOPHYSICS/LOG/HEADER/DEPTHS/BASE/VALUE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+GEOPHYSICS/LOG/HEADER/DEPTHS/MAXIMUM_REACHED/UOM:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+GEOPHYSICS/LOG/HEADER/DEPTHS/MAXIMUM_REACHED/VALUE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+GEOPHYSICS/LOG/HEADER/DEPTHS/TOP/UOM:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+GEOPHYSICS/LOG/HEADER/DEPTHS/TOP/VALUE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+GEOPHYSICS/LOG/HEADER/JOB_ID:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+GEOPHYSICS/LOG/HEADER/RUN:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+GEOPHYSICS/LOG/HEADER/SERVICE/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+GEOPHYSICS/LOG/HEADER/SOURCE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+GEOPHYSICS/LOG/HEADER/TEMPERATURES/MAXIMUM/UOM:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+GEOPHYSICS/LOG/HEADER/TEMPERATURES/MAXIMUM/VALUE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null

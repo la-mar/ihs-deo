@@ -1,0 +1,2583 @@
+WELLBORE/CONTENT/DATA_PROVIDER/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/CONTENT/DRILLING/NARRATIVE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/CONTENT/ENGINEERING/COMPLETION:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/CONTENT/ENGINEERING/PERFORATION:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/CONTENT/GEOLOGY/STRATIGRAPHIC_UNIT:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/CONTENT/GEOPHYSICS/LOG:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/CONTENT/LOCATION:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/CONTENT/MECHANICAL/CASING:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/CONTENT/MECHANICAL/TUBING:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/CONTENT/TESTS/INITIAL_PRODUCTION:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/CONTENT/TESTS/TOTAL:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/CONTENT/TESTS/TREATMENT:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/DRILLING/MEDIA/HEADER/DATA_PROVIDER/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/DRILLING/MEDIA/HEADER/NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/DRILLING/MEDIA/HEADER/SINCE_CIRCULATION/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/DRILLING/MEDIA/HEADER/SINCE_CIRCULATION/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/DRILLING/MEDIA/HEADER/SOURCE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/DRILLING/NARRATIVE/DATA_PROVIDER/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/DRILLING/NARRATIVE/DATE/DAY:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/DRILLING/NARRATIVE/DATE/MONTH_NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/DRILLING/NARRATIVE/DATE/STANDARD:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/DRILLING/NARRATIVE/DATE/YEAR:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/DRILLING/NARRATIVE/NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/DRILLING/NARRATIVE/REMARK:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/DRILLING/NARRATIVE/SOURCE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/DRILLING/NARRATIVE/TYPE/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/DRILLING/NARRATIVE/TYPE/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/COMPLETION/HEADER/DATA_PROVIDER/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/COMPLETION/HEADER/DEPTHS/BASE/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/COMPLETION/HEADER/DEPTHS/BASE/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/COMPLETION/HEADER/DEPTHS/TOP/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/COMPLETION/HEADER/DEPTHS/TOP/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/COMPLETION/HEADER/METHOD/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/COMPLETION/HEADER/METHOD/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/COMPLETION/HEADER/NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/COMPLETION/HEADER/SOURCE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/COMPLETION/HEADER/STRATIGRAPHIC_UNITS/BASE/HEADER/DESIGNATION/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/COMPLETION/HEADER/STRATIGRAPHIC_UNITS/BASE/HEADER/DESIGNATION/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/COMPLETION/HEADER/STRATIGRAPHIC_UNITS/TOP/HEADER/DESIGNATION/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/COMPLETION/HEADER/STRATIGRAPHIC_UNITS/TOP/HEADER/DESIGNATION/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/COMPLETION/HEADER/TYPE/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/PERFORATION/HEADER/COMPLETION/NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/PERFORATION/HEADER/DATA_PROVIDER/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/PERFORATION/HEADER/DATES/FIRST_REPORT/DAY:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/PERFORATION/HEADER/DATES/FIRST_REPORT/MONTH_NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/PERFORATION/HEADER/DATES/FIRST_REPORT/STANDARD:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/PERFORATION/HEADER/DATES/FIRST_REPORT/YEAR:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/PERFORATION/HEADER/DATES/LAST_UPDATE/DAY:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/PERFORATION/HEADER/DATES/LAST_UPDATE/MONTH_NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/PERFORATION/HEADER/DATES/LAST_UPDATE/STANDARD:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/PERFORATION/HEADER/DATES/LAST_UPDATE/YEAR:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/PERFORATION/HEADER/DEPTHS/BASE/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/PERFORATION/HEADER/DEPTHS/BASE/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/PERFORATION/HEADER/DEPTHS/TOP/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/PERFORATION/HEADER/DEPTHS/TOP/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/PERFORATION/HEADER/METHOD/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/PERFORATION/HEADER/METHOD/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/PERFORATION/HEADER/NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/PERFORATION/HEADER/SOURCE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/PERFORATION/HEADER/STRATIGRAPHIC_UNITS/BASE/HEADER/DESIGNATION/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/PERFORATION/HEADER/STRATIGRAPHIC_UNITS/BASE/HEADER/DESIGNATION/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/PERFORATION/HEADER/STRATIGRAPHIC_UNITS/TOP/HEADER/DESIGNATION/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/ENGINEERING/PERFORATION/HEADER/STRATIGRAPHIC_UNITS/TOP/HEADER/DESIGNATION/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOLOGY/STRATIGRAPHIC_UNIT/HEADER/AGES/YOUNGEST/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOLOGY/STRATIGRAPHIC_UNIT/HEADER/DATA_PROVIDER/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOLOGY/STRATIGRAPHIC_UNIT/HEADER/DEPTHS/TOP_MEASURED/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOLOGY/STRATIGRAPHIC_UNIT/HEADER/DEPTHS/TOP_MEASURED/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOLOGY/STRATIGRAPHIC_UNIT/HEADER/DESIGNATION/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOLOGY/STRATIGRAPHIC_UNIT/HEADER/DESIGNATION/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOLOGY/STRATIGRAPHIC_UNIT/HEADER/NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOLOGY/STRATIGRAPHIC_UNIT/HEADER/PICK_SOURCE/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOLOGY/STRATIGRAPHIC_UNIT/HEADER/SEQUENCE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOLOGY/STRATIGRAPHIC_UNIT/HEADER/SOURCE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOLOGY/STRATIGRAPHIC_UNIT/HEADER/TYPE/DESIGNATION/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOPHYSICS/LOG/HEADER/COMPANY/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOPHYSICS/LOG/HEADER/COMPANY/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOPHYSICS/LOG/HEADER/DATA_PROVIDER/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOPHYSICS/LOG/HEADER/DATES/LOGGING/DAY:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOPHYSICS/LOG/HEADER/DATES/LOGGING/MONTH_NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOPHYSICS/LOG/HEADER/DATES/LOGGING/STANDARD:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOPHYSICS/LOG/HEADER/DATES/LOGGING/YEAR:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOPHYSICS/LOG/HEADER/DEPTHS/BASE/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOPHYSICS/LOG/HEADER/DEPTHS/BASE/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOPHYSICS/LOG/HEADER/DEPTHS/MAXIMUM_REACHED/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOPHYSICS/LOG/HEADER/DEPTHS/MAXIMUM_REACHED/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOPHYSICS/LOG/HEADER/DEPTHS/TOP/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOPHYSICS/LOG/HEADER/DEPTHS/TOP/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOPHYSICS/LOG/HEADER/JOB_ID:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOPHYSICS/LOG/HEADER/RUN:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOPHYSICS/LOG/HEADER/SERVICE/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOPHYSICS/LOG/HEADER/SOURCE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOPHYSICS/LOG/HEADER/TEMPERATURES/MAXIMUM/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/GEOPHYSICS/LOG/HEADER/TEMPERATURES/MAXIMUM/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/AGES/BOTTOM_HOLE/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/AGES/BOTTOM_HOLE/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/AGES/OLDEST_PENETRATED/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/AGES/OLDEST_PENETRATED/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/AREAS/RIGHTS/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/AREAS/RIGHTS/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/BASIN/MAIN/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/BASIN/MAIN/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/BASIN/SUB_BASIN/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/BASIN/SUB_BASIN/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/CLASSES/FINAL/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/CLASSES/FINAL/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/CLASSES/INITIAL/ALTERNATE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/CLASSES/INITIAL/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/CLASSES/INITIAL/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATA_PROVIDER/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/COMPLETION/DAY:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/COMPLETION/MONTH_NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/COMPLETION/QUALITY_CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/COMPLETION/STANDARD:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/COMPLETION/YEAR:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/FINAL_DRILLING/DAY:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/FINAL_DRILLING/MONTH_NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/FINAL_DRILLING/STANDARD:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/FINAL_DRILLING/YEAR:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/FIRST_REPORT/DAY:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/FIRST_REPORT/MONTH_NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/FIRST_REPORT/STANDARD:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/FIRST_REPORT/YEAR:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/LAST_UPDATE/DAY:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/LAST_UPDATE/MONTH_NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/LAST_UPDATE/STANDARD:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/LAST_UPDATE/YEAR:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/PERMIT/DAY:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/PERMIT/MONTH_NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/PERMIT/STANDARD:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/PERMIT/YEAR:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/PERMIT_EXPIRY/DAY:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/PERMIT_EXPIRY/MONTH_NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/PERMIT_EXPIRY/STANDARD:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/PERMIT_EXPIRY/YEAR:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/RIG_RELEASE/DAY:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/RIG_RELEASE/MONTH_NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/RIG_RELEASE/STANDARD:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/RIG_RELEASE/YEAR:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/SPUD/DAY:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/SPUD/MONTH_NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/SPUD/QUALITY_CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/SPUD/STANDARD:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DATES/SPUD/YEAR:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DEPTHS/PLUGBACK/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DEPTHS/PLUGBACK/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DEPTHS/TOTAL_DRILLER/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DEPTHS/TOTAL_DRILLER/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DEPTHS/TOTAL_LOGGER/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DEPTHS/TOTAL_LOGGER/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DEPTHS/TOTAL_MEASURED/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DEPTHS/TOTAL_MEASURED/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DEPTHS/TOTAL_MEASURED_OBJECTIVE/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DEPTHS/TOTAL_MEASURED_OBJECTIVE/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DESIGNATION/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DRILLING/CONTRACTOR/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DRILLING/CONTRACTOR/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DRILLING/HOLE_DIRECTION/DESIGNATION/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DRILLING/HOLE_DIRECTION/DESIGNATION/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DRILLING/RIG/NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/DRILLING/TOOL/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/ELEVATIONS/DERRICK_FLOOR/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/ELEVATIONS/DERRICK_FLOOR/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/ELEVATIONS/GROUND/REFERENCE_CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/ELEVATIONS/GROUND/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/ELEVATIONS/GROUND/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/ELEVATIONS/KELLY_BUSHING/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/ELEVATIONS/KELLY_BUSHING/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/ELEVATIONS/REFERENCE/REFERENCE_CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/ELEVATIONS/REFERENCE/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/ELEVATIONS/REFERENCE/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/FIELD/ALIAS:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/FIELD/ALTERNATE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/FIELD/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/FIELD/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/FIELD/REGULATORY_DESIGNATION:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/GEOLOGIC_PROVINCE/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/GEOLOGIC_PROVINCE/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/GEOPOLITICAL/COUNTRY/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/GEOPOLITICAL/COUNTRY/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/GEOPOLITICAL/COUNTY/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/GEOPOLITICAL/COUNTY/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/GEOPOLITICAL/DATA_ZONE/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/GEOPOLITICAL/DATA_ZONE/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/GEOPOLITICAL/DISTRICT/ALTERNATE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/GEOPOLITICAL/DISTRICT/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/GEOPOLITICAL/PROVINCE_STATE/ABBREVIATED:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/GEOPOLITICAL/PROVINCE_STATE/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/GEOPOLITICAL/PROVINCE_STATE/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/GEOPOLITICAL/REGION/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/GEOPOLITICAL/REGION/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/IDENTIFICATION:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/OPERATORS/CURRENT/ALTERNATE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/OPERATORS/CURRENT/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/OPERATORS/CURRENT/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/OPERATORS/ORIGINAL/ALTERNATE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/OPERATORS/ORIGINAL/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/OPERATORS/ORIGINAL/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/OPERATORS/ORIGINAL_CITY:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/PERMIT/ADDRESS_FIRST:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/PERMIT/CITY:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/PERMIT/COUNTRY/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/PERMIT/DAYS:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/PERMIT/FAX:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/PERMIT/NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/PERMIT/PHONE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/PERMIT/POSTAL_CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/PERMIT/PROVINCE_STATE/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/PERMIT/REMARK:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/PLAY/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/PLAY/TYPE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/PRODUCTS/OBJECTIVE/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/RIGHTS/DESIGNATION/ALTERNATE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/RIGHTS/DESIGNATION/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/RIGHTS/TYPE/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/SOURCE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/STATUSES/ACTIVITY/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/STATUSES/ACTIVITY/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/STATUSES/CURRENT/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/STATUSES/CURRENT/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/STATUSES/FINAL/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/STATUSES/PLOT_SYMBOL/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/STATUSES/PLOT_SYMBOL/GROUP_CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/STATUSES/PRODUCTION_CURRENT/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/STRATIGRAPHIC_UNITS/BOTTOM_HOLE/HEADER/DESIGNATION/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/HEADER/STRATIGRAPHIC_UNITS/BOTTOM_HOLE/HEADER/DESIGNATION/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/CONCATENATED/DATA_PROVIDER/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/CONCATENATED/TEXT:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/CONCATENATED/TYPE/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/COORDINATE/COORDINATE_SYSTEM/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/COORDINATE/COORDINATE_SYSTEM/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/COORDINATE/DATA_PROVIDER/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/COORDINATE/EASTING/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/COORDINATE/EASTING/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/COORDINATE/NORTHING/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/COORDINATE/NORTHING/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/COORDINATE/NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/COORDINATE/PROJECTION/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/GEOGRAPHIC/DATA_PROVIDER/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/GEOGRAPHIC/DATUM/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/GEOGRAPHIC/LATITUDE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/GEOGRAPHIC/LONGITUDE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/GEOGRAPHIC/MAP_BASE/ALTERNATE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/GEOGRAPHIC/MAP_BASE/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/GEOGRAPHIC/QUALITY/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/GEOGRAPHIC/QUALITY/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/GEOPOLITICAL/COUNTRY/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/GEOPOLITICAL/COUNTRY/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/GEOPOLITICAL/COUNTY/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/GEOPOLITICAL/COUNTY/CONCATENATED:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/GEOPOLITICAL/COUNTY/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/GEOPOLITICAL/DATA_PROVIDER/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/GEOPOLITICAL/PROVINCE_STATE/ABBREVIATED:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/GEOPOLITICAL/PROVINCE_STATE/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/GEOPOLITICAL/PROVINCE_STATE/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/HEADER/SOURCE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/NARRATIVE/DATA_PROVIDER/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/NARRATIVE/NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/NARRATIVE/REMARK:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/NARRATIVE/SURVEY_TYPE/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/NARRATIVE/TYPE/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/TEXAS/ABSTRACT:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/TEXAS/DATA_PROVIDER/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/TEXAS/SECTION/NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/LOCATION/TEXAS/SURVEY:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/MECHANICAL/STRING/CEMENT/AMOUNT/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/MECHANICAL/STRING/CEMENT/AMOUNT/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/MECHANICAL/STRING/CEMENT/NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/MECHANICAL/STRING/CEMENT/TYPE/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/MECHANICAL/STRING/HEADER/DATA_PROVIDER/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/MECHANICAL/STRING/HEADER/DEPTHS/BASE/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/MECHANICAL/STRING/HEADER/DEPTHS/BASE/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/MECHANICAL/STRING/HEADER/MATERIAL/WEIGHT/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/MECHANICAL/STRING/HEADER/MATERIAL/WEIGHT/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/MECHANICAL/STRING/HEADER/NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/MECHANICAL/STRING/HEADER/SIZES/HOLE/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/MECHANICAL/STRING/HEADER/SIZES/HOLE/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/MECHANICAL/STRING/HEADER/SIZES/STRING/DESCRIPTION:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/MECHANICAL/STRING/HEADER/SIZES/STRING/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/MECHANICAL/STRING/HEADER/SIZES/STRING/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/MECHANICAL/STRING/HEADER/SOURCE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/METADATA/DATA_SET:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/METADATA/DATE_CREATION:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/METADATA/IDENTIFICATION:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/METADATA/SOFTWARE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/METADATA/SOFTWARE_VERSION:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/METADATA/UNITS_SYSTEM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/ANALYSIS_OIL/DEPTHS/BASE/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/ANALYSIS_OIL/DEPTHS/TOP/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/ANALYSIS_OIL/NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/ANALYSIS_OIL/RATIOS/GAS_OIL/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/ANALYSIS_OIL/RATIOS/GAS_OIL/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/ANALYSIS_OIL/STRATIGRAPHIC_UNITS/BASE/HEADER/DESIGNATION/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/ANALYSIS_OIL/STRATIGRAPHIC_UNITS/BASE/HEADER/DESIGNATION/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/ANALYSIS_OIL/STRATIGRAPHIC_UNITS/TOP/HEADER/DESIGNATION/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/ANALYSIS_OIL/STRATIGRAPHIC_UNITS/TOP/HEADER/DESIGNATION/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/FIELD_DATA/NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/FIELD_DATA/TOP_PAY/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/FIELD_DATA/TOP_PAY/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/COMPLETION:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/DATA_PROVIDER/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/DATES/TEST/DAY:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/DATES/TEST/MONTH_NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/DATES/TEST/STANDARD:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/DATES/TEST/YEAR:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/DEPTHS/BASE/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/DEPTHS/BASE/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/DEPTHS/TOP/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/DEPTHS/TOP/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/FLOWS/GAS/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/FLOWS/GAS/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/FLOWS/OIL/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/FLOWS/OIL/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/FLOWS/WATER/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/FLOWS/WATER/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/GRAVITIES/OIL/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/GRAVITIES/OIL/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/METHODS/COMPLETION/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/METHODS/TEST/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/METHODS/TEST/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/RATIOS/GAS_OIL/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/RATIOS/GAS_OIL/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/REPORT_NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/RUN_NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/SOURCE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/STRATIGRAPHIC_UNITS/BASE/HEADER/DESIGNATION/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/STRATIGRAPHIC_UNITS/BASE/HEADER/DESIGNATION/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/STRATIGRAPHIC_UNITS/TOP/HEADER/DESIGNATION/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/HEADER/STRATIGRAPHIC_UNITS/TOP/HEADER/DESIGNATION/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/PERFORATION/HEADER/COMPLETION/NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/PERFORATION/HEADER/DEPTHS/BASE/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/PERFORATION/HEADER/DEPTHS/BASE/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/PERFORATION/HEADER/DEPTHS/TOP/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/PERFORATION/HEADER/DEPTHS/TOP/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/PERFORATION/HEADER/LENGTHS/LATERAL_GROSS_PERF/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/PERFORATION/HEADER/LENGTHS/LATERAL_GROSS_PERF/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/PERFORATION/HEADER/METHOD/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/PERFORATION/HEADER/NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/PERFORATION/HEADER/STRATIGRAPHIC_UNITS/BASE/HEADER/DESIGNATION/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/PERFORATION/HEADER/STRATIGRAPHIC_UNITS/BASE/HEADER/DESIGNATION/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/PERFORATION/HEADER/STRATIGRAPHIC_UNITS/TOP/HEADER/DESIGNATION/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/PERFORATION/HEADER/STRATIGRAPHIC_UNITS/TOP/HEADER/DESIGNATION/NAME:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/TREATMENT/DATA_PROVIDER/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/TREATMENT/DEPTHS/BASE/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/TREATMENT/DEPTHS/BASE/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/TREATMENT/DEPTHS/TOP/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/TREATMENT/DEPTHS/TOP/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/TREATMENT/FLUID/AMOUNT/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/TREATMENT/FLUID/AMOUNT/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/TREATMENT/FLUID/TYPE/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/TREATMENT/NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/TREATMENT/PROPPING_AGENT/AMOUNT/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/TREATMENT/PROPPING_AGENT/AMOUNT/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/TREATMENT/PROPPING_AGENT/MESH_SIZE/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/TREATMENT/PROPPING_AGENT/TYPE/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/TREATMENT/REMARK:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/TREATMENT/TEST_NUMBER:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TESTS/IP_PT/TREATMENT/TYPE/CODE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TREATMENT_SUMMARY/FLUID_OTHER/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TREATMENT_SUMMARY/FLUID_OTHER/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TREATMENT_SUMMARY/NUM_TREATMENT_RECORDS:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TREATMENT_SUMMARY/PROPPANT_FLUID_RATIO:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TREATMENT_SUMMARY/PROPPANT_SAND/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TREATMENT_SUMMARY/PROPPANT_SAND/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TREATMENT_SUMMARY/TOTAL_FLUID/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TREATMENT_SUMMARY/TOTAL_FLUID/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TREATMENT_SUMMARY/TOTAL_PROPPANT/UOM:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None
+WELLBORE/TREATMENT_SUMMARY/TOTAL_PROPPANT/VALUE:
+  group_name: None
+  attribute1: None
+  attribute2: None
+  attribute3: None
+  attribute4: None
+  attribute5: None

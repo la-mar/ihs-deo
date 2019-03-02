@@ -1,0 +1,700 @@
+HEADER/BASIN/MAIN/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/BASIN/MAIN/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/BASIN/SUB_BASIN/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/BASIN/SUB_BASIN/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATA_PROVIDER/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATES/GAS_START/DAY:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATES/GAS_START/MONTH_NUMBER:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATES/GAS_START/STANDARD:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATES/GAS_START/YEAR:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATES/LAST_UPDATE/DAY:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATES/LAST_UPDATE/MONTH_NUMBER:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATES/LAST_UPDATE/STANDARD:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATES/LAST_UPDATE/YEAR:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATES/OIL_START/DAY:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATES/OIL_START/MONTH_NUMBER:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATES/OIL_START/STANDARD:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATES/OIL_START/YEAR:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATES/PERIOD/UOM:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATES/PERIOD/VALUE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATES/PRODUCTION_START/DAY:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATES/PRODUCTION_START/MONTH_NUMBER:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATES/PRODUCTION_START/STANDARD:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATES/PRODUCTION_START/YEAR:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATES/PRODUCTION_STOP/DAY:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATES/PRODUCTION_STOP/MONTH_NUMBER:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATES/PRODUCTION_STOP/STANDARD:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATES/PRODUCTION_STOP/YEAR:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATES/WATER_START/DAY:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATES/WATER_START/MONTH_NUMBER:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATES/WATER_START/STANDARD:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DATES/WATER_START/YEAR:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DEPTHS/PERFORATION_LOWERMOST/UOM:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DEPTHS/PERFORATION_LOWERMOST/VALUE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DEPTHS/PERFORATION_UPPERMOST/UOM:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DEPTHS/PERFORATION_UPPERMOST/VALUE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/DESIGNATION/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/FIELD/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/FIELD/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/FIELD/REGULATORY_DESIGNATION:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/GEOLOGIC_PROVINCE/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/GEOLOGIC_PROVINCE/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/GEOPOLITICAL/COUNTRY/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/GEOPOLITICAL/COUNTRY/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/GEOPOLITICAL/COUNTY/ALTERNATE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/GEOPOLITICAL/COUNTY/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/GEOPOLITICAL/COUNTY/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/GEOPOLITICAL/DISTRICT/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/GEOPOLITICAL/DISTRICT/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/GEOPOLITICAL/PROVINCE_STATE/ABBREVIATED:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/GEOPOLITICAL/PROVINCE_STATE/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/GEOPOLITICAL/PROVINCE_STATE/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/GEOPOLITICAL/REGION/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/GEOPOLITICAL/REGION/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/LATEST_GATHERERS/GAS/ALTERNATE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/LATEST_GATHERERS/GAS/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/LATEST_GATHERERS/GAS/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/LATEST_GATHERERS/LIQUID/ALTERNATE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/LATEST_GATHERERS/LIQUID/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/LATEST_GATHERERS/LIQUID/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/LEGACY/DWIGHTS_STATUS/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/LEGACY/DWIGHTS_STATUS/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/OPERATORS/CURRENT/ALTERNATE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/OPERATORS/CURRENT/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/OPERATORS/CURRENT/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/PLAY/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/PLAY/TYPE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/POOLS/ONSHORE/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/POOLS/ONSHORE/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/PRODUCTS/PRIMARY/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/PRODUCTS/PRIMARY/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/RIGHTS/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/RIGHTS/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/SITUATION/DESIGNATION/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/SITUATION/DESIGNATION/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/SITUATION/OFFSHORE/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/SOURCE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/STATUSES/CURRENT/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/STATUSES/CURRENT/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/STATUSES/ORIGINAL/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/STATUSES/ORIGINAL/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/STATUSES/PLOT_SYMBOL/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/STATUSES/PREVIOUS/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/STATUSES/PREVIOUS/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/TYPE/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/WELLS/ACTIVE_PRODUCING:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/WELLS/ACTIVE_TOTAL:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/WELLS/TOTAL:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/ZONE/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/ZONE/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/ZONES/PRODZONE/DATES/GAS_START/STANDARD:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/ZONES/PRODZONE/DATES/OIL_START/STANDARD:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/ZONES/PRODZONE/DATES/PRODUCTION_STOP/STANDARD:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/ZONES/PRODZONE/DATES/WATER_START/STANDARD:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/ZONES/PRODZONE/DEPTHS:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/ZONES/PRODZONE/FIELD/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/ZONES/PRODZONE/FIELD/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/ZONES/PRODZONE/POOL/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/ZONES/PRODZONE/POOL/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/ZONES/PRODZONE/ZONE/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+HEADER/ZONES/PRODZONE/ZONE/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null

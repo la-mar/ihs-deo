@@ -1,0 +1,42 @@
+DRILLING/CONTRACTOR/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+DRILLING/CONTRACTOR/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+DRILLING/HOLE_DIRECTION/DESIGNATION/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+DRILLING/HOLE_DIRECTION/DESIGNATION/NAME:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+DRILLING/RIG/NUMBER:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null
+DRILLING/TOOL/CODE:
+  attribute1: null
+  attribute2: null
+  attribute3: null
+  attribute4: null
+  attribute5: null
+  table_name: null

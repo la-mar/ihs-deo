@@ -29,10 +29,19 @@ well_query_driftwood = """<criterias>
 #14207C0183842
 #42461343350001
 
+well_template = """
+<EXPORT>
+    <TEXTUAL_EXPORTS>
+        <WELL_XML INCLUDE_PRODFIT='TRUE'>
+        </WELL_XML>
+    </TEXTUAL_EXPORTS>
+</EXPORT>"""
+
 params = {
 'Domain':'US',
 'DataType': 'Well',
-'Template': 'EnerdeqML Well',
+# 'Template': 'EnerdeqML Well',
+'Template': well_template,
 'Query': well_query_driftwood
 }
 
@@ -58,4 +67,4 @@ def driftwood_wells():
     return data.decode('utf-8')
 
 
-
+x = driftwood_wells()

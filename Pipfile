@@ -19,6 +19,7 @@ zeep = "*"
 beautifulsoup4 = "*"
 lxml = "*"
 xmljson = "*"
+bs4 = "*"
 
 [requires]
 python_version = "3.7"
