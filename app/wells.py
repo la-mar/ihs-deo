@@ -67,4 +67,6 @@ def driftwood_wells():
     return data.decode('utf-8')
 
 
-x = driftwood_wells()
+if __name__ == "__main__":
+
+    x = driftwood_wells()

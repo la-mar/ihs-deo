@@ -1,0 +1,6 @@
+pip install "C:\Repositories\Lollapalooza\Utils\wheels\GDAL-2.3.2-cp37-cp37m-win_amd64.whl"
+pip install "C:\Repositories\Lollapalooza\Utils\wheels\pyproj-1.9.5.1-cp37-cp37m-win_amd64.whl"
+pip install "C:\Repositories\Lollapalooza\Utils\wheels\Shapely-1.6.4.post1-cp37-cp37m-win_amd64.whl"
+pip install "C:\Repositories\Lollapalooza\Utils\wheels\Fiona-1.7.13-cp37-cp37m-win_amd64.whl"
+pip install "C:\Repositories\Lollapalooza\Utils\wheels\geopandas-0.4.0-py2.py3-none-any.whl"
+pip install "C:\Repositories\Lollapalooza\Utils\wheels\Rtree-0.8.3-cp37-cp37m-win_amd64.whl"

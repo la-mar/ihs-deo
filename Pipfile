@@ -20,6 +20,7 @@ beautifulsoup4 = "*"
 lxml = "*"
 xmljson = "*"
 bs4 = "*"
+arrow = "*"
 
 [requires]
 python_version = "3.7"
