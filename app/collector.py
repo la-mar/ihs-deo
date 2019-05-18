@@ -32,7 +32,7 @@ class Collector():
     _query_dir = 'queries/'
     _query_ext = '.xml'
     _template_dir = 'templates/'
-    _soap_headers =
+    # _soap_headers =
 
     def __init__(self, query_name: str):
         self.query_name = query_name

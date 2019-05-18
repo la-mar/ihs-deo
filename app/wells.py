@@ -13,14 +13,6 @@ QUERY_DIR = 'queries/'
 
 
 
-def import_query(name: str){
-    """query name is file name"""
-
-    }
-
-def list_queries(){
-
-}
 
 well_query_driftwood = """<criterias>
     <criteria type="group" groupId="" ignored="false">
@@ -54,7 +46,7 @@ well_template = """
         </TEXTUAL_EXPORTS>
     </EXPORT>"""
 
-def get_default_params(){
+def get_default_params():
     return {
             'Domain':'US',
             'DataType': 'Well',
@@ -62,14 +54,13 @@ def get_default_params(){
             'Template': well_template,
             'Query': well_query_driftwood
             }
-}
 
-def get_default_target(){
+def get_default_target():
     return {
             'Filename':'Sample',
             'Overwrite': 'True'
             }
-}
+
 
 def is_complete(job_id):
     return exportbuilder.service.IsComplete(job_id, _soapheaders=[header_value])

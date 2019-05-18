@@ -39,7 +39,7 @@ class IHSConnector(object):
         self.querybuilder = zeep.Client(wsdl=self._wsdl_path+self._wsdls['querybuilder'])
         self.exportbuilder = zeep.Client(wsdl=self._wsdl_path+self._wsdls['exportbuilder'])
 
-    def login(self):
+    # def login(self):
 
 
 # client = zeep.Client(wsdl=wsdl)
