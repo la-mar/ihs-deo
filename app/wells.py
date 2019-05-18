@@ -88,9 +88,9 @@ if __name__ == "__main__":
     root = xml.getroottree().getroot()
     children = [child for child in root.getchildren() if child.tag == 'WELLBORE']
     c = children[0]
-    wellbores = xmltodict.parse(wells_xml)
+    wellbores = xmltodict.parse(c)
     # write to mongodb
-    db.wells.insert(wellbores)
+    db.wells.insert_many(wellbores)
 
 
 
