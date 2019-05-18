@@ -74,5 +74,10 @@ if __name__ == "__main__":
 import xmltodict
 import pprint
 import json
-pp = pprint.PrettyPrinter(indent=4)
-pp.pprint(json.dumps(xmltodict.parse(x)))
+#pp = pprint.PrettyPrinter(indent=4)
+#pp.pprint(json.dumps(xmltodict.parse(x)))
+
+jsonData = json.dumps(xmltodict.parse(x), indent=4)
+
+with open('testoutput.json', 'w') as outfile:
+    outfile.writelines(jsonData)
