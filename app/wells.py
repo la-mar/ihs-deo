@@ -76,6 +76,9 @@ if __name__ == "__main__":
 
     wells_json = json.dumps(xmltodict.parse(wells_xml), indent = 4)
     to_file(wells_json, 'wells_json.json') 
+
+    # write to mongodb
     db.wells.insert(wells_json)
+
 
 
