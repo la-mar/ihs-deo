@@ -92,7 +92,7 @@ def production_header_from_query_builder():
     """
 
     #! use BuildOnelineFromQuery in Export Service
-    return QB.service.GetAttributes(wellquery2, _soapheaders = soapheaders)
+    return querybuilder.service.GetAttributes(wellquery2, _soapheaders = soapheaders)
 
 
 

@@ -1,7 +1,11 @@
+
+import app.connection as conn
 from app.connection import *
 from app.util import *
 from app.mongo import *
 
+import os
+import logging
 
 from time import sleep
 import xmltodict
@@ -9,44 +13,11 @@ import pprint
 import json
 from lxml import etree
 
-QUERY_DIR = 'queries/'
+logging.basicConfig()
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
-
-
-def import_query(name: str){
-    """query name is file name"""
-
-    }
-
-def list_queries(){
-
-}
-
-well_query_driftwood = """<criterias>
-    <criteria type="group" groupId="" ignored="false">
-        <domain>US</domain>
-        <datatype>Well</datatype>
-        <attribute_group>Identification</attribute_group>
-        <attribute>Current Operator</attribute>
-        <filter logic="include">
-            <value id="0" ignored="false">
-                <group_actual>
-                    <operator logic="and">
-                        <condition logic="equals">
-                            <attribute>code</attribute>
-                            <value_list>
-                                <value>278107</value>
-                            </value_list>
-                        </condition>
-                    </operator>
-                </group_actual>
-                <group_display>name = DRIFTWOOD ENERGY OPERATING LLC</group_display>
-            </value>
-        </filter>
-    </criteria>
-    </criterias>"""
-
-well_template = """
+WELL_TEMPLATE = """
     <EXPORT>
         <TEXTUAL_EXPORTS>
             <WELL_XML INCLUDE_PRODFIT='TRUE'>
@@ -54,25 +25,54 @@ well_template = """
         </TEXTUAL_EXPORTS>
     </EXPORT>"""
 
-def get_default_params(){
-    return {
-            'Domain':'US',
-            'DataType': 'Well',
-            # 'Template': 'EnerdeqML Well',
-            'Template': well_template,
-            'Query': well_query_driftwood
-            }
-}
 
-def get_default_target(){
-    return {
-            'Filename':'Sample',
-            'Overwrite': 'True'
-            }
-}
+class Collector():
+    """ One per query """
 
-def is_complete(job_id):
-    return exportbuilder.service.IsComplete(job_id, _soapheaders=[header_value])
+    _query_dir = 'queries/'
+    _query_ext = '.xml'
+    _template_dir = 'templates/'
+    _soap_headers =
+
+    def __init__(self, query_name: str):
+        self.query_name = query_name
+        self.query = self._load_query(self.query_name)
+
+    def _load_query(self, name: str):
+        """query name must equal file name"""
+
+        criterias = None
+        if not name.endswith(self._query_ext):
+            name = name + self._query_ext
+
+        try:
+            with open(self._query_dir + name, 'r') as f:
+                criterias = f.read()
+        except Exception as fe:
+            print(f'Invalid Query Name: {name}')
+
+        return criterias
+
+
+    def _make_params(self, datatype: str, query: str, template: str = None):
+        return {
+                'Domain':'US',
+                'DataType': datatype,
+                # 'Template': 'EnerdeqML Well',
+                'Template': template,
+                'Query': query
+                }
+
+    def _get_target(self):
+        return {
+                'Filename':'default',
+                'Overwrite': 'True'
+                }
+
+    def is_complete(self, job_id):
+        return exportbuilder.service.IsComplete(job_id, _soapheaders=[header_value])
+
+
 
 
 

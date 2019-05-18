@@ -6,8 +6,8 @@ import pandas as pd
 import bs4
 
 # , '2019/01/01', '2019/01/31'
-QB.service.GetDailyUpdateInterval()
-xml = QB.service.GetChangesAndDeletes('Well', '2019/01/01', '2019/02/01', 1, _soapheaders=[header_value])
+querybuilder.service.GetDailyUpdateInterval()
+xml = querybuilder.service.GetChangesAndDeletes('Well', '2019/01/01', '2019/02/01', 1, _soapheaders=[header_value])
 
 
 

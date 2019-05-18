@@ -2,7 +2,7 @@
 from app.connection import *
 from time import sleep
 
-eb_client = zeep.Client(eb_wsdl)
+eb_client = zeep.Client(esdl_exportbuilder)
 
 # Braches can limit what sections of the data we pull
 prod_template = """
@@ -86,7 +86,7 @@ target = {
 }
 
 def is_complete(job_id):
-    return EB.service.IsComplete(job_id, _soapheaders=[header_value])
+    return exportbuilder.service.IsComplete(job_id, _soapheaders=[header_value])
 
 prod_job_id = eb_client.service.BuildExportFromQuery(params_prod, target, _soapheaders=[header_value])
 

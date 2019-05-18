@@ -3,10 +3,10 @@ from app.connection import *
 # EB = zeep.Client(wsdl=eb_wsdl)
 
 def get_layers():
-    return EB.service.GetLayers(_soapheaders = [header_value])
+    return exportbuilder.service.GetLayers(_soapheaders = [header_value])
 
 def get_formats():
-    return EB.service.GetSpatialExportFormats(_soapheaders = [header_value])
+    return exportbuilder.service.GetSpatialExportFormats(_soapheaders = [header_value])
 
 # ns1:SpatialExportParameters(LatMin: xsd:double, LatMax: xsd:double, LongMin: xsd:double, LongMax: xsd:double, Layers: ns2:ArrayOfStrings, Format: xsd:string)
 
@@ -31,4 +31,4 @@ target = {
 'Overwrite': 'True'
 }
 
-EB.service.BuildSpatialExport(param, target, _soapheaders = [header_value])
+exportbuilder.service.BuildSpatialExport(param, target, _soapheaders = [header_value])
