@@ -114,9 +114,9 @@ if __name__ == "__main__":
 
     to_file(json.dumps(wellbore, indent = 4), 'wellbore.json')
     # write to mongodb
-    db.wells.insert_many(wellbore)
+    db.wells.insert(wellbore)
 
-
+    x = db.wells.find_one({'api14': '42383374130000'})
 
 
 
