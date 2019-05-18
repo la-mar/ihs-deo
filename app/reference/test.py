@@ -41,7 +41,7 @@ header = xsd.Element(
 header_value = header(Username=user, Password = password, Application = appName)
 
 _soapheaders = [header_value]
-
+soapheaders = [header_value]
 CC.service.Login(_soapheaders = _soapheaders)
 
 s.GetEntitlements(_soapheaders = _soapheaders) # works

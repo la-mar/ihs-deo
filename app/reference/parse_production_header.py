@@ -5,7 +5,7 @@ from app.connection import *
 from time import sleep
 import pandas as pd
 import bs4
-# client = zeep.Client(wsdl=wsdl)
+from zeep import xsd
 
 API = "42383402790000"
 
@@ -22,32 +22,32 @@ def m(obj):
 def get_count():
     'Put query that worked here'
 
-from zeep import xsd
 
-user = 'brock@driftwoodenergy.com'
-password = 'YrUs0LAME!'
-appName = 'driftwood_wellprod_digest'
 
-header = xsd.Element(
-    '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Header',
-    xsd.ComplexType([
-        xsd.Element(
-            '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Username',
-            xsd.String()),
-            xsd.Element(
-            '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Password',
-            xsd.String()),
-            xsd.Element(
-            '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Application',
-            xsd.String())
-    ])
-)
+# user = 'brock@driftwoodenergy.com'
+# password = 'YrUs0LAME!'
+# appName = 'driftwood_wellprod_digest'
 
-header_value = header(Username=user, Password = password, Application = appName)
+# header = xsd.Element(
+#     '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Header',
+#     xsd.ComplexType([
+#         xsd.Element(
+#             '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Username',
+#             xsd.String()),
+#             xsd.Element(
+#             '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Password',
+#             xsd.String()),
+#             xsd.Element(
+#             '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Application',
+#             xsd.String())
+#     ])
+# )
 
-_soapheaders = [header_value]
+# header_value = header(Username=user, Password = password, Application = appName)
 
-CC.service.Login(_soapheaders = _soapheaders)
+# _soapheaders = [header_value]
+
+# CC.service.Login(_soapheaders = _soapheaders)
 
 wellquery = """
 <criterias>
@@ -63,12 +63,6 @@ wellquery = """
   </criteria>
 </criterias>
 """
-
-
-
-
-
-
 
 def production_header_from_query_builder():
     wellquery2 = """
@@ -98,7 +92,7 @@ def production_header_from_query_builder():
     """
 
     #! use BuildOnelineFromQuery in Export Service
-    return QB.service.GetAttributes(wellquery2, _soapheaders = _soapheaders)
+    return QB.service.GetAttributes(wellquery2, _soapheaders = soapheaders)
 
 
 
@@ -131,7 +125,7 @@ def production_header_xml_to_df(xml: str) -> pd.DataFrame:
 
 df = production_header_xml_to_df(production_header_from_query_builder())
 
-
+df.to_json()
 
 
 

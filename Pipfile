@@ -22,6 +22,7 @@ xmljson = "*"
 bs4 = "*"
 arrow = "*"
 xmltodict = "*"
+pymongo = "*"
 
 [requires]
 python_version = "3.7"

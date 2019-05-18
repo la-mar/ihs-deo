@@ -1,5 +1,12 @@
 from app.connection import *
+from app.util import *
+from app.mongo import *
+
+
 from time import sleep
+import xmltodict
+import pprint
+import json
 
 well_query_driftwood = """<criterias>
     <criteria type="group" groupId="" ignored="false">
@@ -24,10 +31,6 @@ well_query_driftwood = """<criterias>
         </filter>
     </criteria>
 </criterias>"""
-
-#print(qb_client.service.GetCount(qb_query, "Well", "US", _soapheaders=[header_value]))
-#14207C0183842
-#42461343350001
 
 well_template = """
 <EXPORT>
@@ -69,10 +72,10 @@ def driftwood_wells():
 
 if __name__ == "__main__":
 
-    x = driftwood_wells()
+    wells_xml = driftwood_wells()
 
-import xmltodict
-import pprint
-import json
-pp = pprint.PrettyPrinter(indent=4)
-pp.pprint(json.dumps(xmltodict.parse(x)))
+    wells_json = json.dumps(xmltodict.parse(wells_xml), indent = 4)
+    to_file(wells_json, 'wells_json.json') 
+    db.wells.insert(wells_json)
+
+

@@ -22,7 +22,7 @@
         "titleBar.activeBackground": "#17483D",
         "titleBar.activeForeground": "#F4FBFA"
     },
-    "python.pythonPath": "/Users/nataliefriedrich/.local/share/virtualenvs/Collector-IHS-UjMdPZfq/bin/python",
+    "python.pythonPath": ".venv/bin/python",
     // "python.pythonPath": "/usr/local/bin/python3",
     // "python.pythonPath": ".venv\\Scripts\\python.exe"
 }
