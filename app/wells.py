@@ -73,6 +73,19 @@ def driftwood_wells(decode = True):
         return data
 
 
+import types
+def lowerValues(arg):
+    print(arg)
+    # Handle iterables
+    if isinstance(arg, list):
+        return [lowerValues(item) for item in arg]
+    elif isinstance(arg, str):
+        return arg.lower()
+    else:
+        return arg
+
+
+
 if __name__ == "__main__":
 
     """wells_xml = driftwood_wells()
@@ -80,7 +93,6 @@ if __name__ == "__main__":
     wells_json = json.dumps(xmltodict.parse(wells_xml), indent = 4)
     to_file(wells_json, 'wells_json.json')
     """
-
 
     # from lxml import objectify
     wells_bin = driftwood_wells(decode = False)
@@ -107,16 +119,17 @@ if __name__ == "__main__":
     wellbore.move_to_end('api14', last=False)
     wellbore.move_to_end('api10', last=False)
 
+    lower_wellbore = {lowerValues(k) : v for k,v in wellbore.items()}
+
     # for key, value in ids.items():
     #     wellbore.update({x['@TYPE']: x['#text']})
     #     wellbore.move_to_end(x['@TYPE'], last=False)
 
-
-    to_file(json.dumps(wellbore, indent = 4), 'wellbore.json')
+    #to_file(json.dumps(wellbore, indent = 4), 'wellbore.json')
     # write to mongodb
-    db.wells.insert(wellbore)
+    #db.wells.insert(wellbore)
 
-    x = db.wells.find_one({'api14': '42383374130000'})
+    #x = db.wells.find_one({'api14': '42383374130000'})
 
 
 
