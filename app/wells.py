@@ -75,11 +75,11 @@ def driftwood_wells(decode = True):
 
 if __name__ == "__main__":
 
-    wells_xml = driftwood_wells()
+    """wells_xml = driftwood_wells()
 
     wells_json = json.dumps(xmltodict.parse(wells_xml), indent = 4)
     to_file(wells_json, 'wells_json.json')
-
+    """
 
 
     from lxml import objectify
@@ -88,9 +88,19 @@ if __name__ == "__main__":
     root = xml.getroottree().getroot()
     children = [child for child in root.getchildren() if child.tag == 'WELLBORE']
     c = children[0]
-    wellbores = xmltodict.parse(wells_xml)
+
+    #convert child into dictionary
+    from lxml import etree
+    xmltojson = etree.tostring(c)
+    wellbores = xmltodict.parse(xmltojson)
+
     # write to mongodb
     db.wells.insert(wellbores)
+
+
+
+
+
 
 
 
