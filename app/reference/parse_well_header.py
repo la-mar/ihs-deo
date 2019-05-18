@@ -218,7 +218,7 @@ def flatten_xsd(xml:bs4.element.Tag, table_name: str):
 
 
 
-xml = from_file('C:\Repositories\Collector-IHS\well_header.xml')
+# xml = from_file('C:\Repositories\Collector-IHS\well_header.xml')
 # soup = bs4.BeautifulSoup(xml, 'lxml-xml')
 
 
@@ -399,7 +399,7 @@ from app.tables import Pb_Well_Test
 
 
 Pb_Well_Test.merge_records(tests)
-
+a
 
 # Iter tests
 

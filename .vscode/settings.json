@@ -1,8 +1,8 @@
 {
-    "python.unitTest.promptToConfigure": false,
-    "python.unitTest.pyTestEnabled": false,
-    "python.unitTest.unittestEnabled": false,
-    "python.unitTest.nosetestsEnabled": false,
+    "python.testing.promptToConfigure": false,
+    "python.testing.pyTestEnabled": false,
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
     "workbench.colorCustomizations": {
         "editorGroup.border": "#1d1c1d",
         "editorGroupHeader.tabsBackground": "#1d1c1d",
@@ -22,6 +22,6 @@
         "titleBar.activeBackground": "#17483D",
         "titleBar.activeForeground": "#F4FBFA"
     },
-    "python.pythonPath": ".venv\\Scripts\\python.exe",
+    "python.pythonPath": ".venv/bin/python",
     // "python.pythonPath": ".venv\\Scripts\\python.exe"
 }

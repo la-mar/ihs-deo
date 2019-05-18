@@ -2,9 +2,10 @@
 
 
 import zeep
-wsdl = 'C:\Repositories\Collector-IHS\docs\DirectConnect\wsdl.v10\Session.wsdl'
-qb_wsdl = 'C:\Repositories\Collector-IHS\docs\DirectConnect\wsdl.v10\QueryBuilder.wsdl'
-eb_wsdl = 'C:\Repositories\Collector-IHS\docs\DirectConnect\wsdl.v10\ExportBuilder.wsdl'
+wsdl = 'docs/DirectConnect/wsdl.v10/Session.wsdl'
+qb_wsdl = 'docs/DirectConnect/wsdl.v10/QueryBuilder.wsdl'
+eb_wsdl = 'docs/DirectConnect/wsdl.v10/ExportBuilder.wsdl'
+
 
 CC = zeep.Client(wsdl=wsdl)
 QB = zeep.Client(wsdl=qb_wsdl)
