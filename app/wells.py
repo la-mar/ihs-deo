@@ -30,33 +30,33 @@ well_query_driftwood = """<criterias>
             </value>
         </filter>
     </criteria>
-</criterias>"""
+    </criterias>"""
 
 well_template = """
-<EXPORT>
-    <TEXTUAL_EXPORTS>
-        <WELL_XML INCLUDE_PRODFIT='TRUE'>
-        </WELL_XML>
-    </TEXTUAL_EXPORTS>
-</EXPORT>"""
+    <EXPORT>
+        <TEXTUAL_EXPORTS>
+            <WELL_XML INCLUDE_PRODFIT='TRUE'>
+            </WELL_XML>
+        </TEXTUAL_EXPORTS>
+    </EXPORT>"""
 
 params = {
-'Domain':'US',
-'DataType': 'Well',
-# 'Template': 'EnerdeqML Well',
-'Template': well_template,
-'Query': well_query_driftwood
-}
+    'Domain':'US',
+    'DataType': 'Well',
+    # 'Template': 'EnerdeqML Well',
+    'Template': well_template,
+    'Query': well_query_driftwood
+    }
 
 target = {
   'Filename':'Sample',
-'Overwrite': 'True'
-}
+  'Overwrite': 'True'
+    }
 
 def is_complete(job_id):
     return EB.service.IsComplete(job_id, _soapheaders=[header_value])
 
-def driftwood_wells():
+def driftwood_wells(decode = True):
 
     job_id = EB.service.BuildExportFromQuery(params, target, _soapheaders=[header_value])
 
@@ -67,7 +67,10 @@ def driftwood_wells():
 
     data = EB.service.RetrieveExport(job_id, _soapheaders=[header_value])
 
-    return data.decode('utf-8')
+    if decode:
+        return data.decode('utf-8')
+    else:
+        return data
 
 
 if __name__ == "__main__":
@@ -75,10 +78,19 @@ if __name__ == "__main__":
     wells_xml = driftwood_wells()
 
     wells_json = json.dumps(xmltodict.parse(wells_xml), indent = 4)
-    to_file(wells_json, 'wells_json.json') 
+    to_file(wells_json, 'wells_json.json')
+
+
+
+    from lxml import objectify
+    wells_bin = driftwood_wells(decode = False)
+    xml = objectify.fromstring(wells_bin)
+    root = xml.getroottree().getroot()
+
+    records = [child.text for child in root['WELLBORE'].getchildren()]
 
     # write to mongodb
-    db.wells.insert(wells_json)
+    # db.wells.insert(wells_json)
 
 
 
