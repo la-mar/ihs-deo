@@ -1,14 +1,10 @@
 
 
 
-import zeep
-wsdl = 'C:\Repositories\Collector-IHS\docs\DirectConnect\wsdl.v10\Session.wsdl'
-qb_wsdl = 'C:\Repositories\Collector-IHS\docs\DirectConnect\wsdl.v10\QueryBuilder.wsdl'
-eb_wsdl = 'C:\Repositories\Collector-IHS\docs\DirectConnect\wsdl.v10\ExportBuilder.wsdl'
-
-CC = zeep.Client(wsdl=wsdl)
-QB = zeep.Client(wsdl=qb_wsdl)
-EB = zeep.Client(wsdl=eb_wsdl)
+from app.connection import *
+from time import sleep
+import pandas as pd
+import bs4
 # client = zeep.Client(wsdl=wsdl)
 
 API = "42383402790000"
@@ -71,8 +67,7 @@ wellquery = """
 
 
 
-import pandas as pd
-import bs4
+
 
 
 def production_header_from_query_builder():
@@ -135,6 +130,7 @@ def production_header_xml_to_df(xml: str) -> pd.DataFrame:
 
 
 df = production_header_xml_to_df(production_header_from_query_builder())
+
 
 
 
