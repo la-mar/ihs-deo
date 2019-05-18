@@ -146,37 +146,12 @@ def renameKeysToLower(iterable):
 def tolower(d: dict):
     result = {}
     for key, value in d.items():
-        if issubclass(type(value), dict):
+        if isinstance(value, dict):
             result[key.lower()] = tolower(value)
+        elif isinstance(value, list):
+            result[key.lower()] = [tolower(x) for x in value]
         else:
-            # return {k.lower():v for k, v in d.items()}
-            result[key.lower()]
-
-def dictify(group): #! Nope
-    result = {}
-    for li in list(group.children):
-        key = li.name
-        if key is not None:
-            if key in list(result.keys()): # key exists
-                if isinstance(li, bs4.element.Tag): # is tag
-                    if isinstance(result[key], list): # is list
-                        result[key].append(li.name)
-                    else:
-                        result[key] = dictify(li)
-
-                elif isinstance(result[key], list): # is list
-                        result[key].append(li.name)
-                else: # is str
-                    result[key] = [result[key], li.name]
-            else:
-                if isinstance(li, bs4.element.Tag): # is tag
-                    result[key] = dictify(li)
-                elif isinstance(result[key], list): # is list
-                        result[key].append(li.name)
-                else:
-                    result[key] = li
-        else:
-            return li
+            result[key.lower()] = value
     return result
 
 
