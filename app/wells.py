@@ -70,3 +70,9 @@ def driftwood_wells():
 if __name__ == "__main__":
 
     x = driftwood_wells()
+
+import xmltodict
+import pprint
+import json
+pp = pprint.PrettyPrinter(indent=4)
+pp.pprint(json.dumps(xmltodict.parse(x)))

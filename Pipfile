@@ -21,6 +21,7 @@ lxml = "*"
 xmljson = "*"
 bs4 = "*"
 arrow = "*"
+xmltodict = "*"
 
 [requires]
 python_version = "3.7"
