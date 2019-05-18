@@ -1,6 +1,6 @@
 from app.connection import *
-eb_wsdl = 'C:\Repositories\Collector-IHS\docs\DirectConnect\wsdl.v10\ExportBuilder.wsdl'
-EB = zeep.Client(wsdl=eb_wsdl)
+# eb_wsdl = 'C:\Repositories\Collector-IHS\docs\DirectConnect\wsdl.v10\ExportBuilder.wsdl'
+# EB = zeep.Client(wsdl=eb_wsdl)
 
 def get_layers():
     return EB.service.GetLayers(_soapheaders = [header_value])
