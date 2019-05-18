@@ -82,21 +82,26 @@ if __name__ == "__main__":
     """
 
 
-    from lxml import objectify
+    # from lxml import objectify
     wells_bin = driftwood_wells(decode = False)
     xml = objectify.fromstring(wells_bin)
     root = xml.getroottree().getroot()
     children = [child for child in root.getchildren() if child.tag == 'WELLBORE']
     c = children[0]
-    wellbores = xmltodict.parse(c)
+    # wellbores = xmltodict.parse(c)
 
     #convert child into dictionary
     from lxml import etree
     xmltojson = etree.tostring(c)
-    wellbores = xmltodict.parse(xmltojson)
+    wellbore = xmltodict.parse(xmltojson)['WELLBORE']
+    ids = wellbore['HEADER']['IDENTIFICATION']
+    for x in ids:
+        wellbore.update({x['@TYPE']: x['#text']})
+        wellbore.move_to_end(x['@TYPE'], last=False)
 
+    to_file(json.dumps(wellbore, indent = 4), 'wellbore.json')
     # write to mongodb
-    db.wells.insert_many(wellbores)
+    db.wells.insert_many(wellbore)
 
 
 
