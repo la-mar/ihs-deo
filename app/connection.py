@@ -70,16 +70,16 @@ header_value = header(Username=user, Password = password, Application = appName)
 _soapheaders = [header_value]
 soapheaders = [header_value]
 
-session.service.Login(_soapheaders = _soapheaders)
+# session.service.Login(_soapheaders = _soapheaders)
 
 
 #! Remove below once ported to object definition above
 
 import zeep
 
-wsdl_session = './docs/DirectConnect/wsdl.v10/Session.wsdl'
-wsdl_querybuilder = './docs/DirectConnect/wsdl.v10/QueryBuilder.wsdl'
-esdl_exportbuilder = './docs/DirectConnect/wsdl.v10/ExportBuilder.wsdl'
+wsdl_session = 'app/wsdl/v10/Session.wsdl'
+wsdl_querybuilder = 'app/wsdl/v10/QueryBuilder.wsdl'
+esdl_exportbuilder = 'app/wsdl/v10/ExportBuilder.wsdl'
 
 session = zeep.Client(wsdl=wsdl_session)
 querybuilder = zeep.Client(wsdl=wsdl_querybuilder)

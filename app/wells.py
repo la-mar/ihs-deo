@@ -7,7 +7,7 @@ from time import sleep
 import xmltodict
 import pprint
 import json
-from lxml import etree
+from lxml import etree, objectify
 
 QUERY_DIR = 'queries/'
 
@@ -130,6 +130,54 @@ def lowerValues(arg):
     else:
         return arg
 
+from collections import OrderedDict
+def renameKeysToLower(iterable):
+    iterable = dict(iterable).copy()
+    if type(iterable) is dict:
+        for key in iterable.keys():
+            iterable[key.lower()] = iterable.pop(key)
+            if type(iterable[key.lower()]) is dict or type(iterable[key.lower()]) is list:
+                iterable[key.lower()] = renameKeysToLower(iterable[key.lower()])
+    elif type(iterable) is list:
+        for item in iterable:
+            item = renameKeysToLower(item)
+    return dict(iterable)
+
+def tolower(d: dict):
+    result = {}
+    for key, value in d.items():
+        if issubclass(type(value), dict):
+            result[key.lower()] = tolower(value)
+        else:
+            # return {k.lower():v for k, v in d.items()}
+            result[key.lower()]
+
+def dictify(group): #! Nope
+    result = {}
+    for li in list(group.children):
+        key = li.name
+        if key is not None:
+            if key in list(result.keys()): # key exists
+                if isinstance(li, bs4.element.Tag): # is tag
+                    if isinstance(result[key], list): # is list
+                        result[key].append(li.name)
+                    else:
+                        result[key] = dictify(li)
+
+                elif isinstance(result[key], list): # is list
+                        result[key].append(li.name)
+                else: # is str
+                    result[key] = [result[key], li.name]
+            else:
+                if isinstance(li, bs4.element.Tag): # is tag
+                    result[key] = dictify(li)
+                elif isinstance(result[key], list): # is list
+                        result[key].append(li.name)
+                else:
+                    result[key] = li
+        else:
+            return li
+    return result
 
 
 if __name__ == "__main__":
@@ -168,7 +216,7 @@ if __name__ == "__main__":
 
     #x = db.wells.find_one({'api14': '42383374130000'})
 
-
+data = tolower(wellbore)
 
 
 
