@@ -1,0 +1,26 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+rope = "*"
+
+[packages]
+ipython = "*"
+matplotlib = "*"
+numpy = "*"
+pandas = "*"
+pymssql = "*"
+SQLAlchemy = "*"
+pylint = "*"
+pyyaml = "*"
+zeep = "*"
+beautifulsoup4 = "*"
+lxml = "*"
+xmljson = "*"
+bs4 = "*"
+arrow = "*"
+
+[requires]
+python_version = "3.7"

@@ -2,6 +2,7 @@
 
 
 import zeep
+
 wsdl = './docs/DirectConnect/wsdl.v10/Session.wsdl'
 qb_wsdl = './docs/DirectConnect/wsdl.v10/QueryBuilder.wsdl'
 eb_wsdl = './docs/DirectConnect/wsdl.v10/ExportBuilder.wsdl'
