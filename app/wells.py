@@ -94,10 +94,23 @@ if __name__ == "__main__":
     from lxml import etree
     xmltojson = etree.tostring(c)
     wellbore = xmltodict.parse(xmltojson)['WELLBORE']
-    ids = wellbore['HEADER']['IDENTIFICATION']
-    for x in ids:
-        wellbore.update({x['@TYPE']: x['#text']})
-        wellbore.move_to_end(x['@TYPE'], last=False)
+    api = wellbore['METADATA']['IDENTIFICATION']
+
+    if len(api) == 14:
+        wellbore['api14'] = api
+        wellbore['api10'] = api[:10]
+    elif len(api) == 10:
+        wellbore['api10'] = api
+        wellbore['api14'] = api + '0000'
+
+    #move new elements to beginning of ordered dict
+    wellbore.move_to_end('api14', last=False)
+    wellbore.move_to_end('api10', last=False)
+
+    # for key, value in ids.items():
+    #     wellbore.update({x['@TYPE']: x['#text']})
+    #     wellbore.move_to_end(x['@TYPE'], last=False)
+
 
     to_file(json.dumps(wellbore, indent = 4), 'wellbore.json')
     # write to mongodb

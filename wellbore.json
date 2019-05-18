@@ -1,7 +1,6 @@
 {
-    "REGULATORY_API": "4238337413",
-    "API": "42383374130000",
-    "UWI": "42383374130000",
+    "api10": "4238337413",
+    "api14": "42383374130000",
     "@xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
     "METADATA": {
         "IDENTIFICATION": "42383374130000",
