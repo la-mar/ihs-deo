@@ -86,11 +86,11 @@ if __name__ == "__main__":
     wells_bin = driftwood_wells(decode = False)
     xml = objectify.fromstring(wells_bin)
     root = xml.getroottree().getroot()
-
-    records = [child.text for child in root['WELLBORE'].getchildren()]
-
+    children = [child for child in root.getchildren() if child.tag == 'WELLBORE']
+    c = children[0]
+    wellbores = xmltodict.parse(wells_xml)
     # write to mongodb
-    # db.wells.insert(wells_json)
+    db.wells.insert(wellbores)
 
 
 
