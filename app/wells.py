@@ -1,8 +1,6 @@
 from app.collector import Collector
 from app.util import *
 from app.mongo import *
-
-
 from time import sleep
 import xmltodict
 import pprint

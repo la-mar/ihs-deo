@@ -1,83 +1,12 @@
-
-from app.connection import *
+from app.collector import Collector
 from time import sleep
 from app.util import *
 from app.mongo import *
-
 import xmltodict
 import pprint
 import json
 from lxml import etree, objectify
 import copy
-
-eb_client = zeep.Client(wsdl_exportbuilder)
-
-# Braches can limit what sections of the data we pull
-prod_template = """
-<EXPORT>
-    <TEXTUAL_EXPORTS>
-        <PRODUCTION_XML>
-            <BRANCH NAME="/PRODUCTION_SET/PRODUCING_ENTITY/PRODUCTION"/>
-        </PRODUCTION_XML>
-    </TEXTUAL_EXPORTS>
-</EXPORT>"""
-
-prod_query = """
-<criterias>
-    <criteria type="group" groupId="" ignored="false">
-        <domain>US</domain>
-        <datatype>Production Allocated</datatype>
-        <attribute_group>Identification</attribute_group>
-        <attribute>Operator</attribute>
-        <filter logic="include">
-            <value id="0" ignored="false">
-                <group_actual>
-                    <operator logic="and">
-                        <condition logic="equals">
-                            <attribute>code</attribute>
-                            <value_list>
-                                <value>278107</value>
-                            </value_list>
-                        </condition>
-                    </operator>
-                </group_actual>
-                <group_display>name = DRIFTWOOD ENERGY OPERATING LLC</group_display>
-            </value>
-        </filter>
-    </criteria>
-</criterias>
-"""
-params_prod = {
-'Domain':'US',
-'DataType': 'Production Allocated',
-'Template': prod_template,
-#'Template': 'EnerdeqML Production',
-'Query': prod_query
-}
-
-target = {
-  'Filename':'Sample',
-'Overwrite': 'True'
-}
-
-def is_complete(job_id):
-    return exportbuilder.service.IsComplete(job_id, _soapheaders=[header_value])
-
-def driftwood_production(decode = False):
-
-    prod_job_id = eb_client.service.BuildExportFromQuery(params_prod, target, _soapheaders=[header_value])
-
-    while not is_complete(prod_job_id):
-        n = 5
-        print(f'Sleeping for {n} secs')
-        sleep(n)
-
-    data = eb_client.service.RetrieveExport(prod_job_id, _soapheaders=[header_value])
-
-    if decode:
-        return data.decode('utf-8')
-
-    return data
 
 def tolower(d: dict):
     result = {}
@@ -122,11 +51,8 @@ def elevate_api(record: dict) -> dict:
 
     return record
 
-
-
-if __name__ == "__main__":
-    production_bins = driftwood_production(decode = False)
-    xml = objectify.fromstring(production_bins)
+def get_apis(encoded_xml):
+    xml = objectify.fromstring(encoded_xml)
     root = xml.getroottree().getroot()
     records = [child for child in root.getchildren() if child.tag == 'PRODUCING_ENTITY']
 
@@ -150,3 +76,9 @@ if __name__ == "__main__":
             #insert into mongodb
             prod_ent_to_update.append(copy.deepcopy(lower_prodrecord))
 
+    return prod_ent_to_update
+
+if __name__ == "__main__":
+    c = Collector('production allocated', 'production-driftwood', 'production.xml')
+    x  = c.get()
+    apis = get_apis(x)
