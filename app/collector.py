@@ -47,11 +47,10 @@ class Collector():
                     },
                 'default_templates' :
                     {
-                    'Well': 'well.xml',
-                    'Production Allocated': '???'
+                    'Well': 'EnerdeqML Well',#'well.xml',
+                    'Production Allocated': 'EnerdeqML Production'
                     }
         }
-
 
     def __init__(self,
                  datatype: str,
@@ -247,7 +246,8 @@ class Collector():
 if __name__ == "__main__":
 
     c = Collector('well', 'well-driftwood')
-
+    p = Collector('well', 'well-driftwood', 'EnerdeqML Well')
+    p = Collector('production allocated', 'production-driftwood')
     x  = c.get()
     xml = c.as_elements()
     js = c.as_json()
