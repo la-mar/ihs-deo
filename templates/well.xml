@@ -1,0 +1,6 @@
+<EXPORT>
+        <TEXTUAL_EXPORTS>
+            <WELL_XML INCLUDE_PRODFIT='TRUE'>
+            </WELL_XML>
+        </TEXTUAL_EXPORTS>
+    </EXPORT>

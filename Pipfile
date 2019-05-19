@@ -24,6 +24,7 @@ bs4 = "*"
 arrow = "*"
 xmltodict = "*"
 pymongo = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.7"

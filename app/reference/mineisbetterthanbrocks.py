@@ -9,8 +9,7 @@ eb_wsdl = 'C:\Repositories\Collector-IHS\docs\DirectConnect\wsdl.v10\ExportBuild
 client = zeep.Client(wsdl=wsdl)
 
 
-def get_count():
-  print(qb_client.service.GetCount(qb_query, "Well", "US", _soapheaders=[header_value]))
+
 
 from zeep import xsd
 

@@ -1,23 +1,49 @@
 
 
+import os
 
 import zeep
 from zeep import xsd
-
-
-user = 'brock@driftwoodenergy.com'
-password = 'YrUs0LAME!'
-appName = 'driftwood_wellprod_digest'
-
+from dotenv import load_dotenv
 import functools
+
+load_dotenv(verbose=True)
+
+SoapHeader = xsd.Element(
+        '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Header',
+        xsd.ComplexType(
+            [
+                xsd.Element(
+                    '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Username',
+                    xsd.String()
+                ),
+                xsd.Element(
+                    '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Password',
+                    xsd.String()
+                ),
+                xsd.Element(
+                    '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Application',
+                    xsd.String()
+                )
+            ]
+        )
+    )
+
+_SOAPHEADERS = [SoapHeader(
+                    Username=os.getenv('IHS_USER'),
+                    Password = os.getenv('IHS_PASSWORD'),
+                    Application = os.getenv('IHS_APPNAME')
+                    )]
+
+
+
 def soapheaders(func):
     """Capture the analysis method"""
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
 
-        # print(f"Calling {func.__name__}({signature})")
-        obj = args[0]
-        value = func(*args, **kwargs, _soapheaders = obj)
+        kwargs['_soapheaders'] = _SOAPHEADERS
+        value = func(*args, **kwargs)
         return value
     return wrapper
 
@@ -32,6 +58,7 @@ class IHSConnector(object):
     }
     _dtypes = ['Well', 'Production Allocated']
 
+
     def __init__(self, version: str = 'v10'):
         self.version = version
         self._wsdl_path = self._wsdl_dir + f'/{self.version}/'
@@ -39,92 +66,51 @@ class IHSConnector(object):
         self.querybuilder = zeep.Client(wsdl=self._wsdl_path+self._wsdls['querybuilder'])
         self.exportbuilder = zeep.Client(wsdl=self._wsdl_path+self._wsdls['exportbuilder'])
 
-    # def login(self):
+    @soapheaders
+    def login(self, **kwargs) -> bool:
+        """Initiate a connection to the soap service"""
+        return self.session.service.Login(_soapheaders = kwargs.pop('_soapheaders')
+        )
 
+    @property
+    def dtypes(self) -> list:
+        """list the available job datatypes"""
+        return self._dtypes
 
-# client = zeep.Client(wsdl=wsdl)
+    @soapheaders
+    def build_export(self, params: dict, target: dict, **kwargs) -> int:
+        return self.exportbuilder.service.BuildExportFromQuery(
+                        params,
+                        target,
+                        _soapheaders = kwargs.pop('_soapheaders')
+        )
 
-def get_count():
-    'Put query that worked here'
+    @soapheaders
+    def get_export(self, job_id: int, **kwargs):
+        return self.exportbuilder.service.RetrieveExport(
+                    job_id,
+                    _soapheaders = kwargs.pop('_soapheaders')
+        )
 
+    @soapheaders
+    def is_complete(self, job_id: int, **kwargs):
+        return self.exportbuilder.service.IsComplete(
+                    job_id,
+                    _soapheaders = kwargs.pop('_soapheaders')
+        )
 
+    @soapheaders
+    def get_count(self, query: str, datatype: str, **kwargs):
+       return self.querybuilder.service.GetCount(
+                        query,
+                        datatype,
+                        self._domain,
+                        _soapheaders = kwargs.pop('_soapheaders')
+            )
 
+if __name__ == "__main__":
 
-header = xsd.Element(
-    '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Header',
-    xsd.ComplexType([
-        xsd.Element(
-            '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Username',
-            xsd.String()),
-            xsd.Element(
-            '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Password',
-            xsd.String()),
-            xsd.Element(
-            '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Application',
-            xsd.String())
-    ])
-)
+    ihs = IHSConnector()
 
-header_value = header(Username=user, Password = password, Application = appName)
+    ihs.login()
 
-_soapheaders = [header_value]
-soapheaders = [header_value]
-
-# session.service.Login(_soapheaders = _soapheaders)
-
-
-#! Remove below once ported to object definition above
-
-import zeep
-
-wsdl_session = 'app/wsdl/v10/Session.wsdl'
-wsdl_querybuilder = 'app/wsdl/v10/QueryBuilder.wsdl'
-esdl_exportbuilder = 'app/wsdl/v10/ExportBuilder.wsdl'
-
-session = zeep.Client(wsdl=wsdl_session)
-querybuilder = zeep.Client(wsdl=wsdl_querybuilder)
-exportbuilder = zeep.Client(wsdl=esdl_exportbuilder)
-# client = zeep.Client(wsdl=wsdl)
-
-API = "42383402790000"
-
-domain = 'US'
-
-dtypes = ['Well', 'Production Allocated']
-
-def methods(obj) -> None:
-    return [x for x in dir(obj) if not x.startswith('__')]
-
-def m(obj):
-    return methods(obj)
-
-def get_count():
-    'Put query that worked here'
-
-from zeep import xsd
-
-user = 'brock@driftwoodenergy.com'
-password = 'YrUs0LAME!'
-appName = 'driftwood_wellprod_digest'
-
-header = xsd.Element(
-    '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Header',
-    xsd.ComplexType([
-        xsd.Element(
-            '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Username',
-            xsd.String()),
-            xsd.Element(
-            '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Password',
-            xsd.String()),
-            xsd.Element(
-            '{http://www.ihsenergy.com/Enerdeq/Schemas/Header}Application',
-            xsd.String())
-    ])
-)
-
-header_value = header(Username=user, Password = password, Application = appName)
-
-_soapheaders = [header_value]
-soapheaders = [header_value]
-
-session.service.Login(_soapheaders = _soapheaders)
