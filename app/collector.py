@@ -198,19 +198,16 @@ class Collector():
                       self,
                       params: dict, # must be in func signature to seed cache
                       target: dict, # must be in func signature to seed cache
-                    #   decode: bool = False,
-                    #   encoding: str = 'utf-8'
                       ):
+        """ Send export job to IHS and wait for a job id. Once the job id is received
+            poll IHS until the export is complete."""
         self.job_id = self.connection.build_export(params, target)
 
         while not self.is_complete:
-            logger.debug(f'Sleeping for {self.poll} secs')
+            print(f'Sleeping for {self.poll} secs')
             sleep(self.poll)
 
         data = self.connection.get_export(self.job_id)
-
-        # if decode:
-        #     data =  data.decode(encoding)
 
         return data
 
@@ -248,7 +245,7 @@ if __name__ == "__main__":
     c = Collector('well', 'well-driftwood')
     p = Collector('well', 'well-driftwood', 'EnerdeqML Well')
     p = Collector('production allocated', 'production-driftwood', 'production.xml')
-    x  = p.get()
+    x  = c.get()
     xml = c.as_elements()
     js = c.as_json()
 
