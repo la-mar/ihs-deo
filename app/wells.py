@@ -1,4 +1,4 @@
-from app.connection import *
+from app.collector import Collector
 from app.util import *
 from app.mongo import *
 
@@ -11,6 +11,8 @@ from lxml import etree, objectify
 import copy
 
 QUERY_DIR = 'queries/'
+
+
 
 well_query_driftwood = """<criterias>
     <criteria type="group" groupId="" ignored="false">
@@ -59,40 +61,40 @@ def get_default_target():
             'Overwrite': 'True'
             }
 
-def is_complete(job_id):
-    return exportbuilder.service.IsComplete(job_id, _soapheaders=[header_value])
+# def is_complete(job_id):
+#     return exportbuilder.service.IsComplete(job_id, _soapheaders=[header_value])
 
-def driftwood_wells(decode = False):
+# def driftwood_wells(decode = False):
 
-    job_id = exportbuilder.service.BuildExportFromQuery(get_default_params(), get_default_target(), _soapheaders=[header_value])
+#     job_id = exportbuilder.service.BuildExportFromQuery(get_default_params(), get_default_target(), _soapheaders=[header_value])
 
-    while not is_complete(job_id):
-        n = 5
-        print(f'Sleeping for {n} secs')
-        sleep(n)
+#     while not is_complete(job_id):
+#         n = 5
+#         print(f'Sleeping for {n} secs')
+#         sleep(n)
 
-    data = exportbuilder.service.RetrieveExport(job_id, _soapheaders=[header_value])
+#     data = exportbuilder.service.RetrieveExport(job_id, _soapheaders=[header_value])
 
-    if decode:
-        return data.decode('utf-8')
-    else:
-        return data
+#     if decode:
+#         return data.decode('utf-8')
+#     else:
+#         return data
 
-def get_wells(decode = False):
+# def get_wells(decode = False):
 
-    job_id = exportbuilder.service.BuildExportFromQuery(get_default_params(), get_default_target(), _soapheaders=[header_value])
+#     job_id = exportbuilder.service.BuildExportFromQuery(get_default_params(), get_default_target(), _soapheaders=[header_value])
 
-    while not is_complete(job_id):
-        n = 5
-        print(f'Sleeping for {n} secs')
-        sleep(n)
+#     while not is_complete(job_id):
+#         n = 5
+#         print(f'Sleeping for {n} secs')
+#         sleep(n)
 
-    data = exportbuilder.service.RetrieveExport(job_id, _soapheaders=[header_value])
+#     data = exportbuilder.service.RetrieveExport(job_id, _soapheaders=[header_value])
 
-    if decode:
-        return data.decode('utf-8')
-    else:
-        return data
+#     if decode:
+#         return data.decode('utf-8')
+#     else:
+#         return data
 
 def elevate_api(wellbore: dict) -> dict:
     """ Moves a well's identification number (api) to the top level of
@@ -137,37 +139,41 @@ def make_hash(o):
 
     return hash(tuple(frozenset(sorted(new_o.items()))))
 
-def get_apis():
-    # from lxml import objectify
-    wells_bin = driftwood_wells(decode = False)
-    xml = objectify.fromstring(wells_bin)
+def get_apis(encoded_xml):
+    xml = objectify.fromstring(encoded_xml)
     root = xml.getroottree().getroot()
     wellbores = [child for child in root.getchildren() if child.tag == 'WELLBORE']
 
     wellbores_to_update = []
-    #iterate through wellbore objects
+    # iterate through wellbore objects
     number_of_wellbores = len(wellbores)
     for i in range(number_of_wellbores):
-        #convert child into dictionary
+        # convert child into dictionary
         xmltojson = etree.tostring(wellbores[i])
         wellbore = xmltodict.parse(xmltojson)['WELLBORE']
-        #format json object
+        # format json object
         lower_wellbore = tolower(elevate_api(wellbore))
-        #create hash of formatted json object
+        # create hash of formatted json object
         hashvalue = make_hash(lower_wellbore)
-        #query to see if api14 and hash exist in db
+        # query to see if api14 and hash exist in db
         exists = db.wells.find_one( {"$and":[ {'api14': str(wellbore["api14"])}, {"hash_value":hashvalue}]} )
-        #check and see if query returned any value from db
+        # check and see if query returned any value from db
         if exists is None:
-            #store hash in json object
+            # store hash in json object
             lower_wellbore['hash_value'] = hashvalue
-            #insert into mongodb
+            # insert into mongodb
             wellbores_to_update.append(copy.deepcopy(lower_wellbore))
 
     return wellbores_to_update
 
+
+
+
 if __name__ == "__main__":
-    apis = get_apis()
+
+    c = Collector('well', 'well-driftwood')
+    x  = c.get()
+    apis = get_apis(x)
     if not apis:
         print("No Records To Insert!")
     else:

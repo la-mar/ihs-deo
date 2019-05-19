@@ -1,3 +1,4 @@
+from functools import lru_cache
 
 from app.connection import IHSConnector
 from app.connection import *
@@ -12,6 +13,7 @@ import xmltodict
 import pprint
 import json
 import lxml
+import lxml.objectify
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -19,6 +21,11 @@ logger.setLevel(logging.DEBUG)
 
 class Mapping(dict):
     pass
+
+class HashableDict(dict):
+    def __hash__(self):
+        return hash(frozenset(self.items()))
+
 
 class Collector():
     """ One per query """
@@ -87,10 +94,10 @@ class Collector():
 
     @property
     def target(self, filename: str = 'default', overwrite: bool = True):
-        return {
+        return HashableDict({
                 'Filename':filename,
                 'Overwrite': overwrite
-               }
+               })
 
     @property
     def query(self):
@@ -114,12 +121,12 @@ class Collector():
 
     @property
     def params(self):
-        return {
+        return HashableDict({
                 'Domain':'US',
                 'DataType': self.datatype,
                 'Template': self.template,
                 'Query': self.query
-                }
+                })
 
     def _lookup_mapping(self, map_key: str):
         """ Formats the input key with title case for marching"""
@@ -187,8 +194,15 @@ class Collector():
         return entity
 
     # TODO: asyncio
-    def _build_export(self, decode: bool = False, encoding: str = 'utf-8'):
-        self.job_id = self.connection.build_export(self.params, self.target)
+    @lru_cache(maxsize=32)
+    def _build_export(
+                      self,
+                      params: dict, # must be in func signature to seed cache
+                      target: dict, # must be in func signature to seed cache
+                    #   decode: bool = False,
+                    #   encoding: str = 'utf-8'
+                      ):
+        self.job_id = self.connection.build_export(params, target)
 
         while not self.is_complete:
             logger.debug(f'Sleeping for {self.poll} secs')
@@ -196,12 +210,12 @@ class Collector():
 
         data = self.connection.get_export(self.job_id)
 
-        if decode:
-            data =  data.decode(encoding)
+        # if decode:
+        #     data =  data.decode(encoding)
 
         return data
 
-    def as_xml(self):
+    def as_elements(self):
         """Transform the raw data and return it as processed xmlself.
 
             Examples:
@@ -218,23 +232,25 @@ class Collector():
         raw = self.raw or self.get()
         xml = lxml.objectify.fromstring(raw)
         root = xml.getroottree().getroot()
-        xml = [child for child in root.getchildren() if child.tag == self.tag()]
+        xml = [child for child in root.getchildren() if child.tag == self.tag]
         return xml
 
     def as_json(self):
-        return [xmltodict.parse(xml) for xml in self.as_xml()]
+        return [xmltodict.parse(xml) for xml in self.as_elements()]
 
     def get(self):
         """Get the data"""
-        self.raw = self._build_export()
+        self.raw = self._build_export(self.params, self.target)
         return self.raw
 
 
+if __name__ == "__main__":
 
-c = Collector('well', 'well-driftwood')
+    c = Collector('well', 'well-driftwood')
 
-c.get()
-
+    x  = c.get()
+    xml = c.as_elements()
+    js = c.as_json()
 
 # def get_wells(decode = False):
 
