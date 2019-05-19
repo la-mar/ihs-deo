@@ -8,6 +8,7 @@ import xmltodict
 import pprint
 import json
 from lxml import etree, objectify
+import copy
 
 QUERY_DIR = 'queries/'
 
@@ -122,9 +123,6 @@ def tolower(d: dict):
             result[key.lower()] = value
     return result
 
-
-import copy
-
 def make_hash(o):
 
     if isinstance(o, (set, tuple, list)):
@@ -139,24 +137,14 @@ def make_hash(o):
 
     return hash(tuple(frozenset(sorted(new_o.items()))))
 
-if __name__ == "__main__":
-
-    """wells_xml = driftwood_wells()
-
-    wells_json = json.dumps(xmltodict.parse(wells_xml), indent = 4)
-    to_file(wells_json, 'wells_json.json')
-    """
-
-    def download_well_headers():
-        """ one or many"""
-
-
+def get_apis():
     # from lxml import objectify
     wells_bin = driftwood_wells(decode = False)
     xml = objectify.fromstring(wells_bin)
     root = xml.getroottree().getroot()
     wellbores = [child for child in root.getchildren() if child.tag == 'WELLBORE']
 
+    wellbores_to_update = []
     #iterate through wellbore objects
     number_of_wellbores = len(wellbores)
     for i in range(number_of_wellbores):
@@ -171,8 +159,17 @@ if __name__ == "__main__":
         exists = db.wells.find_one( {"$and":[ {'api14': str(wellbore["api14"])}, {"hash_value":hashvalue}]} )
         #check and see if query returned any value from db
         if exists is None:
-            print("doesn't exist")
             #store hash in json object
             lower_wellbore['hash_value'] = hashvalue
             #insert into mongodb
-            db.wells.insert(lower_wellbore)
+            wellbores_to_update.append(copy.deepcopy(lower_wellbore))
+
+    return wellbores_to_update
+
+if __name__ == "__main__":
+    apis = get_apis()
+    if not apis:
+        print("No Records To Insert!")
+    else:
+        db.wells.insert_many(apis)
+
