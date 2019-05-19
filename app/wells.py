@@ -8,11 +8,9 @@ import xmltodict
 import pprint
 import json
 from lxml import etree, objectify
+import copy
 
 QUERY_DIR = 'queries/'
-
-
-
 
 well_query_driftwood = """<criterias>
     <criteria type="group" groupId="" ignored="false">
@@ -61,11 +59,8 @@ def get_default_target():
             'Overwrite': 'True'
             }
 
-
 def is_complete(job_id):
     return exportbuilder.service.IsComplete(job_id, _soapheaders=[header_value])
-
-
 
 def driftwood_wells(decode = False):
 
@@ -99,7 +94,6 @@ def get_wells(decode = False):
     else:
         return data
 
-
 def elevate_api(wellbore: dict) -> dict:
     """ Moves a well's identification number (api) to the top level of
         the dictionary."""
@@ -129,37 +123,53 @@ def tolower(d: dict):
             result[key.lower()] = value
     return result
 
+def make_hash(o):
 
-if __name__ == "__main__":
+    if isinstance(o, (set, tuple, list)):
+        return tuple([make_hash(e) for e in o])
 
-    """wells_xml = driftwood_wells()
+    elif not isinstance(o, dict):
+        return hash(o)
 
-    wells_json = json.dumps(xmltodict.parse(wells_xml), indent = 4)
-    to_file(wells_json, 'wells_json.json')
-    """
+    new_o = copy.deepcopy(o)
+    for k, v in new_o.items():
+        new_o[k] = make_hash(v)
 
-    def download_well_headers():
-        """ one or many"""
+    return hash(tuple(frozenset(sorted(new_o.items()))))
 
-
+def get_apis():
     # from lxml import objectify
     wells_bin = driftwood_wells(decode = False)
     xml = objectify.fromstring(wells_bin)
     root = xml.getroottree().getroot()
     wellbores = [child for child in root.getchildren() if child.tag == 'WELLBORE']
-    c = wellbores[0]
 
-    #convert child into dictionary
-    xmltojson = etree.tostring(c)
-    wellbore = xmltodict.parse(xmltojson)['WELLBORE']
+    wellbores_to_update = []
+    #iterate through wellbore objects
+    number_of_wellbores = len(wellbores)
+    for i in range(number_of_wellbores):
+        #convert child into dictionary
+        xmltojson = etree.tostring(wellbores[i])
+        wellbore = xmltodict.parse(xmltojson)['WELLBORE']
+        #format json object
+        lower_wellbore = tolower(elevate_api(wellbore))
+        #create hash of formatted json object
+        hashvalue = make_hash(lower_wellbore)
+        #query to see if api14 and hash exist in db
+        exists = db.wells.find_one( {"$and":[ {'api14': str(wellbore["api14"])}, {"hash_value":hashvalue}]} )
+        #check and see if query returned any value from db
+        if exists is None:
+            #store hash in json object
+            lower_wellbore['hash_value'] = hashvalue
+            #insert into mongodb
+            wellbores_to_update.append(copy.deepcopy(lower_wellbore))
 
-    lower_wellbore = {lowerValues(k) : v for k,v in wellbore.items()}
+    return wellbores_to_update
 
-    data = tolower(wellbore)
-
-with open('data.json', 'w') as f:
-    f.writelines(json.dumps(data, indent = 4))
-
-
-
+if __name__ == "__main__":
+    apis = get_apis()
+    if not apis:
+        print("No Records To Insert!")
+    else:
+        db.wells.insert_many(apis)
 
