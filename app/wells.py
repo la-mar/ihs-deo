@@ -78,22 +78,6 @@ def driftwood_wells(decode = False):
     else:
         return data
 
-def get_wells(decode = False):
-
-    job_id = exportbuilder.service.BuildExportFromQuery(get_default_params(), get_default_target(), _soapheaders=[header_value])
-
-    while not is_complete(job_id):
-        n = 5
-        print(f'Sleeping for {n} secs')
-        sleep(n)
-
-    data = exportbuilder.service.RetrieveExport(job_id, _soapheaders=[header_value])
-
-    if decode:
-        return data.decode('utf-8')
-    else:
-        return data
-
 def elevate_api(wellbore: dict) -> dict:
     """ Moves a well's identification number (api) to the top level of
         the dictionary."""
