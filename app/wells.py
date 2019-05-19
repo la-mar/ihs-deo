@@ -122,6 +122,23 @@ def tolower(d: dict):
             result[key.lower()] = value
     return result
 
+
+import copy
+
+def make_hash(o):
+
+    if isinstance(o, (set, tuple, list)):
+        return tuple([make_hash(e) for e in o])
+
+    elif not isinstance(o, dict):
+        return hash(o)
+
+    new_o = copy.deepcopy(o)
+    for k, v in new_o.items():
+        new_o[k] = make_hash(v)
+
+    return hash(tuple(frozenset(sorted(new_o.items()))))
+
 if __name__ == "__main__":
 
     """wells_xml = driftwood_wells()
@@ -140,27 +157,22 @@ if __name__ == "__main__":
     root = xml.getroottree().getroot()
     wellbores = [child for child in root.getchildren() if child.tag == 'WELLBORE']
 
+    #iterate through wellbore objects
     number_of_wellbores = len(wellbores)
     for i in range(number_of_wellbores):
-         #convert child into dictionary
+        #convert child into dictionary
         xmltojson = etree.tostring(wellbores[i])
         wellbore = xmltodict.parse(xmltojson)['WELLBORE']
+        #format json object
         lower_wellbore = tolower(elevate_api(wellbore))
-        #to_file(json.dumps(lower_wellbore, indent = 4), 'wellbore'+str(i)+'.json')
-
-        # for key, value in ids.items():
-        #     wellbore.update({x['@TYPE']: x['#text']})
-        #     wellbore.move_to_end(x['@TYPE'], last=False)
-
-        #to_file(json.dumps(wellbore, indent = 4), 'wellbore.json')
-        # write to mongodb
-        #db.wells.insert(wellbore)
-
-        #x = db.wells.find_one({'api14': '42383374130000'})
-
-
-
-
-
-
-
+        #create hash of formatted json object
+        hashvalue = make_hash(lower_wellbore)
+        #query to see if api14 and hash exist in db
+        exists = db.wells.find_one( {"$and":[ {'api14': str(wellbore["api14"])}, {"hash_value":hashvalue}]} )
+        #check and see if query returned any value from db
+        if exists is None:
+            print("doesn't exist")
+            #store hash in json object
+            lower_wellbore['hash_value'] = hashvalue
+            #insert into mongodb
+            db.wells.insert(lower_wellbore)
