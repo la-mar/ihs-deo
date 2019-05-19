@@ -10,26 +10,6 @@ import json
 from lxml import etree, objectify
 import copy
 
-QUERY_DIR = 'queries/'
-
-
-
-
-def get_default_params():
-    return {
-            'Domain':'US',
-            'DataType': 'Well',
-            # 'Template': 'EnerdeqML Well',
-            'Template': well_template,
-            'Query': well_query_driftwood
-            }
-
-def get_default_target():
-    return {
-            'Filename':'Sample',
-            'Overwrite': 'True'
-            }
-
 def elevate_api(wellbore: dict) -> dict:
     """ Moves a well's identification number (api) to the top level of
         the dictionary."""
@@ -99,8 +79,6 @@ def get_apis(encoded_xml):
             wellbores_to_update.append(copy.deepcopy(lower_wellbore))
 
     return wellbores_to_update
-
-
 
 
 if __name__ == "__main__":
