@@ -1,6 +1,6 @@
 {
     "python.testing.promptToConfigure": false,
-    "python.testing.pyTestEnabled": false,
+    "python.testing.pytestEnabled": false,
     "python.testing.unittestEnabled": false,
     "python.testing.nosetestsEnabled": false,
     "workbench.colorCustomizations": {
@@ -22,7 +22,7 @@
         "titleBar.activeBackground": "#17483D",
         "titleBar.activeForeground": "#F4FBFA"
     },
-    "python.pythonPath": ".venv/bin/python",
+    "python.pythonPath": "/Users/friedrichb/Library/Caches/pypoetry/virtualenvs/ihs-xOPCjWzx-py3.7/bin/python",
     // "python.pythonPath": "/usr/local/bin/python3",
     // "python.pythonPath": ".venv\\Scripts\\python.exe"
 }

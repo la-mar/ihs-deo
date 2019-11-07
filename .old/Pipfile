@@ -5,7 +5,13 @@ verify_ssl = true
 
 [dev-packages]
 rope = "*"
+codecov = "*"
+pytest = "*"
+ipython = "*"
+matplotlib = "*"
 pylint = "*"
+coverage = "*"
+pytest-cov = "*"
 autopep8 = "*"
 
 [packages]
@@ -25,6 +31,8 @@ arrow = "*"
 xmltodict = "*"
 pymongo = "*"
 python-dotenv = "*"
+confuse = "*"
+dnspython = "*"
 
 [requires]
 python_version = "3.7"

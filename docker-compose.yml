@@ -1,0 +1,43 @@
+version: "3.7"
+
+x-defaults: &defaults
+  image: ${GCR}/iwell-deo
+  # build:
+  #   context: .
+  #   dockerfile: Dockerfile
+  restart: unless-stopped
+  env_file:
+    - .env
+  depends_on:
+    - redis
+
+services:
+  # web:
+  #   <<: *defaults
+  #   user: celeryuser
+  #   command: iwell run web
+  #   ports:
+  #     - "5000:5000"
+  worker:
+    <<: *defaults
+    user: celeryuser
+    command: iwell run worker
+    ports:
+      - 5000
+  cron:
+    <<: *defaults
+    user: celeryuser
+    command: iwell run cron --loglevel=DEBUG
+  monitor:
+    <<: *defaults
+    user: celeryuser
+    command: iwell run monitor
+    ports:
+      - 5001
+  redis:
+    image: ${GCR}/redis-deo
+    # build:
+    #   context: ./redis
+    #   dockerfile: Dockerfile
+    ports:
+      - 6379
