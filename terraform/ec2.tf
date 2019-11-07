@@ -18,7 +18,7 @@ resource "aws_instance" "mongodb" {
 
 resource "aws_ebs_volume" "mongo_data" {
   availability_zone = aws_instance.mongodb.availability_zone
-  size              = var.db_ebs_size
+  size              = var.db_ebs_data_volume_size
   tags              = merge(local.tags, { Name = "${local.full_service_name}-mongo-data" })
 }
 

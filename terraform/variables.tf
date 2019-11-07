@@ -25,12 +25,8 @@ variable "db_ec2_ami" {
   description = "AMI id for Postgres instance"
 }
 
-variable "db_ec2_volume_size" {
+variable "db_ebs_data_volume_size" {
   description = "AMI id for Postgres instance"
-}
-
-variable "db_ebs_size" {
-  description = "EBS volume size"
 }
 
 variable "db_username" {
