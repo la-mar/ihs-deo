@@ -20,8 +20,8 @@ resource "aws_instance" "mongodb" {
   disable_api_termination = true
   monitoring              = true
 
-  user_data = data.template_file.user_data.rendered
-  tags      = merge(local.tags, { Name = local.full_service_name })
+  # user_data = data.template_file.user_data.rendered
+  tags = merge(local.tags, { Name = local.full_service_name })
 
 }
 
