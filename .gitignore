@@ -1,5 +1,6 @@
 .terraform/
 .DS_Store
+env.tfvars
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
