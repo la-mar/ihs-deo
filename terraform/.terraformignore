@@ -1,7 +1,0 @@
-.mypy_cache/
-.old/
-.vscode/
-app/
-config/
-doc/
-queries/
