@@ -22,4 +22,4 @@
   3. if hash is found, disrgard the update
   4. if hash is NOT found, perform the update, saving the hash value with the record
 
-![refarch](/assets/refarch.png)
+![refarch](/doc/refarch.png)
