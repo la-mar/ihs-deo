@@ -39,9 +39,6 @@ data "terraform_remote_state" "vpc" {
 }
 
 # Get current account id that terraform is running under
-data "aws_region" "current" {
-
-}
 data "aws_caller_identity" "current" {
-
 }
+
