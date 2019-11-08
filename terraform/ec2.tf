@@ -33,7 +33,7 @@ resource "aws_ebs_volume" "mongo_data" {
 
 resource "aws_volume_attachment" "mongo_data" {
   device_name = "/dev/xvdb"
-  instance_id = aws_instance.mongo.id
+  instance_id = aws_instance.mongodb.id
   volume_id   = aws_ebs_volume.mongo_data.id
 }
 
