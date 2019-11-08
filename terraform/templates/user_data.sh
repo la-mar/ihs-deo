@@ -106,22 +106,22 @@ EOF
 service mongod start
 sleep 5
 
-echo "Adding admin user"
-mongo admin <<- EOF
-use admin
-var user = {
-  "user" : "${db_username}",
-  "pwd" : "${db_password}",
-  roles : [
-      {
-          "role" : "userAdminAnyDatabase",
-          "db" : "admin"
-      }
-  ]
-}
-db.createUser(user);
-exit
-EOF
+# echo "Adding admin user"
+# mongo admin <<- EOF
+# use admin
+# var user = {
+#   "user" : "${db_username}",
+#   "pwd" : "${db_password}",
+#   roles : [
+#       {
+#           "role" : "userAdminAnyDatabase",
+#           "db" : "admin"
+#       }
+#   ]
+# }
+# db.createUser(user);
+# exit
+# EOF
 
 
 
