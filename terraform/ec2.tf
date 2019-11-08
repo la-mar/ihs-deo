@@ -1,4 +1,13 @@
+# %% user data for instance bootstrapping
+data "template_file" "user_data" {
+  template = file("templates/user_data.sh")
 
+  vars = {
+    db_username = var.db_username
+    db_password = var.db_password
+    dd_api_key  = var.dd_api_key
+  }
+}
 
 resource "aws_instance" "mongodb" {
   ami                     = var.db_ec2_ami

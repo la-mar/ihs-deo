@@ -38,7 +38,7 @@ done
 
 echo "Installing Datadog Agent..."
 
-DD_API_KEY=${var.dd_api_key} bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
+DD_API_KEY=${dd_api_key} bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
 
 
 ########## Install MongoDB ##########
@@ -110,8 +110,8 @@ echo "Adding admin user"
 mongo admin <<- EOF
 use admin
 var user = {
-  "user" : "${var.db_username}",
-  "pwd" : "${var.db_password}",
+  "user" : "${db_username}",
+  "pwd" : "${db_password}",
   roles : [
       {
           "role" : "userAdminAnyDatabase",
