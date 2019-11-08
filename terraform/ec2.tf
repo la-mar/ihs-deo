@@ -12,7 +12,7 @@ data "template_file" "user_data" {
 resource "aws_instance" "mongodb" {
   ami                     = var.db_ec2_ami
   instance_type           = var.db_ec2_instance_type
-  subnet_id               = data.terraform_remote_state.vpc.outputs.db_subnets[0]
+  subnet_id               = data.terraform_remote_state.vpc.outputs.database_subnets[0]
   vpc_security_group_ids  = [aws_security_group.ec2.id]
   iam_instance_profile    = aws_iam_instance_profile.ec2.name
   key_name                = var.key_name
