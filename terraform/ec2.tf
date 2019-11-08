@@ -1,13 +1,14 @@
 # user data for instance bootstrapping
-# data "template_file" "user_data" {
-#   template = file("templates/user_data.sh")
+data "template_file" "user_data" {
+  template = file("templates/user_data.sh")
 
-#   vars = {
-#     db_username = var.db_username
-#     db_password = var.db_password
-#     dd_api_key  = var.dd_api_key
-#   }
-# }
+  vars = {
+    db_username  = var.db_username
+    db_password  = var.db_password
+    dd_api_key   = var.dd_api_key
+    service_name = var.service_name
+  }
+}
 
 resource "aws_instance" "mongodb" {
   ami                     = var.db_ec2_ami
@@ -17,11 +18,11 @@ resource "aws_instance" "mongodb" {
   iam_instance_profile    = aws_iam_instance_profile.ec2.name
   key_name                = var.key_name
   ebs_optimized           = true
-  disable_api_termination = true
+  disable_api_termination = false
   monitoring              = true
 
-  # user_data = data.template_file.user_data.rendered
-  tags = merge(local.tags, { Name = local.full_service_name })
+  user_data = data.template_file.user_data.rendered
+  tags      = merge(local.tags, { Name = local.full_service_name })
 
 }
 

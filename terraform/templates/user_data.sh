@@ -1,7 +1,7 @@
 #!/bin/bash
 
-
-sudo apt install jq -y
+sudo apt-get update
+sudo apt-get install jq -y
 # sudo apt install awscli -y
 
 
@@ -17,17 +17,18 @@ echo "Mounting EBS volumes..."
 
 function test_volume_mounted
 {
-    value=$(df -h |grep /dev/xvdb)
+    value=$(df -h |grep /dev/nvme1n1)
     echo $?
 }
 result="1"
 
 while [ $result -eq 1 ]
 do
-DEVICE=/dev/xvdb
+DEVICE=/dev/nvme1n1
 MOUNT_POINT=/data
+FSTYPE=xfs
 echo "Creating file system on $DEVICE"
-mkfs -t ext4 $DEVICE
+mkfs -t $FSTYPE $DEVICE
 mkdir $MOUNT_POINT
 mount $DEVICE $MOUNT_POINT
 result=$(test_volume_mounted)
@@ -35,9 +36,14 @@ echo $result
 sleep 10
 done
 
+# Add an entry to /etc/fstab to make the EBS volume remount after a restart
+echo "Writing mount entry to fstab..."
+UUID=$(sudo blkid -s UUID -o value /dev/nvme1n1)
+# FSTYPE=$(sudo blkid -s TYPE -o value /dev/nvme1n1)
+echo "UUID=$UUID $MOUNT_POINT $FSTYPE defaults 0 2" | sudo tee -a /etc/fstab
+
 
 echo "Installing Datadog Agent..."
-
 DD_API_KEY=${dd_api_key} bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
 
 
@@ -48,9 +54,6 @@ echo "Installing MongoDB resources..."
 
 wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
 
-
-
-
 # Create a list file for MongoDB
 echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
 
@@ -60,6 +63,10 @@ sudo apt-get update
 # Install the MongoDB packages.
 sudo apt-get install -y mongodb-org
 
+mkdir /data/db
+chown mongodb /data/db
+service mongod start
+sleep 5
 
 cat > /etc/mongod.conf <<- EOF
 # mongod.conf
@@ -103,25 +110,31 @@ security:
 
 EOF
 
-service mongod start
-sleep 5
-
-echo "Adding admin user"
+echo "Creating admin user"
 mongo admin <<- EOF
 use admin
 var user = {
   "user" : "${db_username}",
   "pwd" : "${db_password}",
   roles : [
-      {
-          "role" : "userAdminAnyDatabase",
-          "db" : "admin"
-      }
-  ]
+              { role: "userAdminAnyDatabase", db: "admin" },
+              { role: "readWriteAnyDatabase", db: "admin" },
+              { role: "dbAdminAnyDatabase", db: "admin" },
+              { role: "clusterAdmin", db: "admin" }
+           ]
 }
 db.createUser(user);
 exit
 EOF
+
+
+service mongod restart
+
+
+echo "Enabling mongod.service to start on boot"
+sudo systemctl enable mongod
+
+
 
 
 

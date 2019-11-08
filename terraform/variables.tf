@@ -22,11 +22,11 @@ variable "db_ec2_instance_type" {
 }
 
 variable "db_ec2_ami" {
-  description = "AMI id for Postgres instance"
+  description = "AMI id for MongoDB instance"
 }
 
 variable "db_ebs_data_volume_size" {
-  description = "AMI id for Postgres instance"
+  description = "EBS data volume size"
 }
 
 variable "db_username" {
