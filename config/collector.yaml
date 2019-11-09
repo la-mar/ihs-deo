@@ -1,0 +1,44 @@
+default_schedule: &default_schedule # seconds: 15
+  cron:
+    minute: "*/30"
+
+job_defaults:
+  sync: &default_sync
+    mode: sync
+    seconds: 60
+  # hourly:
+  #   mode:
+  full: &default_full
+    mode: full
+    cron:
+      minute: 0
+      hour: 0
+
+default_aliases: &default_aliases
+  created_at: ihs_created_at
+  updated_at: ihs_updated_at
+
+default_status: &default_status
+  enabled: true
+
+endpoints:
+  wells:
+    enabled: true
+    version: v10
+    # path: /wells
+    model: api.models.Well
+    # options:
+    #   - since
+    # mappings:
+    #   aliases:
+    #     <<: *default_aliases
+    #     alias: well_alias
+    #     name: well_name
+    #     type: well_type
+    exclude: []
+    normalize: false
+    tasks:
+      sync:
+        <<: *default_sync
+      full:
+        <<: *default_full

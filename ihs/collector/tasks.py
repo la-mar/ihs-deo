@@ -95,7 +95,7 @@ def sync_endpoint(self, endpoint_name: str, **kwargs):
 
 
 def _sync_endpoint(endpoint_name: str, celery: bool = False, **kwargs):
-    """ Sync model from source to data warehouse"""
+    """ Sync model from source to backend"""
     endpoint = endpoints[endpoint_name]
     requestor = IWellRequestor(conf.API_BASE_URL, endpoint, **kwargs)
     errors: List[str] = []

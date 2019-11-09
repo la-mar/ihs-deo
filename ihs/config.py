@@ -1,3 +1,5 @@
+# pylint: disable=invalid-envvar-default
+
 from __future__ import annotations
 import logging
 import os
@@ -9,7 +11,7 @@ import pandas as pd
 import tomlkit
 import yaml
 from attrdict import AttrDict
-from sqlalchemy.engine.url import URL
+
 
 """ Optional Pandas display settings"""
 pd.options.display.max_rows = None
@@ -19,9 +21,10 @@ pd.set_option("precision", 2)
 
 _pg_aliases = ["postgres", "postgresql", "psycopg2", "psycopg2-binary"]
 _mssql_aliases = ["mssql", "sql server"]
+_mongo_aliases = ["mongo", "mongodb"]
 
-APP_SETTINGS = os.getenv("APP_SETTINGS", "app.config.DevelopmentConfig")
-FLASK_APP = os.getenv("FLASK_APP", "app.manage.py")
+APP_SETTINGS = os.getenv("APP_SETTINGS", "ihs.config.DevelopmentConfig")
+FLASK_APP = os.getenv("FLASK_APP", "ihs.manage.py")
 
 
 def make_config_path(path: str, filename: str) -> str:
@@ -29,12 +32,15 @@ def make_config_path(path: str, filename: str) -> str:
 
 
 def load_config(path: str) -> AttrDict:
-    with open(path) as f:
-        return AttrDict(yaml.safe_load(f))
+    try:
+        with open(path) as f:
+            return AttrDict(yaml.safe_load(f))
+    except FileNotFoundError as fe:
+        print(f"Failed to load configuration: {fe}")
 
 
 def get_active_config() -> AttrDict:
-    return globals()[APP_SETTINGS.replace("app.config.", "")]()
+    return globals()[APP_SETTINGS.replace("ihs.config.", "")]()
 
 
 def get_default_port(driver: str):
@@ -43,7 +49,8 @@ def get_default_port(driver: str):
         port = 5432
     elif driver in _mssql_aliases:
         port = 1433
-
+    elif driver in _mongo_aliases:
+        port = 27017
     return port
 
 
@@ -53,7 +60,8 @@ def get_default_driver(dialect: str):
         driver = "postgres"  # "psycopg2"
     elif dialect in _mssql_aliases:
         driver = "pymssql"
-
+    elif dialect in _mongo_aliases:
+        driver = "mongodb"
     return driver
 
 
@@ -96,15 +104,15 @@ class BaseConfig:
     ENV_NAME = os.getenv("ENV_NAME", socket.gethostname())
 
     """ Sentry """
-    SENTRY_ENABLED = os.getenv("SENTRY_ENABLED", False)
+    SENTRY_ENABLED = bool(os.getenv("SENTRY_ENABLED"))
     SENTRY_DSN = os.getenv("SENTRY_DSN", None)
-    SENTRY_LEVEL = os.getenv("SENTRY_LEVEL", logging.ERROR)
-    SENTRY_EVENT_LEVEL = os.getenv("SENTRY_EVENT_LEVEL", logging.ERROR)
+    SENTRY_LEVEL = os.getenv("SENTRY_LEVEL", 40)
+    SENTRY_EVENT_LEVEL = os.getenv("SENTRY_EVENT_LEVEL", 40)
     SENTRY_ENV_NAME = os.getenv("SENTRY_ENV_NAME", ENV_NAME)
     SENTRY_RELEASE = f"{project}-{version}"
 
     """ Datadog """
-    DATADOG_ENABLED = os.getenv("DATADOG_ENABLED", False)
+    DATADOG_ENABLED = bool(os.getenv("DATADOG_ENABLED"))
     DATADOG_API_KEY = os.getenv("DATADOG_API_KEY", None)
     DATADOG_APP_KEY = os.getenv("DATADOG_APP_KEY", None)
 
@@ -114,39 +122,23 @@ class BaseConfig:
     COLLECTOR_CONFIG = load_config(COLLECTOR_CONFIG_PATH)
 
     """ Logging """
-    LOG_LEVEL = os.getenv("LOG_LEVEL", logging.INFO)
+    LOG_LEVEL = os.getenv("LOG_LEVEL", 20)
 
-    """ --------------- Sqlalchemy --------------- """
+    """ --------------- Database --------------- """
 
-    DATABASE_DIALECT = os.getenv("DATABASE_DIALECT", "postgres")
-    DATABASE_DRIVER = os.getenv("DATABASE_DRIVER", get_default_driver(DATABASE_DIALECT))
+    DATABASE_DRIVER = os.getenv("DATABASE_DRIVER", "mongodb")
     DATABASE_USERNAME = os.getenv("DATABASE_USERNAME", "")
     DATABASE_PASSWORD = os.getenv("DATABASE_PASSWORD", "")
     DATABASE_HOST = os.getenv("DATABASE_HOST", "localhost")
-    DATABASE_PORT = os.getenv("DATABASE_PORT", get_default_port(DATABASE_DRIVER))
-    DATABASE_SCHEMA = os.getenv("DATABASE_SCHEMA", get_default_schema(DATABASE_DRIVER))
-    DATABASE_NAME = os.getenv("DATABASE_NAME", "postgres")
-    DATABASE_URL_PARAMS = {
-        "drivername": DATABASE_DRIVER,
-        "username": DATABASE_USERNAME,
-        "password": DATABASE_PASSWORD,
-        "host": DATABASE_HOST,
-        "port": DATABASE_PORT,
-        "database": DATABASE_NAME,
-    }
-    SQLALCHEMY_DATABASE_URI = str(make_url(DATABASE_URL_PARAMS))
-    DEFAULT_EXCLUSIONS = ["updated_at", "inserted_at"]
+    DATABASE_PORT = os.getenv("DATABASE_PORT", 27017)
+    DATABASE_NAME = os.getenv("DATABASE_NAME", "default")
+    DATABASE_AUTHENTICATION_SOURCE = "admin"
+    # DATABASE_UUID_REPRESENTATION = "standard"
+    # DATABASE_CONNECT = os.getenv("DATABASE_CONNECT", False)
 
     """ Celery """
-    # CELERY_TIMEZONE = "US/Central"
-    # BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://localhost:6379/0")
     BROKER_URL = os.getenv("CELERY_BROKER_URL", "sqs://")
-    # CELERY_RESULT_BACKEND = os.getenv(
-    #     "CELERY_RESULT_BACKEND", "redis://localhost:6379/0"
-    # )
-    # CELERY_SEND_TASK_SENT_EVENT = True
     CELERY_TASK_LIST = ["collector.tasks"]
-    # CELERYD_TASK_SOFT_TIME_LIMIT = 3600
     CELERYD_TASK_TIME_LIMIT = os.getenv("CELERYD_TASK_TIME_LIMIT", 60)
     CELERY_TASK_SERIALIZER = "pickle"
     CELERY_ACCEPT_CONTENT = ["json", "pickle"]
@@ -155,29 +147,25 @@ class BaseConfig:
         "CELERYD_MAX_MEMORY_PER_CHILD", 24000
     )  # 24MB
     CELERY_ENABLE_REMOTE_CONTROL = False  # required for sqs
-    CELERY_SEND_EVENTS = False  # required for sqs
-    # BROKER_TRANSPORT_OPTIONS = {
-    #     "visibility_timeout": 360,
-    #     "region": "us-east-1",
-    #     "queue_name_prefix": "app-",
-    # }
-    CELERY_DEFAULT_QUEUE = "app-celery"  # sqs queue name
-    # CELERYD_HIJACK_ROOT_LOGGER = False
-    # CELERY_RESULT_DBURI = "db+" + SQLALCHEMY_DATABASE_URI
-    # CELERY_RESULT_EXTENDED = True
+    CELERY_SEND_EVENTS = False
+    CELERY_DEFAULT_QUEUE = f"{project}-celery"  # sqs queue name
 
     """ API """
-    API_CLIENT_TYPE = os.getenv("IWELL_CLIENT_TYPE", "legacy")
-    API_BASE_URL = os.getenv("IWELL_URL")
-    API_CLIENT_ID = os.getenv("IWELL_CLIENT_ID")
-    API_CLIENT_SECRET = os.getenv("IWELL_CLIENT_SECRET")
-    API_USERNAME = os.getenv("IWELL_USERNAME")
-    API_PASSWORD = os.getenv("IWELL_PASSWORD")
-    API_TOKEN_PATH = os.getenv("IWELL_TOKEN_PATH")
-    API_PAGESIZE = os.getenv("IWELL_PAGESIZE", 1000)
-    API_HEADER_KEY = os.getenv("IWELL_HEADER_KEY", "API-HEADER-KEY")
-    API_HEADER_PREFIX = os.getenv("IWELL_HEADER_PREFIX", "DEO")
-    API_SYNC_WINDOW_MINUTES = os.getenv("IWELL_SYNC_WINDOW_MINUTES", 1440 * 7)
+    API_CLIENT_TYPE = os.getenv("IHS_CLIENT_TYPE", "legacy")
+    API_BASE_URL = os.getenv("IHS_URL")
+    API_USERNAME = os.getenv("IHS_USERNAME")
+    API_PASSWORD = os.getenv("IHS_PASSWORD")
+    API_APP_KEY = os.getenv("IHS_APP_KEY")
+    # API_TOKEN_PATH = os.getenv("IHS_TOKEN_PATH")
+    # API_PAGESIZE = os.getenv("IHS_PAGESIZE", 1000)
+    # API_HEADER_KEY = os.getenv("IHS_HEADER_KEY", "API-HEADER-KEY")
+    # API_HEADER_PREFIX = os.getenv("IHS_HEADER_PREFIX", "DEO")
+    API_SYNC_WINDOW_MINUTES = os.getenv("IHS_SYNC_WINDOW_MINUTES", 1440 * 7)
+    API_HEADERS = {
+        "Username": API_USERNAME,
+        "Password": API_PASSWORD,
+        "Application": API_APP_KEY,
+    }
 
     @property
     def show(self):
@@ -215,6 +203,24 @@ class BaseConfig:
     def functions(self):
         return self.COLLECTOR_CONFIG.functions
 
+    @property
+    def database_params(self):
+        return {
+            key.lower().replace("database_", ""): getattr(self, key)
+            for key in dir(self)
+            if key.startswith("DATABASE_")
+        }
+
+    def database_uri(self, hide_password=False, include_auth_source=True):
+        db = self.database_params
+        password = "***" if hide_password else db.get("password")
+        auth_source = (
+            f"?authSource={db.get('authentication_source')}"
+            if include_auth_source
+            else ""
+        )
+        return f"{db.get('driver')}://{db.get('username')}:{password}@{db.get('host')}:{db.get('port')}/{db.get('name')}{auth_source}"
+
     def __repr__(self):
         """ Print noteworthy configuration items """
         hr = "-" * shutil.get_terminal_size().columns + "\n"
@@ -224,7 +230,8 @@ class BaseConfig:
         string += tpl.format(name="flask app:", value=FLASK_APP)
         string += tpl.format(name="flask env:", value=self.FLASK_ENV)
         string += tpl.format(
-            name="backend:", value=make_url(self.DATABASE_URL_PARAMS).__repr__()
+            name="backend:",
+            value=self.database_url(hide_password=True, include_auth_source=False),
         )
         string += tpl.format(name="broker:", value=self.BROKER_URL)
         # string += tpl.format(name="result broker:", value=self.CELERY_RESULT_BACKEND)
@@ -240,7 +247,6 @@ class DevelopmentConfig(BaseConfig):
     # SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
     DEBUG_TB_ENABLED = True
     SECRET_KEY = os.getenv("SECRET_KEY", "test")
-    SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 
 class TestingConfig(BaseConfig):
@@ -272,7 +278,6 @@ class CIConfig(BaseConfig):
 class ProductionConfig(BaseConfig):
     """Production configuration"""
 
-    # load_dotenv(".env.production")
-    # SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+if __name__ == "__main__":
+    c = BaseConfig()

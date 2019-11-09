@@ -46,7 +46,7 @@ class Endpoint(object):
         self.enabled = enabled
 
     def __repr__(self):
-        return f"{self.version}{self.path}"
+        return f"{self.version}{self.path if self.path else ''}"
 
     def __iter__(self):
         attrs = [x for x in dir(self) if not x.startswith("_")]

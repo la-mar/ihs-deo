@@ -62,67 +62,6 @@ class Collector(object):
         return self.tf.transform(data)
 
 
-class IWellCollector(Collector):
-    def strip_ids_from_headers(self, headers: Dict[Any, str]) -> Dict[str, str]:
-        # get any identifiers in request headers
-        prefix_header = str(headers.get(config.API_HEADER_KEY))
-        keys = {
-            k.replace(prefix_header + "-", ""): v
-            for k, v in headers.items()
-            if k.startswith(prefix_header)
-        }
-        return keys
-
-    def collect(self, response: requests.Response) -> Dict[str, str]:
-        if not response.ok:
-            logger.warning(
-                f"Invalid status code in response: ({response.status_code}: {response.reason}){response.url}"
-            )
-            return {}
-        data = response.json()["data"]
-        logger.info(f"{response.url}: downloaded {len(data)} records")
-        df = self.transform(data)
-        # add ids from headers as columns to dataframe
-        ids = self.strip_ids_from_headers(response.request.headers)  # type: ignore
-        for key, value in ids.items():
-            df[key] = int(value)
-
-        if not df.empty:
-            try:
-                return self.model.bulk_merge(df)
-            except KeyError as ke:
-                # TODO: Special message if missing key is a primary key in the model
-                logger.error(
-                    f"Expected field not found.  Does it have the correct alias? -- {ke} -- fields in passed dataframe:  {df.columns.tolist()}"
-                )
-
-        else:
-            logger.info(f"{self.endpoint}: empty dataframe")
-
-        # TODO: On IntegrityError, queue a task to sync the model containing the foreign key
-        return {}
-
-
-class CollectionLogger(object):
-    """ Logs the completion status of collection tasks in the database"""
-
-    def __init__(self, model: Model):
-        self.model = model
-
-    def log(
-        self, model_name: str, inserts: int = 0, updates: int = 0, deletes: int = 0
-    ):
-        integrated_at = datetime.now()
-        new = self.model(
-            integrated_at=integrated_at,
-            model_name=model_name,
-            inserts=inserts,
-            updates=updates,
-            deletes=deletes,
-        )
-        self.model.s.add(new)
-        self.model.s.commit()
-
 
 if __name__ == "__main__":
     from app import create_app, db

@@ -17,10 +17,39 @@ from collector.request import Request
 from collector.endpoint import Endpoint
 
 logger = logging.getLogger(__name__)
-config = get_active_config()
+conf = get_active_config()
 
 
 class Requestor(object):
+    window_timedelta = timedelta(days=1)
+    sync_epoch = datetime(year=1970, month=1, day=1)
+    functions: Dict[str, str] = {}
+    headers: Dict[str, str] = conf.api_params.get("headers")
+    params: Dict[str, str] = {}
+
+    def __init__(
+        self, base_url: str, endpoint: Endpoint, *args, **kwargs,
+    ):
+
+        self.base_url = base_url
+        self.endpoint = endpoint
+        self.headers = kwargs.get("headers") or self.headers
+        self.params = kwargs.get("params") or self.params
+        self.functions = kwargs.get("functions") or self.functions
+        self._session = None
+        self.requests: list = []
+        self.responses: list = []
+
+    @staticmethod
+    def urljoin(base: str, path: str) -> str:
+        if not base.endswith("/"):
+            base = base + "/"
+        if path.startswith("/"):
+            path = path[1:]
+        return urllib.parse.urljoin(base, path)
+
+
+class RestRequestor(Requestor):
     window_timedelta = timedelta(days=1)
     sync_epoch = datetime(year=1970, month=1, day=1)
     functions: Dict[str, str] = {}
@@ -35,15 +64,10 @@ class Requestor(object):
         headers: dict = None,
         params: dict = None,
     ):
+        super().__init__(
+            base_url, endpoint, functions=functions, headers=headers, params=params
+        )
         self.token_manager = TokenManager.from_app_config()
-        self.headers = headers or self.headers
-        self.params = params or self.params
-        self.base_url = base_url
-        self.endpoint = endpoint
-        self.functions = functions or self.functions
-        self._session = None
-        self.requests: list = []
-        self.responses: list = []
 
     def __repr__(self):
         return f"({self.endpoint.name})  {self.url} -> {self.model}"
@@ -137,14 +161,6 @@ class Requestor(object):
             raise KeyError(f"Unable to format path ({self.path}) without {ke}")
         except Exception:
             raise
-
-    @staticmethod
-    def urljoin(base: str, path: str) -> str:
-        if not base.endswith("/"):
-            base = base + "/"
-        if path.startswith("/"):
-            path = path[1:]
-        return urllib.parse.urljoin(base, path)
 
     def enqueue(self, headers: dict = None, params: dict = None, **kwargs) -> None:
         url = self.format(**kwargs)

@@ -122,11 +122,6 @@ def sentry():
     logger.error("Sentry Integration Test")
 
 
-import sentry_sdk
-
-sentry = sentry_sdk.init(dsn=conf.SENTRY_DSN)
-
-
 def main(argv=sys.argv):
     """
     Args:
