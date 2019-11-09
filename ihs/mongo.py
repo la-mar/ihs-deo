@@ -7,6 +7,8 @@ app = create_app()
 app.app_context().push()
 
 
+db.connection.list_database_names()
+
 # conf = get_active_config()
 # auth = conf.database_params
 
@@ -15,7 +17,7 @@ app.app_context().push()
 # client = connect(name="test", **auth)
 # client = connect(name="test", host=conf.database_uri())
 # client
-# client.list_database_names()
+# db.list_database_names()
 # db = client.ihs
 
 # have to manually auth against admin when not using uri with mongoengine

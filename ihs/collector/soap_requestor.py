@@ -79,12 +79,12 @@ class IHSHeaders:
 class SoapRequestor(Requestor):
     headers = conf.api_params.get("headers")
     _wsdls = conf.api_params.get("wsdls")
+    _soapheaders = IHSHeaders(conf.api_params.get("base_url")).soapheaders
     _session = None
-    _soapheaders = None
 
-    def __init__(self, client_type: str, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.client = self.get_client(client_type)
+        self.client = self.get_client(kwargs.pop("client_type"))
 
     @property
     def soapheaders(self):
@@ -92,7 +92,8 @@ class SoapRequestor(Requestor):
 
     def get_client(self, name: str) -> zeep.Client:
         client = zeep.Client(wsdl=self.get_wsdl(name))
-        return client.set_default_soapheaders(self.soapheaders or [])
+        client.set_default_soapheaders(self.soapheaders or [])
+        return client
 
     def get_wsdl(self, name: str) -> str:
         """ Get a versioned path to a named wsdl file """
@@ -112,12 +113,7 @@ class SoapRequestor(Requestor):
 
 class Builder(SoapRequestor):
     def __init__(self, *args, **kwargs):
-        self.authorizer = IHSHeaders(kwargs.get("base_url"))
         super().__init__(*args, **kwargs)
-
-    @property
-    def soapheaders(self):
-        return self.authorizer.soapheaders
 
     @property
     def service(self):
@@ -149,5 +145,7 @@ if __name__ == "__main__":
 
     x = IHSHeaders(conf.API_BASE_URL)
 
-    self = x
+    x = ExportBuilder(conf.API_BASE_URL, endpoints.get("wells"))
+
+    x.connect()
 

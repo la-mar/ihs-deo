@@ -169,8 +169,8 @@ class BaseConfig:
     API_WSDL_DIR = abs_path(CONFIG_BASEPATH, "wsdl")
     API_WSDLS = {
         "session": abs_path(API_WSDL_DIR, "{version}/Session.wsdl"),
-        "querybuilder": abs_path(API_WSDL_DIR, "QueryBuilder.wsdl"),
-        "exportbuilder": abs_path(API_WSDL_DIR, "ExportBuilder.wsdl"),
+        "querybuilder": abs_path(API_WSDL_DIR, "{version}/QueryBuilder.wsdl"),
+        "exportbuilder": abs_path(API_WSDL_DIR, "{version}/ExportBuilder.wsdl"),
     }
     API_DOMAIN = "US;"
 
