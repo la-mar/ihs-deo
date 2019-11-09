@@ -1,6 +1,7 @@
 import time
 from functools import wraps
 import urllib.parse
+import os
 
 
 def urljoin(base: str, path: str) -> str:
@@ -65,9 +66,34 @@ def retry(ExceptionToCheck, tries=10, delay=10, backoff=2, logger=None):
     return deco_retry
 
 
+def load_xml(dir_path: str, filename: str):
+    """load and return an xml file as a string
+
+    Arguments:
+        filename {str} -- filename of xml file. extension is optional.
+
+    Returns:
+        [type] -- [description]
+    """
+
+    xml = None
+    ext = ".xml"
+    if not filename.endswith(ext):
+        filename = filename + ext
+
+    try:
+        with open(os.path.join(dir_path, filename), "r") as f:
+            xml = f.read()
+    except Exception as fe:
+        print(f"Invalid filename: {filename}")
+
+    return xml
+
+
 if __name__ == "__main__":
 
-    @retry(Exception)
-    def testing():
-        raise Exception("failed!")
+    # @retry(Exception)
+    # def testing():
+    #     raise Exception("failed!")
 
+    xml = load_xml("test/data", "well_header.xml")
