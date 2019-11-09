@@ -127,8 +127,8 @@ class BaseConfig:
     """ --------------- Database --------------- """
 
     DATABASE_DRIVER = os.getenv("DATABASE_DRIVER", "mongodb")
-    DATABASE_USERNAME = os.getenv("DATABASE_USERNAME", "")
-    DATABASE_PASSWORD = os.getenv("DATABASE_PASSWORD", "")
+    DATABASE_USERNAME = os.getenv("DATABASE_USERNAME", None)
+    DATABASE_PASSWORD = os.getenv("DATABASE_PASSWORD", None)
     DATABASE_HOST = os.getenv("DATABASE_HOST", "localhost")
     DATABASE_PORT = os.getenv("DATABASE_PORT", 27017)
     DATABASE_NAME = os.getenv("DATABASE_NAME", "default")
@@ -220,13 +220,14 @@ class BaseConfig:
 
     def database_uri(self, hide_password=False, include_auth_source=True):
         db = self.database_params
+        username = db.get("username")
         password = "***" if hide_password else db.get("password")
         auth_source = (
             f"?authSource={db.get('authentication_source')}"
             if include_auth_source
             else ""
         )
-        return f"{db.get('driver')}://{db.get('username')}:{password}@{db.get('host')}:{db.get('port')}/{db.get('name')}{auth_source}"
+        return f"{db.get('driver')}://{username or ''}{':' if username is not None else ''}{password or ''}{'@' if username else ''}{db.get('host')}:{db.get('port')}/{db.get('name')}{auth_source}"
 
     def __repr__(self):
         """ Print noteworthy configuration items """
