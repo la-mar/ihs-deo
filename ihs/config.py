@@ -27,7 +27,7 @@ APP_SETTINGS = os.getenv("APP_SETTINGS", "ihs.config.DevelopmentConfig")
 FLASK_APP = os.getenv("FLASK_APP", "ihs.manage.py")
 
 
-def make_config_path(path: str, filename: str) -> str:
+def abs_path(path: str, filename: str) -> str:
     return os.path.abspath(os.path.join(path, filename))
 
 
@@ -118,7 +118,7 @@ class BaseConfig:
 
     """ Config """
     CONFIG_BASEPATH = "./config"
-    COLLECTOR_CONFIG_PATH = make_config_path(CONFIG_BASEPATH, "collector.yaml")
+    COLLECTOR_CONFIG_PATH = abs_path(CONFIG_BASEPATH, "collector.yaml")
     COLLECTOR_CONFIG = load_config(COLLECTOR_CONFIG_PATH)
 
     """ Logging """
@@ -166,6 +166,13 @@ class BaseConfig:
         "Password": API_PASSWORD,
         "Application": API_APP_KEY,
     }
+    API_WSDL_DIR = abs_path(CONFIG_BASEPATH, "wsdl")
+    API_WSDLS = {
+        "session": abs_path(API_WSDL_DIR, "{version}/Session.wsdl"),
+        "querybuilder": abs_path(API_WSDL_DIR, "QueryBuilder.wsdl"),
+        "exportbuilder": abs_path(API_WSDL_DIR, "ExportBuilder.wsdl"),
+    }
+    API_DOMAIN = "US;"
 
     @property
     def show(self):
@@ -255,7 +262,7 @@ class TestingConfig(BaseConfig):
     # load_dotenv(".env.testing")
 
     CONFIG_BASEPATH = "./test/data"
-    COLLECTOR_CONFIG_PATH = make_config_path(CONFIG_BASEPATH, "collector.yaml")
+    COLLECTOR_CONFIG_PATH = abs_path(CONFIG_BASEPATH, "collector.yaml")
     COLLECTOR_CONFIG = load_config(COLLECTOR_CONFIG_PATH)
     TESTING = True
     # SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_TEST_URL")

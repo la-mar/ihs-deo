@@ -2,7 +2,6 @@ from __future__ import annotations
 from typing import Dict, List, Union, Generator
 import logging
 from datetime import datetime, timedelta, date
-import urllib.parse
 
 from attrdict import AttrDict
 import pandas as pd
@@ -39,14 +38,6 @@ class Requestor(object):
         self._session = None
         self.requests: list = []
         self.responses: list = []
-
-    @staticmethod
-    def urljoin(base: str, path: str) -> str:
-        if not base.endswith("/"):
-            base = base + "/"
-        if path.startswith("/"):
-            path = path[1:]
-        return urllib.parse.urljoin(base, path)
 
 
 class RestRequestor(Requestor):

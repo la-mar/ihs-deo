@@ -1,5 +1,14 @@
 import time
 from functools import wraps
+import urllib.parse
+
+
+def urljoin(base: str, path: str) -> str:
+    if not base.endswith("/"):
+        base = base + "/"
+    if path.startswith("/"):
+        path = path[1:]
+    return urllib.parse.urljoin(base, path)
 
 
 def retry(ExceptionToCheck, tries=10, delay=10, backoff=2, logger=None):
