@@ -7,6 +7,7 @@ from typing import Dict, Generator, List, Union, Any
 
 import zeep
 from zeep import xsd
+from time import sleep
 
 from collector.endpoint import Endpoint
 from collector.requestor import Requestor
@@ -131,6 +132,35 @@ class ExportBuilder(Builder):
     def __init__(self, *args, **kwargs):
         super().__init__(client_type="exportbuilder", *args, **kwargs)
 
+    @property
+    def parameters(self):
+        return dict(
+            {
+                "Domain": "US",
+                "DataType": "production allocated",
+                "Template": "templates/production.xml",
+                "Query": "queries/production-driftwood.xml",
+            }
+        )
+
+    @property
+    def target(self):
+        return dict({"Filename": "default", "Overwrite": True})
+
+    def build_export(self) -> str:
+
+        self.job_id = self.client.service.BuildExportFromQuery(
+            self.parameters, self.target
+        )
+
+        while not self.client.service.IsComplete(self.job_id):
+            print(f"Sleeping for 5 secs")
+            sleep(5)
+
+        data = self.client.service.get_export(self.job_id)
+
+        return data
+
 
 class QueryBuilder(Builder):
     def __init__(self, *args, **kwargs):
@@ -148,4 +178,6 @@ if __name__ == "__main__":
     x = ExportBuilder(conf.API_BASE_URL, endpoints.get("wells"))
 
     x.connect()
+
+    x.build_export()
 

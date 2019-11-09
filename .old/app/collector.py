@@ -244,15 +244,10 @@ class Collector:
 
 if __name__ == "__main__":
 
-    import xmltodict
-
     c = Collector("well", "well-driftwood")
     p = Collector("well", "well-driftwood", "EnerdeqML Well")
     p = Collector("production allocated", "production-driftwood", "production.xml")
     x = c.get()
-    xml = lxml.objectify.fromstring(x)
-    root = xml.getroottree().getroot()
-
     xml = c.as_elements()
     wellbore = xml[0]
     children = wellbore.getchildren()
