@@ -1,10 +1,13 @@
 from __future__ import annotations
 from typing import Dict, List, Callable, Union
 import logging
-
+import lxml
+import lxml.objectify
+import lxml.etree
 
 import requests
 import pandas as pd
+
 
 logger = logging.getLogger(__name__)
 
@@ -89,8 +92,6 @@ class Transformer(object):
                 # TODO: Convert this into a default array of args at the class level
                 modified_args = {**self.date_handler_args}
                 modified_args.pop("unit", None)
-                # modified_args["yearfirst"] = True
-                # format="%Y-%m-%d"
                 dt = pd.to_datetime(value, **modified_args)
             return dt
         except Exception as e:
@@ -112,42 +113,49 @@ class Transformer(object):
 
         return df
 
+    # def as_json(self):
+    #     return [xmltodict.parse(xml) for xml in self.as_elements()]
+
 
 if __name__ == "__main__":
 
-    from iwell.collector.requestor import Requestor
-    from iwell.collector.request import Request
+    from collector.endpoint import load_from_config
+    from config import get_active_config
+    from collector.util import load_xml
 
-    from iwell.collector.endpoint import Endpoint
-    from iwell.config import get_active_config
-
-    config = get_active_config()
-    endpoints = config.endpoints
-    functions = config.functions
-    endpoint = endpoints.wells
-
-    url = config.API_BASE_URL + endpoints.wells.path
-    requestor = Requestor("req_name", endpoint, functions)
-
-    headers = {"Authorization": requestor.get_token()}
-    params = {}
-
-    r2 = requests.get(url, headers=headers, params=params)
+    conf = get_active_config()
+    endpoints = load_from_config(conf)
+    endpoint = endpoints.get("wells")
 
     t = Transformer(
-        aliases=endpoints.wells.mappings.aliases,
-        exclude=endpoints.wells.exclude,
+        aliases=endpoint.mappings.get("aliases"),
+        exclude=endpoint.exclude,
         date_columns=["latest_production_time", "iwell_created_at", "iwell_updated_at"],
     )
-    data = r2.json()["data"]
-    df = t.transform(data)
 
-    # app.app_context().push()
+    xml = load_xml("test/data/well_header_short.xml")
 
-    from iwell import create_app, db
-    from iwell.api.models import *
+    def to_elements(xml: str):
+        """Parse raw XML string into a python object
 
-    app = create_app()
-    app.app_context().push()
+            Examples:
+                Well: The results of a well query will be reduced to element trees
+                        beginning at a WELLBORE element, then returned as an xml string.
 
-    Well.bulk_merge(df)
+                Production: The results of a well query will be reduced to element
+                            trees beginning at a PRODUCING_ENTITY element, then
+                            returned as an xml string.
+
+            Returns:
+                str - a string of xml
+        """
+        xml = lxml.objectify.fromstring(xml)
+        root = xml.getroottree().getroot()
+        xml = [child for child in root.getchildren() if child.tag == self.tag]
+        return xml
+
+    parsed = xmltodict.parse(xml)
+    wellset = parsed.get("WELL_SET")
+    wellset.keys()
+
+    # lxml.etree.tostring(x)

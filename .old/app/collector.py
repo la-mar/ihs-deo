@@ -1,4 +1,8 @@
 from functools import lru_cache
+import os
+import sys
+
+sys.path.append(os.path.abspath("./.old"))
 
 from app.connection import IHSConnector
 from app.connection import *
@@ -9,7 +13,6 @@ import os
 import logging
 
 from time import sleep
-import xmltodict
 import pprint
 import json
 import lxml
@@ -19,20 +22,22 @@ logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
+
 class Mapping(dict):
     pass
+
 
 class HashableDict(dict):
     def __hash__(self):
         return hash(frozenset(self.items()))
 
 
-class Collector():
+class Collector:
     """ One per query """
 
-    _query_dir = 'queries/'
-    _query_ext = '.xml'
-    _template_dir = 'templates/'
+    _query_dir = "queries/"
+    _query_ext = ".xml"
+    _template_dir = "templates/"
     _connection = None
     _query = None
     _template = None
@@ -40,24 +45,24 @@ class Collector():
     _attempts_max = 3
 
     # TODO: Refactor to class
-    _mappings = {'tags':
-                    { # maps datatype to its expected tag name
-                    'Well' : 'WELLBORE',
-                    'Production Allocated': 'PRODUCING_ENTITY' # need to verify
-                    },
-                'default_templates' :
-                    {
-                    'Well': 'well.xml',
-                    'Production Allocated': 'production.xml'
-                    }
-                }
+    _mappings = {
+        "tags": {  # maps datatype to its expected tag name
+            "Well": "WELLBORE",
+            "Production Allocated": "PRODUCING_ENTITY",  # need to verify
+        },
+        "default_templates": {
+            "Well": "well.xml",
+            "Production Allocated": "production.xml",
+        },
+    }
 
-    def __init__(self,
-                 datatype: str,
-                 query_name: str,
-                 template_name: str = 'default',
-                 poll: int = 5
-                 ):
+    def __init__(
+        self,
+        datatype: str,
+        query_name: str,
+        template_name: str = "default",
+        poll: int = 5,
+    ):
         self.datatype = datatype
         self.query_name = query_name
         self.template_name = template_name
@@ -67,7 +72,7 @@ class Collector():
 
     @property
     def tag(self):
-        return self._lookup_mapping('tags')
+        return self._lookup_mapping("tags")
 
     @property
     def attempts_max(self):
@@ -78,7 +83,7 @@ class Collector():
         if value > 0:
             self._attempts_max = value
         else:
-            print('Value for max attempts must be greater than 0')
+            print("Value for max attempts must be greater than 0")
 
     @property
     def attempts(self):
@@ -92,11 +97,8 @@ class Collector():
         return self._connection
 
     @property
-    def target(self, filename: str = 'default', overwrite: bool = True):
-        return HashableDict({
-                'Filename':filename,
-                'Overwrite': overwrite
-               })
+    def target(self, filename: str = "default", overwrite: bool = True):
+        return HashableDict({"Filename": filename, "Overwrite": overwrite})
 
     @property
     def query(self):
@@ -109,8 +111,8 @@ class Collector():
     def template(self):
         """Singleton reference for the template xml text"""
         template_name = self.template_name
-        if self.template_name == 'default':
-            template_name = self._lookup_mapping('default_templates')
+        if self.template_name == "default":
+            template_name = self._lookup_mapping("default_templates")
 
         return self._load_xml(self._template_dir, template_name)
 
@@ -120,23 +122,24 @@ class Collector():
 
     @property
     def params(self):
-        return HashableDict({
-                'Domain':'US',
-                'DataType': self.datatype,
-                'Template': self.template,
-                'Query': self.query
-                })
+        return HashableDict(
+            {
+                "Domain": "US",
+                "DataType": self.datatype,
+                "Template": self.template,
+                "Query": self.query,
+            }
+        )
 
     def _lookup_mapping(self, map_key: str):
         """ Formats the input key with title case for marching"""
         value = None
-        mapping = self._mappings.get(str(map_key), None) # get level 0
+        mapping = self._mappings.get(str(map_key), None)  # get level 0
         if isinstance(mapping, dict):
-            value = mapping.get(self.datatype.title(), None) # get level 1
+            value = mapping.get(self.datatype.title(), None)  # get level 1
         else:
             value = mapping
         return value
-
 
     def _load_xml(self, dir_path: str, filename: str):
         """load and return an xml file as a string
@@ -149,18 +152,17 @@ class Collector():
         """
 
         xml = None
-        ext = '.xml'
+        ext = ".xml"
         if not filename.endswith(ext):
             filename = filename + ext
 
         try:
-            with open(os.path.join(dir_path, filename), 'r') as f:
+            with open(os.path.join(dir_path, filename), "r") as f:
                 xml = f.read()
         except Exception as fe:
-            print(f'Invalid filename: {filename}')
+            print(f"Invalid filename: {filename}")
 
         return xml
-
 
     def normalize_keys(self, d: dict):
         """Recursively transform all keys in a nested dictionary to lower case"""
@@ -178,33 +180,33 @@ class Collector():
         """ Moves a well's identification number (api) to the top level of
             the dictionary."""
 
-        api = entity['METADATA']['IDENTIFICATION']
+        api = entity["METADATA"]["IDENTIFICATION"]
         if len(api) == 14:
-            entity['api14'] = api
-            entity['api10'] = api[:10]
+            entity["api14"] = api
+            entity["api10"] = api[:10]
         elif len(api) == 10:
-            entity['api10'] = api
-            entity['api14'] = api + '0000'
+            entity["api10"] = api
+            entity["api14"] = api + "0000"
 
-        #move new elements to beginning of ordered dict
-        entity.move_to_end('api14', last=False)
-        entity.move_to_end('api10', last=False)
+        # move new elements to beginning of ordered dict
+        entity.move_to_end("api14", last=False)
+        entity.move_to_end("api10", last=False)
 
         return entity
 
     # TODO: asyncio
     @lru_cache(maxsize=32)
     def _build_export(
-                      self,
-                      params: dict, # must be in func signature to seed cache
-                      target: dict, # must be in func signature to seed cache
-                      ):
+        self,
+        params: dict,  # must be in func signature to seed cache
+        target: dict,  # must be in func signature to seed cache
+    ):
         """ Send export job to IHS and wait for a job id. Once the job id is received
             poll IHS until the export is complete."""
         self.job_id = self.connection.build_export(params, target)
 
         while not self.is_complete:
-            print(f'Sleeping for {self.poll} secs')
+            print(f"Sleeping for {self.poll} secs")
             sleep(self.poll)
 
         data = self.connection.get_export(self.job_id)
@@ -212,7 +214,7 @@ class Collector():
         return data
 
     def as_elements(self):
-        """Transform the raw data and return it as processed xmlself.
+        """Transform the raw data and return it as processed xml.
 
             Examples:
                 Well: The results of a well query will be reduced to element trees
@@ -231,8 +233,8 @@ class Collector():
         xml = [child for child in root.getchildren() if child.tag == self.tag]
         return xml
 
-    def as_json(self):
-        return [xmltodict.parse(xml) for xml in self.as_elements()]
+    # def as_json(self):
+    #     return [xmltodict.parse(xml) for xml in self.as_elements()]
 
     def get(self):
         """Get the data"""
@@ -242,12 +244,21 @@ class Collector():
 
 if __name__ == "__main__":
 
-    c = Collector('well', 'well-driftwood')
-    p = Collector('well', 'well-driftwood', 'EnerdeqML Well')
-    p = Collector('production allocated', 'production-driftwood', 'production.xml')
-    x  = c.get()
+    import xmltodict
+
+    c = Collector("well", "well-driftwood")
+    p = Collector("well", "well-driftwood", "EnerdeqML Well")
+    p = Collector("production allocated", "production-driftwood", "production.xml")
+    x = c.get()
+    xml = lxml.objectify.fromstring(x)
+    root = xml.getroottree().getroot()
+
     xml = c.as_elements()
-    js = c.as_json()
+    wellbore = xml[0]
+    children = wellbore.getchildren()
+
+    [xmltodict.parse(x) for x in c.as_elements()]
+
 
 # def get_wells(decode = False):
 
@@ -266,8 +277,6 @@ if __name__ == "__main__":
 #         return data
 
 
-
-
 # if __name__ == "__main__":
 
 #     """wells_xml = driftwood_wells()
@@ -275,7 +284,6 @@ if __name__ == "__main__":
 #     wells_json = json.dumps(xmltodict.parse(wells_xml), indent = 4)
 #     to_file(wells_json, 'wells_json.json')
 #     """
-
 
 
 #     # from lxml import objectify
@@ -291,15 +299,9 @@ if __name__ == "__main__":
 #     wellbore = xmltodict.parse(xmltojson)['WELLBORE']
 
 
-
 #     to_file(json.dumps(wellbore, indent = 4), 'wellbore.json')
 #     # write to mongodb
 #     db.wells.insert(wellbore)
 
 #     x = db.wells.find_one({'api14': '42383374130000'})
-
-
-
-
-
 

@@ -172,7 +172,7 @@ class BaseConfig:
         "querybuilder": abs_path(API_WSDL_DIR, "{version}/QueryBuilder.wsdl"),
         "exportbuilder": abs_path(API_WSDL_DIR, "{version}/ExportBuilder.wsdl"),
     }
-    API_DOMAIN = "US;"
+    API_DOMAIN = "US"
 
     @property
     def show(self):
@@ -239,7 +239,7 @@ class BaseConfig:
         string += tpl.format(name="flask env:", value=self.FLASK_ENV)
         string += tpl.format(
             name="backend:",
-            value=self.database_url(hide_password=True, include_auth_source=False),
+            value=self.database_uri(hide_password=True, include_auth_source=False),
         )
         string += tpl.format(name="broker:", value=self.BROKER_URL)
         # string += tpl.format(name="result broker:", value=self.CELERY_RESULT_BACKEND)
@@ -263,8 +263,8 @@ class TestingConfig(BaseConfig):
     # load_dotenv(".env.testing")
 
     CONFIG_BASEPATH = "./test/data"
-    COLLECTOR_CONFIG_PATH = abs_path(CONFIG_BASEPATH, "collector.yaml")
-    COLLECTOR_CONFIG = load_config(COLLECTOR_CONFIG_PATH)
+    # COLLECTOR_CONFIG_PATH = abs_path(CONFIG_BASEPATH, "collector.yaml")
+    # COLLECTOR_CONFIG = load_config(COLLECTOR_CONFIG_PATH)
     TESTING = True
     # SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_TEST_URL")
     TOKEN_EXPIRATION_DAYS = 0

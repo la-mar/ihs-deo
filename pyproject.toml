@@ -26,10 +26,10 @@ celery = {version = "^4.3.0", extras = ["sqs"]}
 pymongo = "^3.9.0"
 zeep = "*"
 lxml = "^4.4.1"
-xmltodict = "*"
 mongoengine = "^0.18.2"
 flask-mongoengine = "^0.9.5"
 requests_oauthlib = "^1.3.0"
+xmltodict = "^0.12.0"
 
 
 [tool.poetry.dev-dependencies]

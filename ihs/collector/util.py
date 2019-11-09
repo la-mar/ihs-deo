@@ -4,6 +4,18 @@ import urllib.parse
 import os
 
 
+def from_file(filename: str) -> str:
+    xml = None
+    with open(filename, "r") as f:
+        xml = f.read().splitlines()
+    return "".join(xml)
+
+
+def to_file(xml: str, filename: str) -> str:
+    with open(filename, "w") as f:
+        f.writelines(xml)
+
+
 def urljoin(base: str, path: str) -> str:
     if not base.endswith("/"):
         base = base + "/"
@@ -66,7 +78,7 @@ def retry(ExceptionToCheck, tries=10, delay=10, backoff=2, logger=None):
     return deco_retry
 
 
-def load_xml(dir_path: str, filename: str):
+def load_xml(path: str) -> str:
     """load and return an xml file as a string
 
     Arguments:
@@ -78,14 +90,14 @@ def load_xml(dir_path: str, filename: str):
 
     xml = None
     ext = ".xml"
-    if not filename.endswith(ext):
-        filename = filename + ext
+    if not path.endswith(ext):
+        path = path + ext
 
     try:
-        with open(os.path.join(dir_path, filename), "r") as f:
+        with open(path, "r") as f:
             xml = f.read()
     except Exception as fe:
-        print(f"Invalid filename: {filename}")
+        print(f"Invalid filename: {path}")
 
     return xml
 

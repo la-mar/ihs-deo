@@ -32,7 +32,7 @@ _SOAPHEADERS = [
     SoapHeader(
         Username=os.getenv("IHS_USERNAME"),
         Password=os.getenv("IHS_PASSWORD"),
-        Application=os.getenv("IHS_APPNAME"),
+        Application=os.getenv("IHS_APP_KEY"),
     )
 ]
 
@@ -52,7 +52,7 @@ def soapheaders(func):
 
 class IHSConnector(object):
 
-    _wsdl_dir = ".old/app/wsdl"
+    _wsdl_dir = "config/wsdl"
     _domain = "US;"
     _wsdls = {
         "session": "Session.wsdl",
