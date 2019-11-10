@@ -1,7 +1,7 @@
-import re
-from datetime import datetime, date
-from typing import Union, Callable, Any
 import functools
+import re
+from datetime import date, datetime
+from typing import Callable, Union
 
 
 def safe_convert(func):
