@@ -179,6 +179,7 @@ class BaseConfig:
         "exportbuilder": abs_path(API_WSDL_DIR, "{version}/ExportBuilder.wsdl"),
     }
     API_DOMAIN = "US"
+    API__EXPORT_SLEEP_DUR = 5
 
     @property
     def show(self):

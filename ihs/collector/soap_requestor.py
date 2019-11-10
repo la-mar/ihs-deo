@@ -14,6 +14,7 @@ from collector.requestor import Requestor
 from config import get_active_config, EnumDataType
 import util
 from enum import Enum
+from uuid import uuid4
 
 logger = logging.getLogger(__name__)
 conf = get_active_config()
@@ -130,18 +131,23 @@ class Builder(SoapRequestor):
 
 
 class ExportParameter:
+    """ Next step move this to be config driven """
+
     def __init__(self, dtype: EnumDataType):
+        self.filename = uuid4()
         if dtype == EnumDataType.PRODUCTION_ALLOCATED:
             self.domain = "US"
             self.data_type = "Production Allocated"
             self.template = util.load_xml("config/templates/production.xml")
             self.query = util.load_xml("config/queries/production-driftwood.xml")
+            self.overwrite = True
 
         if dtype == EnumDataType.WELL:
             self.domain = "US"
             self.data_type = "Well"
             self.template = util.load_xml("config/templates/well.xml")
             self.query = util.load_xml("config/queries/well-driftwood.xml")
+            self.overwrite = True
 
     def get_param_dict(self) -> dict:
         return dict(
@@ -153,29 +159,44 @@ class ExportParameter:
             }
         )
 
+    def get_target_dict(self) -> dict:
+        return dict({"Filename": self.filename, "Overwrite": self.overwrite})
+
 
 class ExportBuilder(Builder):
-    def __init__(self, eparam: ExportParameter, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(client_type="exportbuilder", *args, **kwargs)
-        self.param_dict = eparam.get_param_dict()
 
-    @property
-    def target(self):
-        return dict({"Filename": "default", "Overwrite": True})
+    def get_job_id(self, eparam: ExportParameter) -> Union[str, None]:
 
-    def build_export(self) -> str:
+        try:
+            param_dict = eparam.get_param_dict()
+            target_dict = eparam.get_target_dict()
+            return self.client.service.BuildExportFromQuery(param_dict, target_dict)
+        except Exception as e:
+            print(
+                f"Error getting job id from service for data type {eparam.data_type} {e}"
+            )
+            """NOT SURE IF WE SHOULD RETURN NONE"""
+            return None
 
-        self.job_id = self.client.service.BuildExportFromQuery(
-            self.param_dict, self.target
-        )
+    def job_is_complete(self, job_id: str) -> bool:
+        try:
+            if self.client.service.IsComplete(job_id):
+                return True
+            return False
+        except Exception as e:
+            print(f"Could not determine state of Job Id {job_id} {e}")
+            return False
 
-        while not self.client.service.IsComplete(self.job_id):
-            print(f"Sleeping for 5 secs")
-            sleep(5)
+    def get_data(self, job_id: str) -> Union[str, None]:
 
-        data = self.client.service.RetrieveExport(self.job_id)
-
-        return data
+        try:
+            return self.client.service.RetrieveExport(job_id)
+        except Exception as e:
+            print(e)
+        """NOT SURE IF WE SHOULD RETURN NONE"""
+        return None
 
 
 class QueryBuilder(Builder):
@@ -187,13 +208,29 @@ if __name__ == "__main__":
 
     from collector.endpoint import load_from_config
 
+    import sys
+
     endpoints = load_from_config(conf)
 
     exportparam = ExportParameter(EnumDataType.WELL)
 
-    x = ExportBuilder(exportparam, conf.API_BASE_URL, endpoints.get("wells"))
+    x = ExportBuilder(conf.API_BASE_URL, endpoints.get("wells"))
 
     x.connect()
 
-    blah = x.build_export()
+    job_id = x.get_job_id(exportparam)
+
+    if job_id is None:
+        sys.exit()
+
+    sleep_dur = conf.API__EXPORT_SLEEP_DUR
+
+    while not x.job_is_complete(job_id):
+        sleep(sleep_dur)
+        print(f"Sleeping for {sleep_dur}")
+
+    data = x.get_data(job_id)
+
+    if data is None:
+        print("bad data!")
 
