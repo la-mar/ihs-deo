@@ -11,6 +11,7 @@ import pandas as pd
 import tomlkit
 import yaml
 from attrdict import AttrDict
+from enum import Enum
 
 
 """ Optional Pandas display settings"""
@@ -92,6 +93,11 @@ def _get_project_meta() -> dict:
 pkg_meta = _get_project_meta()
 project = pkg_meta.get("name")
 version = pkg_meta.get("version")
+
+
+class EnumDataType(Enum):
+    PRODUCTION_ALLOCATED = 1
+    WELL = 2
 
 
 class BaseConfig:

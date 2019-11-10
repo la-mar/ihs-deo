@@ -11,8 +11,9 @@ from time import sleep
 
 from collector.endpoint import Endpoint
 from collector.requestor import Requestor
-from config import get_active_config
+from config import get_active_config, EnumDataType
 import collector.util as util
+from enum import Enum
 
 logger = logging.getLogger(__name__)
 conf = get_active_config()
@@ -128,20 +129,35 @@ class Builder(SoapRequestor):
         return self.service.BuildExportFromQuery(params, target)
 
 
-class ExportBuilder(Builder):
-    def __init__(self, *args, **kwargs):
-        super().__init__(client_type="exportbuilder", *args, **kwargs)
+class ExportParameter:
+    def __init__(self, dtype: EnumDataType):
+        if dtype == EnumDataType.PRODUCTION_ALLOCATED:
+            self.domain = "US"
+            self.data_type = "Production Allocated"
+            self.template = util.load_xml("config/templates/production.xml")
+            self.query = util.load_xml("config/queries/production-driftwood.xml")
 
-    @property
-    def parameters(self):
+        if dtype == EnumDataType.WELL:
+            self.domain = "US"
+            self.data_type = "Well"
+            self.template = util.load_xml("config/templates/well.xml")
+            self.query = util.load_xml("config/queries/well-driftwood.xml")
+
+    def get_param_dict(self) -> dict:
         return dict(
             {
-                "Domain": "US",
-                "DataType": "production allocated",
-                "Template": "templates/production.xml",
-                "Query": "queries/production-driftwood.xml",
+                "Domain": self.domain,
+                "DataType": self.data_type,
+                "Template": self.template,
+                "Query": self.query,
             }
         )
+
+
+class ExportBuilder(Builder):
+    def __init__(self, eparam: ExportParameter, *args, **kwargs):
+        super().__init__(client_type="exportbuilder", *args, **kwargs)
+        self.param_dict = eparam.get_param_dict()
 
     @property
     def target(self):
@@ -150,14 +166,14 @@ class ExportBuilder(Builder):
     def build_export(self) -> str:
 
         self.job_id = self.client.service.BuildExportFromQuery(
-            self.parameters, self.target
+            self.param_dict, self.target
         )
 
         while not self.client.service.IsComplete(self.job_id):
             print(f"Sleeping for 5 secs")
             sleep(5)
 
-        data = self.client.service.get_export(self.job_id)
+        data = self.client.service.RetrieveExport(self.job_id)
 
         return data
 
@@ -173,11 +189,11 @@ if __name__ == "__main__":
 
     endpoints = load_from_config(conf)
 
-    x = IHSHeaders(conf.API_BASE_URL)
+    exportparam = ExportParameter(EnumDataType.WELL)
 
-    x = ExportBuilder(conf.API_BASE_URL, endpoints.get("wells"))
+    x = ExportBuilder(exportparam, conf.API_BASE_URL, endpoints.get("wells"))
 
     x.connect()
 
-    x.build_export()
+    blah = x.build_export()
 
