@@ -1,8 +1,10 @@
 from __future__ import annotations
-from typing import Dict, List, Callable, Union
-import logging
 
-import pandas as pd
+import logging
+from typing import Callable, Dict, List, Union  # pylint: disable=unused-import
+
+import xmltodict
+
 import util
 from util.stringprocessor import StringProcessor
 
@@ -57,7 +59,6 @@ if __name__ == "__main__":
 
     from collector.endpoint import load_from_config
     from config import get_active_config
-    import xmltodict
 
     conf = get_active_config()
     endpoints = load_from_config(conf)
