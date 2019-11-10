@@ -12,7 +12,7 @@ from time import sleep
 from collector.endpoint import Endpoint
 from collector.requestor import Requestor
 from config import get_active_config, EnumDataType
-import collector.util as util
+import util
 from enum import Enum
 
 logger = logging.getLogger(__name__)
