@@ -6,7 +6,7 @@ from typing import Callable, Dict, List, Union  # pylint: disable=unused-import
 import xmltodict
 
 import util
-from collector.parser import ValueParser
+from collector.parser import Parser
 
 sp = util.StringProcessor()
 
@@ -22,11 +22,13 @@ class Transformer(object):
         exclude: List[str] = None,
         normalize: bool = False,
         date_columns: List[str] = None,
+        parsers: List[Parser] = None,
     ):
         self.normalize = normalize
         self.aliases = aliases or {}
         self.exclude = exclude or []
         self.date_columns = date_columns or []
+        self.parsers = parsers or []
         self.errors: List[str] = []
 
     def __repr__(self):
@@ -34,20 +36,28 @@ class Transformer(object):
             f"Transformer: {len(self.aliases)} aliases, {len(self.exclude)} exclusions"
         )
 
+    def add_parser(
+        self, parser: Parser = None, ruleset: Dict[str, List] = None, name: str = None
+    ):
+        self.parsers.append(parser or Parser.init(ruleset, name=name))
+        return self
+
     def normalize_keys(self, data: dict) -> dict:
         return util.apply_transformation(data, sp.normalize, keys=True, values=False)
 
     def parse_value_dtypes(self, data: dict) -> dict:
-        return util.apply_transformation(
-            data, ValueParser.parse, keys=False, values=True
-        )
+        for parser in self.parsers:
+            data = util.apply_transformation(
+                data, parser.parse, keys=False, values=True
+            )
+        return data
 
     def transform(self, xml: str, **kwargs) -> dict:
-        parsed = self.parse_xml(xml)
+        parsed = self.xml_to_dict(xml)
         parsed = self.normalize_keys(parsed)
         return parsed
 
-    def parse_xml(self, xml: str, **kwargs):
+    def xml_to_dict(self, xml: str, **kwargs):
         return xmltodict.parse(xml, **kwargs)
 
     def handle_date(self, value: str):
@@ -65,15 +75,22 @@ if __name__ == "__main__":
     from collector.endpoint import load_from_config
     from config import get_active_config
 
+    logging.basicConfig()
+    logger.setLevel(10)
+
     conf = get_active_config()
     endpoints = load_from_config(conf)
     endpoint = endpoints.get("wells")
 
-    t = Transformer(aliases=endpoint.mappings.get("aliases"), exclude=endpoint.exclude,)
+    t = Transformer(aliases=endpoint.mappings.get("aliases"), exclude=endpoint.exclude)
+
+    t.add_parser(
+        ruleset=conf.PARSER_CONFIG["parsers"]["default"]["rules"], name="default"
+    )
 
     xml = util.load_xml("test/data/well_header_short.xml")
 
-    parsed = t.parse_xml(xml)
+    parsed = t.xml_to_dict(xml)
     parsed = t.normalize_keys(parsed)
     parsed = t.parse_value_dtypes(parsed)
 
@@ -81,7 +98,8 @@ if __name__ == "__main__":
     wellbore = wellset.get("wellbore")
     len(wellbore)
 
-    wellbore[0].get("treatment_summary")
+    treatment_summary = wellbore[0].get("treatment_summary")
+    print(treatment_summary)
 
-    util.to_json(wellbore[0], "example.json", cls=util.DateTimeEncoder)
+    # util.to_json(wellbore[0], "example.json", cls=util.DateTimeEncoder)
 
