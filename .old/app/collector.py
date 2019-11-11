@@ -252,9 +252,9 @@ if __name__ == "__main__":
     wellbore = xml[0]
     children = wellbore.getchildren()
 
-    [xmltodict.parse(x) for x in c.as_elements()]
+    # [xmltodict.parse(x) for x in c.as_elements()]
 
-
+    # parsed = xmltodict.parse(x)
 # def get_wells(decode = False):
 
 #     job_id = exportbuilder.service.BuildExportFromQuery(get_default_params(), get_default_target(), _soapheaders=[header_value])

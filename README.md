@@ -1,4 +1,4 @@
-# Collector-IHS
+# ihs-deo
 
 # Functionality
 
@@ -21,5 +21,11 @@
   2. look for existing records with the same api14 in the database
   3. if hash is found, disrgard the update
   4. if hash is NOT found, perform the update, saving the hash value with the record
+
+### MongoDB Collections
+
+- well_header
+- well_test
+-
 
 ![refarch](/doc/refarch.png)

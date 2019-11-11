@@ -6,9 +6,9 @@ from typing import Callable, Dict, List, Union  # pylint: disable=unused-import
 import xmltodict
 
 import util
-from util.stringprocessor import StringProcessor
+from collector.parser import ValueParser
 
-sp = StringProcessor()
+sp = util.StringProcessor()
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +35,12 @@ class Transformer(object):
         )
 
     def normalize_keys(self, data: dict) -> dict:
-        return util.transform_keys(data, sp.normalize)
+        return util.apply_transformation(data, sp.normalize, keys=True, values=False)
+
+    def parse_value_dtypes(self, data: dict) -> dict:
+        return util.apply_transformation(
+            data, ValueParser.parse, keys=False, values=True
+        )
 
     def transform(self, xml: str, **kwargs) -> dict:
         parsed = self.parse_xml(xml)
@@ -70,7 +75,7 @@ if __name__ == "__main__":
 
     parsed = t.parse_xml(xml)
     parsed = t.normalize_keys(parsed)
-    parsed.keys()
+    parsed = t.parse_value_dtypes(parsed)
 
     wellset = parsed.get("well_set")
     wellbore = wellset.get("wellbore")
@@ -78,4 +83,5 @@ if __name__ == "__main__":
 
     wellbore[0].get("treatment_summary")
 
-    util.to_json(wellbore[0], "example.json")
+    util.to_json(wellbore[0], "example.json", cls=util.DateTimeEncoder)
+

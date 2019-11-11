@@ -1,21 +1,33 @@
-from typing import Callable, Union
-from util.stringprocessor import StringProcessor
-import urllib.parse
 import json
+import urllib.parse
+from typing import Callable, Union
+
+from util.stringprocessor import StringProcessor
+from util.jsontools import DateTimeEncoder
 
 
-def transform_keys(data: dict, convert: Callable) -> dict:
+def apply_transformation(
+    data: dict, convert: Callable, keys: bool = False, values: bool = True
+) -> dict:
     """
-    Recursively goes through the dictionary data and replaces keys with the convert function.
+    Recursively apply the passed function to a dict's keys, values, or both
     """
     if isinstance(data, (str, int, float)):
-        return data
+        if values:
+            return convert(data)
+        else:
+            return data
     if isinstance(data, dict):
         new = data.__class__()
         for k, v in data.items():
-            new[convert(k)] = transform_keys(v, convert)
+            if keys:
+                new[convert(k)] = apply_transformation(v, convert, keys, values)
+            else:
+                new[k] = apply_transformation(v, convert, keys, values)
     elif isinstance(data, (list, set, tuple)):
-        new = data.__class__(transform_keys(v, convert) for v in data)
+        new = data.__class__(
+            apply_transformation(v, convert, keys, values) for v in data
+        )
     else:
         return data
     return new
@@ -69,6 +81,6 @@ def to_json(d: dict, path: str, cls=None):
         json.dump(d, f, cls=cls, indent=4)
 
 
-def load_json():
+def load_json(path: str):
     with open(path, "r") as f:
         return json.load(f)
