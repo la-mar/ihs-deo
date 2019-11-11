@@ -11,8 +11,6 @@ sudo apt-get install jq -y
 # aws configure set region $(curl --silent http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r '.region')
 
 
-
-
 echo "Mounting EBS volumes..."
 
 function test_volume_mounted
