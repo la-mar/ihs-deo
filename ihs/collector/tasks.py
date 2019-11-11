@@ -10,7 +10,7 @@ from flask_sqlalchemy import Model
 
 
 # it is important that this celery instance is t`he same as the primary flask app and NOT a new instance from celery_worker.py
-from app import celery, db, create_app
+from ihs import celery, db, create_app
 from api.models import *
 from collector.collector import IWellCollector
 from collector.endpoint import load_from_config
