@@ -126,25 +126,8 @@ class BaseConfig:
     CONFIG_BASEPATH = "./config"
     COLLECTOR_CONFIG_PATH = abs_path(CONFIG_BASEPATH, "collector.yaml")
     COLLECTOR_CONFIG = load_config(COLLECTOR_CONFIG_PATH)
-    COLLECTOR_PARSER_RULES = {
-        "default": [
-            {  # noqa
-                "name": "integers",
-                "type": "RegexCriterion",
-                "value": r"^[-+]?[0-9]+$",
-            },
-            {  # noqa
-                "name": "floats",
-                "type": "RegexCriterion",
-                "value": r"^[-+]?[0-9]*\.[0-9]+$",
-            },
-            {  # noqa
-                "name": "dates",
-                "type": "RegexCriterion",
-                "value": r"^\d\d\d\d-\d\d-\d\d$",
-            },
-        ]
-    }
+    PARSER_CONFIG_PATH = abs_path(CONFIG_BASEPATH, "parsers.yaml")
+    PARSER_CONFIG = load_config(PARSER_CONFIG_PATH)
 
     """ Logging """
     LOG_LEVEL = os.getenv("LOG_LEVEL", 20)
