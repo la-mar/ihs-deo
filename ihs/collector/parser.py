@@ -15,36 +15,28 @@ logger = logging.getLogger(__name__)
 
 
 def safe_convert(func):
+    """ Generic error handling decorator for primative type casts """
+
     @functools.wraps(func)
     def func_wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
         except Exception as e:
-            print(f"{func} failed: {e}")
+            logger.debug(f"{func} failed: {e}")
             return None
 
     return func_wrapper
 
 
-# def get_default_rules():
-#     ruledefs = conf.COLLECTOR_PARSER_RULES
-
-#     rules = []
-#     for name, rules in ruledefs.items():
-#         for rule in rules:
-#             RuleType = util.locate_resource(rule["type"])
-#             rules.append(RuleType(rule["value"], rule["name"], name=name))
-
-#     logger.debug(f"Loaded {len(rules)} rules")
-#     return rules
-
-
 def locate_resource(name: str) -> Callable:
+    """ Locate a resource (module, func, etc) within the module's namespace """
     resource = globals()[name]
     return resource
 
 
 class Criterion:
+    """ Basic component of validation logic used to compose a parsing rule """
+
     def __init__(self, func: Callable, name: str = None):
         self.name = name or ""
         self.func = func
@@ -57,78 +49,116 @@ class Criterion:
 
 
 class RegexCriterion(Criterion):
+    """ Regex Parser rule """
+
     def __init__(self, regex: str, name: str = None):
+        self.pattern = regex
         self.regex = re.compile(regex)
         super().__init__(func=self.regex.match, name=name)
 
     def __call__(self, value: Any):
-        super().__call__(str(value))
+        return super().__call__(str(value))
+
+    def __repr__(self):
+        return f"RegexCriterion: {self.name} - {self.pattern}"
 
 
 class TypeCriterion(Criterion):
+    """ Type check Parser rule """
+
     def __init__(self, dtype: type, name: str = None):
         func = lambda v: isinstance(v, dtype)
         super().__init__(func=func, name=name)
 
 
 class ValueCriterion(Criterion):
+    """ Value comparison Parser rule """
+
     def __init__(self, value: Union[str, int, float, bool], name: str = None):
         func = lambda v: v == value
         super().__init__(func=func, name=name)
 
 
 class ParserRule:
-    """ Parser rule base set """
+    """ Validation rule used by a Parser to determine if/how to parse a value """
 
-    def __init__(self, criteria: List[Criterion], name: str = None, **kwargs):
+    def __init__(
+        self,
+        criteria: List[Criterion],
+        name: str = None,
+        allow_partial: bool = True,
+        **kwargs,
+    ):
+        """
+        Arguments:
+            criteria {List[Criterion]} -- Criteria list
+
+        Keyword Arguments:
+            name {str} -- Rule name
+            partial {bool} -- If True, the rule will pass if any criteria are satisfied. If False, the rule will pass only if all criteria are satisfied.
+
+        """
         self.name = name or ""
         self.criteria = criteria
+        self.allow_partial = allow_partial
 
-    def __call__(self, value: Any) -> Any:
-        return all([c(value) for c in self.criteria])
+    def __call__(self, value: Any, return_partials: bool = False) -> Any:
+        partials = [c(value) for c in self.criteria]
+        # print(f"{value} ({type(value).__name__})=> {partials}")
+        if return_partials:
+            return partials
+        if self.allow_partial:
+            return any(partials)
+        else:
+            return all(partials)
+
+    @property
+    def match_mode(self):
+        return "PARTIAL" if self.allow_partial else "FULL"
 
     def __repr__(self):
-        return f"ParserRule - {self.name}: {len(self.criteria)} criteria"
+
+        return f"ParserRule:{self.name} ({self.match_mode}) -  {len(self.criteria)} criteria"
 
     @classmethod
-    def from_list(cls, criteria: List[Dict], name: str = None) -> ParserRule:
+    def from_list(cls, criteria: List[Dict], **kwargs) -> ParserRule:
+        """ Initialize a rule from a list of criteria specifications.
+                Example criteria spec:
+                    criteria = \
+                        [
+                            {
+                                "name": "parse_integers",
+                                "type": "RegexCriterion",
+                                "value": r"^[-+]?[0-9]+$",
+                            },
+                        ],
+         """
         criteriaObjs: List[Criterion] = []
         for c in criteria:
             CriteriaType = locate_resource(c["type"])
             criteriaObjs.append(CriteriaType(c["value"], c["name"]))
-        return cls(criteriaObjs, name=name)
+        return cls(criteriaObjs, **kwargs)
 
 
 class Parser:
-    def __init__(self, rules: List[ParserRule], name: str = None):
+    """ Parses text values according to a set of arbitrary rules"""
+
+    def __init__(
+        self, rules: List[ParserRule], name: str = None, parse_dtypes: bool = True
+    ):
         self.name = name or ""
         self.rules = rules
+        self.parse_dtypes = parse_dtypes
 
     def __repr__(self):
         return f"Parser - {self.name}: {len(self.rules)} rules"
 
-    def add_rule(self, rule: ParserRule):
-        self.rules.append(rule)
-
-    def run_checks(self, value: Any):
-        checks = []
-        for rule in self.rules:
-            result = rule(value)
-            checks.append(result)
-            if not result:
-                logger.debug("Parser check failed: %s", (rule,))
-        return all(checks)
-
-    def parse(self, value: Any) -> Any:
-        """ Attempt to parse a value if all criteria are met """
-        return value if self.run_checks(value) else value
-
     @classmethod
-    def init(cls, conf: Dict[str, List], name: str = None) -> Parser:
+    def init(cls, ruleset: Dict[str, List], name: str = None) -> Parser:
+        """ Initialize from a configuration dict """
         rules: List[ParserRule] = []
-        for cname, criteria in conf.items():
-            rules.append(ParserRule.from_list(criteria, name=cname))
-
+        for ruledef in ruleset:
+            rules.append(ParserRule.from_list(**ruledef))  # type: ignore
         return cls(rules, name=name)
 
     @staticmethod
@@ -146,14 +176,43 @@ class Parser:
     def try_date(s: str) -> Union[date, None]:
         return date.fromisoformat(s)
 
+    def add_rule(self, rule: ParserRule):
+        self.rules.append(rule)
+
+    def run_checks(
+        self, value: Any, return_partials: bool = False
+    ) -> Union[bool, List[bool]]:
+        """ Check if all parsing rules are satisfied """
+        checks = []
+        for rule in self.rules:
+            result = rule(value)
+            checks.append(result)
+            if not result:
+                logger.debug("Parser check failed: %s", (rule,))
+            else:
+                logger.debug("Parser check passed: %s", (rule,))
+
+        # print(f"{value} ({type(value).__name__})=> {checks}")
+        return all(checks) if not return_partials else checks
+
+    def parse_dtype(self, value: str) -> Union[int, float, str, date]:
+        return self.try_int(value) or self.try_float(value) or self.try_date(value)
+
+    def parse(self, value: Any) -> Any:
+        """ Attempt to parse a value if all rules are satisfied """
+        if not self.run_checks(value):
+            return value
+        else:
+            return self.parse_dtype(value) if self.parse_dtypes else value
+
 
 if __name__ == "__main__":
 
-    import util
-
     data = util.load_json("example.json")
 
-    parser = Parser.init(conf.COLLECTOR_PARSER_RULES, name="default")
+    parser = Parser.init(
+        conf.PARSER_CONFIG["parsers"]["default"]["rules"], name="default"
+    )
 
     test_values = [
         "2019-01-01",
