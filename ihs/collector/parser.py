@@ -184,13 +184,13 @@ class Parser:
     ) -> Union[bool, List[bool]]:
         """ Check if all parsing rules are satisfied """
         checks = []
-        for rule in self.rules:
-            result = rule(value)
+        for Rule in self.rules:
+            result = Rule(value)
             checks.append(result)
             if not result:
-                logger.debug("Parser check failed: %s", (rule,))
+                logger.debug("Parser check failed: %s", (Rule,))
             else:
-                logger.debug("Parser check passed: %s", (rule,))
+                logger.debug("Parser check passed: %s", (Rule,))
 
         # print(f"{value} ({type(value).__name__})=> {checks}")
         return all(checks) if not return_partials else checks
