@@ -185,6 +185,15 @@ class ExportParameter:
         return {"Filename": self.export_filename, "Overwrite": self.overwrite}
 
 
+class ExportJob:
+    def __init__(self, job_id: str, **kwargs):
+        self.job_id = job_id
+        self.attrs = kwargs
+
+    def to_dict(self):
+        return {"job_id": self.job_id, **self.attrs}
+
+
 class ExportBuilder(Builder):
     def __init__(self, *args, **kwargs):
         super().__init__(client_type="exportbuilder", *args, **kwargs)
