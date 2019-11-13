@@ -35,8 +35,8 @@ class Task:
             if self.seconds is None
             else f"({self.schedule} seconds)"
         )
-        opts = ", ".join([f"{k}:{v}" for k, v in self.options.items()])
-        return f"{status} {self.qualified_name} {sch} {opts}"
+        # opts = ", ".join([f"{k}:{v}" for k, v in self.options.items()])
+        return f"{status} {self.qualified_name} {sch}"
 
     @property
     def qualified_name(self):
