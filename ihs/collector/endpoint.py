@@ -24,11 +24,12 @@ class Endpoint(object):
         url_params: List[str] = None,
         exclude: List[str] = None,
         depends_on: Dict[str, str] = None,
-        options: List[str] = None,
+        options: dict = None,
         normalize: bool = False,
         updated_column: str = "updated_at",
         enabled: bool = True,
         tasks: dict = None,
+        propagate_to_task: bool = True,
         **kwargs,
     ):
 
@@ -44,8 +45,9 @@ class Endpoint(object):
         self._dependency_map = depends_on or {}
         self._depends_on: Union[Dict[str, Model], None] = None
         self.normalize = normalize
-        self.options = options or []
+        self.options = options or {}
         self.enabled = enabled
+        self.propagate_to_task = propagate_to_task
         self.tasks: Dict[str, Task] = {}
         self.add_tasks((tasks or {}).items())
 
@@ -105,6 +107,9 @@ class Endpoint(object):
         return model
 
     def add_task(self, task_name: str, **kwargs):
+        if self.propagate_to_task:
+            kwargs["options"] = {**self.options, **kwargs.get("options", {})}
+
         self.tasks[task_name] = Task(
             model_name=self.model_name, task_name=task_name, **kwargs
         )
@@ -148,5 +153,5 @@ if __name__ == "__main__":
     wells = Endpoint(name="wells", **endpoints.wells)
     prod = Endpoint(name="production_allocated", **endpoints.production_allocated)
 
-    wells.tasks
-    prod.tasks
+    wells.tasks["sync"].options
+    prod.tasks["sync"].options
