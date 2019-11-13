@@ -87,7 +87,7 @@ class SoapRequestor(Requestor):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.client = self.get_client(kwargs.pop("client_type"))
+        self.client = self.get_client(kwargs.pop("client_type", "session"))
 
     @property
     def soapheaders(self):
