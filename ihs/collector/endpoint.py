@@ -14,8 +14,6 @@ logger = logging.getLogger(__name__)
 
 
 class Endpoint(object):
-    tasks: Dict[str, Task] = {}
-
     def __init__(
         self,
         name: str,
@@ -48,6 +46,7 @@ class Endpoint(object):
         self.normalize = normalize
         self.options = options or []
         self.enabled = enabled
+        self.tasks: Dict[str, Task] = {}
         self.add_tasks((tasks or {}).items())
 
     def __repr__(self):
@@ -146,6 +145,8 @@ if __name__ == "__main__":
     dict(endpoints.wells.tasks)
 
     # e = Endpoint("test", **{"model": "test"})
-    e = Endpoint(name="wells", **endpoints.wells)
+    wells = Endpoint(name="wells", **endpoints.wells)
+    prod = Endpoint(name="production_allocated", **endpoints.production_allocated)
 
-    e.tasks
+    wells.tasks
+    prod.tasks
