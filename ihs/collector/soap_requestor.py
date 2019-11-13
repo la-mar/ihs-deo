@@ -178,7 +178,6 @@ class ExportParameter:
             "Template": self.template,
             "Query": self.query,
         }
-        )
 
     @property
     def target(self) -> dict:
@@ -198,18 +197,16 @@ class ExportBuilder(Builder):
     def __init__(self, *args, **kwargs):
         super().__init__(client_type="exportbuilder", *args, **kwargs)
 
-    def get_job_id(self, eparam: ExportParameter) -> Union[str, None]:
+    def submit_job(self, export_param: ExportParameter) -> Union[str, None]:
 
         try:
-            param_dict = eparam.get_param_dict()
-            target_dict = eparam.get_target_dict()
-            return self.client.service.BuildExportFromQuery(param_dict, target_dict)
+            return self.client.service.BuildExportFromQuery(
+                export_param.params, export_param.target
+            )
         except Exception as e:
             print(
-                f"Error getting job id from service for data type {eparam.data_type} {e}"
+                f"Error getting job id from service for data type {export_param.data_type} {e}"
             )
-            """NOT SURE IF WE SHOULD RETURN NONE"""
-            return None
 
     def job_is_complete(self, job_id: str) -> bool:
         try:
@@ -245,6 +242,8 @@ if __name__ == "__main__":
     import sys
 
     endpoints = load_from_config(conf)
+    endpoint = endpoints.get("wells")
+    dir(endpoint)
 
     exportparam = ExportParameter(EnumDataType.WELL)
 
@@ -252,7 +251,7 @@ if __name__ == "__main__":
 
     x.connect()
 
-    job_id = x.get_job_id(exportparam)
+    job_id = x.submit_job(exportparam)
 
     if job_id is None:
         sys.exit()
@@ -267,4 +266,3 @@ if __name__ == "__main__":
 
     if data is None:
         print("bad data!")
-
