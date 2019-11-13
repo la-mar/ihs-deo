@@ -133,34 +133,56 @@ class Builder(SoapRequestor):
 class ExportParameter:
     """ Next step move this to be config driven """
 
-    def __init__(self, dtype: EnumDataType):
-        self.filename = uuid4()
-        if dtype == EnumDataType.PRODUCTION_ALLOCATED:
-            self.domain = "US"
-            self.data_type = "Production Allocated"
-            self.template = util.load_xml("config/templates/production.xml")
-            self.query = util.load_xml("config/queries/production-driftwood.xml")
-            self.overwrite = True
+    domain = conf.API_DOMAIN
 
-        if dtype == EnumDataType.WELL:
-            self.domain = "US"
-            self.data_type = "Well"
-            self.template = util.load_xml("config/templates/well.xml")
-            self.query = util.load_xml("config/queries/well-driftwood.xml")
-            self.overwrite = True
+    def __init__(
+        self,
+        data_type: str,
+        template_path: str,
+        query_path: str,
+        overwrite: bool = True,
+        domain: str = None,
+    ):
 
-    def get_param_dict(self) -> dict:
-        return dict(
-            {
-                "Domain": self.domain,
-                "DataType": self.data_type,
-                "Template": self.template,
-                "Query": self.query,
-            }
+        self._export_filename = uuid4()
+        self.data_type = data_type
+        self._template_path = template_path
+        self.template = self.load_xml(template_path)
+        self.query_path = query_path
+        self.query = self.load_xml(query_path)
+        self.overwrite = overwrite
+        self.domain = domain or self.domain
+
+    def __repr__(self):
+        return (
+            f"ExportParameter: {self.domain}/{self.data_type} - {self.export_filename}"
         )
 
-    def get_target_dict(self) -> dict:
-        return dict({"Filename": self.filename, "Overwrite": self.overwrite})
+    @property
+    def export_filename(self):
+        return self._export_filename
+
+    @staticmethod
+    def load_xml(path: str):
+        try:
+            return util.load_xml(path)
+        except FileNotFoundError as fe:
+            logger.warning("Failed to load xml file %s -- %s", path, fe)
+            raise
+
+    @property
+    def params(self) -> dict:
+        return {
+            "Domain": self.domain,
+            "DataType": self.data_type,
+            "Template": self.template,
+            "Query": self.query,
+        }
+        )
+
+    @property
+    def target(self) -> dict:
+        return {"Filename": self.export_filename, "Overwrite": self.overwrite}
 
 
 class ExportBuilder(Builder):
