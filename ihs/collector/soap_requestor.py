@@ -217,8 +217,11 @@ class ExportBuilder(Builder):
             return self.client.service.RetrieveExport(job_id)
         except Exception as e:
             print(e)
-        """NOT SURE IF WE SHOULD RETURN NONE"""
-        return None
+
+
+class ExportRetreiver:
+    def __init__(self, job: ExportJob):
+        self.job = job
 
 
 class QueryBuilder(Builder):
