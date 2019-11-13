@@ -5,7 +5,9 @@ default_schedule: &default_schedule # seconds: 15
 job_defaults:
   sync: &default_sync
     mode: sync
-    seconds: 60
+    cron:
+      minute: 0
+      hour: 0
   # hourly:
   #   mode:
   full: &default_full
@@ -25,20 +27,32 @@ endpoints:
   wells:
     enabled: true
     version: v10
-    # path: /wells
     model: api.models.Well
-    # options:
-    #   - since
-    # mappings:
-    #   aliases:
-    #     <<: *default_aliases
-    #     alias: well_alias
-    #     name: well_name
-    #     type: well_type
     exclude: []
     normalize: false
+    options:
+      data_type: Well
     tasks:
       sync:
         <<: *default_sync
+        options:
+          query_path: config/queries/well-driftwood.xml
+          template_path: config/templates/well.xml
+      full:
+        <<: *default_full
+  production_allocated:
+    enabled: true
+    version: v10
+    model: api.models.ProductionAllocated
+    exclude: []
+    normalize: false
+    options:
+      data_type: Production Allocated
+    tasks:
+      sync:
+        <<: *default_sync
+        options:
+          query_path: config/queries/well-driftwood.xml
+          template_path: config/templates/well.xml
       full:
         <<: *default_full
