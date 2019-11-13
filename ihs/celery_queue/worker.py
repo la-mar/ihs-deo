@@ -8,8 +8,9 @@ from celery.schedules import crontab
 
 import collector.endpoint
 from collector.tasks import post_heartbeat, sync_endpoint
+from collector.task import Task
 from config import get_active_config
-from app import create_app
+from ihs import create_app
 
 logger = logging.getLogger(__name__)
 
@@ -40,64 +41,11 @@ flask_app = create_app()
 celery = create_celery(flask_app)
 
 
-class Task:
-    """ A yaml defined task object to be passed to Celery """
-
-    def __init__(
-        self,
-        model_name: str,
-        task_name: str,
-        cron: dict = None,
-        seconds: int = None,
-        mode: str = None,
-        options: dict = None,
-        enabled: bool = True,
-        **kwargs,
-    ):
-        self.model_name = model_name
-        self.task_name = task_name
-        self.cron = self.parse_cron(cron or {})
-        self.seconds = seconds
-        self.mode = mode
-        self.options = options or {}
-        self.enabled = enabled
-
-        if not any([self.cron, self.seconds]):
-            raise ValueError("Either seconds or cron must be specified")
-
-    def __repr__(self):
-        status = "***DISABLED***" if not self.enabled else ""
-        s = self.schedule
-        sch = (
-            f"{s._orig_minute} {s._orig_hour} {s._orig_day_of_week} {s._orig_day_of_month} {s._orig_month_of_year}"
-            if self.seconds is None
-            else f"({self.schedule} seconds)"
-        )
-        opts = ", ".join([f"{k}:{v}" for k, v in self.options.items()])
-        return f"{status} {self.qualified_name} {sch} {opts}"
-
-    @property
-    def qualified_name(self):
-        return f"{self.model_name}/{self.task_name}"
-
-    @property
-    def schedule(self) -> Union[crontab, int]:
-        """ The scheduling expression to be used for task creation. Prefers seconds over cron expressions. """
-        return self.seconds or self.cron
-
-    @staticmethod
-    def parse_cron(cron: dict):
-        """ Return a crontab object if the passed dict has any non-null values """
-        notnull = {k: v for k, v in cron.items() if v is not None}
-        if len(notnull) > 0:
-            return crontab(**notnull)
-        else:
-            return None
-
-
 def tasks_from_app_config(conf: object):
     """ Retrieves collection task definitions from the active configuration and parses
     them into Task objects """
+
+    # TODO: Refactor to use task defifinitions from endpoint.tasks
     for_scheduling: List[Task] = []
     endpoints = collector.endpoint.load_from_config(conf, load_disabled=False)
     for model_name, _ in endpoints.items():  # type: ignore
