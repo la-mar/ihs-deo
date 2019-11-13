@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 from typing import Callable, Dict, List, Union  # pylint: disable=unused-import
+from collections import OrderedDict
 
 import xmltodict
 
@@ -70,6 +71,46 @@ class Transformer(object):
             return None
 
 
+class WellboreTransformer(Transformer):
+    def transform(self, xml: str, **kwargs):
+        parsed = super().transform(xml, **kwargs)
+
+    # def extract_collections(self, data: OrderedDict) -> OrderedDict:
+    #     """ Breakout root document into sub-documents """
+    #     pass
+
+    # def apply_metadata_to_collection(self, collection: OrderedDict) -> dict:
+    #     pass
+
+    def extract_metadata(self, root_document: OrderedDict) -> OrderedDict:
+        return root_document.get("metadata", {})
+
+    def extract_last_updated_date(self, root_document: OrderedDict) -> OrderedDict:
+        return (
+            root_document.get("header", {})
+            .get("dates", {})
+            .get({"last_update"}, {})
+            .get("standard")
+        )
+
+    def copy_api_to_root(self, root_document: OrderedDict) -> OrderedDict:
+        """ Moves a well's identification number (api) to the top level of
+            the dictionary."""
+
+        _id = root_document.get("metadata", {}).get("identification")
+        if str(_id).isnumeric():
+            if len(_id) == 14:
+                root_document["api14"] = _id
+                root_document["api10"] = _id[:10]
+            elif len(_id) == 10:
+                root_document["api10"] = _id
+
+        root_document.move_to_end("api14", last=False)
+        root_document.move_to_end("api10", last=False)
+
+        return root_document
+
+
 if __name__ == "__main__":
 
     from collector.endpoint import load_from_config
@@ -95,10 +136,10 @@ if __name__ == "__main__":
     parsed = t.parse_value_dtypes(parsed)
 
     wellset = parsed.get("well_set")
-    wellbore = wellset.get("wellbore")
+    wellbore = wellset.get("wellbore")[0]
     len(wellbore)
 
-    treatment_summary = wellbore[0].get("treatment_summary")
+    treatment_summary = wellbore.get("treatment_summary")
     print(treatment_summary)
 
     # util.to_json(wellbore[0], "example.json", cls=util.DateTimeEncoder)
