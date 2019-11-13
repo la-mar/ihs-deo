@@ -1,18 +1,21 @@
 from __future__ import annotations
-from typing import Dict, List, Union, Any
+from typing import Dict, List, Union, Any, Tuple, ItemsView
 import logging
 from pydoc import locate
 
 from attrdict import AttrDict
 from flask_sqlalchemy import Model
 from sqlalchemy import Column
-
 from api.models import *
+
+from collector.task import Task
 
 logger = logging.getLogger(__name__)
 
 
 class Endpoint(object):
+    tasks: Dict[str, Task] = {}
+
     def __init__(
         self,
         name: str,
@@ -27,6 +30,7 @@ class Endpoint(object):
         normalize: bool = False,
         updated_column: str = "updated_at",
         enabled: bool = True,
+        tasks: dict = None,
         **kwargs,
     ):
 
@@ -44,9 +48,10 @@ class Endpoint(object):
         self.normalize = normalize
         self.options = options or []
         self.enabled = enabled
+        self.add_tasks((tasks or {}).items())
 
     def __repr__(self):
-        return f"{self.version}{self.path if self.path else ''}"
+        return f"{self.version}/{self.name}"
 
     def __iter__(self):
         attrs = [x for x in dir(self) if not x.startswith("_")]
@@ -100,10 +105,17 @@ class Endpoint(object):
 
         return model
 
+    def add_task(self, task_name: str, **kwargs):
+        self.tasks[task_name] = Task(
+            model_name=self.model_name, task_name=task_name, **kwargs
+        )
 
-def load_from_config(
-    app_config: object, load_disabled: bool = False
-) -> Dict[str, Endpoint]:
+    def add_tasks(self, task_defs: Union[ItemsView, List[Tuple[str, dict]]]):
+        for name, task_def in task_defs:
+            self.add_task(task_name=name, **task_def)
+
+
+def load_from_config(app_config: object) -> Dict[str, Endpoint]:
     endpoints: dict = {}
     try:
         endpoints = app_config.endpoints  # type: ignore
@@ -129,14 +141,11 @@ if __name__ == "__main__":
 
     from config import get_active_config
 
-    config = get_active_config()
-    endpoints = config.endpoints
-    # [x for x in endpoints.items()]
-    load_from_config(config)
+    conf = get_active_config()
+    endpoints = conf.endpoints
+    dict(endpoints.wells.tasks)
 
     # e = Endpoint("test", **{"model": "test"})
-    e = Endpoint(name="test", **endpoints.wells)
-    e.depends_on
-    e._dependency_map
-    e.enabled
+    e = Endpoint(name="wells", **endpoints.wells)
 
+    e.tasks
