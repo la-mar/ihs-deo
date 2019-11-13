@@ -108,21 +108,6 @@ class SoapRequestor(Requestor):
         """ Alias for session """
         return self.session
 
-
-class ExportJob:
-    def __init__(self, job_id: str, **kwargs):
-        self.job_id = job_id
-        self.attrs = kwargs
-
-    def to_dict(self):
-        return {"job_id": self.job_id, **self.attrs}
-
-
-class ExportRetreiver:
-    def __init__(self, job: ExportJob):
-        self.job = job
-        self.client = SoapRequestor()
-
     # def job_is_complete(self, job_id: str) -> bool:
     #     try:
     #         if self.client.service.IsComplete(job_id):
@@ -143,29 +128,9 @@ class ExportRetreiver:
 if __name__ == "__main__":
 
     from collector.endpoint import load_from_config
+    from collector.export_parameter import ExportParameter
 
     endpoints = load_from_config(conf)
     endpoint = endpoints.get("wells")
     dir(endpoint)
 
-    exportparam = ExportParameter(EnumDataType.WELL)
-
-    x = ExportBuilder(conf.API_BASE_URL, endpoints.get("wells"))
-
-    x.connect()
-
-    job_id = x.submit_job(exportparam)
-
-    if job_id is None:
-        sys.exit()
-
-    sleep_dur = conf.API__EXPORT_SLEEP_DUR
-
-    while not x.job_is_complete(job_id):
-        sleep(sleep_dur)
-        print(f"Sleeping for {sleep_dur}")
-
-    data = x.get_data(job_id)
-
-    if data is None:
-        print("bad data!")

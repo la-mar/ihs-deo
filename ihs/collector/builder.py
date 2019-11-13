@@ -1,4 +1,23 @@
+from __future__ import annotations
+import logging
+
+from typing import Union
 from collector.soap_requestor import SoapRequestor
+from collector.export_parameter import ExportParameter
+
+logger = logging.getLogger(__name__)
+
+
+class ExportJob:
+    def __init__(self, job_id: str, **kwargs):
+        self.job_id = job_id
+        self.attrs = kwargs
+
+    def __repr__(self):
+        return f"ExportJob: {self.job_id}"
+
+    def to_dict(self):
+        return {"job_id": self.job_id, **self.attrs}
 
 
 class Builder(SoapRequestor):
@@ -7,13 +26,13 @@ class Builder(SoapRequestor):
 
     @property
     def service(self):
-        return self.s.service
+        return self.client.service
 
     def connect(self) -> bool:
         """Initiate a connection to the soap service"""
-        return self.s.service.Login(_soapheaders=self.soapheaders)
+        return self.service.Login(_soapheaders=self.soapheaders)
 
-    def build(self, params: dict, target: dict) -> int:
+    def build(self, params: dict, target: dict) -> str:
         return self.service.BuildExportFromQuery(params, target)
 
 
@@ -21,32 +40,38 @@ class ExportBuilder(Builder):
     def __init__(self, *args, **kwargs):
         super().__init__(client_type="exportbuilder", *args, **kwargs)
 
-    def submit_job(self, export_param: ExportParameter) -> Union[str, None]:
+    def submit(self, export_param: ExportParameter) -> Union[ExportJob, None]:
 
         try:
-            return self.build(export_param.params, export_param.target)
+            job_id = self.build(export_param.params, export_param.target)
+            return ExportJob(job_id)
         except Exception as e:
-            print(
+            logger.error(
                 f"Error getting job id from service for data type {export_param.data_type} {e}"
             )
-
-    # def job_is_complete(self, job_id: str) -> bool:
-    #     try:
-    #         if self.client.service.IsComplete(job_id):
-    #             return True
-    #         return False
-    #     except Exception as e:
-    #         print(f"Could not determine state of Job Id {job_id} {e}")
-    #         return False
-
-    # def get_data(self, job_id: str) -> Union[str, None]:
-
-    #     try:
-    #         return self.client.service.RetrieveExport(job_id)
-    #     except Exception as e:
-    #         print(e)
 
 
 class QueryBuilder(Builder):
     def __init__(self, *args, **kwargs):
         super().__init__(client_type="querybuilder", *args, **kwargs)
+
+
+class ExportRetriever:
+    def __init__(self, job: ExportJob, **kwargs):
+        self.job = job
+        self.client = ExportBuilder(**kwargs)
+
+    @property
+    def is_complete(self) -> bool:
+        try:
+            return self.client.service.IsComplete(self.job.job_id) is not None
+        except Exception as e:
+            logger.warning(f"Could not determine state of Job Id {self.job.job_id} {e}")
+            return False
+
+    def get(self) -> Union[str, None]:
+
+        try:
+            return self.client.service.RetrieveExport(self.job.job_id)
+        except Exception as e:
+            logger.exception(f"Failed retrieving export {self.job} -- {e}")
