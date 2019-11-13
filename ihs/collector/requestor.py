@@ -69,7 +69,7 @@ class RestRequestor(Requestor):
 
     @property
     def url(self):
-        return self.urljoin(self.base_url, self.path)
+        return util.urljoin(self.base_url, self.path)
 
     @property
     def path(self):
