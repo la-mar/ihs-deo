@@ -76,10 +76,6 @@ def get_default_schema(dialect: str):
     return driver
 
 
-def make_url(url_params: dict) -> URL:
-    return URL(**url_params)
-
-
 def _get_project_meta() -> dict:
     pyproj_path = "./pyproject.toml"
     if os.path.exists(pyproj_path):
@@ -93,11 +89,6 @@ def _get_project_meta() -> dict:
 pkg_meta = _get_project_meta()
 project = pkg_meta.get("name")
 version = pkg_meta.get("version")
-
-
-class EnumDataType(Enum):
-    PRODUCTION_ALLOCATED = 1
-    WELL = 2
 
 
 class BaseConfig:
@@ -181,7 +172,6 @@ class BaseConfig:
         "exportbuilder": abs_path(API_WSDL_DIR, "{version}/ExportBuilder.wsdl"),
     }
     API_DOMAIN = "US"
-    API__EXPORT_SLEEP_DUR = 5
 
     @property
     def show(self):
