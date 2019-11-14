@@ -9,7 +9,7 @@ from zeep import xsd
 
 import util
 from collector.requestor import Requestor
-from config import EnumDataType, get_active_config
+from config import get_active_config
 
 logger = logging.getLogger(__name__)
 conf = get_active_config()
@@ -107,30 +107,3 @@ class SoapRequestor(Requestor):
     def s(self):
         """ Alias for session """
         return self.session
-
-    # def job_is_complete(self, job_id: str) -> bool:
-    #     try:
-    #         if self.client.service.IsComplete(job_id):
-    #             return True
-    #         return False
-    #     except Exception as e:
-    #         print(f"Could not determine state of Job Id {job_id} {e}")
-    #         return False
-
-    # def get_data(self, job_id: str) -> Union[str, None]:
-
-    #     try:
-    #         return self.client.service.RetrieveExport(job_id)
-    #     except Exception as e:
-    #         print(e)
-
-
-if __name__ == "__main__":
-
-    from collector.endpoint import load_from_config
-    from collector.export_parameter import ExportParameter
-
-    endpoints = load_from_config(conf)
-    endpoint = endpoints.get("wells")
-    dir(endpoint)
-
