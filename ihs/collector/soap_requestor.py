@@ -85,6 +85,10 @@ class SoapRequestor(Requestor):
         self.client = self.get_client(kwargs.pop("client_type", "session"))
 
     @property
+    def service(self):
+        return self.client.service
+
+    @property
     def soapheaders(self):
         return self._soapheaders
 
