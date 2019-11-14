@@ -76,7 +76,7 @@ def load_xml(path: str) -> Union[str, None]:
     return xml
 
 
-def to_json(d: dict, path: str, cls=None):
+def to_json(d: dict, path: str, cls=DateTimeEncoder):
     with open(path, "w") as f:
         json.dump(d, f, cls=cls, indent=4)
 
