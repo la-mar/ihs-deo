@@ -39,6 +39,7 @@ class WellboreTransformer:
                 data["api10"] = _id
 
         data.move_to_end("api10", last=False)
+        data.move_to_end("api14", last=False)
 
         return data
 
@@ -46,7 +47,7 @@ class WellboreTransformer:
     def copy_metadata_to_root(cls, data: OrderedDict) -> OrderedDict:
         meta = cls.extract_metadata(data)
         for key, value in meta.items():
-            data[key] = value
+            data[key] = str(value)  # force to string
             data.move_to_end(key, last=False)
 
         return data
@@ -54,6 +55,8 @@ class WellboreTransformer:
     @classmethod
     def copy_last_update_to_root(cls, data: OrderedDict) -> OrderedDict:
         data["last_update"] = cls.extract_last_updated_date(data)
+        data.move_to_end("last_update", last=False)
+
         return data
 
     @classmethod
