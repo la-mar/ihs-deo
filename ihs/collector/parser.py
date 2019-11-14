@@ -164,7 +164,9 @@ class Parser:
     @staticmethod
     @safe_convert
     def try_int(s: str) -> Union[int, None]:
-        return int(float(s))
+        # if str(s).replace("+", "").replace("-", "").isdigit():
+        # return int(float(s))
+        return int(s)
 
     @staticmethod
     @safe_convert
