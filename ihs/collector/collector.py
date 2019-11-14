@@ -1,90 +1,94 @@
 from __future__ import annotations
-from typing import Dict, List, Union, Any
+
 import logging
-from datetime import datetime
+from typing import Dict, Union, List
+from collections import OrderedDict
 
-import pandas as pd
-from flask_sqlalchemy import Model
-import requests
-
-
-from api.models import *
 from collector.endpoint import Endpoint
-from collector.request import Request
-from collector.transformer import Transformer
-from config import get_active_config
-from collector.util import retry
 
 logger = logging.getLogger(__name__)
-
-config = get_active_config()
 
 
 class Collector(object):
     """ Acts as the conduit for transferring newly collected data into a backend data model """
 
-    _tf = None
-    _endpoint = None
-    _functions = None
-    _model = None
+    def __init__(self, model):
+        self.model = model
 
-    def __init__(
-        self,
-        endpoint: Endpoint,
-        functions: Dict[Union[str, None], Union[str, None]] = None,
-    ):
-        self.endpoint = endpoint
-        self._functions = functions
+    def save(self, documents: List[OrderedDict]):
+        succeeded = 0
+        failed = []
+        for doc in documents:
+            try:
+                self.model(**doc).save()
+                succeeded += 1
+            except Exception as e:
+                failed.append(e)
 
-    @property
-    def functions(self):
-        if self._functions is None:
-            self._functions = config.functions
-        return self._functions
-
-    @property
-    def model(self):
-        if self._model is None:
-            self._model = self.endpoint.model
-        return self._model
-
-    @property
-    def tf(self):
-        if self._tf is None:
-            self._tf = Transformer(
-                aliases=self.endpoint.mappings.get("aliases", {}),
-                exclude=self.endpoint.exclude,
-                date_columns=self.model.date_columns,
-            )
-        return self._tf
-
-    def transform(self, data: dict) -> pd.DataFrame:
-        return self.tf.transform(data)
-
+        if len(failed) > 0:
+            logger.error("Failed saving %s documents to %s", len(failed), self.model)
+        logger.info("Saved %s documents to %s", succeeded, self.model)
 
 
 if __name__ == "__main__":
-    from app import create_app, db
-    from api.models import *
-    from collector.requestor import Requestor, IWellRequestor
+    from ihs import create_app
+    from api.models import Well, Production
+    from collector.export_parameter import ExportParameter
+    from collector.builder import ExportBuilder, ExportRetriever
     from collector.endpoint import load_from_config
-    import requests
+    from config import get_active_config
+    from collector.xmlparser import XMLParser
+    from collector.transformer import WellboreTransformer
+    from util import to_json
+    from time import sleep
 
     app = create_app()
     app.app_context().push()
 
-    config = get_active_config()
-    endpoints = load_from_config(config)
-    endpoint = endpoints["fields"]
+    conf = get_active_config()
+    url = conf.API_BASE_URL
+    endpoints = load_from_config(conf)
 
-    c = IWellCollector(endpoint)
-    c.model
+    # # ? well example
+    # endpoint = endpoints["wells"]
+    # c = Collector(endpoint)
+    # requestor = ExportBuilder(url, endpoint, functions={})
+    # task = endpoint.tasks["driftwood"]
+    # ep = ExportParameter(**task.options)
+    # jid = requestor.submit(ep)
 
-    requestor = IWellRequestor(config.API_BASE_URL, endpoint, functions={})
+    # retr = ExportRetriever(jid, base_url=url, endpoint=endpoint)
 
-    r2 = requests.get(
-        requestor.url, headers={"Authorization": requestor.get_token()}, params={}
-    )
-    data = r2.json()["data"]
-    c.collect(r2)
+    # sleep(5)
+    # xml = retr.get()
+    # parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
+    # document = parser.parse(xml)
+    # wellbores = WellboreTransformer.extract_from_wellset(document)
+    # to_json(wellbores, "test/data/wellbores_parsed.json")
+    # print(f"Parsed {len(wellbores)} wellbores")
 
+    # for wb in wellbores:
+    #     Well(**wb).save()
+
+    # ? production example
+    endpoint = endpoints["production"]
+    c = Collector(endpoint)
+    requestor = ExportBuilder(url, endpoint, functions={})
+    task = endpoint.tasks["driftwood"]
+    ep = ExportParameter(**task.options)
+    jid = requestor.submit(ep)
+
+    retr = ExportRetriever(jid, base_url=url, endpoint=endpoint)
+
+    sleep(5)
+    xml = retr.get()
+    parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
+    document = parser.parse(xml, parse_dtypes=False)
+    to_json(document, "test/data/production_unparsed.json")
+    document = parser.parse(xml, parse_dtypes=True)
+    to_json(document, "test/data/production_parsed.json")
+    # production = ProductionTransformer.extract_from_wellset(document)
+    # print(f"Parsed {len(production)} production records")
+
+    # for wb in production:
+    #     Production(**wb).save()
