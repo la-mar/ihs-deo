@@ -32,15 +32,16 @@ endpoints:
     normalize: false
     options:
       data_type: Well
+      template_path: config/templates/well.xml
     tasks:
-      sync:
+      driftwood:
         <<: *default_sync
         options:
-          query_path: config/queries/well-driftwood.xml
+          query_path: config/queries/well_driftwood_all.xml
           template_path: config/templates/well.xml
       full:
         <<: *default_full
-  production_allocated:
+  production:
     enabled: true
     version: v10
     model: api.models.ProductionAllocated
@@ -48,11 +49,12 @@ endpoints:
     normalize: false
     options:
       data_type: Production Allocated
+      template_path: config/templates/production.xml
     tasks:
-      sync:
+      driftwood:
         <<: *default_sync
         options:
-          query_path: config/queries/well-driftwood.xml
-          template_path: config/templates/well.xml
+          query_path: config/queries/production_driftwood_all.xml
+          template_path: config/templates/production.xml
       full:
         <<: *default_full
