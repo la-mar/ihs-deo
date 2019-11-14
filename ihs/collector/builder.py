@@ -4,6 +4,9 @@ import logging
 from typing import Union
 from collector.soap_requestor import SoapRequestor
 from collector.export_parameter import ExportParameter
+from config import get_active_config
+
+conf = get_active_config()
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +24,10 @@ class ExportJob:
 
 
 class Builder(SoapRequestor):
+    """ IHS specific builder """
+
+    domain = conf.API_DOMAIN
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -34,6 +41,9 @@ class Builder(SoapRequestor):
 
     def build(self, params: dict, target: dict) -> str:
         return self.service.BuildExportFromQuery(params, target)
+
+    def dtypes(self, domain: str = None):
+        return self.service.GetDatatypes(self.domain or domain)
 
 
 class ExportBuilder(Builder):
