@@ -49,10 +49,11 @@ class XMLParser(object):
             )
         return data
 
-    def parse(self, xml: str, **kwargs) -> OrderedDict:
+    def parse(self, xml: str, parse_dtypes: bool = True, **kwargs) -> OrderedDict:
         parsed = self.xml_to_dict(xml, **kwargs)
         parsed = self.normalize_keys(parsed)
-        parsed = self.parse_value_dtypes(parsed)
+        if parse_dtypes:
+            parsed = self.parse_value_dtypes(parsed)
         return parsed
 
     def xml_to_dict(self, xml: str, **kwargs) -> OrderedDict:
