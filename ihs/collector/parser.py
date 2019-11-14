@@ -2,7 +2,7 @@ from __future__ import annotations
 import functools
 import logging
 import re
-from datetime import date
+from datetime import datetime
 from pydoc import locate
 from typing import Any, Callable, List, Union, Dict
 
@@ -173,8 +173,8 @@ class Parser:
 
     @staticmethod
     @safe_convert
-    def try_date(s: str) -> Union[date, None]:
-        return date.fromisoformat(s)
+    def try_date(s: str) -> Union[datetime, None]:
+        return datetime.fromisoformat(s)
 
     def add_rule(self, rule: ParserRule):
         self.rules.append(rule)
@@ -195,7 +195,7 @@ class Parser:
         # print(f"{value} ({type(value).__name__})=> {checks}")
         return all(checks) if not return_partials else checks
 
-    def parse_dtype(self, value: str) -> Union[int, float, str, date]:
+    def parse_dtype(self, value: str) -> Union[int, float, str, datetime]:
         return self.try_int(value) or self.try_float(value) or self.try_date(value)
 
     def parse(self, value: Any) -> Any:
