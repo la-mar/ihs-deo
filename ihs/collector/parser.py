@@ -210,17 +210,18 @@ class Parser:
 
 if __name__ == "__main__":
 
-    data = util.load_json("example.json")
-
     parser = Parser.init(
         conf.PARSER_CONFIG["parsers"]["default"]["rules"], name="default"
     )
+
+    print(parser.rules[0].criteria)
 
     test_values = [
         "2019-01-01",
         "1",
         "+1",
         "-1",
+        "2018",
         "0",
         "+0",
         "-0",
@@ -255,9 +256,19 @@ if __name__ == "__main__":
         "+1234567890.1034",
         "-1234567890.1034",
         "2019-01-01",
+        "2020-06-06",
         "19-01-01",
         "2019-01",
         "qwe2019-01-01",
         "2019-01-01rte",
         "3242019-01-01",
+        "31.24141",
+        "101.98853",
+        "+31.24141",
+        "-101.98853",
     ]
+
+    for value in test_values:
+        new_value = parser.parse(value) or "-"
+        value = value or "-"
+        print(f"{value:<20} -> {new_value}")
