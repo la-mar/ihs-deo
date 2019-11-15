@@ -42,8 +42,58 @@ class Builder(SoapRequestor):
     def build(self, params: dict, target: dict) -> str:
         return self.service.BuildExportFromQuery(params, target)
 
-    def dtypes(self, domain: str = None):
+    def dtypes(self, domain: str = None) -> list:
+        """ List the datadypes available to this service.
+
+        Example:
+            ['Production Allocated',
+            'Production Unallocated',
+            'Well',
+            'Activity Data',
+            'Rig Activity']
+        """
         return self.service.GetDatatypes(self.domain or domain)
+
+    def templates(self, data_type: str, domain: str = None):
+        """ List the available templates
+
+            ['EnerdeqML 1.0 Well',
+            'EnerdeqML Well',
+            'Excel Well Workbook (Excel 2002, 2003, 2007)',
+            'Excel Well Workbook (Excel 2007, 2010)',
+            'Excel Well Workbook (CSV)',
+            'Well ID List',
+            '297 Well (fixed field)',
+            '297 Well (comma delimited)',
+            'Well Header',
+            'Excel Directional Survey (Compatible with Excel 2003 and newer)',
+            'Excel Directional Survey (Compatible with Excel 2007 and newer)',
+            'Excel Directional Survey (CSV)',
+            'Well Completion List',
+            'Well Completion List (CSV)',
+            'Geoscience Software PRODFit ASCII Export',
+            'EnerdeqML Production',
+            'Excel Production Workbook (Excel 2002, 2003, 2007)',
+            'Excel Production Workbook (Excel 2007, 2010)',
+            'Excel Production Workbook (CSV)',
+            'EnerdeqML 1.0 Production',
+            'Production ID List',
+            '298 Production (comma delimited)',
+            '298 Summary Production (comma delimited)',
+            '298 Production (fixed field)',
+            '298 Summary Production (fixed field)',
+            'Lease Producing Well Count (Compatible with Excel 2007 and newer)',
+            'Lease Producing Well Count (Compatible with Excel 2003 and newer)',
+            'Lease Producing Well Count (CSV)',
+            'PowerTools Production Export',
+            'Powertools Production Export (comma delimited)',
+            'PowerTools Summary Production Export',
+            'Production Header',
+            'DMP2 Production',
+            'DMP2 Summary Production']
+        """
+
+        return self.service.GetExportTemplates(self.domain or domain, data_type)
 
 
 class ExportBuilder(Builder):
