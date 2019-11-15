@@ -1,3 +1,4 @@
+from typing import Union
 import logging
 
 from uuid import uuid4
@@ -25,10 +26,8 @@ class ExportParameter:
 
         self._export_filename = uuid4()
         self.data_type = data_type
-        self._template_path = template_path
-        self.template = self.load_xml(template_path)
         self.query_path = query_path
-        self.query = self.load_xml(query_path)
+        self.template_path = template_path
         self.overwrite = overwrite
         self.domain = domain or self.domain
 
@@ -59,6 +58,49 @@ class ExportParameter:
         }
 
     @property
+    def query(self):
+        return self._query
+
+    @query.setter
+    def query(self, value: str):
+        """ query can be either the name of a query saved in IHS or an XML string of criteria """
+        self._query = value
+
+    @property
+    def query_path(self) -> Union[str, None]:
+        return self._query_path
+
+    @query_path.setter
+    def query_path(self, path: str):
+        self._query_path = path
+        if path:
+            self.query = util.load_xml(path)
+        else:
+            self.query = None
+
+    @property
+    def template(self):
+        return self._template
+
+    @template.setter
+    def template(self, value: str):
+        """ template can be either the name of a template saved in IHS or an XML string of criteria """
+        self._template = value
+
+    @property
+    def template_path(self) -> Union[str, None]:
+        return self._template_path
+
+    @template_path.setter
+    def template_path(self, path: str):
+        """ template can be either the name of a query saved in IHS or an XML string of criteria """
+        self._template_path = path
+        if path:
+            self.template = util.load_xml(path)
+        else:
+            self.template = None
+
+    @property
     def target(self) -> dict:
         return {"Filename": self.export_filename, "Overwrite": self.overwrite}
 
@@ -75,7 +117,7 @@ if __name__ == "__main__":
     endpoints = load_from_config(config)
     endpoint = endpoints["wells"]
 
-    task = endpoint.tasks["sync"]
+    task = endpoint.tasks["driftwood"]
 
     ep = ExportParameter(**task.options)
 
