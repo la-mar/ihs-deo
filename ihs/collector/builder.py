@@ -109,6 +109,7 @@ class ExportBuilder(Builder):
             logger.error(
                 f"Error getting job id from service for data type {export_param.data_type} {e}"
             )
+        return None
 
 
 class QueryBuilder(Builder):
@@ -127,7 +128,8 @@ class ExportRetriever:
             return self.client.service.IsComplete(self.job.job_id) is not None
         except Exception as e:
             logger.warning(f"Could not determine state of Job Id {self.job.job_id} {e}")
-            return False
+
+        return False
 
     def get(self) -> Union[str, None]:
 
@@ -135,3 +137,5 @@ class ExportRetriever:
             return self.client.service.RetrieveExport(self.job.job_id)
         except Exception as e:
             logger.exception(f"Failed retrieving export {self.job} -- {e}")
+
+        return None
