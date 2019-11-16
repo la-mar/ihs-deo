@@ -50,10 +50,10 @@ if __name__ == "__main__":
     endpoints = load_from_config(conf)
 
     # # ? well example
-    # endpoint = endpoints["wells"]
-    # c = Collector(endpoint)
-    # requestor = ExportBuilder(url, endpoint, functions={})
-    # task = endpoint.tasks["driftwood"]
+    endpoint = endpoints["wells"]
+    c = Collector(endpoint)
+    requestor = ExportBuilder(url, endpoint, functions={})
+    task = endpoint.tasks["driftwood"]
     # ep = ExportParameter(**task.options)
     # jid = requestor.submit(ep)
 
@@ -71,24 +71,75 @@ if __name__ == "__main__":
     #     Well(**wb).save()
 
     # ? production example
-    endpoint = endpoints["production"]
-    c = Collector(endpoint)
-    requestor = ExportBuilder(url, endpoint, functions={})
-    task = endpoint.tasks["driftwood"]
-    ep = ExportParameter(**task.options)
-    jid = requestor.submit(ep)
+    # endpoint = endpoints["production"]
+    # c = Collector(endpoint)
+    # requestor = ExportBuilder(url, endpoint, functions={})
+    # task = endpoint.tasks["driftwood"]
+    # ep = ExportParameter(**task.options)
+    # jid = requestor.submit(ep)
 
-    retr = ExportRetriever(jid, base_url=url, endpoint=endpoint)
+    # retr = ExportRetriever(jid, base_url=url, endpoint=endpoint)
 
-    sleep(5)
-    xml = retr.get()
-    parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
-    document = parser.parse(xml, parse_dtypes=False)
-    to_json(document, "test/data/production_unparsed.json")
-    document = parser.parse(xml, parse_dtypes=True)
-    to_json(document, "test/data/production_parsed.json")
+    # sleep(5)
+    # xml = retr.get()
+    # parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
+    # document = parser.parse(xml, parse_dtypes=False)
+    # to_json(document, "test/data/production_unparsed.json")
+    # document = parser.parse(xml, parse_dtypes=True)
+    # to_json(document, "test/data/production_parsed.json")
     # production = ProductionTransformer.extract_from_wellset(document)
     # print(f"Parsed {len(production)} production records")
 
     # for wb in production:
     #     Production(**wb).save()
+
+    # ep.template = "EnerdeqML 1.0 Well"
+    # jid = requestor.submit(ep)
+    # retr = ExportRetriever(jid, base_url=url, endpoint=endpoint)
+    # sleep(5)
+    # xml = retr.get()
+    # parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
+    # document = parser.parse(xml, parse_dtypes=True)
+    # to_json(document, "test/data/wellML.json")
+
+    # ep.template = "EnerdeqML 1.0 Production"
+    # jid = requestor.submit(ep)
+    # retr = ExportRetriever(jid, base_url=url, endpoint=endpoint)
+    # sleep(5)
+    # xml = retr.get()
+    # parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
+    # document = parser.parse(xml, parse_dtypes=True)
+    # to_json(document, "test/data/wellML.json")
+
+    ep = ExportParameter(
+        **{
+            "data_type": "Well",
+            "template": "Well ID List",
+            "query_path": "config/queries/well_upton_all.xml",
+        }
+    )
+    ep.template = "Well ID List"
+    jid = requestor.submit(ep)
+    retr = ExportRetriever(jid, base_url=url, endpoint=endpoint)
+    sleep(5)
+    ids = retr.get()
+
+    to_json(document, "test/data/well_id_list_permian.json")
+
+    import pandas as pd
+
+    dir(pd.io.json)
+
+    prod_json = document["production_set"]["producing_entity"][0]["production"]["year"]
+
+    df = pd.io.json.json_normalize(
+        prod_json,
+        record_path=["month"],
+        record_prefix="month.",
+        meta=["number"],
+        meta_prefix="year.",
+        # errors="ignore",
+    )
+
+    df.iloc[10].T
+
