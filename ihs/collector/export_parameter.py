@@ -1,5 +1,6 @@
 from typing import Union
 import logging
+import os
 
 from uuid import uuid4
 from config import get_active_config
@@ -14,20 +15,30 @@ class ExportParameter:
     """ Next step move this to be config driven """
 
     domain = conf.API_DOMAIN
+    query_basepath = conf.QUERY_PATH
 
     def __init__(
         self,
         data_type: str,
-        template_path: str,
-        query_path: str,
+        template: str = None,
+        query: str = None,
+        template_path: str = None,
+        query_path: str = None,
         overwrite: bool = True,
         domain: str = None,
+        **kwargs,
     ):
 
         self._export_filename = uuid4()
         self.data_type = data_type
-        self.query_path = query_path
-        self.template_path = template_path
+        self.query = (
+            query or self.load_query(query_path, **kwargs, data_type=data_type) or None
+        )
+        self.template = (
+            template
+            or self.load_query(template_path, **kwargs, data_type=data_type)
+            or None
+        )
         self.overwrite = overwrite
         self.domain = domain or self.domain
 
@@ -39,14 +50,6 @@ class ExportParameter:
     @property
     def export_filename(self):
         return self._export_filename
-
-    @staticmethod
-    def load_xml(path: str):
-        try:
-            return util.load_xml(path)
-        except FileNotFoundError as fe:
-            logger.warning("Failed to load xml file %s -- %s", path, fe)
-            raise
 
     @property
     def params(self) -> dict:
@@ -67,18 +70,6 @@ class ExportParameter:
         self._query = value
 
     @property
-    def query_path(self) -> Union[str, None]:
-        return self._query_path
-
-    @query_path.setter
-    def query_path(self, path: str):
-        self._query_path = path
-        if path:
-            self.query = util.load_xml(path)
-        else:
-            self.query = None
-
-    @property
     def template(self):
         return self._template
 
@@ -87,18 +78,19 @@ class ExportParameter:
         """ template can be either the name of a template saved in IHS or an XML string of criteria """
         self._template = value
 
-    @property
-    def template_path(self) -> Union[str, None]:
-        return self._template_path
-
-    @template_path.setter
-    def template_path(self, path: str):
-        """ template can be either the name of a query saved in IHS or an XML string of criteria """
-        self._template_path = path
+    @classmethod
+    def load_query(cls, path: Union[str, None], **kwargs) -> Union[str, None]:
         if path:
-            self.template = util.load_xml(path)
+            if not os.path.exists(path):
+                path = os.path.join(cls.query_basepath, path)
+
+            try:
+                return util.load_xml(path).format(**kwargs)
+            except FileNotFoundError as fe:
+                logger.warning("Failed to load xml file %s -- %s", path, fe)
+                raise
         else:
-            self.template = None
+            return None
 
     @property
     def target(self) -> dict:
@@ -117,9 +109,15 @@ if __name__ == "__main__":
     endpoints = load_from_config(config)
     endpoint = endpoints["wells"]
 
-    task = endpoint.tasks["driftwood"]
+    task = endpoint.tasks["sync_identities"]
 
-    ep = ExportParameter(**task.options)
+    ep = ExportParameter(
+        data_type="Well",
+        query_path="well_horizontal_by_county",
+        template="EnerdeqML Well",
+        name="tx-upton",
+        state_code=42,
+        county_code=461,
+    )
 
-    ep.params
-    ep.target
+    print(ep.query)
