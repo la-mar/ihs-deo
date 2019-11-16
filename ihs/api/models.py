@@ -1,8 +1,24 @@
+import datetime
 import mongoengine as me
 
 
+class WellMaster(me.Document):
+    meta = {"collection": "well_master", "ordering": ["-last_update"]}
+    name = me.StringField(primary_key=True)
+    ids = me.ListField()
+    count = me.IntField()
+    last_update = me.DateTimeField(default=datetime.datetime.now)
+
+
+class ProducingEntityMaster(me.Document):
+    meta = {"collection": "producing_entity_master", "ordering": ["-last_update"]}
+    identification = me.StringField(primary_key=True)
+    count = me.IntField()
+    last_update = me.DateTimeField(default=datetime.datetime.now)
+
+
 class Well(me.DynamicDocument):
-    meta = {"collection": "well", "ordering": ["-last_update"]}
+    meta = {"collection": "wells", "ordering": ["-last_update"]}
     identification = me.StringField(primary_key=True)
     api14 = me.StringField(unique=True)
     api10 = me.StringField()
