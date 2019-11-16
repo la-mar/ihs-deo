@@ -119,6 +119,8 @@ class BaseConfig:
     COLLECTOR_CONFIG = load_config(COLLECTOR_CONFIG_PATH)
     PARSER_CONFIG_PATH = abs_path(CONFIG_BASEPATH, "parsers.yaml")
     PARSER_CONFIG = load_config(PARSER_CONFIG_PATH)
+    QUERY_PATH = abs_path(CONFIG_BASEPATH, "templates/queries")
+    EXPORT_PATH = abs_path(CONFIG_BASEPATH, "templates/exports")
 
     """ Logging """
     LOG_LEVEL = os.getenv("LOG_LEVEL", 20)
