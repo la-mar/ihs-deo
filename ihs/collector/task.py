@@ -1,5 +1,21 @@
-from typing import Union
+from typing import Union, List, Dict
 from celery.schedules import crontab
+
+
+class OptionMatrix:
+    def __init__(self, matrix: List[Dict] = None, **kwargs):
+        self.matrix = matrix if isinstance(matrix, list) else [matrix or {}]
+        self.kwargs = kwargs
+
+    def __repr__(self):
+        return str(self.__dict__)
+
+    def __iter__(self):
+        for opts in self.matrix:
+            yield {**opts, **self.kwargs}
+
+    def to_list(self):
+        return list(self)
 
 
 class Task:
@@ -21,7 +37,7 @@ class Task:
         self.cron = self.parse_cron(cron or {})
         self.seconds = seconds
         self.mode = mode
-        self.options = options or {}
+        self.options = OptionMatrix(**(options or {}))
         self.enabled = enabled
 
         if not any([self.cron, self.seconds]):
@@ -35,7 +51,6 @@ class Task:
             if self.seconds is None
             else f"({self.schedule} seconds)"
         )
-        # opts = ", ".join([f"{k}:{v}" for k, v in self.options.items()])
         return f"{status} {self.qualified_name} {sch}"
 
     @property
@@ -60,9 +75,14 @@ class Task:
 if __name__ == "__main__":
 
     from config import get_active_config
+    from attrdict import AttrDict
 
     conf = get_active_config()
     endpoints = conf.endpoints
     tasks = endpoints.wells.tasks
-    sync = tasks["sync"]
-    Task("wells", "sync", **sync)
+    t = AttrDict(list(tasks.items())[1][1])
+    task = Task("wells", "sync", **t)
+    task.options
+
+    to = OptionMatrix(**t.options)
+    list(to)
