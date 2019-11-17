@@ -58,7 +58,3 @@ data "aws_caller_identity" "current" {
 
 
 
-# Get current account id that terraform is running under
-data "aws_caller_identity" "current" {
-}
-
