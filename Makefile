@@ -23,29 +23,29 @@ redis-start:
 	docker run -d --name redis -p 6379:6379 redis
 
 init-db:
-	poetry run app db init
+	poetry run ihs db init
 
 migrate:
-	# poetry run app db stamp head
-	poetry run app db migrate
+	# poetry run ihs db stamp head
+	poetry run ihs db migrate
 
 revision:
-	poetry run app db revision
+	poetry run ihs db revision
 
 upgrade:
-	poetry run app db upgrade
+	poetry run ihs db upgrade
 
 celery-worker:
-	celery -E -A app.celery_queue.worker:celery worker --loglevel=INFO --purge
+	celery -E -A ihs.celery_queue.worker:celery worker --loglevel=INFO --purge
 
 celery-beat:
-	celery -A app.celery_queue.worker:celery beat --loglevel=DEBUG
+	celery -A ihs.celery_queue.worker:celery beat --loglevel=DEBUG
 
 celery-flower:
-	celery -A app.celery_queue.worker:celery flower --loglevel=DEBUG --purge
+	celery -A ihs.celery_queue.worker:celery flower --loglevel=DEBUG --purge
 
-app-start:
-	poetry run app ipython
+ihs-start:
+	poetry run ihs ipython
 
 kubectl-proxy:
 	kubectl proxy --port=8080
