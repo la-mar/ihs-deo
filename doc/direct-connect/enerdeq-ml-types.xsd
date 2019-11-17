@@ -1,0 +1,2270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified">
+	<xsd:complexType name="ihse_set_metadata">
+		<xsd:sequence>
+			<xsd:element name="DATE_CREATION" type="xsd:date">
+				<xsd:annotation>
+					<xsd:documentation>Date of the XML data set output.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="COUNT" type="xsd:long">
+				<xsd:annotation>
+					<xsd:documentation>Count of producing entities in data set.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SCHEMA_VERSION" type="xsd:double">
+				<xsd:annotation>
+					<xsd:documentation>XML schema version.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="COPYRIGHT" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>Copyright 2006-2016, IHS Inc. and its affiliated and subsidiary companies, all
+                        rights reserved. Altova XMLSpy is a registered trademark of Altova. All other trademarks belong
+                        to IHS Inc. and its affiliated and subsidiary companies, all rights reserved.
+
+                        This product, including software, data and documentation, are licensed to the user for its
+                        internal business purposes only and may not be disclosed, disseminated, sold, licensed, copied,
+                        reproduced, translated or transferred to any third party.
+
+                        IHS Inc.
+                        15 Inverness Way East
+                        Englewood, Colorado 80112
+                        303-736-3000
+                    </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_entity_metadata">
+		<xsd:sequence>
+			<xsd:element name="IDENTIFICATION" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>Primary unique identifier of entity.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SECONDARY" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Secondary unique identifier of entity.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="UNITS_SYSTEM" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Base Units System used to store dimensions for entity.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DATE_CREATION" type="xsd:date" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation/>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DATA_SET" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation/>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SOFTWARE" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation/>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SOFTWARE_VERSION" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation/>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="CONFIDENTIAL" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_value_string">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_size">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="DESCRIPTION" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_decimal">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="DESCRIPTION" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_integer">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:long"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_ratio">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_area">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_fluid">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="DESCRIPTION" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="TYPE_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="TYPE_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="SPECIFIC_GRAVITY_VALUE" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="SPECIFIC_GRAVITY_UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="BASIS_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="BASIS_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="YEAR_TO" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="AGGREGATED" type="xsd:boolean" minOccurs="0"/>
+			<xsd:element name="REFERENCE_FIELD_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="REFERENCE_FIELD_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="DATA_SOURCE_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="DATA_SOURCE_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_liquid">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="ACCURACY_VALUE" type="xsd:decimal" minOccurs="0"/>
+			<xsd:element name="ACCURACY_UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="DESCRIPTION" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="TYPE_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="TYPE_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="SPECIFIC_GRAVITY_VALUE" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="SPECIFIC_GRAVITY_UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="BASIS_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="BASIS_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="YEAR_TO" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="AGGREGATED" type="xsd:boolean" minOccurs="0"/>
+			<xsd:element name="REFERENCE_FIELD_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="REFERENCE_FIELD_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="DATA_SOURCE_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="DATA_SOURCE_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_gas">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="ACCURACY_VALUE" type="xsd:decimal" minOccurs="0"/>
+			<xsd:element name="ACCURACY_UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="DESCRIPTION" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="TYPE_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="TYPE_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="SPECIFIC_GRAVITY_VALUE" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="SPECIFIC_GRAVITY_UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="BASIS_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="BASIS_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="YEAR_TO" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="AGGREGATED" type="xsd:boolean" minOccurs="0"/>
+			<xsd:element name="REFERENCE_FIELD_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="REFERENCE_FIELD_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="DATA_SOURCE_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="DATA_SOURCE_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_period">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_pressure">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="DESCRIPTION" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="TYPE_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="TYPE_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_pressure_gradient">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_length">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="DESCRIPTION" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_depth">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="REFERENCE_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="REFERENCE_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="RANGE_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="RANGE_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_distance">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_elevation">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="REFERENCE_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="REFERENCE_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_weight">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_rate">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_density">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_viscosity">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_resistivity">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_porosity">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_permeability">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_volume">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_gravity">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_salinity">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="TYPE_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="TYPE_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_salinity_water_analysis">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="TYPE_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="TYPE_NAME" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_name_code">
+		<xsd:sequence>
+			<xsd:element name="NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="SHORT" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="ABBREVIATED" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="ALTERNATE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="GROUP_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="GROUP_ALTERNATE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="GROUP_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="REGULATORY_DESIGNATION" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="RANK" type="xsd:double" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:group name="ihse_stratigraphic_unit_base">
+		<xsd:sequence>
+			<xsd:element name="HEADER" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SOURCE" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="DATA_PROVIDER" type="ihse_name_code" minOccurs="0"/>
+						<xsd:element name="SEQUENCE" type="xsd:long" minOccurs="0"/>
+						<xsd:element name="DESIGNATION" type="ihse_name_code" minOccurs="0"/>
+						<xsd:element name="PRODFIT" type="ihse_name_code" minOccurs="0"/>
+						<xsd:element name="GEOPOLITICAL" type="ihse_geopolitical" minOccurs="0"/>
+						<xsd:element name="DATES" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="EXPIRY" type="ihse_date" minOccurs="0"/>
+									<xsd:element name="FIRST_REPORT" type="ihse_date" minOccurs="0"/>
+									<xsd:element name="LAST_UPDATE" type="ihse_date" minOccurs="0"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="STATUS" type="ihse_name_code" minOccurs="0"/>
+						<xsd:element name="INTERPRETED" type="ihse_name_code" minOccurs="0"/>
+						<xsd:element name="INTERPRETER" type="ihse_name_code" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The individual who interprets a formation pick or recognizes a
+                                    formation as an identifiable stratigraphic unit.
+                                </xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="DEPTHS" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Depths of the formation.</xsd:documentation>
+							</xsd:annotation>
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="TOP_MEASURED" type="ihse_depth" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Measured depth from the surface to the top of the
+                                                formation.
+                                            </xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="TOP_TRUE_VERTICAL" type="ihse_depth" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>True vertical depth to the top of the formation.
+                                            </xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="BASE_MEASURED" type="ihse_depth" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Measured depth from the surface to the base of the
+                                                formation.
+                                            </xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="BASE_TRUE_VERTICAL" type="ihse_depth" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>True vertical depth from the surface to the base of the
+                                                formation.
+                                            </xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="PICK_SOURCE" type="ihse_name_code" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Individual who recognizes the formation as an identifiable
+                                    stratigraphic or mapping unit.
+                                </xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="EQUIVALENCE" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="AREA" type="ihse_name_code" minOccurs="0"/>
+						<xsd:element name="AGES" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The geologic age of the formation.</xsd:documentation>
+							</xsd:annotation>
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="YOUNGEST" type="ihse_age" minOccurs="0"/>
+									<xsd:element name="OLDEST" type="ihse_age" minOccurs="0"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="TYPE" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="PICK_TYPE" type="ihse_name_code" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Code qualifying the formation top (e.g., uncertain depth
+                                                (?), not logged (NL), estimated depth (ED), etc..
+                                            </xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="DESIGNATION" type="ihse_name_code" minOccurs="0"/>
+									<xsd:element name="RANK" type="xsd:string" minOccurs="0"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="PARENT" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="DESIGNATION" type="ihse_name_code" minOccurs="0"/>
+									<xsd:element name="TYPE" type="ihse_name_code" minOccurs="0"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="SUBUNIT" type="ihse_name_code" minOccurs="0"/>
+						<xsd:element name="FAULT" type="ihse_name_code" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The type of fault within the stratigraphic unit.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="INDICATORS" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="FAULT" type="ihse_name_code" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Y(es) or N(o) indicating the top was faulted.
+                                            </xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="GRAPHICS" type="xsd:boolean" minOccurs="0"/>
+									<xsd:element name="BIBLIOGRAPHY" type="xsd:boolean" minOccurs="0"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="RANK" type="ihse_name_code" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Code describing the degree of confidence associated with the tops
+                                    that were picked.
+                                </xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="PICK_REF" type="ihse_name_code" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Code identifying the location of the formation pick.
+                                </xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="NUMBER" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="REMARK" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="ATTACHMENT" type="ihse_attachment" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="LITHOLOGY" type="ihse_name_code" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Description of the lithology associated with the formation.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:complexType name="ihse_stratigraphic_unit">
+		<xsd:sequence>
+			<xsd:group ref="ihse_stratigraphic_unit_base"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_attachment">
+		<xsd:annotation>
+			<xsd:documentation>Describes non-XML data associated with this entity.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="FORMAT" type="xsd:string"/>
+			<xsd:element name="LOCATION" type="xsd:string"/>
+			<xsd:element name="DESCRIPTION" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="TYPE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="TOPIC" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="TITLE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_production_wells">
+		<xsd:sequence>
+			<xsd:element name="TOTAL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="OIL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="GAS" type="xsd:long" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_temperature">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_temperature_gradient">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_polar">
+		<xsd:sequence>
+			<xsd:element name="AZIMUTH" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="DISTANCE" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_offset">
+		<xsd:sequence>
+			<xsd:element name="DIRECTION_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="DIRECTION_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="LATITUDE" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="LONGITUDE" type="xsd:double" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_identification">
+		<xsd:sequence>
+			<xsd:element name="TYPE" type="xsd:string"/>
+			<xsd:element name="VALUE" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_date">
+		<xsd:sequence>
+			<xsd:element name="YEAR" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="MONTH_NUMBER" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="DAY" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="STANDARD" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="TIME" type="xsd:time" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_lat_long">
+		<xsd:sequence>
+			<xsd:element name="DATA_PROVIDER" type="ihse_name_code" minOccurs="0"/>
+			<xsd:element name="MAP_BASE" type="ihse_name_code" minOccurs="0"/>
+			<xsd:element name="LATITUDE">
+				<xsd:complexType>
+					<xsd:simpleContent>
+						<xsd:extension base="xsd:double">
+							<xsd:attribute name="TYPE" type="xsd:string" use="optional"/>
+						</xsd:extension>
+					</xsd:simpleContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="LONGITUDE">
+				<xsd:complexType>
+					<xsd:simpleContent>
+						<xsd:extension base="xsd:double">
+							<xsd:attribute name="TYPE" type="xsd:string" use="optional"/>
+						</xsd:extension>
+					</xsd:simpleContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="QUALITY" type="ihse_name_code" minOccurs="0"/>
+			<xsd:element name="DATUM" type="ihse_name_code" minOccurs="0"/>
+			<xsd:element name="REMARK" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="ATTACHMENT" type="ihse_attachment" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Link to an external file that contains additional Lat/Long information.
+                    </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_generic">
+		<xsd:sequence>
+			<xsd:element name="SOURCE" type="xsd:string"/>
+			<xsd:element name="NAME" type="xsd:string"/>
+			<xsd:element name="USER_ELEMENT" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="NAME" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="TYPE" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="VALUE" type="xsd:double" minOccurs="0"/>
+						<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="USER_COLLECTION" type="ihse_generic" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="ATTACHMENT" type="ihse_attachment" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Reference to an external file that contains additional porosity data.
+                    </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_location">
+		<xsd:annotation>
+			<xsd:documentation>Common location branch</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="HEADER" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SOURCE" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="NUMBER" type="xsd:long" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GEOGRAPHIC" type="ihse_lat_long" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Geographic coordinates for the well location.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="UTM" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>UTM location of the well.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="DATA_PROVIDER" type="ihse_name_code"/>
+						<xsd:element name="GRID" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>A grid is the largest area, 10 minutes by 15 minutes south of
+                                    latitude 70, and 10 minutes by 30 minutes north of latitude 70. Approximately 11
+                                    miles NS and 5 - 11 miles EW. It is identified as follows: Degrees latitude (40 -
+                                    83), Minutes latitude (00, 10, 20, 30, 40, or 50), Degrees longitude (42 - 141),
+                                    Minutes longitude (00, 15, 30, 45, 60). FORMAT is (DD-MM-DDD-MM). Latitude to be
+                                    first (DD-MM) and longitude second (DDD-MM).
+                                </xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="QUADRANT" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Quadrant number identifying the UTM zone number and UTM numeric
+                                    quadrant (e.g. NG15-2).
+                                </xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="NORTH_SOUTH" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Letter, either N or S, indicating the block direction from the
+                                    baseline.
+                                </xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="TIER" type="xsd:double" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Number identifying the block increasing north or south of the
+                                    baseline.
+                                </xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="EAST_WEST" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Letter, either E or W indicating block direction from the principle
+                                    meridian
+                                </xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="RANGE" type="xsd:long" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Number identifying the whole or partial range. The number identifying
+                                    the block increases east or west of the principal meridian.
+                                </xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="ATTACHMENT" type="ihse_attachment" minOccurs="0" maxOccurs="unbounded">
+							<xsd:annotation>
+								<xsd:documentation>Reference to an external file that contains additional UTM location
+                                    information.
+                                </xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="LANDMARK" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A location that is relative to an established landmark.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="DATA_PROVIDER" type="ihse_name_code"/>
+						<xsd:element name="REFERENCE" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Information about the landmark that the location is relative to.
+                                </xsd:documentation>
+							</xsd:annotation>
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="IDENTIFICATION" type="ihse_name_code" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Landmark location is relative to.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="TYPE" type="ihse_name_code" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Type of landmark.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="ELEVATION" type="ihse_elevation" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>The elevation of the landmark.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="GEOGRAPHIC" type="ihse_lat_long" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Geographic coordinates of the landmark.
+                                            </xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="DEPTHS" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Depths in well of location.</xsd:documentation>
+							</xsd:annotation>
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="MEASURED" type="ihse_depth" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Measured depth from the surface to a point in the
+                                                wellbore.
+                                            </xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="TRUE_VERTICAL" type="ihse_depth" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Absolute calculated vertical distance from surface to
+                                                corresponding
+                                                measured depth.
+                                            </xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="POLAR" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Value for the azimuth direction of polar offset, measured in angular
+                                    degrees with a clockwise offset from true (geographic) north.
+                                </xsd:documentation>
+							</xsd:annotation>
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="AZIMUTH" type="ihse_decimal" minOccurs="0"/>
+									<xsd:element name="DISTANCE" type="ihse_distance" minOccurs="0"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="OFFSET" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Distance from landmark expressed in rectangular offset.
+                                </xsd:documentation>
+							</xsd:annotation>
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="Y" type="ihse_offset" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Distance, In the north/south (Y) direction from the
+                                                landmark.
+                                            </xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="X" type="ihse_offset" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Offset distance, in the east/west (X) direction from the
+                                                landmark.
+                                            </xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="REMARK" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>General remark about location.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="ATTACHMENT" type="ihse_attachment" minOccurs="0" maxOccurs="unbounded">
+							<xsd:annotation>
+								<xsd:documentation>Reference to an external file that contains additional UTM location
+                                    information.
+                                </xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+					<xsd:attribute name="TYPE_NAME" type="xsd:string" use="optional"/>
+					<xsd:attribute name="TYPE_CODE" type="xsd:string" use="optional"/>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="COORDINATE" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Describes the different coordinate values associated with a well point projected
+                        to the surface of the Earth.
+                    </xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="DATA_PROVIDER" type="ihse_name_code"/>
+						<xsd:element name="NUMBER" type="xsd:long" minOccurs="0"/>
+						<xsd:element name="DEPTHS" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Depths in well.</xsd:documentation>
+							</xsd:annotation>
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="MEASURED" type="ihse_depth" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Measured depth from the surface to a point in the
+                                                wellbore.
+                                            </xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="TRUE_VERTICAL" type="ihse_depth" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Absolute calculated vertical distance from surface to
+                                                corresponding
+                                                measured depth.
+                                            </xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="EASTING" type="ihse_distance" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The X coordinate for the node with respect to the point of origin of
+                                    the specified map projection.
+                                </xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="NORTHING" type="ihse_distance" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The Y coordinate for the node location with respect to the point of
+                                    origin of the specified map projection.
+                                </xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="COORDINATE_SYSTEM" type="ihse_name_code" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Unique identifier for the map (northing and easting) coordinate
+                                    system.
+                                </xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="PROJECTION" type="ihse_name_code" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Code identifying the general type of projection this map grid system
+                                    is considered to be, such as Mercator, ambert, Polyconic, etc..
+                                </xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="QUALITY" type="ihse_name_code" minOccurs="0"/>
+						<xsd:element name="REMARK" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="ATTACHMENT" type="ihse_attachment" minOccurs="0" maxOccurs="unbounded">
+							<xsd:annotation>
+								<xsd:documentation>Reference to an external file that contains additional location
+                                    coordinate information.
+                                </xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GEOPOLITICAL" type="ihse_geopolitical" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:choice minOccurs="0">
+				<xsd:element name="CARTER" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Describes the location of a cartographic object in reference to the Carter
+                            Grid Survey System which is a township, range and
+                            section system using latitude and longitude lines for subdivision boundaries. This land
+                            survey system is primarily used in the United States for the states of
+                            Kentucky and Tennessee.
+                        </xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="DATA_PROVIDER" type="ihse_name_code"/>
+							<xsd:element name="TOWNSHIP" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Number designating the full or partial township division north or
+                                        south of the surveyed baseline, usually 5 miles by 5 miles wide.
+                                    </xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="DIRECTION" type="xsd:string" minOccurs="0"/>
+										<xsd:element name="NAME_NUMBER" type="xsd:string" minOccurs="0"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="RANGE" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Number designating a whole or partial range division east or west
+                                        of the principal meridian.
+                                    </xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="DIRECTION" type="xsd:string" minOccurs="0"/>
+										<xsd:element name="NUMBER" type="xsd:double" minOccurs="0"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="SECTION" type="xsd:double" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Number designating the Carter section within a township,
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="QUADRANGLE" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Name of the USGS map quadrangle used.</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="MINUTES" type="xsd:double" minOccurs="0"/>
+										<xsd:element name="NAME" type="xsd:string" minOccurs="0"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="REMARK" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Remarks or comments pertaining to the Carter location.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="FOOTAGE" type="ihse_footage" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Distance measured in feet, from a reference line to the
+                                        well location
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ATTACHMENT" type="ihse_attachment" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>Reference to an external file that contains additional Carter
+                                        location information.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="CONGRESSIONAL" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Describes the location of an object in reference to the Congressional Land
+                            Survey System.
+                        </xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="DATA_PROVIDER" type="ihse_name_code"/>
+							<xsd:element name="TOWNSHIP" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Number designating the township division north or south of the
+                                        baseline.
+                                    </xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="DIRECTION" type="xsd:string" minOccurs="0"/>
+										<xsd:element name="NUMBER" type="xsd:double" minOccurs="0"/>
+										<xsd:element name="NAME" type="xsd:string" minOccurs="0"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="RANGE" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Number designating a whole or partial range division east or west
+                                        of the principal meridian.
+                                    </xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="DIRECTION" type="xsd:string" minOccurs="0"/>
+										<xsd:element name="NUMBER" type="xsd:double" minOccurs="0"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="SECTION" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Number designating a whole or partial range division east or west
+                                        of the principal meridian.
+                                    </xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="NUMBER" type="xsd:double" minOccurs="0"/>
+										<xsd:element name="TYPE" type="ihse_name_code" minOccurs="0"/>
+										<xsd:element name="SUFFIX" type="xsd:string" minOccurs="0"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="LOT" type="xsd:string" minOccurs="0"/>
+							<xsd:element name="MERIDIAN" type="ihse_name_code" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>The first meridian from which all other meridians in
+                                        the survey are numbered
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="REMARK" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Remarks or comments pertaining to the Congressional location.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="FOOTAGE" type="ihse_footage" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Distance measured in feet, from a reference line to
+                                        the well location
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ATTACHMENT" type="ihse_attachment" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>Reference to an external file that contains additional
+                                        Congressional location information.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="NORTHEAST" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Location information pertaining to states located in the Northeast region of
+                            the United States.
+                        </xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="DATA_PROVIDER" type="ihse_name_code"/>
+							<xsd:element name="REFERENCE" type="ihse_lat_long" minOccurs="0"/>
+							<xsd:element name="TOWNSHIP" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Name of the northeast township.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="LOT" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Code describing the land-lot in Georgia which is a subdivision of
+                                        a land district.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="DISTRICT" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Name of the district the wells in Virginia and West Virginia are
+                                        located in.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="QUADRANGLE" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>The USGS map quadrangle in which the well location falls.
+                                    </xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="MINUTES" type="xsd:double" minOccurs="0">
+											<xsd:annotation>
+												<xsd:documentation>USGS map quadrangle scale, either 7.5 or 15 minute
+                                                    area sizes.
+                                                </xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="NAME" type="xsd:string" minOccurs="0">
+											<xsd:annotation>
+												<xsd:documentation>Name of the USGS quadrangle in which the well
+                                                    location falls.
+                                                </xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SECTION" type="xsd:string" minOccurs="0">
+											<xsd:annotation>
+												<xsd:documentation>USGS map quadrangle section which is made up of 9
+                                                    alpha
+                                                    sections.
+                                                </xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="REMARK" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Remarks pertaining to node locations in the USA Northeast.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="FOOTAGE" type="ihse_footage" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Distance measured in feet, from a reference line to
+                                        the well location
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ATTACHMENT" type="ihse_attachment" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>Reference to an external file that contains additional Northeast
+                                        location information.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="OHIO" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Describes the location of a well within the state of Ohio.
+                        </xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="DATA_PROVIDER" type="ihse_name_code"/>
+							<xsd:element name="TOWNSHIP" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>The name of the township where the well is located.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="LOT" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>The lot within a given township for a well location.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SECTION" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Code identifying the section within a given township in Ohio for
+                                        the well location.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="MERIDIAN" type="ihse_name_code" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>The unique identifier for the reference table.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="QUADRANGLE" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Name of the USGS quadrangle in which the well location is
+                                        located.
+                                    </xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="MINUTES" type="xsd:double" minOccurs="0"/>
+										<xsd:element name="NAME" type="xsd:string" minOccurs="0"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="REMARK" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Remarks or comments pertaining to the well location.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="FOOTAGE" type="ihse_footage" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Distance measured from a reference line to the well location.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ATTACHMENT" type="ihse_attachment" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>Reference to an external file that contains additional Ohio
+                                        location information.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="OFFSHORE" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Describes the offshore location of the well.</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="DATA_PROVIDER" type="ihse_name_code"/>
+							<xsd:element name="BLOCK" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Number identifying the offshore oil and gas concession area
+                                        defined
+                                        by its longitude and latitude, a subdivision of an OCS area.
+                                    </xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="ADDITION" type="xsd:string" minOccurs="0"/>
+										<xsd:element name="NUMBER" type="xsd:string" minOccurs="0"/>
+										<xsd:element name="MODIFIER" type="xsd:string" minOccurs="0"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="OCS_NUMBER" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Number assigned to all offshore wells in Federal territory, on
+                                        the Outer Continental Shelf .
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="WATER_BOTTOM_ZONE" type="ihse_name_code" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Code identifying the water bottom zone, which is retained in
+                                        Louisiana as a special allowable area or zone.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="GOVERNING_AGENCY" type="ihse_name_code" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Code indicating the well is located in Federal offshore (F),
+                                        State offshore (S), or in a Bay (B).
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="AREA" type="ihse_name_code" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>The Outer Continental Shelf (OCS) division area (e.g., AC =
+                                        Alaminos Canyon Area).
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="PROJECTED" minOccurs="0">
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="TOWNSHIP" minOccurs="0">
+											<xsd:annotation>
+												<xsd:documentation>Number designating the township division north or
+                                                    south of the
+                                                    baseline.
+                                                </xsd:documentation>
+											</xsd:annotation>
+											<xsd:complexType>
+												<xsd:sequence>
+													<xsd:element name="DIRECTION" type="xsd:string" minOccurs="0"/>
+													<xsd:element name="NUMBER" type="xsd:double" minOccurs="0"/>
+													<xsd:element name="NAME" type="xsd:string" minOccurs="0"/>
+												</xsd:sequence>
+											</xsd:complexType>
+										</xsd:element>
+										<xsd:element name="RANGE" minOccurs="0">
+											<xsd:annotation>
+												<xsd:documentation>Number designating a whole or partial range division
+                                                    east or west of the principal meridian.
+                                                </xsd:documentation>
+											</xsd:annotation>
+											<xsd:complexType>
+												<xsd:sequence>
+													<xsd:element name="DIRECTION" type="xsd:string" minOccurs="0"/>
+													<xsd:element name="NUMBER" type="xsd:double" minOccurs="0"/>
+												</xsd:sequence>
+											</xsd:complexType>
+										</xsd:element>
+										<xsd:element name="SECTION" minOccurs="0">
+											<xsd:annotation>
+												<xsd:documentation>Number designating a whole or partial range division
+                                                    east or west of the principal meridian.
+                                                </xsd:documentation>
+											</xsd:annotation>
+											<xsd:complexType>
+												<xsd:sequence>
+													<xsd:element name="NUMBER" type="xsd:double" minOccurs="0"/>
+													<xsd:element name="TYPE" type="xsd:string" minOccurs="0"/>
+													<xsd:element name="SUFFIX" type="xsd:string" minOccurs="0"/>
+												</xsd:sequence>
+											</xsd:complexType>
+										</xsd:element>
+										<xsd:element name="MERIDIAN" type="ihse_name_code" minOccurs="0">
+											<xsd:annotation>
+												<xsd:documentation>The unique identifier for the reference table.
+                                                </xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="REMARK" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Remarks or comments pertaining to the offshore area.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="FOOTAGE" type="ihse_footage" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Distance measured from a reference line to the well location.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ATTACHMENT" type="ihse_attachment" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>Reference to an external file that contains additional Northeast
+                                        location information.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="TEXAS" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Describes the location of the well within the state of Texas.
+                        </xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="DATA_PROVIDER" type="ihse_name_code"/>
+							<xsd:element name="BLOCK" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>A county sub-divided by the Texas General Land Office into blocks
+                                        and surveys.
+                                    </xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="NUMBER" type="xsd:string" minOccurs="0"/>
+										<xsd:element name="FRACTION" type="xsd:string" minOccurs="0"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="LEAGUE" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Alphanumeric code identifying the league sub-division of a survey
+                                        (Spanish Land Grant).
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SECTION" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Number designating the section within a township (1-36).
+                                    </xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="NUMBER" type="xsd:string" minOccurs="0"/>
+										<xsd:element name="FRACTION" type="xsd:string" minOccurs="0"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="LABOR" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Alphanumeric code identifying the labor sub-division of a league
+                                        (Spanish Land Grant).
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="LOT" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Code identifying the lot within a given township for a well
+                                        location.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="TOWNSHIP" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Number identifying the township sub-division of a Texas survey.
+                                    </xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="DIRECTION" type="xsd:string" minOccurs="0"/>
+										<xsd:element name="NUMBER" type="xsd:string" minOccurs="0"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="ABSTRACT" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Number assigned by the Texas General Land Office to the blocks
+                                        and surveys in a county. Each number is unique within a given county.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SURVEY" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Name identifying the Texas survey within a given county.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="REMARK" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Remarks describing the nodes legal survey location.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="FOOTAGE" type="ihse_footage" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Distance measured from a north or south reference line to the
+                                        well location
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ATTACHMENT" type="ihse_attachment" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>Reference to an external file that contains additional Texas
+                                        location information.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="DOMINION_LAND" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>The location of a well based on the Canadian Dominion Land Survey (DLS)
+                        </xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="DATA_PROVIDER" type="ihse_name_code"/>
+							<xsd:element name="SYSTEM" type="xsd:long" minOccurs="0"/>
+							<xsd:element name="NUMBER" type="xsd:long" minOccurs="0"/>
+							<xsd:element name="MERIDIAN" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Designates the first meridian from which all other meridians in
+                                        the survey zone are numbered.
+                                    </xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="NUMBER" type="xsd:string"/>
+										<xsd:element name="DIRECTION" type="xsd:string"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="TOWNSHIP" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Identifies the whole or partial township division north or south
+                                        of the baseline.
+                                    </xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="NUMBER" type="xsd:long"/>
+										<xsd:element name="MODIFIER" type="xsd:string" minOccurs="0"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="RANGE" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Identifies the whole or partial range division east or west of
+                                        the principal meridian.
+                                    </xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="NUMBER" type="xsd:long"/>
+										<xsd:element name="MODIFIER" type="xsd:string" minOccurs="0"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="SECTION" type="xsd:long" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Identifies the section within a township, numbered 1 to 36.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SUBDIVISION" type="xsd:long" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Number for the legal subdivision (LSD) within a Canadian section.
+                                        Sections are divided into 16
+                                        legal subdivisions.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="EXCEPTION" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>A well location not conforming to normal well spacing in
+                                        Saskatchewan and only with government authorization.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="EVENT" type="xsd:long" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Sequence number indicating each well event in Saskatchewan (e.g.,
+                                        0 = original oil well, 1 = reentry,
+                                        etc.).
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="LSD_PARCEL" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Bitmap of LSD's.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="REMARK" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Remarks or comments pertaining to the Dominion land location.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ATTACHMENT" type="ihse_attachment" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>Reference to an external file that contains additional Dominion
+                                        land location information.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="NATIONAL_TOPOGRAPHIC" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Well location based on the Canadian National Topographic Series survey
+                            system. The Canadian National Topographic Series survey system is a grid system of blocks
+                            formed from the subdivision of latitude and longitude quadrangles. This survey
+                            system is used in the Canadian province of British Columbia.
+                        </xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="DATA_PROVIDER" type="ihse_name_code"/>
+							<xsd:element name="SYSTEM" type="xsd:long" minOccurs="0"/>
+							<xsd:element name="QUADRANGLE" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Number identifying the primary quadrangle, the largest grid unit,
+                                        consisting of 4 degrees latitude by
+                                        8 degrees longitude.
+                                    </xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="PRIMARY" type="xsd:long" minOccurs="0"/>
+										<xsd:element name="LETTERED" type="xsd:string" minOccurs="0"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="SIXTEENTH" type="xsd:long" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Number designating the block within a letter quadrangle which is
+                                        divided into 16, 15 minute by 30
+                                        minute blocks.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="BLOCK" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Letter designating a block within the Sixteenth, which is divided
+                                        into 12 blocks, 5 degrees by 7.5
+                                        degrees, lettering from A - F.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="UNIT" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Number designating the unit within a block. Blocks are divided
+                                        into 100 units, numbering from 1 (in
+                                        the SE) to 100 (in the NW corner).
+                                    </xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="NUMBER" type="xsd:long" minOccurs="0"/>
+										<xsd:element name="QUARTER" type="xsd:string" minOccurs="0"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="EXCEPTION" type="xsd:string" minOccurs="0"/>
+							<xsd:element name="EVENT" type="xsd:long" minOccurs="0"/>
+							<xsd:element name="REMARK" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Remarks or comments pertaining to the National Topographic
+                                        location.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ATTACHMENT" type="ihse_attachment" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>Reference to an external file that contains additional National
+                                        Topographic location information.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="FEDERAL_PERMIT" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Describes well locations in the Federal Permit System used in Canada. This
+                            system is used in all Canadian Federal Lands in both the
+                            offshore and the northern territories.';
+                        </xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="DATA_PROVIDER" type="ihse_name_code"/>
+							<xsd:element name="SYSTEM" type="xsd:long" minOccurs="0"/>
+							<xsd:element name="UNIT" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Unit letter for the FPS location, 1/16th of an intermediate area.
+                                        From 35 - 50 acres. Value must be between A - P.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SECTION" type="xsd:long" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Number designating the section within a township (1-36).
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="GRID" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>A grid is the largest area, 10 minutes by 15 minutes south of
+                                        latitude 70, and 10 minutes by 30 minutes north of latitude 70. Approximately 11
+                                        miles NS and 5 - 11 miles EW. It is identified as follows: Degrees latitude (40
+                                        - 83), Minutes latitude (00, 10, 20, 30, 40, or 50), degrees longitude (42 -
+                                        141), Minutes longitude (00, 15,
+                                        30, 45, 60). FORMAT is (DD-MM-DDD-MM). Latitude to be first (DD-MM) and
+                                        longitude second (DDD-MM).
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="LATITUDE" minOccurs="0">
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="DEGREES" type="xsd:long"/>
+										<xsd:element name="MINUTES" type="xsd:double"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="LONGITUDE" minOccurs="0">
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="DEGREES" type="xsd:long"/>
+										<xsd:element name="MINUTES" type="xsd:double"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="EXCEPTION" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Designates a well location not conforming to normal well spacing
+                                        and only with government
+                                        authorization.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="EVENT" type="xsd:long" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Number indicting the sequence for each well event (e.g.,
+                                        0=Original
+                                        oil well, 1=re-entry, etc.).
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="REMARK" type="xsd:string" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Remarks or comments pertaining to a Federal Permit location.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ATTACHMENT" type="ihse_attachment" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>Reference to an external file that contains additional Federal
+                                        Permit location information.
+                                    </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="GEODETIC" minOccurs="0">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="DATA_PROVIDER" type="ihse_name_code"/>
+							<xsd:element name="SYSTEM" type="xsd:long" minOccurs="0"/>
+							<xsd:element name="LATITUDE" type="xsd:double" minOccurs="0"/>
+							<xsd:element name="LONGITUDE" type="xsd:double" minOccurs="0"/>
+							<xsd:element name="EXCEPTION" type="xsd:string" minOccurs="0"/>
+							<xsd:element name="EVENT" type="xsd:long" minOccurs="0"/>
+							<xsd:element name="REMARK" type="xsd:string" minOccurs="0"/>
+							<xsd:element name="ATTACHMENT" type="ihse_attachment" minOccurs="0" maxOccurs="unbounded"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element name="CONCATENATED" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="DATA_PROVIDER" type="ihse_name_code"/>
+						<xsd:element name="TYPE" type="ihse_name_code" minOccurs="0"/>
+						<xsd:element name="TEXT" type="xsd:string" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="NARRATIVE" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="DATA_PROVIDER" type="ihse_name_code"/>
+						<xsd:element name="NUMBER" type="xsd:long" minOccurs="0"/>
+						<xsd:element name="SURVEY_TYPE" type="ihse_name_code" minOccurs="0"/>
+						<xsd:element name="TYPE" type="ihse_name_code" minOccurs="0"/>
+						<xsd:element name="REMARK" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="ATTACHMENT" type="ihse_attachment" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="TYPE_NAME" type="xsd:string" use="optional"/>
+		<xsd:attribute name="TYPE_CODE" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_footage">
+		<xsd:sequence>
+			<xsd:element name="NORTH_SOUTH" type="ihse_distance" minOccurs="0"/>
+			<xsd:element name="NORTH_SOUTH_START_LINE" type="ihse_name_code" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The north-south starting line for well location footage measurements; for
+                        example, FEL (from east line), FNN (from most northerly north line), etc.
+                    </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="EAST_WEST" type="ihse_distance" minOccurs="0"/>
+			<xsd:element name="EAST_WEST_START_LINE" type="ihse_name_code" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The east-west starting lines for well location footage measurements; for example,
+                        FEL (from east line), FNN (from most northerly north line), etc.
+                    </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="REFERENCE" type="ihse_name_code" minOccurs="0"/>
+			<xsd:element name="SPOT" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Code identifying a quartered division of a section, also known as the aliquot
+                        description (e.g., NW
+                        SE NE, C SW, etc.).
+                    </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="QUALITY" type="ihse_name_code" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Indicates if the footage is interpreted or an actual measured value.
+                    </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="CONCATENATED" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_cost">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="DESCRIPTION" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="EXCHANGE" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="EXCHANGE_QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="EXCHANGE_QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_unit_cost">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_age">
+		<xsd:sequence>
+			<xsd:element name="NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="ALTERNATE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="GROUP_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="GROUP_ALTERNATE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="GROUP_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="RANK" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="MILLION_YEARS" type="xsd:double" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_choke">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="DESCRIPTION" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="TYPE_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="TYPE_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_boundary">
+		<xsd:sequence>
+			<xsd:element name="HEADER">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SOURCE" type="xsd:string"/>
+						<xsd:element name="DATA_PROVIDER" type="ihse_name_code"/>
+						<xsd:element name="OBJECT" type="ihse_name_code"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="INCLUDE" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="OBJECT" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="POINT" type="ihse_location" minOccurs="4" maxOccurs="unbounded"/>
+						<xsd:element name="EXCLUDE" minOccurs="0" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="POINT" type="ihse_location" minOccurs="4" maxOccurs="unbounded"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_trace">
+		<xsd:sequence>
+			<xsd:element name="OBJECT" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="POINT" type="ihse_location" minOccurs="2" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_concentration">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_city">
+		<xsd:sequence>
+			<xsd:element name="NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="ALTERNATE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="PRIMARY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="PRIMARY_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_geopolitical">
+		<xsd:sequence>
+			<xsd:element name="SOURCE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="DATA_PROVIDER" type="ihse_name_code" minOccurs="0"/>
+			<xsd:element name="STREET" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="CITY" type="ihse_city" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>City entity is located in.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="POSTAL" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Postal code for location.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="COUNTY" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>The primary geographic division within a state (e.g., county, parish, or small
+                        designation).
+                    </xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="NAME" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="ALTERNATE" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="CODE" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="GROUP_NAME" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="GROUP_ALTERNATE" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="GROUP_CODE" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="RANK" type="xsd:double" minOccurs="0"/>
+						<xsd:element name="CONCATENATED" type="xsd:string" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="DISTRICT" type="ihse_name_code" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Local petroleum administrative area. (eg FSS Zone, Texas District, etc.)
+                    </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PROVINCE_STATE" type="ihse_name_code" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The primary division of land within a country (e.g., state, province or
+                        department).
+                    </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DATA_ZONE" type="ihse_name_code" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Smaller scale geographic area, (e. g. North Slope Alaska)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="WELL_PROD_ZONE" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="REMARK" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Well prod zone remark.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="COUNTRY" type="ihse_name_code" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The division of land, political nation or territory.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="REGION" type="ihse_name_code" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Large scale geographic region (e. g. Africa).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="RANK" type="xsd:double" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Importance relative to other geopolitical areas.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PERCENTAGE" type="xsd:double" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Percentage of parent entity within geopolitical area.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="NAME_ALTERNATE" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Alternate name for the entity within geopolitical unit.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_owner">
+		<xsd:sequence>
+			<xsd:element name="LESSOR" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="OWNER" minOccurs="0" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="NAME" minOccurs="0"/>
+									<xsd:element name="ADDRESS" minOccurs="0" maxOccurs="unbounded"/>
+									<xsd:element name="INTEREST_AND_MINERAL" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+									<xsd:element name="JOINT" type="ihse_decimal" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Percent</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="INTEREST" type="ihse_decimal" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Percent</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_participant">
+		<xsd:sequence>
+			<xsd:element name="SOURCE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="NUMBER" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="NAME" type="ihse_name_code" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The participant in the well.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="INTEREST" type="xsd:double" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Percentage of ownership held by they participant.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TYPE" type="ihse_name_code" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Type of interest the participant has under the terms of the lease
+                    </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="REMARK" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Remarks or comments pertaining to well ownership.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ATTACHMENT" type="ihse_attachment" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Reference to an external file that contains additional ownership data.
+                    </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_interest">
+		<xsd:sequence>
+			<xsd:element name="PERCENTAGE" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="DESCRIPTION" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_commitment">
+		<xsd:sequence>
+			<xsd:element name="SOURCE" type="xsd:string"/>
+			<xsd:element name="DATA_PROVIDER" type="ihse_name_code"/>
+			<xsd:element name="NUMBER" type="xsd:double" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>sequence number of commitment</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TYPE" type="ihse_name_code" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Type of commitment</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="STATUS" type="ihse_name_code" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Type of commitment</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="INVESTMENT" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The amount of money to be invested</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="TYPE" type="ihse_name_code" minOccurs="0"/>
+						<xsd:element name="AMOUNT" type="ihse_cost" minOccurs="0"/>
+						<xsd:element name="EXCH_RATE_TO_US_DOLLAR" type="xsd:double" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="DATES" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="START" type="ihse_date" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Start of commitment</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="END" type="ihse_date" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>End of commitment</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="FIRST_REPORTED" type="ihse_date" minOccurs="0"/>
+						<xsd:element name="LAST_ACTIVITY" type="ihse_date" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="PERIOD" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Details of the period of the commitment</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="TYPE" type="ihse_name_code" minOccurs="0"/>
+						<xsd:element name="NUMB_OF_YEARS" type="xsd:double" minOccurs="0"/>
+						<xsd:element name="REMARKS" type="xsd:string" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="DRILLING" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>details of what owner id committed to do.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="MIN_DEPTH_OF_WELLS" type="ihse_depth" minOccurs="0"/>
+						<xsd:element name="MIN_FOOT_TO_BE_DRILLD" type="ihse_depth" minOccurs="0"/>
+						<xsd:element name="NUMB_OF_WELLS_TO_BE_DRILLD" type="xsd:double" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="SURVEY" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The type of survey to be carried out</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="TYPE" type="ihse_name_code" minOccurs="0"/>
+						<xsd:element name="METHOD" type="ihse_name_code" minOccurs="0"/>
+						<xsd:element name="AREA" type="ihse_area" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Survey area</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="LENGTH" type="ihse_distance" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Survey lines</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="REMARKS" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Remarks</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_gradient">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="ihse_decimal" minOccurs="0"/>
+			<xsd:element name="DEPTH" type="ihse_depth" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_energy_generation">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="PERCENTAGE" type="xsd:decimal" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Percentage of total generation from this source.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_energy">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="VALUE_ORIGINAL" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="UOM_ORIGINAL" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="QUALITY_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_remark">
+		<xsd:sequence>
+			<xsd:element name="SOURCE" type="xsd:string"/>
+			<xsd:element name="DATA_PROVIDER" type="ihse_name_code"/>
+			<xsd:element name="NUMBER" type="xsd:long" minOccurs="0"/>
+			<xsd:element name="TYPE" type="ihse_name_code" minOccurs="0"/>
+			<xsd:element name="SUBJECT" type="ihse_name_code" minOccurs="0"/>
+			<xsd:element name="REMARK" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_angle">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="DIRECTION" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="REFERENCE_NAME" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="REFERENCE_CODE" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_investment">
+		<xsd:sequence>
+			<xsd:element name="TYPE" type="ihse_name_code"/>
+			<xsd:element name="AMOUNT" type="ihse_cost"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ihse_reflectance">
+		<xsd:sequence>
+			<xsd:element name="VALUE" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="UOM" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

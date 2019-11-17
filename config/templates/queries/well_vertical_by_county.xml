@@ -28,13 +28,13 @@
     </criteria>
     <criteria type="group" groupId="" ignored="false">
         <domain>US</domain>
-        <datatype>{data_type}</datatype>
-        <attribute_group>{data_type}</attribute_group>
+        <datatype>Well</datatype>
+        <attribute_group>Well</attribute_group>
         <attribute>Hole Direction</attribute>
-        <filter logic="include">
+        <filter logic="exclude">
             <value id="0" ignored="false">
                 <group_actual>
-                    <operator logic="and">
+                    <operator logic="and" exclude="true">
                         <condition logic="equals">
                             <attribute>code</attribute>
                             <value_list>
@@ -43,7 +43,7 @@
                         </condition>
                     </operator>
                 </group_actual>
-                <group_display>name = HORIZONTAL</group_display>
+                <group_display>exclude name = HORIZONTAL</group_display>
             </value>
         </filter>
     </criteria>

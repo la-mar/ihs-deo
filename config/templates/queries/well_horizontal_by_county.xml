@@ -29,7 +29,7 @@
     <criteria type="group" groupId="" ignored="false">
         <domain>US</domain>
         <datatype>{data_type}</datatype>
-        <attribute_group>{data_type}</attribute_group>
+        <attribute_group>Well</attribute_group>
         <attribute>Hole Direction</attribute>
         <filter logic="include">
             <value id="0" ignored="false">
