@@ -76,7 +76,7 @@ cat > /etc/mongod.conf <<- EOF
 
 # Where and how to store data.
 storage:
-#  dbPath: /data/db
+  dbPath: /data/db
   journal:
     enabled: true
 #  engine:
@@ -111,6 +111,8 @@ security:
 EOF
 
 echo "Creating admin user"
+echo "username: ${db_username}"
+echo "password: ${db_password}"
 mongo admin <<- EOF
 use admin
 var user = {
@@ -126,7 +128,7 @@ var user = {
 db.createUser(user);
 exit
 EOF
-
+sleep 3
 
 service mongod restart
 
