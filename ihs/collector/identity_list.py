@@ -1,7 +1,13 @@
 from typing import Union, Any, List
 import logging
 
-from api.models import WellMaster, ProducingEntityMaster
+from config import HoleDirection
+from api.models import (
+    WellMasterHorizontal,
+    WellMasterVertical,
+    ProducingEntityMasterHorizontal,
+    ProducingEntityMasterVertical,
+)
 
 
 logger = logging.getLogger(__name__)
@@ -54,18 +60,28 @@ class IdentityList:
 
 
 class WellList(IdentityList):
-
-    model = WellMaster
-
-    def __init__(self, key: str):
+    def __init__(self, key: str, hole_direction: str):
+        if hole_direction == HoleDirection.H.name:
+            self.model = WellMasterHorizontal
+        elif hole_direction == HoleDirection.V.name:
+            self.model = WellMasterVertical
+        else:
+            raise ValueError(
+                f"Invalid value for hole_direction ({hole_direction}) -- Valid options are {HoleDirection.member_names()}"
+            )
         super().__init__(self.model, key)
 
 
 class ProducingEntityList(IdentityList):
-
-    model = ProducingEntityMaster
-
-    def __init__(self, key: str):
+    def __init__(self, key: str, hole_direction: str):
+        if hole_direction == HoleDirection.H.name:
+            self.model = ProducingEntityMasterHorizontal
+        elif hole_direction == HoleDirection.V.name:
+            self.model = ProducingEntityMasterVertical
+        else:
+            raise ValueError(
+                f"Invalid value for hole_direction ({hole_direction}) -- Valid options are {HoleDirection.member_names()}"
+            )
         super().__init__(self.model, key)
 
 

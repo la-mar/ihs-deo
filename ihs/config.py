@@ -100,6 +100,18 @@ class Enum(enum.Enum):
     def has_member(cls, value: str):
         return value in cls.value_map().keys()
 
+    @classmethod
+    def member_values(cls):
+        return [v.value for v in self.value_map().values()]
+
+    @classmethod
+    def member_names(cls):
+        return [v.name for v in self.value_map().values()]
+
+    @classmethod
+    def members(cls):
+        return self.value_map.values()
+
 
 class IdentityTemplates(Enum):
     WELL = "Well ID List"
@@ -109,6 +121,11 @@ class IdentityTemplates(Enum):
 class ExportDataTypes(Enum):
     WELL = "Well"
     PRODUCTION = "Production Allocated"
+
+
+class HoleDirection(Enum):
+    H = "horizontal"
+    V = "vertical"
 
 
 class BaseConfig:

@@ -2,105 +2,72 @@ import datetime
 import mongoengine as me
 
 
-class WellMaster(me.Document):
-    meta = {"collection": "well_master", "ordering": ["-last_update"]}
+class WellMasterHorizontal(me.Document):
+    meta = {"collection": "well_master_horizontal", "ordering": ["-last_update"]}
     name = me.StringField(primary_key=True)
     ids = me.ListField()
     count = me.IntField()
     last_update = me.DateTimeField(default=datetime.datetime.now)
 
 
-class ProducingEntityMaster(me.Document):
-    meta = {"collection": "producing_entity_master", "ordering": ["-last_update"]}
+class WellMasterVertical(me.Document):
+    meta = {"collection": "well_master_vertical", "ordering": ["-last_update"]}
+    name = me.StringField(primary_key=True)
+    ids = me.ListField()
+    count = me.IntField()
+    last_update = me.DateTimeField(default=datetime.datetime.now)
+
+
+class ProducingEntityMasterHorizontal(me.Document):
+    meta = {
+        "collection": "producing_entity_master_horizontal",
+        "ordering": ["-last_update"],
+    }
     identification = me.StringField(primary_key=True)
     count = me.IntField()
     last_update = me.DateTimeField(default=datetime.datetime.now)
 
 
-class Well(me.DynamicDocument):
-    meta = {"collection": "wells", "ordering": ["-last_update"]}
+class ProducingEntityMasterVertical(me.Document):
+    meta = {
+        "collection": "producing_entity_master_vertical",
+        "ordering": ["-last_update"],
+    }
+    identification = me.StringField(primary_key=True)
+    count = me.IntField()
+    last_update = me.DateTimeField(default=datetime.datetime.now)
+
+
+class WellHorizontal(me.DynamicDocument):
+    meta = {"collection": "well_horizontal", "ordering": ["-last_update"]}
     identification = me.StringField(primary_key=True)
     api14 = me.StringField(unique=True)
     api10 = me.StringField()
-    last_update = me.DateTimeField()
+    last_update = me.DateTimeField(default=datetime.datetime.now)
 
 
-class Production(me.DynamicDocument):
-    meta = {"collection": "production", "ordering": ["-last_update"]}
+class WellVertical(me.DynamicDocument):
+    meta = {"collection": "well_vertical", "ordering": ["-last_update"]}
     identification = me.StringField(primary_key=True)
     api14 = me.StringField(unique=True)
     api10 = me.StringField()
-    last_update = me.DateTimeField()
+    last_update = me.DateTimeField(default=datetime.datetime.now)
 
 
-# class WellHeader(me.DynamicDocument):
-#     meta = {"collection": "well_header", "ordering": ["-last_update"]}
-#     uwi = me.StringField(primary_key=True)
-#     api14 = me.StringField(unique=True)
-#     last_update = me.DateTimeField()
+class ProductionHorizontal(me.DynamicDocument):
+    meta = {"collection": "production_horizontal", "ordering": ["-last_update"]}
+    identification = me.StringField(primary_key=True)
+    api14 = me.StringField(unique=True)
+    api10 = me.StringField()
+    last_update = me.DateTimeField(default=datetime.datetime.now)
 
 
-# class WellLocation(me.DynamicDocument):
-#     meta = {"collection": "well_location", "ordering": ["-last_update"]}
-#     uwi = me.StringField(primary_key=True)
-#     api14 = me.StringField(unique=True)
-#     last_update = me.DateTimeField()
-
-
-# class WellDrilling(me.DynamicDocument):
-#     meta = {"collection": "well_drilling", "ordering": ["-last_update"]}
-#     uwi = me.StringField(primary_key=True)
-#     api14 = me.StringField(unique=True)
-#     last_update = me.DateTimeField()
-
-
-# class WellMechanical(me.DynamicDocument):
-#     meta = {"collection": "well_mechanical", "ordering": ["-last_update"]}
-#     uwi = me.StringField(primary_key=True)
-#     api14 = me.StringField(unique=True)
-#     last_update = me.DateTimeField()
-
-
-# class WellGeology(me.DynamicDocument):
-#     meta = {"collection": "well_geology", "ordering": ["-last_update"]}
-#     uwi = me.StringField(primary_key=True)
-#     api14 = me.StringField(unique=True)
-#     last_update = me.DateTimeField()
-
-
-# class WellGeophysics(me.DynamicDocument):
-#     meta = {"collection": "well_geophysics", "ordering": ["-last_update"]}
-#     uwi = me.StringField(primary_key=True)
-#     api14 = me.StringField(unique=True)
-#     last_update = me.DateTimeField()
-
-
-# class WellEngineering(me.DynamicDocument):
-#     meta = {"collection": "well_engineering", "ordering": ["-last_update"]}
-#     uwi = me.StringField(primary_key=True)
-#     api14 = me.StringField(unique=True)
-#     last_update = me.DateTimeField()
-
-
-# class WellTest(me.DynamicDocument):
-#     meta = {"collection": "well_test", "ordering": ["-last_update"]}
-#     uwi = me.StringField(primary_key=True)
-#     api14 = me.StringField(unique=True)
-#     last_update = me.DateTimeField()
-
-
-# class WellTreatmentSummary(me.DynamicDocument):
-#     meta = {"collection": "well_treatment_summary", "ordering": ["-last_update"]}
-#     uwi = me.StringField(primary_key=True)
-#     api14 = me.StringField(unique=True)
-#     last_update = me.DateTimeField()
-
-
-# class WellContent(me.DynamicDocument):
-#     meta = {"collection": "well_content", "ordering": ["-last_update"]}
-#     uwi = me.StringField(primary_key=True)
-#     api14 = me.StringField(unique=True)
-#     last_update = me.DateTimeField()
+class ProductionVertical(me.DynamicDocument):
+    meta = {"collection": "production_vertical", "ordering": ["-last_update"]}
+    identification = me.StringField(primary_key=True)
+    api14 = me.StringField(unique=True)
+    api10 = me.StringField()
+    last_update = me.DateTimeField(default=datetime.datetime.now)
 
 
 if __name__ == "__main__":

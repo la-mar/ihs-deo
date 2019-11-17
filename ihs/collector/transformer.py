@@ -129,30 +129,22 @@ class ProductionTransformer(Transformer):
 
 if __name__ == "__main__":
 
-    from collector.endpoint import load_from_config
     from config import get_active_config
-    from collector.xmlparser import XMLParser
+    from collector import XMLParser, Endpoint
+    from collector.tasks import run_endpoint_task, get_job_results
+    from util import to_json
+    from time import sleep
 
-    logging.basicConfig()
-    logger.setLevel(10)
+    logging.basicConfig(level=20)
 
     conf = get_active_config()
-    endpoints = load_from_config(conf)
-    endpoint = endpoints.get("wells")
+    endpoints = Endpoint.load_from_config(conf)
 
+    endpoint_name = "production"
+    task_name = "driftwood"
+    job = [x for x in run_endpoint_task(endpoint_name, task_name) if x is not None][0]
+    sleep(5)
+    xml = get_job_results(job)
     parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
-
-    # parser.add_parser(
-    #     ruleset=conf.PARSER_CONFIG["parsers"]["default"]["rules"], name="default"
-    # )
-
-    xml = util.load_xml("test/data/well_header_short.xml")
-
     document = parser.parse(xml)
-    wellset = document.get("well_set", document)
-    wellbores = wellset.get("wellbore", wellset)
-
-    transformed_wellbores: List[OrderedDict] = []
-    for wb in wellbores:
-        transformed_wellbores.append(WellboreTransformer.transform(wb))
-
+    to_json(document, "test/data/production_example.json")

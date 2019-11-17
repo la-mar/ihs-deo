@@ -70,23 +70,24 @@ def get_job_results(job: Union[ExportJob, dict]) -> bytes:
 
 
 def collect_data(job: ExportJob, xml: bytes):
-    parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
-    document = parser.parse(xml)
-    collector = Collector(endpoints[job.endpoint].model)
-    if job.data_type == ExportDataTypes.WELL.value:
-        data = WellboreTransformer.extract_from_well_set(document)
-    elif job.data_type == ExportDataTypes.PRODUCTION.value:
-        data = ProductionTransformer.extract_from_production_set(document)
-    collector.save(data)
+    if xml:
+        parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
+        document = parser.parse(xml)
+        collector = Collector(endpoints[job.endpoint].model)
+        if job.data_type == ExportDataTypes.WELL.value:
+            data = WellboreTransformer.extract_from_well_set(document)
+        elif job.data_type == ExportDataTypes.PRODUCTION.value:
+            data = ProductionTransformer.extract_from_production_set(document)
+        collector.save(data)
 
 
 def collect_identities(job: ExportJob, data: bytes) -> IdentityList:
     interface = None
     if job.data_type == ExportDataTypes.WELL.value:
-        interface = WellList(job.name)
+        interface = WellList(job.name, job.criteria.get("hole_direction"))
         interface.ids = data
     elif job.data_type == ExportDataTypes.PRODUCTION.value:
-        interface = ProducingEntityList(job.name)
+        interface = ProducingEntityList(job.name, job.criteria.get("hole_direction"))
         interface.ids = data
 
     return interface
@@ -112,9 +113,10 @@ if __name__ == "__main__":
     app = create_app()
     app.app_context().push()
 
-    endpoint_name = "well_master"
+    endpoint_name = "well_master_horizontal"
     task_name = "sync"
     results = [x for x in run_endpoint_task(endpoint_name, task_name) if x is not None]
+    job = results[0]
     [collect(r) for r in results]
     # [r.to_dict().get("name") for r in results]
 

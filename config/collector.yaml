@@ -160,15 +160,18 @@ counties: &counties
     state_code: 42
 
 endpoints:
-  well_master:
+  well_master_horizontal:
     enabled: true
     version: v10
-    model: api.models.WellMaster
+    model: api.models.WellMasterHorizontal
     exclude: []
     normalize: false
+    propagate_to_task: true
     options:
       data_type: Well
       template: Well ID List
+      criteria:
+        hole_direction: H
     tasks:
       sync:
         cron:
@@ -180,35 +183,87 @@ endpoints:
             <<: *counties
       # full:
       #   <<: *default_full
-  wells:
+  well_horizontal:
     enabled: true
     version: v10
-    model: api.models.Well
+    model: api.models.WellHorizontal
     exclude: []
     normalize: false
     options:
       data_type: Well
       template: EnerdeqML Well
+      criteria:
+        hole_direction: H
+    tasks:
+      sync:
+        <<: *default_sync
+        options:
+          query_path: well_horizontal_by_county.xml
+          matrix:
+            <<: *counties
+      # driftwood:
+      #   <<: *default_sync
+      #   options:
+      #     query_path: well_horizontal_driftwood_all.xml
+
+  well_master_vertical:
+    enabled: true
+    version: v10
+    model: api.models.WellMasterVertical
+    exclude: []
+    normalize: false
+    propagate_to_task: true
+    options:
+      data_type: Well
+      template: Well ID List
+      criteria:
+        hole_direction: V
+    tasks:
+      sync:
+        cron:
+          minute: 0
+          hour: 0
+        options:
+          query_path: well_vertical_by_county.xml
+          matrix:
+            <<: *counties
+  well_vertical:
+    enabled: true
+    version: v10
+    model: api.models.WellVertical
+    exclude: []
+    normalize: false
+    options:
+      data_type: Well
+      template: EnerdeqML Well
+      criteria:
+        hole_direction: V
+    tasks:
+      sync:
+        <<: *default_sync
+        options:
+          query_path: well_vertical_by_county.xml
+          matrix:
+            <<: *counties
+      # driftwood:
+      #   <<: *default_sync
+      #   options:
+      #     query_path: well_vertical_driftwood_all.xml
+  production:
+    enabled: false
+    version: v10
+    model: api.models.ProductionHorizontal
+    exclude: []
+    normalize: false
+    options:
+      data_type: Production Allocated
+      template: EnerdeqML Production
+      criteria:
+        hole_direction: H
     tasks:
       driftwood:
         <<: *default_sync
         options:
-          query_path: well_driftwood_all.xml
-      # full:
-      #   <<: *default_full
-  # production:
-  #   enabled: true
-  #   version: v10
-  #   model: api.models.ProductionAllocated
-  #   exclude: []
-  #   normalize: false
-  #   options:
-  #     data_type: Production Allocated
-  #     template: EnerdeqML Production
-  #   tasks:
-  #     driftwood:
-  #       <<: *default_sync
-  #       options:
-  #         query_path: production_driftwood_all.xml
-  #     full:
-  #       <<: *default_full
+          query_path: production_horizontal_driftwood_all.xml
+      full:
+        <<: *default_full
