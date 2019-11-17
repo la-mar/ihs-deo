@@ -4,8 +4,6 @@ import logging
 from typing import Dict, Union, List
 from collections import OrderedDict
 
-from collector.endpoint import Endpoint
-
 logger = logging.getLogger(__name__)
 
 
@@ -23,6 +21,7 @@ class Collector(object):
                 self.model(**doc).save()
                 succeeded += 1
             except Exception as e:
+                logger.info("Failed saving document to %s", self.model)
                 failed.append(e)
 
         if len(failed) > 0:
@@ -33,12 +32,18 @@ class Collector(object):
 if __name__ == "__main__":
     from ihs import create_app
     from api.models import Well, Production
-    from collector.export_parameter import ExportParameter
-    from collector.builder import ExportBuilder, ExportRetriever
-    from collector.endpoint import load_from_config
+    from collector import (
+        XMLParser,
+        Endpoint,
+        ExportParameter,
+        ExportBuilder,
+        ExportJob,
+        ExportParameter,
+        ExportRetriever,
+        WellboreTransformer,
+        ProductionTransformer,
+    )
     from config import get_active_config
-    from collector.xmlparser import XMLParser
-    from collector.transformer import WellboreTransformer
     from util import to_json
     from time import sleep
 
@@ -47,28 +52,29 @@ if __name__ == "__main__":
 
     conf = get_active_config()
     url = conf.API_BASE_URL
-    endpoints = load_from_config(conf)
+    endpoints = Endpoint.load_from_config(conf)
 
     # # ? well example
     endpoint = endpoints["wells"]
-    c = Collector(endpoint)
     requestor = ExportBuilder(url, endpoint, functions={})
     task = endpoint.tasks["driftwood"]
-    # ep = ExportParameter(**task.options)
-    # jid = requestor.submit(ep)
+    ep = ExportParameter(**list(task.options)[0])
 
-    # retr = ExportRetriever(jid, base_url=url, endpoint=endpoint)
+    #
+    jid = requestor.submit(ep)
 
-    # sleep(5)
-    # xml = retr.get()
-    # parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
-    # document = parser.parse(xml)
-    # wellbores = WellboreTransformer.extract_from_wellset(document)
-    # to_json(wellbores, "test/data/wellbores_parsed.json")
-    # print(f"Parsed {len(wellbores)} wellbores")
+    retr = ExportRetriever(jid, base_url=url, endpoint=endpoint)
 
-    # for wb in wellbores:
-    #     Well(**wb).save()
+    xml = retr.get()
+    parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
+    document = parser.parse(xml)
+    wellbores = WellboreTransformer.extract_from_wellset(document)
+    to_json(wellbores, "test/data/wellbores_parsed.json")
+    print(f"Parsed {len(wellbores)} wellbores")
+    c = Collector(endpoint)
+
+    for wb in wellbores:
+        Well(**wb).save()
 
     # ? production example
     # endpoint = endpoints["production"]
@@ -124,7 +130,7 @@ if __name__ == "__main__":
     sleep(5)
     ids = retr.get()
 
-    to_json(document, "test/data/well_id_list_permian.json")
+    # to_json(document, "test/data/well_id_list_permian.json")
 
     import pandas as pd
 
