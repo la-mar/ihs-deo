@@ -5,11 +5,7 @@ default_schedule: &default_schedule # seconds: 15
 job_defaults:
   sync: &default_sync
     mode: sync
-    cron:
-      minute: 0
-      hour: 0
-  # hourly:
-  #   mode:
+    seconds: 60
   full: &default_full
     mode: full
     cron:
@@ -25,52 +21,31 @@ default_status: &default_status
 
 counties: &counties
   tx-andrews:
-    county_code: 003
-    state_code: 42
-  tx-hall:
-    county_code: 191
-    state_code: 42
-  tx-hardeman:
-    county_code: 197
+    county_code: "003"
     state_code: 42
   tx-bailey:
-    county_code: 017
+    county_code: "017"
     state_code: 42
   tx-crosby:
     county_code: 107
     state_code: 42
   tx-borden:
-    county_code: 033
-    state_code: 42
-  tx-briscoe:
-    county_code: 045
+    county_code: "033"
     state_code: 42
   tx-brown:
-    county_code: 049
-    state_code: 42
-  tx-childress:
-    county_code: 075
+    county_code: "049"
     state_code: 42
   tx-cochran:
-    county_code: 079
-    state_code: 42
-  tx-foard:
-    county_code: 155
+    county_code: "079"
     state_code: 42
   tx-dawson:
     county_code: 115
     state_code: 42
   tx-coke:
-    county_code: 081
-    state_code: 42
-  tx-gillespie:
-    county_code: 171
-    state_code: 42
-  tx-coleman:
-    county_code: 083
+    county_code: "081"
     state_code: 42
   tx-concho:
-    county_code: 095
+    county_code: "095"
     state_code: 42
   tx-cottle:
     county_code: 101
@@ -86,15 +61,6 @@ counties: &counties
     state_code: 42
   tx-ector:
     county_code: 135
-    state_code: 42
-  tx-edwards:
-    county_code: 137
-    state_code: 42
-  tx-fisher:
-    county_code: 151
-    state_code: 42
-  tx-kerr:
-    county_code: 265
     state_code: 42
   tx-garza:
     county_code: 169
@@ -132,9 +98,6 @@ counties: &counties
   tx-king:
     county_code: 269
     state_code: 42
-  tx-knox:
-    county_code: 275
-    state_code: 42
   tx-lamb:
     county_code: 279
     state_code: 42
@@ -146,9 +109,6 @@ counties: &counties
     state_code: 42
   tx-martin:
     county_code: 317
-    state_code: 42
-  tx-mason:
-    county_code: 319
     state_code: 42
   tx-mcculloch:
     county_code: 307
@@ -165,17 +125,11 @@ counties: &counties
   tx-motley:
     county_code: 345
     state_code: 42
-  tx-nolan:
-    county_code: 353
-    state_code: 42
   tx-reagan:
     county_code: 383
     state_code: 42
   tx-runnels:
     county_code: 399
-    state_code: 42
-  tx-san saba:
-    county_code: 411
     state_code: 42
   tx-schleicher:
     county_code: 413
@@ -195,20 +149,37 @@ counties: &counties
   tx-terry:
     county_code: 445
     state_code: 42
-  tx-tom green:
+  tx-tomgreen:
     county_code: 451
     state_code: 42
   tx-upton:
     county_code: 461
-    state_code: 42
-  tx-val verde:
-    county_code: 465
     state_code: 42
   tx-yoakum:
     county_code: 501
     state_code: 42
 
 endpoints:
+  well_master:
+    enabled: true
+    version: v10
+    model: api.models.WellMaster
+    exclude: []
+    normalize: false
+    options:
+      data_type: Well
+      template: Well ID List
+    tasks:
+      sync:
+        cron:
+          minute: 0
+          hour: 0
+        options:
+          query_path: well_horizontal_by_county.xml
+          matrix:
+            <<: *counties
+      # full:
+      #   <<: *default_full
   wells:
     enabled: true
     version: v10
@@ -223,29 +194,21 @@ endpoints:
         <<: *default_sync
         options:
           query_path: well_driftwood_all.xml
-      sync_identities:
-        cron:
-          minute: 0
-          hour: 0
-        options:
-          query_path: well_horizontal_by_county.xml
-          matrix:
-            <<: *counties
-      full:
-        <<: *default_full
-  production:
-    enabled: true
-    version: v10
-    model: api.models.ProductionAllocated
-    exclude: []
-    normalize: false
-    options:
-      data_type: Production Allocated
-      template: EnerdeqML Production
-    tasks:
-      driftwood:
-        <<: *default_sync
-        options:
-          query_path: production_driftwood_all.xml
-      full:
-        <<: *default_full
+      # full:
+      #   <<: *default_full
+  # production:
+  #   enabled: true
+  #   version: v10
+  #   model: api.models.ProductionAllocated
+  #   exclude: []
+  #   normalize: false
+  #   options:
+  #     data_type: Production Allocated
+  #     template: EnerdeqML Production
+  #   tasks:
+  #     driftwood:
+  #       <<: *default_sync
+  #       options:
+  #         query_path: production_driftwood_all.xml
+  #     full:
+  #       <<: *default_full
