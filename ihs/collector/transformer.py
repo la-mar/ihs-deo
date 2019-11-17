@@ -4,6 +4,7 @@ import hashlib
 import logging
 from collections import OrderedDict
 from typing import Callable, Dict, List, Union  # pylint: disable=unused-import
+from abc import abstractclassmethod
 
 
 import util
@@ -11,7 +12,39 @@ import util
 logger = logging.getLogger(__name__)
 
 
-class WellboreTransformer:
+class Transformer:
+    @classmethod
+    def add_document_hash(cls, data: OrderedDict) -> OrderedDict:
+        data["md5"] = hashlib.md5(str(data).encode()).hexdigest()
+        data.move_to_end("md5", last=False)
+        return data
+
+    @abstractclassmethod
+    def transform(cls, data: OrderedDict) -> OrderedDict:
+        pass
+
+    @abstractclassmethod
+    def extract_metadata(cls, data: OrderedDict) -> OrderedDict:
+        pass
+
+    @abstractclassmethod
+    def extract_last_updated_date(cls, data: OrderedDict) -> OrderedDict:
+        pass
+
+    @abstractclassmethod
+    def copy_identifier_to_root(cls, data: OrderedDict) -> OrderedDict:
+        pass
+
+    @abstractclassmethod
+    def copy_metadata_to_root(cls, data: OrderedDict) -> OrderedDict:
+        pass
+
+    @abstractclassmethod
+    def copy_last_update_to_root(cls, data: OrderedDict) -> OrderedDict:
+        pass
+
+
+class WellboreTransformer(Transformer):
     @classmethod
     def extract_metadata(cls, data: OrderedDict) -> OrderedDict:
         return data.get("metadata", {})
@@ -26,7 +59,7 @@ class WellboreTransformer:
         )
 
     @classmethod
-    def copy_api_to_root(cls, data: OrderedDict) -> OrderedDict:
+    def copy_identifier_to_root(cls, data: OrderedDict) -> OrderedDict:
         """ Moves a well's identification number (api) to the top level of
             the dictionary."""
 
@@ -60,21 +93,7 @@ class WellboreTransformer:
         return data
 
     @classmethod
-    def add_document_hash(cls, data: OrderedDict) -> OrderedDict:
-        data["md5"] = hashlib.md5(str(data).encode()).hexdigest()
-        data.move_to_end("md5", last=False)
-        return data
-
-    @classmethod
-    def transform(cls, data: OrderedDict) -> OrderedDict:
-        parsed = cls.copy_metadata_to_root(data)
-        parsed = cls.copy_last_update_to_root(parsed)
-        parsed = cls.copy_api_to_root(parsed)
-        parsed = cls.add_document_hash(parsed)
-        return parsed
-
-    @classmethod
-    def extract_from_wellset(cls, document: OrderedDict) -> List[OrderedDict]:
+    def extract_from_well_set(cls, document: OrderedDict) -> List[OrderedDict]:
         wellset = document.get("well_set", document)
         wellbores = wellset.get("wellbore", wellset)
 
@@ -84,6 +103,28 @@ class WellboreTransformer:
 
         logger.info(f"Extracted {len(transformed_wellbores)} from document")
         return transformed_wellbores
+
+    @classmethod
+    def transform(cls, data: OrderedDict) -> OrderedDict:
+        parsed = cls.copy_metadata_to_root(data)
+        parsed = cls.copy_last_update_to_root(parsed)
+        parsed = cls.copy_identifier_to_root(parsed)
+        parsed = cls.add_document_hash(parsed)
+        return parsed
+
+
+class ProductionTransformer(Transformer):
+    @classmethod
+    def extract_metadata(cls, data: OrderedDict) -> OrderedDict:
+        pass
+
+    @classmethod
+    def extract_last_updated_date(cls, data: OrderedDict) -> OrderedDict:
+        pass
+
+    @classmethod
+    def extract_from_production_set(cls, document: OrderedDict) -> List[OrderedDict]:
+        pass
 
 
 if __name__ == "__main__":
