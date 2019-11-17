@@ -35,7 +35,7 @@ data "aws_iam_policy_document" "allow_ecs_access_to_sqs" {
     condition {
       test     = "ArnEquals"
       variable = "ecs:service"
-      values   = [aws_ecs_service.iwell.id]
+      values   = [aws_ecs_service.ihs.id]
     }
     # condition {
     #   test     = "StringEquals"
