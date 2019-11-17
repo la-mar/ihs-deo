@@ -46,6 +46,7 @@ docker = "*"
 boto3 = "*"
 hypothesis = "*"
 requests_mock = "*"
+redis = "^3.3.11"
 
 [tool.poetry.scripts]
 ihs = "ihs.manage:main"
