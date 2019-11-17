@@ -97,16 +97,30 @@ class Builder(SoapRequestor):
 
         return self.service.GetExportTemplates(self.domain or domain, data_type)
 
+    def delete_job(self, job: Union[ExportJob, str]) -> bool:
+        if isinstance(job, ExportJob):
+            job = job.job_id
+        return self.service.Delete(job)
+
+    def job_exists(self, job: Union[ExportJob, str]) -> bool:
+        if isinstance(job, ExportJob):
+            job = job.job_id
+        return self.service.Exists(job)
+
 
 class ExportBuilder(Builder):
     def __init__(self, *args, **kwargs):
         super().__init__(client_type="exportbuilder", *args, **kwargs)
 
-    def submit(self, export_param: ExportParameter) -> Union[ExportJob, None]:
+    def submit(
+        self, export_param: ExportParameter, metadata: dict = None
+    ) -> Union[ExportJob, None]:
 
         try:
             job_id = self.build(export_param.params, export_param.target)
-            return ExportJob(job_id)
+            return ExportJob(
+                job_id=job_id, **{**(metadata or {}), **dict(export_param)}
+            )
         except Exception as e:
             logger.error(
                 f"Error getting job id from service for data type {export_param.data_type} {e}"
