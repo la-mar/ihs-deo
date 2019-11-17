@@ -11,7 +11,7 @@ import pandas as pd
 import tomlkit
 import yaml
 from attrdict import AttrDict
-from enum import Enum
+import enum
 
 
 """ Optional Pandas display settings"""
@@ -91,6 +91,26 @@ project = pkg_meta.get("name")
 version = pkg_meta.get("version")
 
 
+class Enum(enum.Enum):
+    @classmethod
+    def value_map(cls):
+        return cls._value2member_map_  # pylint: disable=no-member
+
+    @classmethod
+    def has_member(cls, value: str):
+        return value in cls.value_map().keys()
+
+
+class IdentityTemplates(Enum):
+    WELL = "Well ID List"
+    PRODUCTION = "Production ID List"
+
+
+class ExportDataTypes(Enum):
+    WELL = "Well"
+    PRODUCTION = "Production Allocated"
+
+
 class BaseConfig:
     """Base configuration"""
 
@@ -138,11 +158,11 @@ class BaseConfig:
     # DATABASE_CONNECT = os.getenv("DATABASE_CONNECT", False)
 
     """ Celery """
-    BROKER_URL = os.getenv("CELERY_BROKER_URL", "sqs://")
-    CELERY_TASK_LIST = ["collector.tasks"]
+    BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://localhost:6379/0")
+    CELERY_TASK_LIST = ["celery_queue.tasks"]
     CELERYD_TASK_TIME_LIMIT = os.getenv("CELERYD_TASK_TIME_LIMIT", 60)
-    CELERY_TASK_SERIALIZER = "pickle"
-    CELERY_ACCEPT_CONTENT = ["json", "pickle"]
+    CELERY_TASK_SERIALIZER = "json"
+    CELERY_ACCEPT_CONTENT = ["json"]
     CELERYD_MAX_TASKS_PER_CHILD = os.getenv("CELERYD_MAX_TASKS_PER_CHILD", 1000)
     CELERYD_MAX_MEMORY_PER_CHILD = os.getenv(
         "CELERYD_MAX_MEMORY_PER_CHILD", 24000
@@ -150,7 +170,6 @@ class BaseConfig:
     CELERY_ENABLE_REMOTE_CONTROL = False  # required for sqs
     CELERY_SEND_EVENTS = False
     CELERY_DEFAULT_QUEUE = f"{project}-celery"  # sqs queue name
-
     """ API """
     API_CLIENT_TYPE = os.getenv("IHS_CLIENT_TYPE", "legacy")
     API_BASE_URL = os.getenv("IHS_URL")
