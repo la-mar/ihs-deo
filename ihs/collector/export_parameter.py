@@ -47,6 +47,20 @@ class ExportParameter:
             f"ExportParameter: {self.domain}/{self.data_type} - {self.export_filename}"
         )
 
+    def __iter__(self):
+        for key, value in self.to_dict().items():
+            yield key, value
+
+    def to_dict(self):
+        return {
+            "domain": self.domain,
+            "data_type": self.data_type,
+            "template": self.template,
+            "query": self.query,
+            "overwrite": self.overwrite,
+            "export_filename": self.export_filename,
+        }
+
     @property
     def export_filename(self):
         return self._export_filename
@@ -100,24 +114,26 @@ class ExportParameter:
 if __name__ == "__main__":
 
     from ihs import create_app, db
-    from collector.endpoint import load_from_config
+    from collector.endpoint import Endpoint
 
     app = create_app()
     app.app_context().push()
 
-    config = get_active_config()
-    endpoints = load_from_config(config)
+    conf = get_active_config()
+    endpoints = Endpoint.load_from_config(conf)
     endpoint = endpoints["wells"]
 
-    task = endpoint.tasks["sync_identities"]
+    task = endpoint.tasks["driftwood"]
 
-    ep = ExportParameter(
-        data_type="Well",
-        query_path="well_horizontal_by_county",
-        template="EnerdeqML Well",
-        name="tx-upton",
-        state_code=42,
-        county_code=461,
-    )
+    print(task.options)
+    ep = ExportParameter(**task.options[0])
+    # ep = ExportParameter(
+    #     data_type="Well",
+    #     query_path="well_horizontal_by_county",
+    #     template="EnerdeqML Well",
+    #     name="tx-upton",
+    #     state_code=42,
+    #     county_code=461,
+    # )
 
-    print(ep.query)
+    print(dict(ep))
