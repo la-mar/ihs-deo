@@ -4,7 +4,6 @@ import logging
 from pydoc import locate
 
 from attrdict import AttrDict
-from flask_sqlalchemy import Model
 from sqlalchemy import Column
 from api.models import *
 
@@ -118,27 +117,27 @@ class Endpoint(object):
         for name, task_def in task_defs:
             self.add_task(task_name=name, **task_def)
 
-
-def load_from_config(app_config: object) -> Dict[str, Endpoint]:
-    endpoints: dict = {}
-    try:
-        endpoints = app_config.endpoints  # type: ignore
-    except AttributeError:
-        logger.debug("config object has no attribute 'endpoints'")
-
-    loaded: Dict[str, Endpoint] = {}
-    for ep in endpoints.items():
+    @staticmethod
+    def load_from_config(app_config: object) -> Dict[str, Endpoint]:
+        endpoints: dict = {}
         try:
-            new = Endpoint(name=ep[0], **ep[1])
-            if new.enabled:
-                loaded[ep[0]] = new
-                # print(f"Created endpoint ({ep[0]})")
-            # else:
-            #     print(f"Skipping endpoint ({ep[0]})")
-        except Exception as e:
-            logger.error(f"Failed to create endpoint ({ep[0]}) -> {e}")
+            endpoints = app_config.endpoints  # type: ignore
+        except AttributeError:
+            logger.debug("config object has no attribute 'endpoints'")
 
-    return loaded
+        loaded: Dict[str, Endpoint] = {}
+        for ep in endpoints.items():
+            try:
+                new = Endpoint(name=ep[0], **ep[1])
+                if new.enabled:
+                    loaded[ep[0]] = new
+                    # print(f"Created endpoint ({ep[0]})")
+                # else:
+                #     print(f"Skipping endpoint ({ep[0]})")
+            except Exception as e:
+                logger.error(f"Failed to create endpoint ({ep[0]}) -> {e}")
+
+        return loaded
 
 
 if __name__ == "__main__":
@@ -151,7 +150,7 @@ if __name__ == "__main__":
 
     # e = Endpoint("test", **{"model": "test"})
     wells = Endpoint(name="wells", **endpoints.wells)
-    prod = Endpoint(name="production_allocated", **endpoints.production_allocated)
+    # prod = Endpoint(name="production_allocated", **endpoints.production_allocated)
 
     wells.tasks["sync"].options
     prod.tasks["sync"].options
