@@ -14,13 +14,15 @@ logger = logging.getLogger(__name__)
 class ExportJob:
     def __init__(self, job_id: str, **kwargs):
         self.job_id = job_id
-        self.attrs = kwargs
+        self._kwargs = kwargs
+        for key, value in kwargs.items():
+            setattr(self, key, value)
 
     def __repr__(self):
         return f"ExportJob: {self.job_id}"
 
     def to_dict(self):
-        return {"job_id": self.job_id, **self.attrs}
+        return {"job_id": self.job_id, **self._kwargs}
 
 
 class Builder(SoapRequestor):
