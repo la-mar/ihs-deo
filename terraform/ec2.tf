@@ -1,6 +1,6 @@
 # user data for instance bootstrapping
 data "template_file" "user_data" {
-  template = file("user_data.sh")
+  template = file("templates/user_data.sh")
 
   vars = {
     db_username  = var.db_username
