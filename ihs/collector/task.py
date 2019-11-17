@@ -3,19 +3,31 @@ from celery.schedules import crontab
 
 
 class OptionMatrix:
-    def __init__(self, matrix: List[Dict] = None, **kwargs):
-        self.matrix = matrix if isinstance(matrix, list) else [matrix or {}]
+    def __init__(self, matrix: dict = None, **kwargs):
+        # self.matrix = matrix if isinstance(matrix, list) else [matrix or {}]
+        self.matrix = matrix or {}
         self.kwargs = kwargs
 
     def __repr__(self):
-        return str(self.__dict__)
+        return str(self.to_list())
 
     def __iter__(self):
-        for opts in self.matrix:
-            yield {**opts, **self.kwargs}
+        for d in self._cross_apply():
+            yield d
 
-    def to_list(self):
-        return list(self)
+    def _cross_apply(self) -> List[Dict]:
+        if len(self.matrix):
+            values = [
+                {"name": key, **self.kwargs, **value}
+                for key, value in self.matrix.items()
+            ]
+        else:
+            values = [self.kwargs or {}]
+
+        return values
+
+    def to_list(self) -> List[Dict]:
+        return self._cross_apply()
 
 
 class Task:
@@ -80,9 +92,9 @@ if __name__ == "__main__":
     conf = get_active_config()
     endpoints = conf.endpoints
     tasks = endpoints.wells.tasks
-    t = AttrDict(list(tasks.items())[1][1])
+    # t = AttrDict(list(tasks.items())[1][1])
+    t = tasks.driftwood
     task = Task("wells", "sync", **t)
-    task.options
+    to = task.options
+    print(to)
 
-    to = OptionMatrix(**t.options)
-    list(to)
