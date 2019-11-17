@@ -1,7 +1,8 @@
 from typing import Union, Any, List
 import logging
 
-from api.models import WellMaster, ProductionEntityMaster
+from api.models import WellMaster, ProducingEntityMaster
+
 
 logger = logging.getLogger(__name__)
 
@@ -41,6 +42,7 @@ class IdentityList:
             self._set_ids(ids)
 
     def _set_ids(self, ids: list):
+        ids = [x for x in ids if x != ""]  # drop trailing empties
         self.model(**{"name": self.key, "count": len(ids), "ids": ids}).save()
 
     def _set_ids_from_bytes(self, ids: bytes, sep: str = "\n"):
@@ -51,9 +53,20 @@ class IdentityList:
         self.ids = []
 
 
-# class WellList:
-#     def __init__(self, key: str):
-#         super().__init__(model)
+class WellList(IdentityList):
+
+    model = WellMaster
+
+    def __init__(self, key: str):
+        super().__init__(self.model, key)
+
+
+class ProducingEntityList(IdentityList):
+
+    model = ProducingEntityMaster
+
+    def __init__(self, key: str):
+        super().__init__(self.model, key)
 
 
 if __name__ == "__main__":
