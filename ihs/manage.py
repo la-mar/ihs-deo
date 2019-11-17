@@ -10,10 +10,9 @@ from flask.cli import FlaskGroup, AppGroup
 
 from api.models import *
 import collector.tasks
-from app import create_app, db
+from ihs import create_app, db
 import loggers
 from config import get_active_config
-from collector.endpoint import load_from_config
 
 loggers.standard_config()
 logger = logging.getLogger()
