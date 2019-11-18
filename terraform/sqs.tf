@@ -1,5 +1,5 @@
-resource "aws_sqs_queue" "celery" {
-  name                       = "${var.service_name}-celery"
+resource "aws_sqs_queue" "default" {
+  name                       = "${var.service_name}-default"
   delay_seconds              = 30
   message_retention_seconds  = 3600 # 1 hour
   receive_wait_time_seconds  = 0
@@ -8,8 +8,8 @@ resource "aws_sqs_queue" "celery" {
   tags = local.tags
 }
 
-resource "aws_sqs_queue_policy" "sqs" {
-  queue_url = aws_sqs_queue.celery.id
+resource "aws_sqs_queue_policy" "sqs-default" {
+  queue_url = aws_sqs_queue.default.id
   policy    = data.aws_iam_policy_document.allow_ecs_access_to_sqs.json
 }
 
@@ -23,7 +23,7 @@ resource "aws_sqs_queue" "collections" {
   tags = local.tags
 }
 
-resource "aws_sqs_queue_policy" "sqs" {
+resource "aws_sqs_queue_policy" "collections" {
   queue_url = aws_sqs_queue.collections.id
   policy    = data.aws_iam_policy_document.allow_ecs_access_to_sqs.json
 }
@@ -38,7 +38,7 @@ resource "aws_sqs_queue" "submissions" {
   tags = local.tags
 }
 
-resource "aws_sqs_queue_policy" "sqs" {
+resource "aws_sqs_queue_policy" "submissions" {
   queue_url = aws_sqs_queue.submissions.id
   policy    = data.aws_iam_policy_document.allow_ecs_access_to_sqs.json
 }
