@@ -60,7 +60,9 @@ data "aws_iam_policy_document" "allow_ecs_access_to_sqs" {
     ]
 
     resources = [
-      aws_sqs_queue.celery.arn
+      aws_sqs_queue.default.arn,
+      aws_sqs_queue.collections.arn,
+      aws_sqs_queue.submissions.arn,
     ]
 
     condition {
