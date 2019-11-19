@@ -195,6 +195,9 @@ endpoints:
       template: EnerdeqML Well
       criteria:
         hole_direction: H
+        api: uio3g4tgwg
+        county_code: akjsdb
+        state_code: asdsd
     tasks:
       sync:
         seconds: 30
@@ -254,22 +257,22 @@ endpoints:
   #     #   <<: *default_sync
   #     #   options:
   #     #     query_path: well_vertical_driftwood_all.xml
-  production_horizontal:
-    enabled: true
-    version: v10
-    model: api.models.ProductionHorizontal
-    exclude: []
-    normalize: false
-    options:
-      data_type: Production Allocated
-      template: EnerdeqML Production
-      criteria:
-        hole_direction: H
-    tasks:
-      sequoia:
-        seconds: 30
-        options:
-          query_path: production_by_api.xml
-          matrix:
-            sequoia:
-              api: "42461409160000"
+  # production_horizontal:
+  #   enabled: true
+  #   version: v10
+  #   model: api.models.ProductionHorizontal
+  #   exclude: []
+  #   normalize: false
+  #   options:
+  #     data_type: Production Allocated
+  #     template: EnerdeqML Production
+  #     criteria:
+  #       hole_direction: H
+  #   tasks:
+  #     sequoia:
+  #       seconds: 30
+  #       options:
+  #         query_path: production_by_api.xml
+  #         matrix:
+  #           sequoia:
+  #             api: "42461409160000"
