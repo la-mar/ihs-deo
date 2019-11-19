@@ -1,5 +1,8 @@
+from __future__ import annotations
 from typing import Union, List, Dict
 from celery.schedules import crontab
+from api.models import *
+from pydoc import locate
 
 
 class OptionMatrix:
@@ -7,6 +10,8 @@ class OptionMatrix:
         # self.matrix = matrix if isinstance(matrix, list) else [matrix or {}]
         self.matrix = matrix or {}
         self.kwargs = kwargs
+        self.using = self.matrix.pop("using", None)
+        self.label = self.matrix.pop("label", "id")
 
     def __repr__(self):
         return str(self.to_list())
@@ -16,6 +21,9 @@ class OptionMatrix:
             yield d
 
     def _cross_apply(self) -> List[Dict]:
+        if self.using:
+            self.matrix = self._matrix_from_model()
+
         if len(self.matrix):
             values = [
                 {"name": key, **self.kwargs, **value}
@@ -28,6 +36,45 @@ class OptionMatrix:
 
     def to_list(self) -> List[Dict]:
         return self._cross_apply()
+
+    def _matrix_from_model(self) -> Dict[str, Dict]:
+        """Generate a matrix using the values in a referenced model field.
+
+        Arguments:
+            model_ref {str} -- Model reference string of the form module.models.model.field.
+                               Ex: api.models.WellMasterHorizontal.ids
+        """
+
+        model_name, field_name = self.using.rsplit(".", maxsplit=1)
+        model = self.locate_model(model_name)
+
+        values: List[str] = []
+        for document in model.objects():
+            values = values + document[field_name]
+
+        matrix = {}
+        for v in values:
+            matrix[f"{self.label}-{v}"] = {self.label: v}
+
+        return matrix
+
+    def locate_model(self, model_name: str) -> Model:  # type: ignore
+        model: Model = None  # type: ignore
+        try:
+            # try to import dotted model name. ex: api.models.MyModel
+            model = locate(model_name)
+        except ModuleNotFoundError:
+            try:
+                # try to import model from global namespace
+                model = globals()[model_name]
+            except ModuleNotFoundError:
+                raise ModuleNotFoundError(
+                    f"No module named '{model_name}' found in project or global namespace"
+                )
+        except Exception as e:
+            raise Exception(f"Unable to locate module {model_name} -- {e}")
+
+        return model
 
 
 class Task:
@@ -88,12 +135,18 @@ if __name__ == "__main__":
 
     from config import get_active_config
     from attrdict import AttrDict
+    from ihs.config import get_active_config
+    from ihs import create_app, db
+
+    conf = get_active_config()
+    app = create_app()
+    app.app_context().push()
 
     conf = get_active_config()
     endpoints = conf.endpoints
-    tasks = endpoints.wells.tasks
+    tasks = endpoints.well_horizontal.tasks
     # t = AttrDict(list(tasks.items())[1][1])
-    t = tasks.driftwood
+    t = tasks.sync
     task = Task("wells", "sync", **t)
     to = task.options
     print(to)
