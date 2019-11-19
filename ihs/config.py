@@ -177,7 +177,7 @@ class BaseConfig:
     """ Celery """
     BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://localhost:6379/0")
     CELERY_TASK_LIST = ["celery_queue.tasks"]
-    CELERYD_TASK_TIME_LIMIT = os.getenv("CELERYD_TASK_TIME_LIMIT", 60)
+    CELERYD_TASK_TIME_LIMIT = os.getenv("CELERYD_TASK_TIME_LIMIT", 60 * 60)
     CELERY_TASK_SERIALIZER = "json"
     CELERY_ACCEPT_CONTENT = ["json"]
     CELERYD_MAX_TASKS_PER_CHILD = os.getenv("CELERYD_MAX_TASKS_PER_CHILD", 1000)
@@ -186,7 +186,12 @@ class BaseConfig:
     )  # 24MB
     CELERY_ENABLE_REMOTE_CONTROL = False  # required for sqs
     CELERY_SEND_EVENTS = False
-    CELERY_DEFAULT_QUEUE = f"{project}-celery"  # sqs queue name
+    CELERY_DEFAULT_QUEUE = f"{project}-default"  # sqs queue name
+    CELERY_ROUTES = {
+        "celery_queue.tasks.submit_job": f"{project}-submissions",
+        "celery_queue.tasks.collect_job_result": f"{project}-collections",
+    }
+
     """ API """
     API_CLIENT_TYPE = os.getenv("IHS_CLIENT_TYPE", "legacy")
     API_BASE_URL = os.getenv("IHS_URL")
