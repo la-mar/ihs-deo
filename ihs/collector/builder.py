@@ -1,7 +1,7 @@
 from __future__ import annotations
 import logging
 
-from typing import Union
+from typing import Union, List
 from collector.soap_requestor import SoapRequestor
 from collector.export_parameter import ExportParameter
 from config import get_active_config
@@ -98,14 +98,26 @@ class Builder(SoapRequestor):
         return self.service.GetExportTemplates(self.domain or domain, data_type)
 
     def delete_job(self, job: Union[ExportJob, str]) -> bool:
+
+        result = False
         if isinstance(job, ExportJob):
             job = job.job_id
-        return self.service.Delete(job)
+
+        try:
+            result = self.service.DeleteExport(job)
+            logger.info("Deleted job: %s", job)
+        except Exception as e:
+            logger.info("Encountered error when deleting job %s -- %s", job, e)
+
+        return result
 
     def job_exists(self, job: Union[ExportJob, str]) -> bool:
         if isinstance(job, ExportJob):
             job = job.job_id
         return self.service.Exists(job)
+
+    def list_completed_jobs(self) -> List[str]:
+        return self.service.GetCompleteExports()
 
 
 class ExportBuilder(Builder):
@@ -150,8 +162,30 @@ class ExportRetriever:
     def get(self) -> Union[str, None]:
 
         try:
-            return self.client.service.RetrieveExport(self.job.job_id)
+            result = self.client.service.RetrieveExport(self.job.job_id)
+            self.client.delete_job(self.job)
+            return result
         except Exception as e:
-            logger.exception(f"Failed retrieving export {self.job} -- {e}")
+            logger.warning(f"Failed retrieving export {self.job} -- {e}")
 
         return None
+
+
+if __name__ == "__main__":
+
+    from config import get_active_config
+    from attrdict import AttrDict
+    from ihs.config import get_active_config
+    from ihs import create_app, db
+    from collector import Endpoint
+
+    conf = get_active_config()
+    app = create_app()
+    app.app_context().push()
+
+    endpoints = Endpoint.load_from_config(conf)
+    endpoint = endpoints.get("well_master_horizontal")
+
+    eb = ExportBuilder(conf.API_BASE_URL, endpoint)
+
+    eb.list_completed_jobs()
