@@ -13,8 +13,6 @@ from collector.util import retry
 
 logger = logging.getLogger(__name__)
 
-# r = Request("GET", "https://api.example.com/v1/path/1/subpath/2/values")
-
 
 class Request(requests.Request):
     """ An objects specifying a single request to be made to an endpoint."""

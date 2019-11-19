@@ -121,12 +121,12 @@ if __name__ == "__main__":
 
     conf = get_active_config()
     endpoints = Endpoint.load_from_config(conf)
-    endpoint = endpoints["wells"]
+    endpoint = endpoints["well_horizontal"]
 
-    task = endpoint.tasks["driftwood"]
+    task = endpoint.tasks["sync"]
 
-    print(task.options)
-    ep = ExportParameter(**task.options[0])
+    # print(task.options)
+    ep = ExportParameter(**task.options.to_list()[0])
     # ep = ExportParameter(
     #     data_type="Well",
     #     query_path="well_horizontal_by_county",
@@ -136,4 +136,6 @@ if __name__ == "__main__":
     #     county_code=461,
     # )
 
+    ep.query = None
     print(dict(ep))
+

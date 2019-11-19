@@ -78,18 +78,5 @@ if __name__ == "__main__":
     app = create_app()
     app.app_context().push()
 
-    well = Well(api14="12345678901234")
-    well.save()
-
-    WELL_COLLECTIONS = [
-        "well_header",
-        "well_location",
-        "well_drilling",
-        "well_mechanical",
-        "well_geology",
-        "well_geophysics",
-        "well_engineering",
-        "well_tests",
-        "well_treatment_summary",
-        "well_content",
-    ]
+    obj = WellMasterHorizontal.objects()[0]
+    obj.ids
