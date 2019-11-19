@@ -5,8 +5,8 @@ from config import HoleDirection
 from api.models import (
     WellMasterHorizontal,
     WellMasterVertical,
-    ProducingEntityMasterHorizontal,
-    ProducingEntityMasterVertical,
+    ProductionMasterHorizontal,
+    ProductionMasterVertical,
 )
 
 from collector.collector import Collector
@@ -78,12 +78,12 @@ class WellList(IdentityList):
         super().__init__(self.model, key)
 
 
-class ProducingEntityList(IdentityList):
+class ProductionList(IdentityList):
     def __init__(self, key: str, hole_direction: str):
         if hole_direction == HoleDirection.H.name:
-            self.model = ProducingEntityMasterHorizontal
+            self.model = ProductionMasterHorizontal
         elif hole_direction == HoleDirection.V.name:
-            self.model = ProducingEntityMasterVertical
+            self.model = ProductionMasterVertical
         else:
             raise ValueError(
                 f"Invalid value for hole_direction ({hole_direction}) -- Valid options are {HoleDirection.member_names()}"

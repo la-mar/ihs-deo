@@ -15,7 +15,7 @@ from collector import (  # noqa
     WellboreTransformer,
     ProductionTransformer,
     WellList,
-    ProducingEntityList,
+    ProductionList,
 )
 from collector.identity_list import IdentityList
 from collector.collector import Collector
@@ -48,7 +48,7 @@ def run_endpoint_task(
         )
 
 
-def submit_job(job_options: dict, metadata: dict):
+def submit_job(job_options: dict, metadata: dict) -> ExportJob:
     endpoint_name = metadata.get("endpoint")
     endpoint = endpoints[endpoint_name]
     ep = ExportParameter(**job_options)
@@ -96,7 +96,7 @@ def collect_identities(job: ExportJob, data: bytes) -> IdentityList:
         interface = WellList(job.name, job.criteria.get("hole_direction"))
         interface.ids = data
     elif job.data_type == ExportDataTypes.PRODUCTION.value:
-        interface = ProducingEntityList(job.name, job.criteria.get("hole_direction"))
+        interface = ProductionList(job.name, job.criteria.get("hole_direction"))
         interface.ids = data
 
     return interface
@@ -123,8 +123,14 @@ if __name__ == "__main__":
     app = create_app()
     app.app_context().push()
 
-    endpoint_name = "well_master_horizontal"
+    endpoint_name = "production_master_horizontal"
     task_name = "sync"
     results = [x for x in run_endpoint_task(endpoint_name, task_name) if x is not None]
-    [collect(r) for r in results]
+    job_options = results[0]
+    job = submit_job(**job_options)
+
+    data = get_job_results(job)
+
+    interface = ProductionList(job.name, job.criteria.get("hole_direction"))
+    interface.ids = data
 

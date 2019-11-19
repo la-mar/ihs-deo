@@ -26,7 +26,6 @@ class Transformer:
         data = data or OrderedDict()
 
         _id = cls.extract_identifier(data)
-        print(_id)
         if _id.isnumeric():
             if len(_id) == 14:
                 data["api14"] = _id
@@ -116,6 +115,12 @@ class ProductionTransformer(Transformer):
         return str(
             data.get("wellbore", {}).get("metadata", {}).get("identification", "")
         )
+
+    # @classmethod
+    # def set_identifier_to_api(cls, data: OrderedDict) -> OrderedDict:
+    #     data["producing_entity"] = data.get("identifier")
+    #     data["identifier"] = cls.extract_identifier(data)
+    #     return data
 
 
 if __name__ == "__main__":

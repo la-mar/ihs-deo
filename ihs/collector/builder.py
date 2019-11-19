@@ -135,7 +135,10 @@ class ExportBuilder(Builder):
             )
         except Exception as e:
             logger.warning(
-                f"Error getting job id from service for data type {export_param.data_type} {e}"
+                f"Error getting job id from service for data type {export_param.data_type} -- {e}"
+                + "\nmetadata: "
+                + str(metadata)
+                + "\n\n"
             )
         return None
 

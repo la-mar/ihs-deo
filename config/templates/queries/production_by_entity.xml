@@ -1,0 +1,23 @@
+<criterias>
+    <criteria type="group" groupId="" ignored="false">
+        <domain>US</domain>
+        <datatype>{data_type}</datatype>
+        <attribute_group>Identification</attribute_group>
+        <attribute>Production ID</attribute>
+        <filter logic="include">
+            <value id="0" ignored="false">
+                <group_actual>
+                    <operator logic="and">
+                        <condition logic="equals">
+                            <attribute>code</attribute>
+                            <value_list>
+                                <value>{producing_entity}</value>
+                            </value_list>
+                        </condition>
+                    </operator>
+                </group_actual>
+                <group_display>Production ID = {producing_entity}</group_display>
+            </value>
+        </filter>
+    </criteria>
+</criterias>

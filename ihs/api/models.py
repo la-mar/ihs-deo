@@ -18,22 +18,24 @@ class WellMasterVertical(me.Document):
     last_update = me.DateTimeField(default=datetime.datetime.now)
 
 
-class ProducingEntityMasterHorizontal(me.Document):
+class ProductionMasterHorizontal(me.Document):
     meta = {
-        "collection": "producing_entity_master_horizontal",
+        "collection": "production_master_horizontal",
         "ordering": ["-last_update"],
     }
-    identification = me.StringField(primary_key=True)
+    name = me.StringField(primary_key=True)
+    ids = me.ListField()
     count = me.IntField()
     last_update = me.DateTimeField(default=datetime.datetime.now)
 
 
-class ProducingEntityMasterVertical(me.Document):
+class ProductionMasterVertical(me.Document):
     meta = {
-        "collection": "producing_entity_master_vertical",
+        "collection": "production_master_vertical",
         "ordering": ["-last_update"],
     }
-    identification = me.StringField(primary_key=True)
+    name = me.StringField(primary_key=True)
+    ids = me.ListField()
     count = me.IntField()
     last_update = me.DateTimeField(default=datetime.datetime.now)
 

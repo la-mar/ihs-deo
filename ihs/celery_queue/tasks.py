@@ -53,7 +53,7 @@ def post_heartbeat():
 def collect_job_result(self, job: Union[dict, ExportJob]):
     if not isinstance(job, ExportJob):
         job = ExportJob(**job)
-    logger.warning(f"Collecting job: {job}")
+    logger.info(f"Collecting job: {job}")
     try:
         return collector.tasks.collect(job)
     except Exception as exc:
@@ -64,7 +64,7 @@ def collect_job_result(self, job: Union[dict, ExportJob]):
 def submit_job(self, job_options: dict, metadata: dict = None):
     try:
         job = collector.tasks.submit_job(job_options, metadata or {})
-        logger.warning(f"Submitted job: {job}")
+        logger.info(f"Submitted job: {job}")
         if job:
             collect_job_result.apply_async((), {"job": job.to_dict()})
     except Exception as exc:

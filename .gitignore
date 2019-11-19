@@ -119,3 +119,4 @@ dmypy.json
 .pyre/
 .DS_Store
 celerybeat-schedule.db
+celerybeat.pid

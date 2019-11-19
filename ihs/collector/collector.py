@@ -55,6 +55,7 @@ if __name__ == "__main__":
     from config import get_active_config
     from util import to_json
     from time import sleep
+    from collector.identity_list import ProductionList
 
     app = create_app()
     app.app_context().push()
@@ -63,18 +64,10 @@ if __name__ == "__main__":
     url = conf.API_BASE_URL
     endpoints = Endpoint.load_from_config(conf)
 
-    endpoint = endpoints["well_horizontal"]
-    task = endpoint.tasks["sequoia"]
-    requestor = ExportBuilder(url, endpoint, functions={})
-    ep = ExportParameter(**list(task.options)[0])
-    jid = requestor.submit(ep)
-    retr = ExportRetriever(jid, base_url=url, endpoint=endpoint)
-    xml = retr.get()
-    parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
-    document = parser.parse(xml, parse_dtypes=False)
-    wellbores = WellboreTransformer.extract_from_collection(document)
-    to_json(wellbores, "test/data/wellbore_example.json")
-    print(f"Parsed {len(wellbores)} wellbores")
+    endpoint = endpoints["production_master_horizontal"]
+    task = endpoint.tasks["sync"]
+
+    # print(f"Parsed {len(wellbores)} wellbores")
 
     import pandas as pd
 
