@@ -16,29 +16,29 @@ from collector import (  # noqa
     ProductionTransformer,
     WellList,
     ProducingEntityList,
-    Collector,
 )
 from collector.identity_list import IdentityList
+from collector.collector import Collector
 from config import get_active_config, project, IdentityTemplates, ExportDataTypes
 import metrics
 
 logger = logging.getLogger(__name__)
-
+logging.getLogger("urllib3").setLevel(logging.WARNING)
+logging.getLogger("boto3").setLevel(logging.WARNING)
+logging.getLogger("botocore").setLevel(logging.CRITICAL)
 conf = get_active_config()
 endpoints = Endpoint.load_from_config(conf)
 
 
 def run_endpoint_task(
     endpoint_name: str, task_name: str
-) -> Generator[ExportJob, None, None]:
-    """ Unpack an tasks options and submit a job for each option set """
+) -> Generator[dict, None, None]:
+    """ Unpack task options and assemble metadata for job configuration """
     endpoint = endpoints[endpoint_name]
-    requestor = ExportBuilder(conf.API_BASE_URL, endpoint)
     task = endpoint.tasks[task_name]
     for opts in task.options:
-        ep = ExportParameter(**opts)
-        yield requestor.submit(
-            ep,
+        yield dict(
+            job_options=opts,
             metadata={
                 "endpoint": endpoint_name,
                 "task": task_name,
@@ -46,6 +46,14 @@ def run_endpoint_task(
                 **opts,
             },
         )
+
+
+def submit_job(job_options: dict, metadata: dict):
+    endpoint_name = metadata.get("endpoint")
+    endpoint = endpoints[endpoint_name]
+    ep = ExportParameter(**job_options)
+    requestor = ExportBuilder(conf.API_BASE_URL, endpoint)
+    return requestor.submit(ep, metadata=metadata or {})
 
 
 def collect(job: Union[dict, ExportJob]):
@@ -64,6 +72,7 @@ def collect(job: Union[dict, ExportJob]):
 def get_job_results(job: Union[ExportJob, dict]) -> bytes:
     if not isinstance(job, ExportJob):
         job = ExportJob(**job)
+    # logger.info(f"Fetching job results: {job}")
     retr = ExportRetriever(job, base_url=job.url, endpoint=endpoints[job.endpoint])
     data = retr.get()
     return data
@@ -75,9 +84,9 @@ def collect_data(job: ExportJob, xml: bytes):
         document = parser.parse(xml)
         collector = Collector(endpoints[job.endpoint].model)
         if job.data_type == ExportDataTypes.WELL.value:
-            data = WellboreTransformer.extract_from_well_set(document)
+            data = WellboreTransformer.extract_from_collection(document)
         elif job.data_type == ExportDataTypes.PRODUCTION.value:
-            data = ProductionTransformer.extract_from_production_set(document)
+            data = ProductionTransformer.extract_from_collection(document)
         collector.save(data)
 
 
@@ -115,12 +124,14 @@ if __name__ == "__main__":
 
     endpoint_name = "well_master_horizontal"
     task_name = "sync"
-    results = [x for x in run_endpoint_task(endpoint_name, task_name) if x is not None]
-    job = results[0]
+    job_configs = [
+        x for x in run_endpoint_task(endpoint_name, task_name) if x is not None
+    ]
+    job_config = job_configs[0]
     [collect(r) for r in results]
-    # [r.to_dict().get("name") for r in results]
 
     endpoint_name = "wells"
     task_name = "driftwood"
     results = [x for x in run_endpoint_task(endpoint_name, task_name) if x is not None]
     [collect(r) for r in results]
+
