@@ -16,22 +16,29 @@ class Collector(object):
     def save(self, documents: List[OrderedDict]):
         succeeded = 0
         failed = []
+        if not isinstance(documents, list):
+            documents = [documents]  # type: ignore
         for doc in documents:
             try:
                 self.model(**doc).save()
                 succeeded += 1
             except Exception as e:
-                logger.info("Failed saving document to %s", self.model)
+                logger.debug("Failed saving document to %s", self.model)
                 failed.append(e)
 
         if len(failed) > 0:
-            logger.error("Failed saving %s documents to %s", len(failed), self.model)
+            logger.error(
+                "Failed saving %s documents to %s -- %s",
+                len(failed),
+                self.model,
+                failed,
+            )
         logger.info("Saved %s documents to %s", succeeded, self.model)
 
 
 if __name__ == "__main__":
     from ihs import create_app
-    from api.models import Well, Production
+    from api.models import WellHorizontal
     from collector import (
         XMLParser,
         Endpoint,
@@ -55,9 +62,9 @@ if __name__ == "__main__":
     endpoints = Endpoint.load_from_config(conf)
 
     # # ? well example
-    endpoint = endpoints["wells"]
+    endpoint = endpoints["well_horizontal"]
+    task = endpoint.tasks["sequoia"]
     requestor = ExportBuilder(url, endpoint, functions={})
-    task = endpoint.tasks["driftwood"]
     ep = ExportParameter(**list(task.options)[0])
 
     #
@@ -67,9 +74,9 @@ if __name__ == "__main__":
 
     xml = retr.get()
     parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
-    document = parser.parse(xml)
-    wellbores = WellboreTransformer.extract_from_wellset(document)
-    to_json(wellbores, "test/data/wellbores_parsed.json")
+    document = parser.parse(xml, parse_dtypes=False)
+    wellbores = WellboreTransformer.extract_from_well_set(document)
+    to_json(wellbores, "test/data/wellbore_example.json")
     print(f"Parsed {len(wellbores)} wellbores")
     c = Collector(endpoint)
 
