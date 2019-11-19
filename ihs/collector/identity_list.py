@@ -9,6 +9,7 @@ from api.models import (
     ProducingEntityMasterVertical,
 )
 
+from collector.collector import Collector
 
 logger = logging.getLogger(__name__)
 
@@ -18,11 +19,12 @@ class IdentityList:
     _ids = None
 
     def __init__(self, model: Any, key: str):
+        self.collector = Collector(model)
         self.model = model
         self.key = key
 
     def __repr__(self):
-        return f"{self.__class__.__name__}: {len(self)} ids"
+        return f"{self.__class__.__name__}/{self.key}: {len(self)} ids"
 
     def __len__(self):
         return len(self.ids)
@@ -48,8 +50,12 @@ class IdentityList:
             self._set_ids(ids)
 
     def _set_ids(self, ids: list):
-        ids = [x for x in ids if x != ""]  # drop trailing empties
-        self.model(**{"name": self.key, "count": len(ids), "ids": ids}).save()
+        if ids:
+            ids = [x for x in ids if x != ""]  # drop trailing empties
+            self.collector.save({"name": self.key, "count": len(ids), "ids": ids})
+            logger.info(
+                "Saved %s ids to %s/%s", len(ids), self.__class__.__name__, self.key
+            )
 
     def _set_ids_from_bytes(self, ids: bytes, sep: str = "\n"):
         self._set_ids(ids=ids.decode().split(sep))
