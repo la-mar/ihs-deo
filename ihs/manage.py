@@ -82,7 +82,7 @@ def ipython_embed():
     IPython.embed(banner1=banner, user_ns=ctx)
 
 
-@run_cli.command()
+@run_cli.command(context_settings=dict(ignore_unknown_options=True))
 @click.argument("celery_args", nargs=-1, type=click.UNPROCESSED)
 def worker(celery_args):
     # from celery_queue.worker import celery
@@ -129,7 +129,6 @@ def main(argv=sys.argv):
         int: A return code
     Does stuff.
     """
-    # print(argv)
 
     cli()
     return 0
