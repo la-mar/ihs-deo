@@ -1,11 +1,11 @@
-from celery.signals import setup_logging, task_postrun
-from celery.utils.log import get_task_logger
 from typing import Union
-import collector.tasks
-from collector import ExportJob, Endpoint
-from ihs import celery
-from config import get_active_config
 
+from celery.utils.log import get_task_logger
+
+import collector.tasks
+from collector import Endpoint, ExportJob
+from config import get_active_config
+from ihs import celery
 
 logger = get_task_logger(__name__)
 
@@ -71,27 +71,9 @@ def submit_job(self, job_options: dict, metadata: dict = None):
         raise self.retry(exc=exc, countdown=2 ** self.request.retries)
 
 
+# pylint: disable=unused-argument
 @celery.task(rate_limit="10/s", ignore_result=True)
 def sync_endpoint(endpoint_name: str, task_name: str, **kwargs) -> ExportJob:
     for job_config in collector.tasks.run_endpoint_task(endpoint_name, task_name):
         if job_config:
             submit_job.apply_async((), job_config)
-
-
-# @celery.task(rate_limit="10/s", ignore_result=True)
-# def sync_endpoint(endpoint_name: str, task_name: str, **kwargs) -> ExportJob:
-#     for job in collector.tasks.run_endpoint_task(endpoint_name, task_name):
-#         if job:
-#             collect_job_result.apply_async((), {"job": job.to_dict()})
-
-
-# def get_endpoint_tasks():
-#     """ Retrieves collection task definitions from the active configuration and     parses them into Task objects """
-
-#     for_scheduling: List[Task] = []
-#     for endpoint_name in endpoints.keys():  # type: ignore
-#         for task_name in endpoint.tasks.keys():
-#             for_scheduling.append(
-#                 {"endpoint_name": endpoint_name, "task_name": task_name}
-#             )
-#     return for_scheduling

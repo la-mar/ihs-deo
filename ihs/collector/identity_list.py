@@ -89,17 +89,3 @@ class ProducingEntityList(IdentityList):
                 f"Invalid value for hole_direction ({hole_direction}) -- Valid options are {HoleDirection.member_names()}"
             )
         super().__init__(self.model, key)
-
-
-if __name__ == "__main__":
-    from ihs import create_app
-    from api.models import WellMaster
-
-    app = create_app()
-    app.app_context().push()
-
-    obj = IdentityList(WellMaster, "list1")
-    obj.ids = ["test4", "test5", "test6"]
-    print(obj)
-    # list(obj)
-    # obj.delete()

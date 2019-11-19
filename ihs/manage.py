@@ -1,23 +1,20 @@
 import logging
 import os
 import shutil
+import subprocess
 import sys
 from collections import defaultdict
-import subprocess
 
 import click
-from flask.cli import FlaskGroup, AppGroup
+from flask.cli import AppGroup, FlaskGroup
 
-from api.models import *
-import collector.tasks
-from ihs import create_app, db
 import loggers
+from api.models import *
 from config import get_active_config
+from ihs import create_app, db
 
 loggers.standard_config()
 logger = logging.getLogger()
-
-import metrics
 
 
 CONTEXT_SETTINGS = dict(
@@ -75,7 +72,7 @@ def ipython_embed():
     startup = os.environ.get("PYTHONSTARTUP")
     if startup and os.path.isfile(startup):
         with open(startup, "r") as f:
-            eval(compile(f.read(), startup, "exec"), ctx)
+            eval(compile(f.read(), startup, "exec"), ctx)  # pylint: disable=eval-used
 
     ctx.update(app.make_shell_context())
 
@@ -121,7 +118,7 @@ def sentry():
     logger.error("Sentry Integration Test")
 
 
-def main(argv=sys.argv):
+def main(argv=sys.argv):  # pylint: disable=unused-argument
     """
     Args:
         argv (list): List of arguments
@@ -132,14 +129,6 @@ def main(argv=sys.argv):
 
     cli()
     return 0
-
-
-@cli.command()
-def recreate_db():
-    # with app.app_context().push():
-    db.drop_all()
-    db.create_all()
-    db.session.commit()
 
 
 # @cli.command()

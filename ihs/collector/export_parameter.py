@@ -109,33 +109,3 @@ class ExportParameter:
     @property
     def target(self) -> dict:
         return {"Filename": self.export_filename, "Overwrite": self.overwrite}
-
-
-if __name__ == "__main__":
-
-    from ihs import create_app, db
-    from collector.endpoint import Endpoint
-
-    app = create_app()
-    app.app_context().push()
-
-    conf = get_active_config()
-    endpoints = Endpoint.load_from_config(conf)
-    endpoint = endpoints["well_horizontal"]
-
-    task = endpoint.tasks["sync"]
-
-    # print(task.options)
-    ep = ExportParameter(**task.options.to_list()[0])
-    # ep = ExportParameter(
-    #     data_type="Well",
-    #     query_path="well_horizontal_by_county",
-    #     template="EnerdeqML Well",
-    #     name="tx-upton",
-    #     state_code=42,
-    #     county_code=461,
-    # )
-
-    ep.query = None
-    print(dict(ep))
-

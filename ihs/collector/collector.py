@@ -37,6 +37,8 @@ class Collector(object):
 
 
 if __name__ == "__main__":
+    # pylint: disable-all
+
     from ihs import create_app
     from api.models import WellHorizontal
     from collector import (
@@ -61,83 +63,18 @@ if __name__ == "__main__":
     url = conf.API_BASE_URL
     endpoints = Endpoint.load_from_config(conf)
 
-    # # ? well example
     endpoint = endpoints["well_horizontal"]
     task = endpoint.tasks["sequoia"]
     requestor = ExportBuilder(url, endpoint, functions={})
     ep = ExportParameter(**list(task.options)[0])
-
-    #
     jid = requestor.submit(ep)
-
     retr = ExportRetriever(jid, base_url=url, endpoint=endpoint)
-
     xml = retr.get()
     parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
     document = parser.parse(xml, parse_dtypes=False)
-    wellbores = WellboreTransformer.extract_from_well_set(document)
+    wellbores = WellboreTransformer.extract_from_collection(document)
     to_json(wellbores, "test/data/wellbore_example.json")
     print(f"Parsed {len(wellbores)} wellbores")
-    c = Collector(endpoint)
-
-    for wb in wellbores:
-        Well(**wb).save()
-
-    # ? production example
-    # endpoint = endpoints["production"]
-    # c = Collector(endpoint)
-    # requestor = ExportBuilder(url, endpoint, functions={})
-    # task = endpoint.tasks["driftwood"]
-    # ep = ExportParameter(**task.options)
-    # jid = requestor.submit(ep)
-
-    # retr = ExportRetriever(jid, base_url=url, endpoint=endpoint)
-
-    # sleep(5)
-    # xml = retr.get()
-    # parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
-    # document = parser.parse(xml, parse_dtypes=False)
-    # to_json(document, "test/data/production_unparsed.json")
-    # document = parser.parse(xml, parse_dtypes=True)
-    # to_json(document, "test/data/production_parsed.json")
-    # production = ProductionTransformer.extract_from_wellset(document)
-    # print(f"Parsed {len(production)} production records")
-
-    # for wb in production:
-    #     Production(**wb).save()
-
-    # ep.template = "EnerdeqML 1.0 Well"
-    # jid = requestor.submit(ep)
-    # retr = ExportRetriever(jid, base_url=url, endpoint=endpoint)
-    # sleep(5)
-    # xml = retr.get()
-    # parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
-    # document = parser.parse(xml, parse_dtypes=True)
-    # to_json(document, "test/data/wellML.json")
-
-    # ep.template = "EnerdeqML 1.0 Production"
-    # jid = requestor.submit(ep)
-    # retr = ExportRetriever(jid, base_url=url, endpoint=endpoint)
-    # sleep(5)
-    # xml = retr.get()
-    # parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
-    # document = parser.parse(xml, parse_dtypes=True)
-    # to_json(document, "test/data/wellML.json")
-
-    ep = ExportParameter(
-        **{
-            "data_type": "Well",
-            "template": "Well ID List",
-            "query_path": "config/queries/well_upton_all.xml",
-        }
-    )
-    ep.template = "Well ID List"
-    jid = requestor.submit(ep)
-    retr = ExportRetriever(jid, base_url=url, endpoint=endpoint)
-    sleep(5)
-    ids = retr.get()
-
-    # to_json(document, "test/data/well_id_list_permian.json")
 
     import pandas as pd
 

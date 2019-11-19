@@ -1,6 +1,3 @@
-# services/users/project/__init__.py
-
-
 import os
 
 from flask import Flask
@@ -20,17 +17,17 @@ migrate = Migrate()
 celery = Celery()
 
 
-def create_app(script_info=None):
+def create_app(script_info=None):  # pylint: disable=unused-argument
     app = Flask(__name__)
+
     # set config
-    # app_settings = os.getenv("APP_SETTINGS")
     app.config.from_object(APP_SETTINGS)
     app.config["MONGODB_SETTINGS"] = {
         "db": "ihs",
         "host": conf.database_uri(),
-        "connect": False
-        # "name": "default",
+        "connect": False,
     }
+
     # set up extensions
     db.init_app(app)
     toolbar.init_app(app)
@@ -39,7 +36,7 @@ def create_app(script_info=None):
 
     # shell context for flask cli
     @app.shell_context_processor
-    def ctx():
+    def ctx():  # pylint: disable=unused-variable
         return {"app": app, "db": db, "celery": celery}
 
     return app

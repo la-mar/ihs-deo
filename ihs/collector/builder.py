@@ -172,6 +172,7 @@ class ExportRetriever:
 
 
 if __name__ == "__main__":
+    # pylint: disable-all
 
     from config import get_active_config
     from attrdict import AttrDict

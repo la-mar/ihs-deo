@@ -115,6 +115,7 @@ def post_metric(endpoint: Endpoint, result: dict):
 
 
 if __name__ == "__main__":
+    # pylint: disable-all
 
     from ihs import create_app
 
@@ -124,14 +125,6 @@ if __name__ == "__main__":
 
     endpoint_name = "well_master_horizontal"
     task_name = "sync"
-    job_configs = [
-        x for x in run_endpoint_task(endpoint_name, task_name) if x is not None
-    ]
-    job_config = job_configs[0]
-    [collect(r) for r in results]
-
-    endpoint_name = "wells"
-    task_name = "driftwood"
     results = [x for x in run_endpoint_task(endpoint_name, task_name) if x is not None]
     [collect(r) for r in results]
 

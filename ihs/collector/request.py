@@ -1,13 +1,8 @@
-from typing import Dict, Optional
 import logging
-import os
-from datetime import datetime, timedelta
-from time import sleep
-from copy import copy
+from typing import Dict, Optional
 from urllib.parse import urlparse
 
 import requests
-import logging
 
 from collector.util import retry
 
@@ -70,29 +65,3 @@ class Request(requests.Request):
     @retry(Exception, tries=10, delay=5, backoff=2, logger=logger)
     def get(self):
         return self.session.get(self.url, headers=self.headers, params=self.params)
-
-
-if __name__ == "__main__":
-
-    from collector.requestor import IWellRequestor
-
-    from collector.endpoint import Endpoint
-    from config import get_active_config
-
-    from datetime import datetime
-
-    config = get_active_config()
-    endpoints = config.endpoints
-    functions = config.functions
-    endpoint = endpoints.wells
-
-    url = config.API_BASE_URL + endpoints.wells.path
-    requestor = IWellRequestor(
-        "req_name", endpoint, since=datetime(year=2019, month=10, day=1)
-    )
-
-    headers = requestor.headers
-    params = requestor.params
-
-    resp = requests.get(url, headers=headers, params=params)
-    resp.json()
