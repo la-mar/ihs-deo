@@ -28,6 +28,7 @@ def create_app(script_info=None):
     app.config["MONGODB_SETTINGS"] = {
         "db": "ihs",
         "host": conf.database_uri(),
+        "connect": False
         # "name": "default",
     }
     # set up extensions
