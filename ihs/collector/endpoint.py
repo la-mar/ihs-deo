@@ -118,7 +118,9 @@ class Endpoint(object):
             self.add_task(task_name=name, **task_def)
 
     @staticmethod
-    def load_from_config(app_config: object) -> Dict[str, Endpoint]:
+    def load_from_config(
+        app_config: object, load_disabled: bool = False
+    ) -> Dict[str, Endpoint]:
         endpoints: dict = {}
         try:
             endpoints = app_config.endpoints  # type: ignore
@@ -129,7 +131,7 @@ class Endpoint(object):
         for ep in endpoints.items():
             try:
                 new = Endpoint(name=ep[0], **ep[1])
-                if new.enabled:
+                if new.enabled or load_disabled:
                     loaded[ep[0]] = new
                     # print(f"Created endpoint ({ep[0]})")
                 # else:
