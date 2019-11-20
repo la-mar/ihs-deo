@@ -278,11 +278,12 @@ class ExportRetriever:
 
         return False
 
-    def get(self) -> Union[str, None]:
+    def get(self, auto_delete: bool = True) -> Union[str, None]:
 
         try:
             result = self.client.service.RetrieveExport(self.job.job_id)
-            self.client.delete_job(self.job)
+            if auto_delete:
+                self.client.delete_job(self.job)
             return result
         except Exception as e:
             logger.warning(f"Failed retrieving export {self.job} -- {e}")
