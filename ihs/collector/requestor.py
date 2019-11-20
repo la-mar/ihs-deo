@@ -25,12 +25,13 @@ class Requestor(object):
     functions: Dict[str, str] = {}
     headers: Dict[str, str] = conf.api_params.get("headers")
     params: Dict[str, str] = {}
+    base_url = conf.API_BASE_URL
 
     def __init__(
-        self, base_url: str, endpoint: Endpoint, *args, **kwargs,
+        self, endpoint: Endpoint, base_url: str = None, *args, **kwargs,
     ):
 
-        self.base_url = base_url
+        self.base_url = base_url or self.base_url
         self.endpoint = endpoint
         self.headers = kwargs.get("headers") or self.headers
         self.params = kwargs.get("params") or self.params

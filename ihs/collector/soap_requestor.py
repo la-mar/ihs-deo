@@ -21,9 +21,10 @@ class IHSHeaders:
     _url_path = "Enerdeq/Schemas/Header"
     _confheaders = conf.api_params.get("headers")
     _soapheaders = None
+    base_url = conf.API_BASE_URL
 
-    def __init__(self, base_url: str):
-        self.base_url = base_url
+    def __init__(self, base_url: str = None):
+        self.base_url = base_url or self.base_url
 
     @property
     def schema_header_url(self):
