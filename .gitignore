@@ -120,3 +120,4 @@ dmypy.json
 .DS_Store
 celerybeat-schedule.db
 celerybeat.pid
+doc/.DS_Store
