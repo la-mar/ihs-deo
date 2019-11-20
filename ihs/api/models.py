@@ -59,7 +59,7 @@ class WellVertical(me.DynamicDocument):
 class ProductionHorizontal(me.DynamicDocument):
     meta = {"collection": "production_horizontal", "ordering": ["-last_update"]}
     identification = me.StringField(primary_key=True)
-    api14 = me.StringField(unique=True)
+    api14 = me.StringField()
     api10 = me.StringField()
     last_update = me.DateTimeField(default=datetime.datetime.now)
 
@@ -67,7 +67,7 @@ class ProductionHorizontal(me.DynamicDocument):
 class ProductionVertical(me.DynamicDocument):
     meta = {"collection": "production_vertical", "ordering": ["-last_update"]}
     identification = me.StringField(primary_key=True)
-    api14 = me.StringField(unique=True)
+    api14 = me.StringField()
     api10 = me.StringField()
     last_update = me.DateTimeField(default=datetime.datetime.now)
 
