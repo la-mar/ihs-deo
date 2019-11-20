@@ -49,31 +49,47 @@ def post_heartbeat():
     return metrics.send(f"{project}.heartbeat", 1)
 
 
-@celery.task(bind=True, max_retries=0, ignore_result=True)
-def collect_job_result(self, job: Union[dict, ExportJob]):
-    if not isinstance(job, ExportJob):
-        job = ExportJob(**job)
-    logger.info(f"Collecting job: {job}")
-    try:
-        return collector.tasks.collect(job)
-    except Exception as exc:
-        raise self.retry(exc=exc, countdown=2 ** self.request.retries)
-
-
-@celery.task(bind=True, max_retries=0, ignore_result=True)
-def submit_job(self, job_options: dict, metadata: dict = None):
-    try:
-        job = collector.tasks.submit_job(job_options, metadata or {})
-        logger.info(f"Submitted job: {job}")
-        if job:
-            collect_job_result.apply_async((), {"job": job.to_dict()})
-    except Exception as exc:
-        raise self.retry(exc=exc, countdown=2 ** self.request.retries)
-
-
 # pylint: disable=unused-argument
 @celery.task(rate_limit="10/s", ignore_result=True)
 def sync_endpoint(endpoint_name: str, task_name: str, **kwargs) -> ExportJob:
     for job_config in collector.tasks.run_endpoint_task(endpoint_name, task_name):
         if job_config:
-            submit_job.apply_async((), job_config)
+            submit_job.apply_async(
+                (job_config.get("metadata").get("hole_direction"),), job_config
+            )
+
+
+@celery.task(bind=True, max_retries=0, ignore_result=True)
+def submit_job(self, route_key: str, job_options: dict, metadata: dict = None):
+    try:
+        job = collector.tasks.submit_job(job_options, metadata or {})
+        logger.info(f"Submitted job: {job}")
+        if job:
+            collect_job_result.apply_async((route_key,), {"job": job.to_dict()})
+    except Exception as exc:
+        raise self.retry(exc=exc, countdown=2 ** self.request.retries)
+
+
+@celery.task(bind=True, max_retries=0, ignore_result=True)
+def collect_job_result(self, route_key: str, job: Union[dict, ExportJob]):
+    if not isinstance(job, ExportJob):
+        job = ExportJob(**job)
+    logger.info(f"Collecting job: {job}")
+    try:
+        collector.tasks.collect(job)
+        delete_job.apply_async((route_key,), {"job": job.to_dict()})
+
+    except Exception as exc:
+        raise self.retry(exc=exc, countdown=2 ** self.request.retries)
+
+
+@celery.task(bind=True, max_retries=0, ignore_result=True)
+def delete_job(self, route_key: str, job: Union[dict, ExportJob]):
+    if not isinstance(job, ExportJob):
+        job = ExportJob(**job)
+    logger.info(f"Collecting job: {job}")
+    try:
+        return collector.tasks.delete_job(job)
+    except Exception as exc:
+        raise self.retry(exc=exc, countdown=2 ** self.request.retries)
+

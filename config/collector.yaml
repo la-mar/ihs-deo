@@ -161,7 +161,7 @@ counties: &counties
 
 endpoints:
   well_master_horizontal:
-    enabled: false
+    enabled: true
     version: v10
     model: api.models.WellMasterHorizontal
     exclude: []
@@ -181,38 +181,38 @@ endpoints:
           query_path: well_horizontal_by_county.xml
           matrix:
             <<: *counties
-  # well_horizontal:
-  #   enabled: true
-  #   version: v10
-  #   model: api.models.WellHorizontal
-  #   exclude: []
-  #   normalize: false
-  #   options:
-  #     data_type: Well
-  #     template: EnerdeqML Well
-  #     criteria:
-  #       hole_direction: H
-  #   tasks:
-  #     sync:
-  #       cron:
-  #         minute: 0
-  #         hour: 0
-  #       options:
-  #         query_path: well_by_api.xml
-  #         matrix:
-  #           using: api.models.WellMasterHorizontal.ids
-  #           label: api
-  #     sequoia:
-  #       seconds: 300
-  #       options:
-  #         query_path: well_by_api.xml
-  #         matrix:
-  #           sequoia:
-  #             api: "42461409160000"
-  production_master_horizontal:
-    enabled: false
+  well_horizontal:
+    enabled: true
     version: v10
-    model: api.models.ProducingEntityMasterHorizontal
+    model: api.models.WellHorizontal
+    exclude: []
+    normalize: false
+    options:
+      data_type: Well
+      template: EnerdeqML Well
+      criteria:
+        hole_direction: H
+    tasks:
+      sync:
+        cron:
+          minute: 0
+          hour: 0
+        options:
+          query_path: well_by_api.xml
+          matrix:
+            using: api.models.WellMasterHorizontal.ids
+            label: api
+      # sequoia:
+      #   seconds: 300
+      #   options:
+      #     query_path: well_by_api.xml
+      #     matrix:
+      #       sequoia:
+      #         api: "42461409160000"
+  production_master_horizontal:
+    enabled: true
+    version: v10
+    model: api.models.ProductionMasterHorizontal
     exclude: []
     normalize: false
     propagate_to_task: true
@@ -223,10 +223,9 @@ endpoints:
         hole_direction: H
     tasks:
       sync:
-        seconds: 60
-        # cron:
-        #   minute: 0
-        #   hour: 0
+        cron:
+          minute: 0
+          hour: 0
         options:
           query_path: production_horizontal_by_county.xml
           matrix:
@@ -244,13 +243,13 @@ endpoints:
         hole_direction: H
     tasks:
       sync:
-        # seconds: 60
         cron:
-          minute: "*/30"
+          minute: 0
+          hour: 0
         options:
           query_path: production_by_entity.xml
           matrix:
-            using: api.models.ProducingEntityMasterHorizontal.ids
+            using: api.models.ProductionMasterHorizontal.ids
             label: producing_entity
       # sequoia:
       #   seconds: 300

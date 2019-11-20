@@ -43,7 +43,8 @@ def run_endpoint_task(
                 "endpoint": endpoint_name,
                 "task": task_name,
                 "url": conf.API_BASE_URL,
-                **opts,
+                "hole_direction": opts.get("criteria", {}).get("hole_direction"),
+                # **opts,
             },
         )
 
@@ -52,7 +53,7 @@ def submit_job(job_options: dict, metadata: dict) -> ExportJob:
     endpoint_name = metadata.get("endpoint")
     endpoint = endpoints[endpoint_name]
     ep = ExportParameter(**job_options)
-    requestor = ExportBuilder(conf.API_BASE_URL, endpoint)
+    requestor = ExportBuilder(endpoint)
     return requestor.submit(ep, metadata=metadata or {})
 
 
@@ -135,11 +136,5 @@ if __name__ == "__main__":
     endpoint_name = "production_horizontal"
     task_name = "sync"
     results = [x for x in run_endpoint_task(endpoint_name, task_name) if x is not None]
-    job_options = results[0]
-    job = submit_job(**job_options)
-
-    data = get_job_results(job)
-
-    interface = ProductionList(job.name, job.criteria.get("hole_direction"))
-    interface.ids = data
-
+    opts = results[0]
+    opts.get("job_options")

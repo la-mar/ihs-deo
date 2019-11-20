@@ -153,5 +153,7 @@ if __name__ == "__main__":
     parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
     document = parser.parse(xml)
     transformed = ProductionTransformer.extract_from_collection(document)
-    collector = Collector(endpoints[job.endpoint].model)  # pylint: disable=no-member
-    collector.save(transformed)
+    to_json(transformed, "test/data/production_parsed.json")
+
+    # collector = Collector(endpoints[job.endpoint].model)  # pylint: disable=no-member
+    # collector.save(transformed)

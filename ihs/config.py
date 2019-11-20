@@ -186,10 +186,13 @@ class BaseConfig:
     CELERY_ENABLE_REMOTE_CONTROL = False  # required for sqs
     CELERY_SEND_EVENTS = False
     CELERY_DEFAULT_QUEUE = f"{project}-default"  # sqs queue name
-    CELERY_ROUTES = {
-        "celery_queue.tasks.submit_job": f"{project}-submissions",
-        "celery_queue.tasks.collect_job_result": f"{project}-collections",
-    }
+    # CELERY_ROUTES = {
+    #     "celery_queue.tasks.submit_job": f"{project}-submissions",
+    #     "celery_queue.tasks.collect_job_result": f"{project}-collections",
+    #     "celery_queue.tasks.delete_job": f"{project}-deletions",
+    # }
+    CELERY_ROUTES = ("celery_queue.routers.hole_direction_router",)
+    CELERY_TASK_CREATE_MISSING_QUEUES = False
 
     """ API """
     API_CLIENT_TYPE = os.getenv("IHS_CLIENT_TYPE", "legacy")
@@ -296,6 +299,7 @@ class DevelopmentConfig(BaseConfig):
     # SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
     DEBUG_TB_ENABLED = True
     SECRET_KEY = os.getenv("SECRET_KEY", "test")
+    CELERY_TASK_CREATE_MISSING_QUEUES = True
 
 
 class TestingConfig(BaseConfig):
