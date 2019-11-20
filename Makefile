@@ -36,10 +36,12 @@ upgrade:
 	poetry run ihs db upgrade
 
 celery-worker:
-	celery -E -A ihs.celery_queue.worker:celery worker --loglevel=INFO --purge
+	# celery -E -A ihs.celery_queue.worker:celery worker --loglevel=INFO --purge
+	ihs run worker -Q ihs-default,ihs-collections,ihs-submissions --purge
 
 celery-beat:
-	celery -A ihs.celery_queue.worker:celery beat --loglevel=DEBUG
+	# celery -A ihs.celery_queue.worker:celery beat --loglevel=DEBUG
+	ihs run cron --loglevel=DEBUG
 
 celery-flower:
 	celery -A ihs.celery_queue.worker:celery flower --loglevel=DEBUG --purge
