@@ -102,6 +102,15 @@ def collect_identities(job: ExportJob, data: bytes) -> IdentityList:
     return interface
 
 
+def delete_job(job: ExportJob) -> bool:
+    endpoint = endpoints[job.endpoint]
+    requestor = ExportBuilder(conf.API_BASE_URL, endpoint)
+    result = False
+    if requestor.job_exists(job):
+        result = requestor.delete_job(job)
+    return result
+
+
 def post_metric(endpoint: Endpoint, result: dict):
     for k, v in result.items():
         try:
@@ -123,7 +132,7 @@ if __name__ == "__main__":
     app = create_app()
     app.app_context().push()
 
-    endpoint_name = "production_master_horizontal"
+    endpoint_name = "production_horizontal"
     task_name = "sync"
     results = [x for x in run_endpoint_task(endpoint_name, task_name) if x is not None]
     job_options = results[0]
