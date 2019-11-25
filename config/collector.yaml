@@ -1,6 +1,17 @@
 default_schedule: &default_schedule # seconds: 15
   cron:
-    minute: "*/30"
+    minute: 0
+    hour: "*/6"
+
+nightly: &nightly
+  cron:
+    minute: 0
+    hour: 3
+
+every_6_hours: &every_6_hours
+  cron:
+    minute: 0
+    hour: "*/6"
 
 job_defaults:
   sync: &default_sync
@@ -174,9 +185,7 @@ endpoints:
         hole_direction: H
     tasks:
       sync:
-        cron:
-          minute: 0
-          hour: 0
+        <<: *nightly
         options:
           query_path: well_horizontal_by_county.xml
           matrix:
@@ -194,9 +203,7 @@ endpoints:
         hole_direction: H
     tasks:
       sync:
-        cron:
-          minute: 0
-          hour: 0
+        <<: *every_6_hours
         options:
           query_path: well_by_api.xml
           matrix:
@@ -223,9 +230,7 @@ endpoints:
         hole_direction: H
     tasks:
       sync:
-        cron:
-          minute: 0
-          hour: 0
+        <<: *nightly
         options:
           query_path: production_horizontal_by_county.xml
           matrix:
@@ -243,9 +248,7 @@ endpoints:
         hole_direction: H
     tasks:
       sync:
-        cron:
-          minute: 0
-          hour: 0
+        <<: *every_6_hours
         options:
           query_path: production_by_entity.xml
           matrix:
@@ -258,47 +261,86 @@ endpoints:
       #     matrix:
       #       sequoia:
       #         api: "42461409160000"
-  # well_master_vertical:
-  #   enabled: true
-  #   version: v10
-  #   model: api.models.WellMasterVertical
-  #   exclude: []
-  #   normalize: false
-  #   propagate_to_task: true
-  #   options:
-  #     data_type: Well
-  #     template: Well ID List
-  #     criteria:
-  #       hole_direction: V
-  #   tasks:
-  #     sync:
-  #       seconds: 60
-  #       # cron:
-  #       #   minute: 0
-  #       #   hour: 0
-  #       options:
-  #         query_path: well_vertical_by_county.xml
-  #         matrix:
-  #           <<: *counties
-  # well_vertical:
-  #   enabled: true
-  #   version: v10
-  #   model: api.models.WellVertical
-  #   exclude: []
-  #   normalize: false
-  #   options:
-  #     data_type: Well
-  #     template: EnerdeqML Well
-  #     criteria:
-  #       hole_direction: V
-  #   tasks:
-  #     sync:
-  #       <<: *default_sync
-  #       options:
-  #         query_path: well_vertical_by_county.xml
-  #         matrix:
-  #           <<: *counties
-  #     # driftwood:
-  #     #   <<: *default_sync
-  #     #   options:
-  #     #     query_path: well_vertical_driftwood_all.xml
+  well_master_vertical:
+    enabled: true
+    version: v10
+    model: api.models.WellMasterVertical
+    exclude: []
+    normalize: false
+    propagate_to_task: true
+    options:
+      data_type: Well
+      template: Well ID List
+      criteria:
+        hole_direction: V
+    tasks:
+      sync:
+        <<: *nightly
+        options:
+          query_path: well_vertical_by_county.xml
+          matrix:
+            <<: *counties
+  well_vertical:
+    enabled: true
+    version: v10
+    model: api.models.WellVertical
+    exclude: []
+    normalize: false
+    options:
+      data_type: Well
+      template: EnerdeqML Well
+      criteria:
+        hole_direction: V
+    tasks:
+      sync:
+        <<: *nightly
+        options:
+          query_path: well_by_api.xml
+          matrix:
+            using: api.models.WellMasterVertical.ids
+            label: api
+  production_master_vertical:
+    enabled: true
+    version: v10
+    model: api.models.ProductionMasterVertical
+    exclude: []
+    normalize: false
+    propagate_to_task: true
+    options:
+      data_type: Production Allocated
+      template: Production ID List
+      criteria:
+        hole_direction: V
+    tasks:
+      sync:
+        <<: *nightly
+        options:
+          query_path: production_vertical_by_county.xml
+          matrix:
+            <<: *counties
+  production_vertical:
+    enabled: true
+    version: v10
+    model: api.models.ProductionVertical
+    exclude: []
+    normalize: false
+    options:
+      data_type: Production Allocated
+      template: EnerdeqML Production
+      criteria:
+        hole_direction: V
+    tasks:
+      sync:
+        <<: *nightly
+        options:
+          query_path: production_by_entity.xml
+          matrix:
+            using: api.models.ProductionMasterVertical.ids
+            label: producing_entity
+      # sequoia:
+      #   seconds: 300
+      #   options:
+      #     query_path: production_by_api.xml
+      #     matrix:
+      #       sequoia:
+      #         api: "42461409160000"
