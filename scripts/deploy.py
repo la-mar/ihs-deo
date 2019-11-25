@@ -55,21 +55,16 @@ ENV = os.getenv("ENV", "prod")
 PROJECT_NAME: str = os.getenv("COMPOSE_PROJECT_NAME")  # type: ignore
 CLUSTER_NAME = f"{os.getenv('ECS_CLUSTER')}-{ENV}"  # type: ignore
 SERVICE_NAME = PROJECT_NAME
-TASK_IAM_ROLE = "arn:aws:iam::864494265830:role/iwell-deo-task-role"
+TASK_IAM_ROLE = f"arn:aws:iam::864494265830:role/{PROJECT_NAME}-task-role"
 
 SERVICES: List[str] = [PROJECT_NAME]
 
 IMAGES = [
     {"name": PROJECT_NAME, "dockerfile": "Dockerfile", "build_context": "."},
-    {
-        "name": "iwell-redis-deo",
-        "dockerfile": "./redis/Dockerfile",
-        "build_context": "./redis",
-    },
 ]
 
 TAGS = [
-    {"key": "domain", "value": "engineering"},
+    {"key": "domain", "value": "technology"},
     {"key": "service_name", "value": SERVICE_NAME},
     {"key": "environment", "value": ENV},
     {"key": "terraform", "value": "true"},
@@ -104,7 +99,7 @@ def get_task_definition(
     task_iam_role_arn: str = "ecsTaskExecutionRole",
 ):
     defs = {
-        PROJECT_NAME: {
+        "ihs-worker": {
             "containerDefinitions": [
                 {
                     "name": "ihs-worker",
@@ -122,6 +117,15 @@ def get_task_definition(
                     "essential": True,
                     "environment": transform_envs(envs),
                 },
+            ],
+            "executionRoleArn": "ecsTaskExecutionRole",
+            "family": f"{service_name}",
+            "networkMode": "bridge",
+            "taskRoleArn": task_iam_role_arn,
+            "tags": tags,
+        },
+        "ihs-cron": {
+            "containerDefinitions": [
                 {
                     "name": "ihs-cron",
                     "logConfiguration": {
@@ -144,7 +148,7 @@ def get_task_definition(
             "networkMode": "bridge",
             "taskRoleArn": task_iam_role_arn,
             "tags": tags,
-        }
+        },
     }
 
     return defs[name]
