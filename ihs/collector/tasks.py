@@ -44,7 +44,7 @@ def run_endpoint_task(
                 "task": task_name,
                 "url": conf.API_BASE_URL,
                 "hole_direction": opts.get("criteria", {}).get("hole_direction"),
-                # **opts,
+                **opts,  # duplicate job options here to they travel with the job throughout its lifecycle
             },
         )
 
@@ -105,7 +105,7 @@ def collect_identities(job: ExportJob, data: bytes) -> IdentityList:
 
 def delete_job(job: ExportJob) -> bool:
     endpoint = endpoints[job.endpoint]
-    requestor = ExportBuilder(conf.API_BASE_URL, endpoint)
+    requestor = ExportBuilder(endpoint)
     result = False
     if requestor.job_exists(job):
         result = requestor.delete_job(job)
@@ -133,8 +133,11 @@ if __name__ == "__main__":
     app = create_app()
     app.app_context().push()
 
-    endpoint_name = "production_horizontal"
+    endpoint_name = "production_master_horizontal"
     task_name = "sync"
     results = [x for x in run_endpoint_task(endpoint_name, task_name) if x is not None]
     opts = results[0]
     opts.get("job_options")
+    job = submit_job(**opts)
+    dir(job)
+    job.to_dict()
