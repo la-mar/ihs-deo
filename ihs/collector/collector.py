@@ -67,22 +67,21 @@ if __name__ == "__main__":
     endpoint = endpoints["production_master_horizontal"]
     task = endpoint.tasks["sync"]
 
-    # print(f"Parsed {len(wellbores)} wellbores")
+    #! Dont delete
+    # import pandas as pd
 
-    import pandas as pd
+    # dir(pd.io.json)
 
-    dir(pd.io.json)
+    # prod_json = document["production_set"]["producing_entity"][0]["production"]["year"]
 
-    prod_json = document["production_set"]["producing_entity"][0]["production"]["year"]
+    # df = pd.io.json.json_normalize(
+    #     prod_json,
+    #     record_path=["month"],
+    #     record_prefix="month.",
+    #     meta=["number"],
+    #     meta_prefix="year.",
+    #     # errors="ignore",
+    # )
 
-    df = pd.io.json.json_normalize(
-        prod_json,
-        record_path=["month"],
-        record_prefix="month.",
-        meta=["number"],
-        meta_prefix="year.",
-        # errors="ignore",
-    )
-
-    df.iloc[10].T
+    # df.iloc[10].T
 
