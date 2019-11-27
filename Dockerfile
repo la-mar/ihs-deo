@@ -33,6 +33,5 @@ RUN poetry install --no-dev --no-interaction
 COPY . /app
 
 # create unprivileged user
-# RUN adduser --disabled-password --gecos '' celeryuser
 RUN groupadd -r celeryuser && useradd -r -m -g celeryuser celeryuser
 RUN find /app ! -user celeryuser -exec chown celeryuser {} \;
