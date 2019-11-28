@@ -4,15 +4,6 @@ from flask import Blueprint, request, jsonify
 from flask_restful import Resource, Api
 import json
 
-# from marshmallow import (
-#     Schema,
-#     fields,
-#     validate,
-#     pre_load,
-#     post_dump,
-#     post_load,
-#     ValidationError,
-# )
 
 from ihs.api.models import (
     WellMasterHorizontal,
@@ -23,22 +14,6 @@ from ihs.api.models import (
 
 well_blueprint = Blueprint("well", __name__, url_prefix="/well")
 api = Api(well_blueprint)
-
-
-# class WellSchema(Schema):
-#     name = fields.Str(dump_only=True, required=True)
-
-#     # Clean up data
-#     @pre_load
-#     def process_input(self, data, **kwargs):
-#         # data["email"] = data["email"].lower().strip()
-#         return data
-
-#     # We add a post_dump hook to add an envelope to responses
-#     @post_dump(pass_many=True)
-#     def wrap(self, data, many, **kwargs):
-#         key = "users" if many else "user"
-#         return {key: data}
 
 
 @well_blueprint.route("/ping", methods=["GET"])
@@ -76,6 +51,56 @@ class Well(Resource):
         return response_object, 200
 
 
+class WellHeader(Resource):
+    # header/
+    pass
+
+
+class WellHeaderList(Resource):
+    # header/
+    pass
+
+
+class WellTest(Resource):
+    # tests/ip_pt/[type code, header]
+    pass
+
+
+class WellTestList(Resource):
+    # tests/ip_pt/[type code, header]
+    pass
+
+
+class WellSurvey(Resource):
+    # surveys/borehole
+    pass
+
+
+class WellSurveyList(Resource):
+    # surveys/borehole
+    pass
+
+
+class WellTreatmentSummary(Resource):
+    # treatment_summary/
+    pass
+
+
+class WellTreatmentSummaryList(Resource):
+    # treatment_summary/
+    pass
+
+
+class WellCompletion(Resource):
+    # engineering/completion/header
+    pass
+
+
+class WellCompletionList(Resource):
+    # engineering/completion/header
+    pass
+
+
 class Test(Resource):
     def get(self) -> Tuple[Dict, int]:
         """Get all makes"""
@@ -95,15 +120,13 @@ if __name__ == "__main__":
 
     app = create_app()
     app.app_context().push()
-
     conf = get_active_config()
 
-    model = WellMasterHorizontal
+    model = WellHorizontal
+    api14 = "42461409160000"
+    m = model.objects.get(api14=api14)
 
-    [m.to_json() for m in model.objects.only("_id")][0]
-
-    name = "tx-mitchell"
-    model.objects.get(name=name).ids
-
-    dir(model.objects)
+    # m.content
+    # dir(m)
+    # dir(model.objects)
 
