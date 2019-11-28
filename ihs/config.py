@@ -132,9 +132,11 @@ class BaseConfig:
 
     load_dotenv(".env")
 
+    """ General """
     FLASK_ENV = os.getenv("FLASK_ENV", "development")
     DEFAULT_COLLECTION_INTERVAL = {"hours": 1}
     ENV_NAME = os.getenv("ENV_NAME", socket.gethostname())
+    DEFAULT_PROJECTION = "wgs84"
 
     """ Sentry """
     SENTRY_ENABLED = bool(os.getenv("SENTRY_ENABLED"))
