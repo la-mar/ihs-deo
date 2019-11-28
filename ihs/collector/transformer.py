@@ -104,6 +104,22 @@ class WellboreTransformer(Transformer):
     collection_key = "well_set"
     entity_key = "wellbore"
 
+    @classmethod
+    def copy_content_to_root(cls, data: OrderedDict) -> OrderedDict:
+        data = data or OrderedDict()
+        content = data.get("content", {})
+        data["ip_test_count"] = content.get("tests", {}).get("initial_production")
+        data["completion_count"] = content.get("engineering", {}).get("completion")
+        data["perforation_count"] = content.get("engineering", {}).get("perforation")
+        data["survey_count"] = content.get("surveys", {}).get("borehole")
+        return data
+
+    @classmethod
+    def transform(cls, data: OrderedDict) -> OrderedDict:
+        data = super().transform(data)
+        data = cls.copy_content_to_root(data)
+        return data
+
 
 class ProductionTransformer(Transformer):
 
@@ -141,8 +157,8 @@ if __name__ == "__main__":
     conf = get_active_config()
     endpoints = Endpoint.load_from_config(conf)
 
-    endpoint_name = "production_horizontal"
-    task_name = "sequoia"
+    endpoint_name = "well_vertical"
+    task_name = "driftwood"
     job_config = [
         x for x in run_endpoint_task(endpoint_name, task_name) if x is not None
     ][0]
@@ -152,8 +168,8 @@ if __name__ == "__main__":
 
     parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
     document = parser.parse(xml)
-    transformed = ProductionTransformer.extract_from_collection(document)
-    to_json(transformed, "test/data/production_parsed.json")
+    transformed = WellboreTransformer.extract_from_collection(document)
+    to_json(transformed, "test/data/vertical_driftwood_all.json")
 
     # collector = Collector(endpoints[job.endpoint].model)  # pylint: disable=no-member
     # collector.save(transformed)
