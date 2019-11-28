@@ -84,3 +84,10 @@ def to_json(d: dict, path: str, cls=DateTimeEncoder):
 def load_json(path: str):
     with open(path, "r") as f:
         return json.load(f)
+
+
+def query_dict(path: str, data: dict, sep: str = "."):
+    elements = path.split(sep)
+    for e in elements:
+        data = data.get(e, {})
+    return data if data != {} else None
