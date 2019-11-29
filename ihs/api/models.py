@@ -1,4 +1,5 @@
 from typing import no_type_check, List, Dict
+from collections import OrderedDict
 import functools
 import datetime
 import mongoengine as me
@@ -32,6 +33,31 @@ class BaseMixin:
 
 
 class WellMixin(BaseMixin):
+    @property
+    def well_header(self):
+        output = OrderedDict()
+        header = self.header
+
+        output["api14"] = self.api14
+        output["api10"] = self.api10
+        output["last_update_date"] = self.last_update
+
+        output["well_name"] = get("designation.name", header)
+        output["well_number"] = get("number", header)
+        output["products"] = get("products.objective.code", header)
+        output["hole_direction"] = get(
+            "drilling.hole_direction.designation.code", header
+        )
+        output["county_name"] = get("geopolitical.county.name", header)
+        output["county_code"] = get("geopolitical.county.code", header)
+        output["state_name"] = get("geopolitical.province_state.name", header)
+        output["state_code"] = get("geopolitical.province_state.code", header)
+        output["region_name"] = get("geopolitical.region.name", header)
+        output["operator_name"] = get("operators.current.name", header)
+        output["operator_alias"] = get("operators.current.alternate", header)
+
+        return output
+
     @property
     def well_locations(self):
         locs = {}
@@ -101,6 +127,53 @@ class WellMixin(BaseMixin):
         header["points"] = points
 
         return header
+
+    @property
+    def ip_tests(self):
+        data = {}
+        output = []
+
+        if hasattr(self, "tests"):
+            data = self["tests"].get("ip_pt")
+
+        if issubclass(data.__class__, dict):
+            data = [data]
+
+        for test in data:
+            get = functools.partial(query_dict, data=test)
+            out = {}
+            out["type_code"] = get("type_code")
+            out["test_number"] = get("header.number")
+            out["test_date"] = get("header.dates.test.standard")
+            out["test_method"] = get("header.methods.test.name")
+            out["completion"] = get("header.completion")
+            out["oil"] = get("header.flows.oil.value")
+            out["oil_uom"] = get("header.flows.oil.uom")
+            out["gas"] = get("header.flows.gas.value")
+            out["gas_uom"] = get("header.flows.gas.uom")
+            out["water"] = get("header.flows.water.value")
+            out["water_uom"] = get("header.flows.water.uom")
+            choke = get("header.chokes.top.description")
+            choke_uom = get("header.chokes.top.description")
+            out["choke"] = f"{choke} {choke_uom}" if choke and choke_uom else None
+            out["depth_top"] = get("header.depths.top.value")
+            out["depth_top"] = get("header.depths.top.uom")
+            out["depth_base"] = get("header.depths.base.value")
+            out["depth_base"] = get("header.depths.base.uom")
+            out["sulfur"] = get("header.sulfur.indicator.code")
+            out["oil_gravity"] = get("header.gravities.oil.value")
+            out["oil_gravity_uom"] = get("header.gravities.oil.uom")
+            out["gor"] = get("header.ratios.gas_oil.value")
+            out["gor_uom"] = get("header.ratios.gas_oil.uom")
+            out["oil_gravity_uom"] = get("header.ratios.gas_oil.uom")
+            out["perf_upper"] = get("perforation.header.depths.top.value")
+            out["perf_upper_uom"] = get("perforation.header.depths.top.uom")
+            out["perf_lower"] = get("perforation.header.depths.base.value")
+            out["perf_lower_uom"] = get("perforation.header.depths.base.uom")
+            out["perfll"] = get("perforation.header.lengths.lateral_gross_perf.value")
+            out["perfll_uom"] = get("perforation.header.lengths.lateral_gross_perf.uom")
+            output.append(out)
+        return output
 
 
 class ProductionMixin(BaseMixin):
@@ -189,4 +262,4 @@ if __name__ == "__main__":
     m = model.objects.get(api14=api14)  # pylint: disable=no-member
 
     # vertical = "42383362060000"
-    m.active_survey.keys()
+    m.ip_tests
