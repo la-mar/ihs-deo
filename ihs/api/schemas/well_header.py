@@ -11,9 +11,11 @@ from marshmallow import (
 )
 
 from util import query_dict as get
+from api.schemas import WellBaseSchema
 
 
-class WellLocation(Schema):
+class WellLocationSchema(Schema):
+
     lon = fields.Float()
     lat = fields.Float()
     crs = fields.Str()
@@ -24,24 +26,10 @@ class WellLocation(Schema):
     metes_bounds = fields.Str()
 
 
-class WellHeaderSchema(Schema):
+class WellHeaderSchema(WellBaseSchema):
     class Meta:
         ordered = True
 
-    api14 = fields.Str(required=True)
-    api10 = fields.Str()
-    last_update_date = fields.Date()
-    well_name = fields.Str()
-    well_number = fields.Str()
-    products = fields.Str()
-    hole_direction = fields.Str()
-    county_name = fields.Str()
-    county_code = fields.Str()
-    state_name = fields.Str()
-    state_code = fields.Str()
-    region_name = fields.Str()
-    operator_name = fields.Str()
-    operator_alias = fields.Str()
     oeprator_code = fields.Str()
     operator_city = fields.Str()
     operator_original_name = fields.Str()
@@ -79,9 +67,9 @@ class WellHeaderSchema(Schema):
     area_rights_value = fields.Int()
     area_rights_uom = fields.Str()
     data_source = fields.Str()
-    shl = fields.Nested(WellLocation)
-    bhl = fields.Nested(WellLocation)
-    pbhl = fields.Nested(WellLocation)
+    shl = fields.Nested(WellLocationSchema)
+    bhl = fields.Nested(WellLocationSchema)
+    pbhl = fields.Nested(WellLocationSchema)
 
     # Clean up data
     @pre_dump
