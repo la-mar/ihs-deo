@@ -1,6 +1,6 @@
 import json
 import urllib.parse
-from typing import Callable, Union
+from typing import Callable, Union, Tuple
 
 from util.stringprocessor import StringProcessor
 from util.jsontools import DateTimeEncoder
@@ -91,3 +91,10 @@ def query_dict(path: str, data: dict, sep: str = "."):
     for e in elements:
         data = data.get(e, {})
     return data if data != {} else None
+
+
+def gal_to_bbl(value: float, uom: str) -> Tuple[float, str]:
+    if uom.lower() == "gal":
+        return value / 42, "BBL"
+    else:
+        return value, uom

@@ -1,3 +1,4 @@
+# pylint: disable=unused-argument
 import os
 
 from flask import Flask
@@ -6,8 +7,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from flask_migrate import Migrate
 from celery import Celery
 
-from ihs.api.welldata import well_blueprint
-
+from api.well import well_blueprint
 
 from config import APP_SETTINGS, project, get_active_config
 
@@ -20,13 +20,13 @@ migrate = Migrate()
 celery = Celery()
 
 
-def create_app(script_info=None):  # pylint: disable=unused-argument
+def create_app(script_info=None):
     app = Flask(__name__)
 
     # set config
     app.config.from_object(APP_SETTINGS)
     app.config["MONGODB_SETTINGS"] = {
-        "db": "ihs",
+        "db": conf.DATABASE_NAME,
         "host": conf.database_uri(),
         "connect": False,
     }

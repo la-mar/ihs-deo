@@ -190,11 +190,6 @@ class BaseConfig:
     CELERY_ENABLE_REMOTE_CONTROL = False  # required for sqs
     CELERY_SEND_EVENTS = False
     CELERY_DEFAULT_QUEUE = f"{project}-default"  # sqs queue name
-    # CELERY_ROUTES = {
-    #     "celery_queue.tasks.submit_job": f"{project}-submissions",
-    #     "celery_queue.tasks.collect_job_result": f"{project}-collections",
-    #     "celery_queue.tasks.delete_job": f"{project}-deletions",
-    # }
     CELERY_ROUTES = ("celery_queue.routers.hole_direction_router",)
     CELERY_TASK_CREATE_MISSING_QUEUES = False
 
@@ -204,10 +199,6 @@ class BaseConfig:
     API_USERNAME = os.getenv("IHS_USERNAME")
     API_PASSWORD = os.getenv("IHS_PASSWORD")
     API_APP_KEY = os.getenv("IHS_APP_KEY")
-    # API_TOKEN_PATH = os.getenv("IHS_TOKEN_PATH")
-    # API_PAGESIZE = os.getenv("IHS_PAGESIZE", 1000)
-    # API_HEADER_KEY = os.getenv("IHS_HEADER_KEY", "API-HEADER-KEY")
-    # API_HEADER_PREFIX = os.getenv("IHS_HEADER_PREFIX", "DEO")
     API_SYNC_WINDOW_MINUTES = os.getenv("IHS_SYNC_WINDOW_MINUTES", 1440 * 7)
     API_HEADERS = {
         "Username": API_USERNAME,
