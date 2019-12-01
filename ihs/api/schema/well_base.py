@@ -1,3 +1,5 @@
+# pylint: disable=unused-argument
+
 from typing import Dict
 import functools
 from marshmallow import Schema, fields, pre_dump

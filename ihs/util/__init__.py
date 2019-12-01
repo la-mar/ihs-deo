@@ -9,9 +9,7 @@ from util.jsontools import DateTimeEncoder
 def apply_transformation(
     data: dict, convert: Callable, keys: bool = False, values: bool = True
 ) -> dict:
-    """
-    Recursively apply the passed function to a dict's keys, values, or both
-    """
+    """ Recursively apply the passed function to a dict's keys, values, or both """
     if isinstance(data, (str, int, float)):
         if values:
             return convert(data)
@@ -54,7 +52,7 @@ def urljoin(base: str, path: str) -> str:
 
 
 def load_xml(path: str) -> Union[str, None]:
-    """load and return an xml file as a string
+    """ Load and return an xml file as a string
 
     Arguments:
         filename {str} -- filename of xml file. extension is optional.
@@ -71,8 +69,8 @@ def load_xml(path: str) -> Union[str, None]:
     try:
         with open(path, "r") as f:
             xml = f.read()
-    except Exception as fe:
-        print(f"Invalid filename: {path}")
+    except FileNotFoundError as fe:
+        print(f"Invalid file path: {fe}")
     return xml
 
 

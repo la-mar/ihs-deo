@@ -1,14 +1,5 @@
-from collections import OrderedDict
-from marshmallow import (
-    Schema,
-    fields,
-    validate,
-    pre_load,
-    pre_dump,
-    post_dump,
-    post_load,
-    ValidationError,
-)
+# pylint: disable=unused-argument
+from marshmallow import Schema, fields, pre_dump
 
 
 class IPTestSchema(Schema):
@@ -48,8 +39,8 @@ class IPTestSchema(Schema):
     def transform(self, data, **kwargs) -> list:
         if hasattr(data, "ip_tests"):
             return data.ip_tests
-        else:
-            return data
+
+        return data
 
 
 if __name__ == "__main__":

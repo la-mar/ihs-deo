@@ -1,17 +1,5 @@
-from collections import OrderedDict
-import functools
-from marshmallow import (
-    Schema,
-    fields,
-    validate,
-    pre_load,
-    pre_dump,
-    post_dump,
-    post_load,
-    ValidationError,
-)
+from marshmallow import Schema, fields, pre_dump
 
-from util import query_dict
 from api.schema import WellBaseSchema
 
 
@@ -38,7 +26,6 @@ class SurveySchema(WellBaseSchema):
     points = fields.Nested(SurveyPointSchema(many=True))
     data_source = fields.Str()
 
-    # Clean up data
     @pre_dump
     def transform(self, data, **kwargs):
         output = super().transform(data)
