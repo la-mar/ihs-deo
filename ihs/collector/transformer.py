@@ -3,7 +3,10 @@ from __future__ import annotations
 import hashlib
 import logging
 from collections import OrderedDict
+import functools
 from typing import Callable, Dict, List, Union  # pylint: disable=unused-import
+
+from util import query_dict
 
 logger = logging.getLogger(__name__)
 
@@ -44,13 +47,7 @@ class Transformer:
 
     @classmethod
     def extract_last_updated_date(cls, data: OrderedDict) -> OrderedDict:
-        data = data or OrderedDict()
-        return (
-            data.get("header", {})
-            .get("dates", {})
-            .get("last_update", {})
-            .get("standard")
-        )
+        return query_dict("header.dates.last_update.standard", data or {})
 
     @classmethod
     def copy_last_update_to_root(cls, data: OrderedDict) -> OrderedDict:
@@ -107,11 +104,12 @@ class WellboreTransformer(Transformer):
     @classmethod
     def copy_content_to_root(cls, data: OrderedDict) -> OrderedDict:
         data = data or OrderedDict()
-        content = data.get("content", {})
-        data["ip_test_count"] = content.get("tests", {}).get("initial_production")
-        data["completion_count"] = content.get("engineering", {}).get("completion")
-        data["perforation_count"] = content.get("engineering", {}).get("perforation")
-        data["survey_count"] = content.get("surveys", {}).get("borehole")
+        get = functools.partial(query_dict, data=data.get("content", {}))
+
+        data["ip_test_count"] = get("tests.initial_production")
+        data["completion_count"] = get("engineering.completion")
+        data["perforation_count"] = get("engineering.perforation")
+        data["survey_count"] = get("surveys.borehole")
         return data
 
     @classmethod
@@ -128,15 +126,7 @@ class ProductionTransformer(Transformer):
 
     @classmethod
     def extract_identifier(cls, data: OrderedDict) -> str:
-        return str(
-            data.get("wellbore", {}).get("metadata", {}).get("identification", "")
-        )
-
-    # @classmethod
-    # def set_identifier_to_api(cls, data: OrderedDict) -> OrderedDict:
-    #     data["producing_entity"] = data.get("identifier")
-    #     data["identifier"] = cls.extract_identifier(data)
-    #     return data
+        return str(query_dict("wellbore.metadata.identification", data))
 
 
 if __name__ == "__main__":
@@ -157,8 +147,8 @@ if __name__ == "__main__":
     conf = get_active_config()
     endpoints = Endpoint.load_from_config(conf)
 
-    endpoint_name = "well_vertical"
-    task_name = "driftwood"
+    endpoint_name = "well_horizontal"
+    task_name = "sequoia"
     job_config = [
         x for x in run_endpoint_task(endpoint_name, task_name) if x is not None
     ][0]
@@ -169,7 +159,7 @@ if __name__ == "__main__":
     parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
     document = parser.parse(xml)
     transformed = WellboreTransformer.extract_from_collection(document)
-    to_json(transformed, "test/data/vertical_driftwood_all.json")
+    # to_json(transformed, "test/data/production_sequoia.json")
 
     # collector = Collector(endpoints[job.endpoint].model)  # pylint: disable=no-member
     # collector.save(transformed)
