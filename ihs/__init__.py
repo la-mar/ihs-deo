@@ -8,6 +8,7 @@ from flask_migrate import Migrate
 from celery import Celery
 
 from api.well import well_blueprint
+from api.production import production_blueprint
 
 from config import APP_SETTINGS, project, get_active_config
 
@@ -39,6 +40,7 @@ def create_app(script_info=None):
 
     # register blueprints
     app.register_blueprint(well_blueprint)
+    app.register_blueprint(production_blueprint)
 
     # shell context for flask cli
     @app.shell_context_processor
