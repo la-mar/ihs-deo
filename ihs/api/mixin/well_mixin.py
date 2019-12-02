@@ -24,7 +24,7 @@ class WellMixin(BaseMixin):
 
         output["api14"] = self.api14
         output["api10"] = self.api10
-        output["last_update_date"] = self.last_update
+        output["last_update_at"] = self.last_update_at
 
         output["well_name"] = get("designation.name")
         output["well_number"] = get("number")
