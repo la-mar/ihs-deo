@@ -35,3 +35,10 @@ class BaseMixin:
             return cls.objects(**kwargs)
         except me.errors.DoesNotExist:
             return None
+
+    #! TODO: override save() and check for document hash
+    #! if hash exists => discard
+    #! else:
+    #! replace existing record
+    #! post message to SNS
+
