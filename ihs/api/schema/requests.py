@@ -7,7 +7,7 @@ class WellRequestSchema(Schema):
 
     area_name = fields.Str()
     api14 = fields.List(fields.Str())
-    last_update = fields.DateTime()
+    last_update_at = fields.DateTime()
 
 
 if __name__ == "__main__":
