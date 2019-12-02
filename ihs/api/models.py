@@ -12,86 +12,94 @@ loggger = logging.getLogger(__name__)
 
 
 class WellMasterHorizontal(me.Document, BaseMixin):
-    meta = {"collection": "well_master_horizontal", "ordering": ["-last_update"]}
+    meta = {"collection": "well_master_horizontal", "ordering": ["-last_update_at"]}
     name = me.StringField(primary_key=True)
     ids = me.ListField()
     count = me.IntField()
-    last_update = me.DateTimeField(default=datetime.datetime.now)
+    last_update_at = me.DateTimeField(default=datetime.datetime.now)
+    ihs_last_update_date = me.DateTimeField()
 
 
 class WellMasterVertical(me.Document, BaseMixin):
-    meta = {"collection": "well_master_vertical", "ordering": ["-last_update"]}
+    meta = {"collection": "well_master_vertical", "ordering": ["-last_update_at"]}
     name = me.StringField(primary_key=True)
     ids = me.ListField()
     count = me.IntField()
-    last_update = me.DateTimeField(default=datetime.datetime.now)
+    last_update_at = me.DateTimeField(default=datetime.datetime.now)
+    ihs_last_update_date = me.DateTimeField()
 
 
 class ProductionMasterHorizontal(me.Document, BaseMixin):
     meta = {
         "collection": "production_master_horizontal",
-        "ordering": ["-last_update"],
+        "ordering": ["-last_update_at"],
     }
     name = me.StringField(primary_key=True)
     ids = me.ListField()
     count = me.IntField()
-    last_update = me.DateTimeField(default=datetime.datetime.now)
+    last_update_at = me.DateTimeField(default=datetime.datetime.now)
+    ihs_last_update_date = me.DateTimeField()
 
 
 class ProductionMasterVertical(me.Document, BaseMixin):
     meta = {
         "collection": "production_master_vertical",
-        "ordering": ["-last_update"],
+        "ordering": ["-last_update_at"],
     }
     name = me.StringField(primary_key=True)
     ids = me.ListField()
     count = me.IntField()
-    last_update = me.DateTimeField(default=datetime.datetime.now)
+    last_update_at = me.DateTimeField(default=datetime.datetime.now)
+    ihs_last_update_date = me.DateTimeField()
 
 
 class WellHorizontal(me.DynamicDocument, WellMixin):
-    meta = {"collection": "well_horizontal", "ordering": ["-last_update"]}
+    meta = {"collection": "well_horizontal", "ordering": ["-last_update_at"]}
     identification = me.StringField(primary_key=True)
     api14 = me.StringField(unique=True)
     api10 = me.StringField()
-    last_update = me.DateTimeField(default=datetime.datetime.now)
+    last_update_at = me.DateTimeField(default=datetime.datetime.now)
+    ihs_last_update_date = me.DateTimeField()
 
 
 class WellVertical(me.DynamicDocument, WellMixin):
-    meta = {"collection": "well_vertical", "ordering": ["-last_update"]}
+    meta = {"collection": "well_vertical", "ordering": ["-last_update_at"]}
     identification = me.StringField(primary_key=True)
     api14 = me.StringField(unique=True)
     api10 = me.StringField()
-    last_update = me.DateTimeField(default=datetime.datetime.now)
+    last_update_at = me.DateTimeField(default=datetime.datetime.now)
+    ihs_last_update_date = me.DateTimeField()
 
 
 class ProductionHorizontal(me.DynamicDocument, ProductionMixin):
-    meta = {"collection": "production_horizontal", "ordering": ["-last_update"]}
+    meta = {"collection": "production_horizontal", "ordering": ["-last_update_at"]}
     identification = me.StringField(primary_key=True)
-    api14 = me.StringField()
     api10 = me.StringField()
-    last_update = me.DateTimeField(default=datetime.datetime.now)
+    last_update_at = me.DateTimeField(default=datetime.datetime.now)
+    ihs_last_update_date = me.DateTimeField()
 
 
 class ProductionVertical(me.DynamicDocument, ProductionMixin):
-    meta = {"collection": "production_vertical", "ordering": ["-last_update"]}
+    meta = {"collection": "production_vertical", "ordering": ["-last_update_at"]}
     identification = me.StringField(primary_key=True)
-    api14 = me.StringField()
     api10 = me.StringField()
-    last_update = me.DateTimeField(default=datetime.datetime.now)
+    last_update_at = me.DateTimeField(default=datetime.datetime.now)
+    ihs_last_update_date = me.DateTimeField()
 
 
 if __name__ == "__main__":
     from ihs import create_app
+    from config import get_active_config
 
     app = create_app()
     app.app_context().push()
     conf = get_active_config()
 
-    model = WellHorizontal
+    model = ProductionHorizontal
     api14 = "42461409160000"
     m = model.objects.get(api14=api14)  # pylint: disable=no-member
 
     # vertical = "42383362060000"
-    model.get(api14=api14)
-
+    x = model.get(api14=api14)[0]
+    dir(x)
+    x.production_header

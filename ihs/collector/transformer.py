@@ -52,8 +52,8 @@ class Transformer:
     @classmethod
     def copy_last_update_to_root(cls, data: OrderedDict) -> OrderedDict:
         data = data or OrderedDict()
-        data["last_update"] = cls.extract_last_updated_date(data)
-        data.move_to_end("last_update", last=False)
+        data["ihs_last_update_date"] = cls.extract_last_updated_date(data)
+        data.move_to_end("ihs_last_update_date", last=False)
 
         return data
 
