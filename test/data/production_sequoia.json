@@ -1,0 +1,2854 @@
+[{
+    "md5": "19f0d6ba6ce37f26e89a66f3cc849cea",
+    "api14": "42461409160000",
+    "api10": "4246140916",
+    "last_update": "2019-11-25T00:00:00",
+    "confidential": "NO",
+    "software_version": "2019.02",
+    "software": "Enerdeq",
+    "data_set": "PIDM",
+    "date_creation": "2019-12-01 00:00:00",
+    "units_system": "US CUSTOMARY",
+    "identification": "14207C0202511H",
+    "metadata": {
+        "identification": "14207C0202511H",
+        "units_system": "US CUSTOMARY",
+        "date_creation": "2019-12-01T00:00:00",
+        "data_set": "PIDM",
+        "software": "Enerdeq",
+        "software_version": 2019.02,
+        "confidential": "NO"
+    },
+    "header": {
+        "source": "IHSE",
+        "data_provider": {
+            "code": "PI"
+        },
+        "type": {
+            "name": "ALLOCATED"
+        },
+        "designation": {
+            "name": "SEQUOIA"
+        },
+        "zone": {
+            "name": "SPRABERRY",
+            "code": "452SPRB"
+        },
+        "operators": {
+            "current": {
+                "name": "DRIFTWOOD ENERGY OPERATING LLC",
+                "alternate": "DRIFTWOOD ENERGY OP",
+                "code": 278107
+            },
+            "current_city": "DALLAS"
+        },
+        "geopolitical": {
+            "county": {
+                "name": "UPTON",
+                "alternate": "UPTON",
+                "code": 461
+            },
+            "district": {
+                "name": "TEXAS DISTRICT 7C",
+                "code": "7C"
+            },
+            "province_state": {
+                "name": "TEXAS",
+                "abbreviated": "TX",
+                "code": 42
+            },
+            "country": {
+                "name": "UNITED STATES",
+                "code": "USA"
+            },
+            "region": {
+                "name": "PERMIAN BASIN",
+                "code": "PB"
+            }
+        },
+        "field": {
+            "name": "SPRABERRY",
+            "code": 47307,
+            "regulatory_designation": "NO MMS ALIAS EXIST"
+        },
+        "pools": {
+            "onshore": {
+                "name": "TREND AREA",
+                "code": 40288
+            }
+        },
+        "rights": {
+            "name": "SEQUOIA",
+            "code": 20251
+        },
+        "geologic_province": {
+            "name": "PERMIAN BASIN",
+            "code": 430
+        },
+        "basin": {
+            "main": {
+                "name": "PERMIAN BASIN",
+                "code": 741000
+            },
+            "sub_basin": {
+                "name": "MIDLAND BASIN (PERMIAN BASIN)",
+                "code": 741006
+            }
+        },
+        "products": {
+            "primary": {
+                "name": "CRUDE OIL",
+                "code": "O"
+            }
+        },
+        "statuses": {
+            "current": {
+                "name": "ACTIVE",
+                "code": "A"
+            },
+            "original": {
+                "name": "ACTIVE",
+                "code": "A"
+            },
+            "plot_symbol": {
+                "code": "O"
+            }
+        },
+        "situation": {
+            "designation": {
+                "name": "ONSHORE",
+                "code": "L"
+            },
+            "offshore": {
+                "name": null
+            }
+        },
+        "wells": {
+            "active_producing": 1,
+            "active_total": 1,
+            "total": 1
+        },
+        "dates": {
+            "production_start": {
+                "year": 2018,
+                "month_number": 10,
+                "day": 1,
+                "standard": "2018-10-01T00:00:00"
+            },
+            "production_stop": {
+                "year": 2019,
+                "month_number": 9,
+                "day": 30,
+                "standard": "2019-09-30T00:00:00"
+            },
+            "oil_start": {
+                "year": 2018,
+                "month_number": 10,
+                "day": 1,
+                "standard": "2018-10-01T00:00:00"
+            },
+            "gas_start": {
+                "year": 2018,
+                "month_number": 10,
+                "day": 1,
+                "standard": "2018-10-01T00:00:00"
+            },
+            "water_start": {
+                "year": 2018,
+                "month_number": 10,
+                "day": 1,
+                "standard": "2018-10-01T00:00:00"
+            },
+            "last_update": {
+                "year": 2019,
+                "month_number": 11,
+                "day": 25,
+                "standard": "2019-11-25T00:00:00"
+            },
+            "period": {
+                "value": 1,
+                "uom": "YR"
+            }
+        },
+        "latest_gatherers": {
+            "liquid": {
+                "name": "PLAML",
+                "alternate": "PLAINS MARKETING LP",
+                "code": 174303
+            },
+            "gas": {
+                "name": "TARGW",
+                "alternate": "TARGA PL MID-CONT WESTTEX LLC",
+                "code": 267037
+            }
+        },
+        "depths": {
+            "perforation_uppermost": {
+                "value": 8805,
+                "uom": "FT"
+            },
+            "perforation_lowermost": {
+                "value": 19166,
+                "uom": "FT"
+            }
+        },
+        "legacy": {
+            "dwights_status": {
+                "name": "ACT",
+                "code": 1
+            }
+        },
+        "play": {
+            "name": "WOLFCAMP/CLINE HORIZONTAL - MIDLAND BASIN",
+            "type": "TIGHT OIL (L)"
+        },
+        "zones": {
+            "prodzone": {
+                "zone": {
+                    "code": "452SPRB",
+                    "name": "SPRABERRY"
+                },
+                "dates": {
+                    "gas_start": {
+                        "standard": "2018-10-01T00:00:00"
+                    },
+                    "oil_start": {
+                        "standard": "2018-10-01T00:00:00"
+                    },
+                    "production_stop": {
+                        "standard": "2019-09-30T00:00:00"
+                    },
+                    "water_start": {
+                        "standard": "2018-10-01T00:00:00"
+                    }
+                },
+                "depths": null,
+                "field": {
+                    "code": 47307,
+                    "name": "NO MMS ALIAS EXIST"
+                },
+                "pool": {
+                    "code": 40288,
+                    "name": "TREND AREA"
+                }
+            }
+        }
+    },
+    "location": [{
+            "type_name": "SURFACE",
+            "header": {
+                "source": "IHSE"
+            },
+            "geographic": {
+                "data_provider": {
+                    "code": "PI"
+                },
+                "map_base": {
+                    "name": "I",
+                    "alternate": "I",
+                    "code": "IH"
+                },
+                "latitude": 31.20297,
+                "longitude": -101.91796,
+                "datum": {
+                    "code": "NAD27"
+                }
+            },
+            "geopolitical": {
+                "data_provider": {
+                    "code": "PI"
+                },
+                "county": {
+                    "name": "UPTON",
+                    "code": 461,
+                    "concatenated": "UPTON"
+                },
+                "province_state": {
+                    "name": "TEXAS",
+                    "abbreviated": "TX",
+                    "code": 42
+                },
+                "country": {
+                    "name": "UNITED STATES",
+                    "code": "USA"
+                }
+            },
+            "texas": {
+                "data_provider": {
+                    "code": "PI"
+                },
+                "block": {
+                    "number": "B"
+                },
+                "section": {
+                    "number": 3
+                },
+                "abstract": 136,
+                "survey": "EL&RR RR CO",
+                "footage": {
+                    "north_south": {
+                        "value": 500,
+                        "uom": "FT"
+                    },
+                    "north_south_start_line": {
+                        "code": "FN"
+                    },
+                    "east_west": {
+                        "value": 2317,
+                        "uom": "FT"
+                    },
+                    "east_west_start_line": {
+                        "code": "FE"
+                    },
+                    "reference": {
+                        "code": "J"
+                    }
+                }
+            },
+            "concatenated": {
+                "data_provider": {
+                    "code": "PI"
+                },
+                "type": {
+                    "name": "TEXAS"
+                },
+                "text": "SEC:3 BLK:B SRV:EL&RR RR CO ABS:136"
+            }
+        },
+        {
+            "type_name": "ABHL",
+            "header": {
+                "source": "IHSE"
+            },
+            "texas": {
+                "data_provider": {
+                    "code": "PI"
+                },
+                "block": {
+                    "number": "B"
+                },
+                "section": {
+                    "number": 25
+                },
+                "abstract": 253,
+                "survey": "HE&WT RR CO",
+                "footage": {
+                    "north_south": {
+                        "value": 33,
+                        "uom": "FT"
+                    },
+                    "north_south_start_line": {
+                        "code": "FN"
+                    },
+                    "east_west": {
+                        "value": 2305,
+                        "uom": "FT"
+                    },
+                    "east_west_start_line": {
+                        "code": "FE"
+                    },
+                    "reference": {
+                        "code": "J"
+                    }
+                }
+            }
+        },
+        {
+            "type_name": "PBHL",
+            "header": {
+                "source": "IHSE"
+            },
+            "texas": {
+                "data_provider": {
+                    "code": "PI"
+                },
+                "block": {
+                    "number": "B"
+                },
+                "section": {
+                    "number": 25
+                },
+                "abstract": 253,
+                "survey": "HE&WT RR CO",
+                "footage": {
+                    "north_south": {
+                        "value": 1,
+                        "uom": "FT"
+                    },
+                    "north_south_start_line": {
+                        "code": "FN"
+                    },
+                    "east_west": {
+                        "value": 2310,
+                        "uom": "FT"
+                    },
+                    "east_west_start_line": {
+                        "code": "FE"
+                    },
+                    "reference": {
+                        "code": "J"
+                    }
+                }
+            }
+        }
+    ],
+    "wellbore": {
+        "metadata": {
+            "identification": 42461409160000,
+            "units_system": "US CUSTOMARY",
+            "date_creation": "2019-12-01T00:00:00",
+            "data_set": "PIDM",
+            "software": "Enerdeq",
+            "software_version": 2019.02,
+            "confidential": "NO"
+        },
+        "header": {
+            "source": "IHSE",
+            "data_provider": {
+                "code": "PI"
+            },
+            "geopolitical": {
+                "district": {
+                    "name": "TEXAS DISTRICT 7C",
+                    "code": "7C"
+                },
+                "country": {
+                    "name": "UNITED STATES",
+                    "code": "USA"
+                }
+            },
+            "rights": {
+                "designation": {
+                    "name": "SEQUOIA",
+                    "code": 20251
+                }
+            },
+            "number": "1H",
+            "designation": {
+                "name": "HORIZONTAL",
+                "code": "H"
+            },
+            "field": {
+                "name": "SPRABERRY",
+                "code": 47307,
+                "regulatory_designation": "NO MMS ALIAS EXIST"
+            },
+            "type": {
+                "name": "ACTIVE PRODUCING-GENERAL",
+                "code": "B0"
+            },
+            "geologic_province": {
+                "name": "PERMIAN BASIN",
+                "code": 430
+            },
+            "drilling": {
+                "hole_direction": {
+                    "designation": {
+                        "name": "HORIZONTAL",
+                        "code": "H"
+                    }
+                }
+            },
+            "depths": {
+                "total_true_vertical": {
+                    "value": 8503,
+                    "uom": "FT"
+                },
+                "total_measured": {
+                    "value": 19272,
+                    "uom": "FT"
+                }
+            },
+            "dates": {
+                "completion": {
+                    "year": 2018,
+                    "month_number": 10,
+                    "day": 4,
+                    "standard": "2018-10-04T00:00:00"
+                }
+            },
+            "statuses": {
+                "production_current": {
+                    "name": "ACTIVE",
+                    "code": "A"
+                }
+            },
+            "unit_well_number": 1,
+            "perforations": {
+                "top": {
+                    "value": 8805,
+                    "uom": "FT"
+                },
+                "base": {
+                    "value": 19166,
+                    "uom": "FT"
+                }
+            }
+        },
+        "location": [{
+                "type_name": "SURFACE",
+                "header": {
+                    "source": "IHSE"
+                },
+                "geographic": {
+                    "data_provider": {
+                        "code": "PI"
+                    },
+                    "map_base": {
+                        "name": "I",
+                        "alternate": "I",
+                        "code": "IH"
+                    },
+                    "latitude": 31.20297,
+                    "longitude": -101.91796,
+                    "datum": {
+                        "code": "NAD27"
+                    }
+                },
+                "geopolitical": {
+                    "data_provider": {
+                        "code": "PI"
+                    },
+                    "county": {
+                        "name": "UPTON",
+                        "code": 461,
+                        "concatenated": "UPTON"
+                    },
+                    "province_state": {
+                        "name": "TEXAS",
+                        "abbreviated": "TX",
+                        "code": 42
+                    },
+                    "country": {
+                        "name": "UNITED STATES",
+                        "code": "USA"
+                    }
+                },
+                "texas": {
+                    "data_provider": {
+                        "code": "PI"
+                    },
+                    "block": {
+                        "number": "B"
+                    },
+                    "section": {
+                        "number": 3
+                    },
+                    "abstract": 136,
+                    "survey": "EL&RR RR CO",
+                    "footage": {
+                        "north_south": {
+                            "value": 500,
+                            "uom": "FT"
+                        },
+                        "north_south_start_line": {
+                            "code": "FN"
+                        },
+                        "east_west": {
+                            "value": 2317,
+                            "uom": "FT"
+                        },
+                        "east_west_start_line": {
+                            "code": "FE"
+                        },
+                        "reference": {
+                            "code": "J"
+                        }
+                    }
+                },
+                "concatenated": {
+                    "data_provider": {
+                        "code": "PI"
+                    },
+                    "type": {
+                        "name": "TEXAS"
+                    },
+                    "text": "SEC:3 BLK:B SRV:EL&RR RR CO ABS:136"
+                }
+            },
+            {
+                "type_name": "ACTUAL BOTTOM HOLE",
+                "type_code": "PBHL",
+                "header": {
+                    "source": "IHSE"
+                },
+                "geographic": {
+                    "data_provider": {
+                        "code": "PI"
+                    },
+                    "map_base": {
+                        "name": "I",
+                        "alternate": "I",
+                        "code": "IH"
+                    },
+                    "latitude": 31.2335817,
+                    "longitude": -101.9174058,
+                    "datum": {
+                        "code": "NAD27"
+                    }
+                }
+            },
+            {
+                "type_name": "ACTUAL BOTTOM HOLE",
+                "type_code": "ABHL",
+                "header": {
+                    "source": "IHSE"
+                },
+                "geographic": {
+                    "data_provider": {
+                        "code": "PI"
+                    },
+                    "map_base": {
+                        "name": "I",
+                        "alternate": "I",
+                        "code": "IH"
+                    },
+                    "latitude": 31.23349,
+                    "longitude": -101.91745,
+                    "datum": {
+                        "code": "NAD27"
+                    }
+                }
+            }
+        ],
+        "tests": {
+            "ip_pt": [{
+                    "type_name": "PENDING TEST",
+                    "type_code": "PEN",
+                    "header": {
+                        "source": "IHSE",
+                        "data_provider": {
+                            "code": "PI"
+                        },
+                        "dates": {
+                            "test": {
+                                "year": 2018,
+                                "month_number": 9,
+                                "day": 30,
+                                "standard": "2018-09-30T00:00:00"
+                            }
+                        },
+                        "methods": {
+                            "test": {
+                                "name": "UNDESIGNATED",
+                                "code": "U"
+                            }
+                        },
+                        "flows": {
+                            "oil": {
+                                "value": 1,
+                                "uom": "BPD"
+                            },
+                            "casinghead_gas": {
+                                "value": 4,
+                                "uom": "MCFD"
+                            },
+                            "water": {
+                                "value": 1,
+                                "uom": "BPD"
+                            }
+                        },
+                        "depths": {
+                            "top": {
+                                "value": 8805,
+                                "uom": "FT"
+                            },
+                            "base": {
+                                "value": 19166,
+                                "uom": "FT"
+                            }
+                        },
+                        "ratios": {
+                            "gas_oil": {
+                                "value": 4552,
+                                "uom": "CFB"
+                            }
+                        }
+                    }
+                },
+                {
+                    "type_name": "PENDING TEST",
+                    "type_code": "PEN",
+                    "header": {
+                        "source": "IHSE",
+                        "data_provider": {
+                            "code": "PI"
+                        },
+                        "dates": {
+                            "test": {
+                                "year": 2018,
+                                "month_number": 10,
+                                "day": 31,
+                                "standard": "2018-10-31T00:00:00"
+                            }
+                        },
+                        "methods": {
+                            "test": {
+                                "name": "UNDESIGNATED",
+                                "code": "U"
+                            }
+                        },
+                        "flows": {
+                            "oil": {
+                                "value": 309,
+                                "uom": "BPD"
+                            },
+                            "casinghead_gas": {
+                                "value": 280,
+                                "uom": "MCFD"
+                            },
+                            "water": {
+                                "value": 309,
+                                "uom": "BPD"
+                            }
+                        },
+                        "cumulative": {
+                            "gas": {
+                                "value": 8669,
+                                "uom": "MCFD"
+                            }
+                        },
+                        "depths": {
+                            "top": {
+                                "value": 8805,
+                                "uom": "FT"
+                            },
+                            "base": {
+                                "value": 19166,
+                                "uom": "FT"
+                            }
+                        },
+                        "ratios": {
+                            "gas_oil": {
+                                "value": 904,
+                                "uom": "CFB"
+                            }
+                        }
+                    }
+                },
+                {
+                    "type_name": "INITIAL POTENTIAL TEST",
+                    "type_code": "IP",
+                    "header": {
+                        "source": "IHSE",
+                        "data_provider": {
+                            "code": "PI"
+                        },
+                        "dates": {
+                            "test": {
+                                "year": 2018,
+                                "month_number": 11,
+                                "day": 17,
+                                "standard": "2018-11-17T00:00:00"
+                            }
+                        },
+                        "methods": {
+                            "test": {
+                                "name": "PUMPING",
+                                "code": "P"
+                            }
+                        },
+                        "flows": {
+                            "oil": {
+                                "value": 1018,
+                                "uom": "BPD"
+                            },
+                            "casinghead_gas": {
+                                "value": 573,
+                                "uom": "MCFD"
+                            },
+                            "water": {
+                                "value": 1254,
+                                "uom": "BPD"
+                            }
+                        },
+                        "cumulative": {
+                            "gas": {
+                                "value": 18702,
+                                "uom": "MCFD"
+                            }
+                        },
+                        "depths": {
+                            "top": {
+                                "value": 8805,
+                                "uom": "FT"
+                            },
+                            "base": {
+                                "value": 19166,
+                                "uom": "FT"
+                            }
+                        },
+                        "ratios": {
+                            "gas_oil": {
+                                "value": 562,
+                                "uom": "CFB"
+                            }
+                        }
+                    }
+                },
+                {
+                    "type_name": "PENDING TEST",
+                    "type_code": "PEN",
+                    "header": {
+                        "source": "IHSE",
+                        "data_provider": {
+                            "code": "PI"
+                        },
+                        "dates": {
+                            "test": {
+                                "year": 2018,
+                                "month_number": 11,
+                                "day": 30,
+                                "standard": "2018-11-30T00:00:00"
+                            }
+                        },
+                        "methods": {
+                            "test": {
+                                "name": "UNDESIGNATED",
+                                "code": "U"
+                            }
+                        },
+                        "flows": {
+                            "oil": {
+                                "value": 924,
+                                "uom": "BPD"
+                            },
+                            "casinghead_gas": {
+                                "value": 590,
+                                "uom": "MCFD"
+                            },
+                            "water": {
+                                "value": 924,
+                                "uom": "BPD"
+                            }
+                        },
+                        "cumulative": {
+                            "gas": {
+                                "value": 26375,
+                                "uom": "MCFD"
+                            }
+                        },
+                        "depths": {
+                            "top": {
+                                "value": 8805,
+                                "uom": "FT"
+                            },
+                            "base": {
+                                "value": 19166,
+                                "uom": "FT"
+                            }
+                        },
+                        "ratios": {
+                            "gas_oil": {
+                                "value": 639,
+                                "uom": "CFB"
+                            }
+                        }
+                    }
+                },
+                {
+                    "type_name": "PENDING TEST",
+                    "type_code": "PEN",
+                    "header": {
+                        "source": "IHSE",
+                        "data_provider": {
+                            "code": "PI"
+                        },
+                        "dates": {
+                            "test": {
+                                "year": 2018,
+                                "month_number": 12,
+                                "day": 31,
+                                "standard": "2018-12-31T00:00:00"
+                            }
+                        },
+                        "methods": {
+                            "test": {
+                                "name": "UNDESIGNATED",
+                                "code": "U"
+                            }
+                        },
+                        "flows": {
+                            "oil": {
+                                "value": 771,
+                                "uom": "BPD"
+                            },
+                            "casinghead_gas": {
+                                "value": 551,
+                                "uom": "MCFD"
+                            },
+                            "water": {
+                                "value": 771,
+                                "uom": "BPD"
+                            }
+                        },
+                        "cumulative": {
+                            "gas": {
+                                "value": 43470,
+                                "uom": "MCFD"
+                            }
+                        },
+                        "depths": {
+                            "top": {
+                                "value": 8805,
+                                "uom": "FT"
+                            },
+                            "base": {
+                                "value": 19166,
+                                "uom": "FT"
+                            }
+                        },
+                        "ratios": {
+                            "gas_oil": {
+                                "value": 715,
+                                "uom": "CFB"
+                            }
+                        }
+                    }
+                },
+                {
+                    "type_name": "PENDING TEST",
+                    "type_code": "PEN",
+                    "header": {
+                        "source": "IHSE",
+                        "data_provider": {
+                            "code": "PI"
+                        },
+                        "dates": {
+                            "test": {
+                                "year": 2019,
+                                "month_number": 1,
+                                "day": 31,
+                                "standard": "2019-01-31T00:00:00"
+                            }
+                        },
+                        "methods": {
+                            "test": {
+                                "name": "UNDESIGNATED",
+                                "code": "U"
+                            }
+                        },
+                        "flows": {
+                            "oil": {
+                                "value": 652,
+                                "uom": "BPD"
+                            },
+                            "casinghead_gas": {
+                                "value": 539,
+                                "uom": "MCFD"
+                            },
+                            "water": {
+                                "value": 652,
+                                "uom": "BPD"
+                            }
+                        },
+                        "cumulative": {
+                            "gas": {
+                                "value": 60174,
+                                "uom": "MCFD"
+                            }
+                        },
+                        "depths": {
+                            "top": {
+                                "value": 8805,
+                                "uom": "FT"
+                            },
+                            "base": {
+                                "value": 19166,
+                                "uom": "FT"
+                            }
+                        },
+                        "ratios": {
+                            "gas_oil": {
+                                "value": 827,
+                                "uom": "CFB"
+                            }
+                        }
+                    }
+                },
+                {
+                    "type_name": "PENDING TEST",
+                    "type_code": "PEN",
+                    "header": {
+                        "source": "IHSE",
+                        "data_provider": {
+                            "code": "PI"
+                        },
+                        "dates": {
+                            "test": {
+                                "year": 2019,
+                                "month_number": 2,
+                                "day": 28,
+                                "standard": "2019-02-28T00:00:00"
+                            }
+                        },
+                        "methods": {
+                            "test": {
+                                "name": "UNDESIGNATED",
+                                "code": "U"
+                            }
+                        },
+                        "flows": {
+                            "oil": {
+                                "value": 685,
+                                "uom": "BPD"
+                            },
+                            "casinghead_gas": {
+                                "value": 586,
+                                "uom": "MCFD"
+                            },
+                            "water": {
+                                "value": 685,
+                                "uom": "BPD"
+                            }
+                        },
+                        "cumulative": {
+                            "gas": {
+                                "value": 76568,
+                                "uom": "MCFD"
+                            }
+                        },
+                        "depths": {
+                            "top": {
+                                "value": 8805,
+                                "uom": "FT"
+                            },
+                            "base": {
+                                "value": 19166,
+                                "uom": "FT"
+                            }
+                        },
+                        "ratios": {
+                            "gas_oil": {
+                                "value": 855,
+                                "uom": "CFB"
+                            }
+                        }
+                    }
+                },
+                {
+                    "type_name": "PENDING TEST",
+                    "type_code": "PEN",
+                    "header": {
+                        "source": "IHSE",
+                        "data_provider": {
+                            "code": "PI"
+                        },
+                        "dates": {
+                            "test": {
+                                "year": 2019,
+                                "month_number": 3,
+                                "day": 31,
+                                "standard": "2019-03-31T00:00:00"
+                            }
+                        },
+                        "methods": {
+                            "test": {
+                                "name": "UNDESIGNATED",
+                                "code": "U"
+                            }
+                        },
+                        "flows": {
+                            "oil": {
+                                "value": 655,
+                                "uom": "BPD"
+                            },
+                            "casinghead_gas": {
+                                "value": 861,
+                                "uom": "MCFD"
+                            },
+                            "water": {
+                                "value": 655,
+                                "uom": "BPD"
+                            }
+                        },
+                        "cumulative": {
+                            "gas": {
+                                "value": 103267,
+                                "uom": "MCFD"
+                            }
+                        },
+                        "depths": {
+                            "top": {
+                                "value": 8805,
+                                "uom": "FT"
+                            },
+                            "base": {
+                                "value": 19166,
+                                "uom": "FT"
+                            }
+                        },
+                        "ratios": {
+                            "gas_oil": {
+                                "value": 1315,
+                                "uom": "CFB"
+                            }
+                        }
+                    }
+                },
+                {
+                    "type_name": "CALCULATED TEST",
+                    "type_code": "CAL",
+                    "header": {
+                        "source": "IHSE",
+                        "data_provider": {
+                            "code": "PI"
+                        },
+                        "dates": {
+                            "test": {
+                                "year": 2019,
+                                "month_number": 4,
+                                "day": 30,
+                                "standard": "2019-04-30T00:00:00"
+                            }
+                        },
+                        "methods": {
+                            "test": {
+                                "name": "UNDESIGNATED",
+                                "code": "U"
+                            }
+                        },
+                        "flows": {
+                            "oil": {
+                                "value": 563,
+                                "uom": "BPD"
+                            },
+                            "casinghead_gas": {
+                                "value": 1174,
+                                "uom": "MCFD"
+                            },
+                            "water": {
+                                "value": 563,
+                                "uom": "BPD"
+                            }
+                        },
+                        "cumulative": {
+                            "gas": {
+                                "value": 138496,
+                                "uom": "MCFD"
+                            }
+                        },
+                        "depths": {
+                            "top": {
+                                "value": 8805,
+                                "uom": "FT"
+                            },
+                            "base": {
+                                "value": 19166,
+                                "uom": "FT"
+                            }
+                        },
+                        "ratios": {
+                            "gas_oil": {
+                                "value": 2085,
+                                "uom": "CFB"
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        "content": {
+            "data_provider": {
+                "code": "IHSE"
+            },
+            "location": 1,
+            "tests": {
+                "total": 9,
+                "production": 9
+            }
+        }
+    },
+    "production": {
+        "header": {
+            "source": "IHSE",
+            "data_provider": {
+                "code": "PI"
+            }
+        },
+        "abstract": [{
+                "type_name": "CUMULATIVE",
+                "dates": {
+                    "start": {
+                        "year": 2018,
+                        "month_number": 10,
+                        "day": 1,
+                        "standard": "2018-10-01T00:00:00"
+                    },
+                    "end": {
+                        "year": 2019,
+                        "month_number": 9,
+                        "day": 30,
+                        "standard": "2019-09-30T00:00:00"
+                    },
+                    "period": {
+                        "value": 1,
+                        "uom": "YR"
+                    }
+                },
+                "total_liquid": {
+                    "value": 201649,
+                    "uom": "BBL"
+                },
+                "oil": {
+                    "value": 201649,
+                    "uom": "BBL"
+                },
+                "total_gas": {
+                    "value": 281678,
+                    "uom": "MCF"
+                },
+                "casinghead_gas": {
+                    "value": 281678,
+                    "uom": "MCF"
+                },
+                "water": {
+                    "value": 201649,
+                    "uom": "BBL"
+                },
+                "ratios": {
+                    "gas_oil": {
+                        "value": 1397,
+                        "uom": "CFB"
+                    },
+                    "water_cut": 50
+                }
+            },
+            {
+                "type_name": "FIRST_MONTH",
+                "dates": {
+                    "start": {
+                        "year": 2018,
+                        "month_number": 11,
+                        "day": 1,
+                        "standard": "2018-11-01T00:00:00"
+                    },
+                    "end": {
+                        "year": 2018,
+                        "month_number": 11,
+                        "day": 30,
+                        "standard": "2018-11-30T00:00:00"
+                    },
+                    "period": {
+                        "value": 1,
+                        "uom": "MTH"
+                    }
+                },
+                "total_liquid": {
+                    "value": 27727,
+                    "uom": "BBL"
+                },
+                "oil": {
+                    "value": 27727,
+                    "uom": "BBL"
+                },
+                "total_gas": {
+                    "value": 17706,
+                    "uom": "MCF"
+                },
+                "casinghead_gas": {
+                    "value": 17706,
+                    "uom": "MCF"
+                },
+                "water": {
+                    "value": 27727,
+                    "uom": "BBL"
+                },
+                "ratios": {
+                    "gas_oil": {
+                        "value": 639,
+                        "uom": "CFB"
+                    },
+                    "water_cut": 50
+                },
+                "wells": 1
+            },
+            {
+                "type_name": "FIRST_TWO_MONTHS",
+                "dates": {
+                    "start": {
+                        "year": 2018,
+                        "month_number": 11,
+                        "day": 1,
+                        "standard": "2018-11-01T00:00:00"
+                    },
+                    "end": {
+                        "year": 2018,
+                        "month_number": 12,
+                        "day": 31,
+                        "standard": "2018-12-31T00:00:00"
+                    },
+                    "period": {
+                        "value": 2,
+                        "uom": "MTH"
+                    }
+                },
+                "total_liquid": {
+                    "value": 51624,
+                    "uom": "BBL"
+                },
+                "oil": {
+                    "value": 51624,
+                    "uom": "BBL"
+                },
+                "total_gas": {
+                    "value": 34801,
+                    "uom": "MCF"
+                },
+                "casinghead_gas": {
+                    "value": 34801,
+                    "uom": "MCF"
+                },
+                "water": {
+                    "value": 51624,
+                    "uom": "BBL"
+                },
+                "ratios": {
+                    "gas_oil": {
+                        "value": 674,
+                        "uom": "CFB"
+                    },
+                    "water_cut": 50
+                },
+                "wells": 1
+            },
+            {
+                "type_name": "FIRST_THREE_MONTHS",
+                "dates": {
+                    "start": {
+                        "year": 2018,
+                        "month_number": 11,
+                        "day": 1,
+                        "standard": "2018-11-01T00:00:00"
+                    },
+                    "end": {
+                        "year": 2019,
+                        "month_number": 1,
+                        "day": 31,
+                        "standard": "2019-01-31T00:00:00"
+                    },
+                    "period": {
+                        "value": 3,
+                        "uom": "MTH"
+                    }
+                },
+                "total_liquid": {
+                    "value": 71821,
+                    "uom": "BBL"
+                },
+                "oil": {
+                    "value": 71821,
+                    "uom": "BBL"
+                },
+                "total_gas": {
+                    "value": 51505,
+                    "uom": "MCF"
+                },
+                "casinghead_gas": {
+                    "value": 51505,
+                    "uom": "MCF"
+                },
+                "water": {
+                    "value": 71821,
+                    "uom": "BBL"
+                },
+                "ratios": {
+                    "gas_oil": {
+                        "value": 717,
+                        "uom": "CFB"
+                    },
+                    "water_cut": 50
+                },
+                "wells": 1
+            },
+            {
+                "type_name": "FIRST_SIX_MONTHS",
+                "dates": {
+                    "start": {
+                        "year": 2018,
+                        "month_number": 11,
+                        "day": 1,
+                        "standard": "2018-11-01T00:00:00"
+                    },
+                    "end": {
+                        "year": 2019,
+                        "month_number": 4,
+                        "day": 30,
+                        "standard": "2019-04-30T00:00:00"
+                    },
+                    "period": {
+                        "value": 6,
+                        "uom": "MTH"
+                    }
+                },
+                "total_liquid": {
+                    "value": 128189,
+                    "uom": "BBL"
+                },
+                "oil": {
+                    "value": 128189,
+                    "uom": "BBL"
+                },
+                "total_gas": {
+                    "value": 129827,
+                    "uom": "MCF"
+                },
+                "casinghead_gas": {
+                    "value": 129827,
+                    "uom": "MCF"
+                },
+                "water": {
+                    "value": 128189,
+                    "uom": "BBL"
+                },
+                "ratios": {
+                    "gas_oil": {
+                        "value": 1013,
+                        "uom": "CFB"
+                    },
+                    "water_cut": 50
+                },
+                "wells": 1
+            },
+            {
+                "type_name": "FIRST_TWELVE_MONTHS",
+                "dates": {
+                    "start": {
+                        "year": 2018,
+                        "month_number": 11,
+                        "day": 1,
+                        "standard": "2018-11-01T00:00:00"
+                    },
+                    "end": {
+                        "year": 2019,
+                        "month_number": 9,
+                        "day": 30,
+                        "standard": "2019-09-30T00:00:00"
+                    },
+                    "period": {
+                        "value": 11,
+                        "uom": "MTH"
+                    }
+                },
+                "total_liquid": {
+                    "value": 192062,
+                    "uom": "BBL"
+                },
+                "oil": {
+                    "value": 192062,
+                    "uom": "BBL"
+                },
+                "total_gas": {
+                    "value": 273009,
+                    "uom": "MCF"
+                },
+                "casinghead_gas": {
+                    "value": 273009,
+                    "uom": "MCF"
+                },
+                "water": {
+                    "value": 192062,
+                    "uom": "BBL"
+                },
+                "ratios": {
+                    "gas_oil": {
+                        "value": 1421,
+                        "uom": "CFB"
+                    },
+                    "water_cut": 50
+                },
+                "wells": 1
+            },
+            {
+                "type_name": "FIRST_TWENTYFOUR_MONTHS",
+                "dates": {
+                    "start": {
+                        "year": 2018,
+                        "month_number": 11,
+                        "day": 1,
+                        "standard": "2018-11-01T00:00:00"
+                    },
+                    "end": {
+                        "year": 2019,
+                        "month_number": 9,
+                        "day": 30,
+                        "standard": "2019-09-30T00:00:00"
+                    },
+                    "period": {
+                        "value": 11,
+                        "uom": "MTH"
+                    }
+                },
+                "total_liquid": {
+                    "value": 192062,
+                    "uom": "BBL"
+                },
+                "oil": {
+                    "value": 192062,
+                    "uom": "BBL"
+                },
+                "total_gas": {
+                    "value": 273009,
+                    "uom": "MCF"
+                },
+                "casinghead_gas": {
+                    "value": 273009,
+                    "uom": "MCF"
+                },
+                "water": {
+                    "value": 192062,
+                    "uom": "BBL"
+                },
+                "ratios": {
+                    "gas_oil": {
+                        "value": 1421,
+                        "uom": "CFB"
+                    },
+                    "water_cut": 50
+                },
+                "wells": 1
+            },
+            {
+                "type_name": "FIRST_CALENDAR_YEAR",
+                "dates": {
+                    "start": {
+                        "year": 2018,
+                        "month_number": 10,
+                        "day": 1,
+                        "standard": "2018-10-01T00:00:00"
+                    },
+                    "end": {
+                        "year": 2018,
+                        "month_number": 12,
+                        "day": 31,
+                        "standard": "2018-12-31T00:00:00"
+                    },
+                    "period": {
+                        "value": 3,
+                        "uom": "MTH"
+                    }
+                },
+                "total_liquid": {
+                    "value": 61211,
+                    "uom": "BBL"
+                },
+                "oil": {
+                    "value": 61211,
+                    "uom": "BBL"
+                },
+                "total_gas": {
+                    "value": 43470,
+                    "uom": "MCF"
+                },
+                "casinghead_gas": {
+                    "value": 43470,
+                    "uom": "MCF"
+                },
+                "water": {
+                    "value": 61211,
+                    "uom": "BBL"
+                },
+                "ratios": {
+                    "gas_oil": {
+                        "value": 710,
+                        "uom": "CFB"
+                    },
+                    "water_cut": 50
+                },
+                "wells": 1
+            },
+            {
+                "type_name": "LAST_MONTH",
+                "dates": {
+                    "start": {
+                        "year": 2019,
+                        "month_number": 9,
+                        "day": 1,
+                        "standard": "2019-09-01T00:00:00"
+                    },
+                    "end": {
+                        "year": 2019,
+                        "month_number": 9,
+                        "day": 30,
+                        "standard": "2019-09-30T00:00:00"
+                    },
+                    "period": {
+                        "value": 1,
+                        "uom": "MTH"
+                    }
+                },
+                "total_liquid": {
+                    "value": 10709,
+                    "uom": "BBL"
+                },
+                "oil": {
+                    "value": 10709,
+                    "uom": "BBL"
+                },
+                "total_gas": {
+                    "value": 28999,
+                    "uom": "MCF"
+                },
+                "casinghead_gas": {
+                    "value": 28999,
+                    "uom": "MCF"
+                },
+                "water": {
+                    "value": 10709,
+                    "uom": "BBL"
+                },
+                "ratios": {
+                    "gas_oil": {
+                        "value": 2708,
+                        "uom": "CFB"
+                    },
+                    "water_cut": 50
+                },
+                "wells": 1
+            },
+            {
+                "type_name": "LAST_TWO_MONTHS",
+                "dates": {
+                    "start": {
+                        "year": 2019,
+                        "month_number": 8,
+                        "day": 1,
+                        "standard": "2019-08-01T00:00:00"
+                    },
+                    "end": {
+                        "year": 2019,
+                        "month_number": 9,
+                        "day": 30,
+                        "standard": "2019-09-30T00:00:00"
+                    },
+                    "period": {
+                        "value": 2,
+                        "uom": "MTH"
+                    }
+                },
+                "total_liquid": {
+                    "value": 22037,
+                    "uom": "BBL"
+                },
+                "oil": {
+                    "value": 22037,
+                    "uom": "BBL"
+                },
+                "total_gas": {
+                    "value": 61954,
+                    "uom": "MCF"
+                },
+                "casinghead_gas": {
+                    "value": 61954,
+                    "uom": "MCF"
+                },
+                "water": {
+                    "value": 22037,
+                    "uom": "BBL"
+                },
+                "ratios": {
+                    "gas_oil": {
+                        "value": 2811,
+                        "uom": "CFB"
+                    },
+                    "water_cut": 50
+                },
+                "wells": 1
+            },
+            {
+                "type_name": "LAST_THREE_MONTHS",
+                "dates": {
+                    "start": {
+                        "year": 2019,
+                        "month_number": 7,
+                        "day": 1,
+                        "standard": "2019-07-01T00:00:00"
+                    },
+                    "end": {
+                        "year": 2019,
+                        "month_number": 9,
+                        "day": 30,
+                        "standard": "2019-09-30T00:00:00"
+                    },
+                    "period": {
+                        "value": 3,
+                        "uom": "MTH"
+                    }
+                },
+                "total_liquid": {
+                    "value": 36220,
+                    "uom": "BBL"
+                },
+                "oil": {
+                    "value": 36220,
+                    "uom": "BBL"
+                },
+                "total_gas": {
+                    "value": 97180,
+                    "uom": "MCF"
+                },
+                "casinghead_gas": {
+                    "value": 97180,
+                    "uom": "MCF"
+                },
+                "water": {
+                    "value": 36220,
+                    "uom": "BBL"
+                },
+                "ratios": {
+                    "gas_oil": {
+                        "value": 2683,
+                        "uom": "CFB"
+                    },
+                    "water_cut": 50
+                },
+                "wells": 1
+            },
+            {
+                "type_name": "LAST_SIX_MONTHS",
+                "dates": {
+                    "start": {
+                        "year": 2019,
+                        "month_number": 4,
+                        "day": 1,
+                        "standard": "2019-04-01T00:00:00"
+                    },
+                    "end": {
+                        "year": 2019,
+                        "month_number": 9,
+                        "day": 30,
+                        "standard": "2019-09-30T00:00:00"
+                    },
+                    "period": {
+                        "value": 6,
+                        "uom": "MTH"
+                    }
+                },
+                "total_liquid": {
+                    "value": 80766,
+                    "uom": "BBL"
+                },
+                "oil": {
+                    "value": 80766,
+                    "uom": "BBL"
+                },
+                "total_gas": {
+                    "value": 178411,
+                    "uom": "MCF"
+                },
+                "casinghead_gas": {
+                    "value": 178411,
+                    "uom": "MCF"
+                },
+                "water": {
+                    "value": 80766,
+                    "uom": "BBL"
+                },
+                "ratios": {
+                    "gas_oil": {
+                        "value": 2209,
+                        "uom": "CFB"
+                    },
+                    "water_cut": 50
+                },
+                "wells": 1
+            },
+            {
+                "type_name": "LAST_TWELVE_MONTHS",
+                "dates": {
+                    "start": {
+                        "year": 2018,
+                        "month_number": 10,
+                        "day": 1,
+                        "standard": "2018-10-01T00:00:00"
+                    },
+                    "end": {
+                        "year": 2019,
+                        "month_number": 9,
+                        "day": 30,
+                        "standard": "2019-09-30T00:00:00"
+                    },
+                    "period": {
+                        "value": 12,
+                        "uom": "MTH"
+                    }
+                },
+                "total_liquid": {
+                    "value": 201649,
+                    "uom": "BBL"
+                },
+                "oil": {
+                    "value": 201649,
+                    "uom": "BBL"
+                },
+                "total_gas": {
+                    "value": 281678,
+                    "uom": "MCF"
+                },
+                "casinghead_gas": {
+                    "value": 281678,
+                    "uom": "MCF"
+                },
+                "water": {
+                    "value": 201649,
+                    "uom": "BBL"
+                },
+                "ratios": {
+                    "gas_oil": {
+                        "value": 1397,
+                        "uom": "CFB"
+                    },
+                    "water_cut": 50
+                },
+                "wells": 1
+            },
+            {
+                "type_name": "LAST_CALENDAR_YEAR",
+                "dates": {
+                    "start": {
+                        "year": 2019,
+                        "month_number": 1,
+                        "day": 1,
+                        "standard": "2019-01-01T00:00:00"
+                    },
+                    "end": {
+                        "year": 2019,
+                        "month_number": 9,
+                        "day": 30,
+                        "standard": "2019-09-30T00:00:00"
+                    },
+                    "period": {
+                        "value": 9,
+                        "uom": "MTH"
+                    }
+                },
+                "total_liquid": {
+                    "value": 140438,
+                    "uom": "BBL"
+                },
+                "oil": {
+                    "value": 140438,
+                    "uom": "BBL"
+                },
+                "total_gas": {
+                    "value": 238208,
+                    "uom": "MCF"
+                },
+                "casinghead_gas": {
+                    "value": 238208,
+                    "uom": "MCF"
+                },
+                "water": {
+                    "value": 140438,
+                    "uom": "BBL"
+                },
+                "ratios": {
+                    "gas_oil": {
+                        "value": 1696,
+                        "uom": "CFB"
+                    },
+                    "water_cut": 50
+                },
+                "wells": 1
+            },
+            {
+                "type_name": "NEXT_TO_LAST_CALENDAR_YEAR",
+                "dates": {
+                    "start": {
+                        "year": 2018,
+                        "month_number": 10,
+                        "day": 1,
+                        "standard": "2018-10-01T00:00:00"
+                    },
+                    "end": {
+                        "year": 2018,
+                        "month_number": 12,
+                        "day": 31,
+                        "standard": "2018-12-31T00:00:00"
+                    },
+                    "period": {
+                        "value": 3,
+                        "uom": "MTH"
+                    }
+                },
+                "total_liquid": {
+                    "value": 61211,
+                    "uom": "BBL"
+                },
+                "oil": {
+                    "value": 61211,
+                    "uom": "BBL"
+                },
+                "total_gas": {
+                    "value": 43470,
+                    "uom": "MCF"
+                },
+                "casinghead_gas": {
+                    "value": 43470,
+                    "uom": "MCF"
+                },
+                "water": {
+                    "value": 61211,
+                    "uom": "BBL"
+                },
+                "ratios": {
+                    "gas_oil": {
+                        "value": 710,
+                        "uom": "CFB"
+                    },
+                    "water_cut": 50
+                },
+                "wells": 1
+            },
+            {
+                "type_name": "MAX_PRODUCTION",
+                "dates": {
+                    "total_liquid": {
+                        "year": 2018,
+                        "month_number": 11,
+                        "day": 1,
+                        "standard": "2018-11-01T00:00:00"
+                    },
+                    "total_gas": {
+                        "year": 2019,
+                        "month_number": 4,
+                        "day": 1,
+                        "standard": "2019-04-01T00:00:00"
+                    },
+                    "water": {
+                        "year": 2018,
+                        "month_number": 11,
+                        "day": 1,
+                        "standard": "2018-11-01T00:00:00"
+                    }
+                },
+                "total_liquid": {
+                    "value": 27727,
+                    "uom": "BBL"
+                },
+                "total_gas": {
+                    "value": 35229,
+                    "uom": "MCF"
+                },
+                "water": {
+                    "value": 27727,
+                    "uom": "BBL"
+                }
+            },
+            {
+                "type_name": "MAX_IP",
+                "dates": {
+                    "total_liquid": {
+                        "year": 2018,
+                        "month_number": 11,
+                        "day": 17,
+                        "standard": "2018-11-17T00:00:00"
+                    },
+                    "water": {
+                        "year": 2018,
+                        "month_number": 11,
+                        "day": 17,
+                        "standard": "2018-11-17T00:00:00"
+                    }
+                },
+                "total_liquid": {
+                    "value": 1018,
+                    "uom": "BBL"
+                },
+                "water": {
+                    "value": 1254,
+                    "uom": "BBL"
+                }
+            }
+        ],
+        "year": [{
+                "number": 2018,
+                "reported": {
+                    "total_liquid": {
+                        "value": 61211,
+                        "uom": "BBL"
+                    },
+                    "oil": {
+                        "value": 61211,
+                        "uom": "BBL"
+                    },
+                    "total_gas": {
+                        "value": 43470,
+                        "uom": "MCF"
+                    },
+                    "casinghead_gas": {
+                        "value": 43470,
+                        "uom": "MCF"
+                    },
+                    "water": {
+                        "value": 61211,
+                        "uom": "BBL"
+                    },
+                    "ratios": {
+                        "gas_oil": {
+                            "value": 710,
+                            "uom": "CFB"
+                        },
+                        "water_cut": 50
+                    }
+                },
+                "month": [{
+                        "number": 10,
+                        "last_day": 31,
+                        "total_liquid": {
+                            "value": 9587,
+                            "uom": "BBL"
+                        },
+                        "oil": {
+                            "value": 9587,
+                            "uom": "BBL"
+                        },
+                        "total_gas": {
+                            "value": 8669,
+                            "uom": "MCF"
+                        },
+                        "casinghead_gas": {
+                            "value": 8669,
+                            "uom": "MCF"
+                        },
+                        "water": {
+                            "value": 9587,
+                            "uom": "BBL"
+                        },
+                        "ratios": {
+                            "gas_oil": {
+                                "value": 904,
+                                "uom": "CFB"
+                            },
+                            "water_cut": 50
+                        },
+                        "wells": {
+                            "total": 1,
+                            "oil": 1
+                        }
+                    },
+                    {
+                        "number": 11,
+                        "last_day": 30,
+                        "total_liquid": {
+                            "value": 27727,
+                            "uom": "BBL"
+                        },
+                        "oil": {
+                            "value": 27727,
+                            "uom": "BBL"
+                        },
+                        "total_gas": {
+                            "value": 17706,
+                            "uom": "MCF"
+                        },
+                        "casinghead_gas": {
+                            "value": 17706,
+                            "uom": "MCF"
+                        },
+                        "water": {
+                            "value": 27727,
+                            "uom": "BBL"
+                        },
+                        "ratios": {
+                            "gas_oil": {
+                                "value": 639,
+                                "uom": "CFB"
+                            },
+                            "water_cut": 50
+                        },
+                        "wells": {
+                            "total": 1,
+                            "oil": 1
+                        }
+                    },
+                    {
+                        "number": 12,
+                        "last_day": 31,
+                        "total_liquid": {
+                            "value": 23897,
+                            "uom": "BBL"
+                        },
+                        "oil": {
+                            "value": 23897,
+                            "uom": "BBL"
+                        },
+                        "total_gas": {
+                            "value": 17095,
+                            "uom": "MCF"
+                        },
+                        "casinghead_gas": {
+                            "value": 17095,
+                            "uom": "MCF"
+                        },
+                        "water": {
+                            "value": 23897,
+                            "uom": "BBL"
+                        },
+                        "ratios": {
+                            "gas_oil": {
+                                "value": 715,
+                                "uom": "CFB"
+                            },
+                            "water_cut": 50
+                        },
+                        "wells": {
+                            "total": 1,
+                            "oil": 1
+                        }
+                    }
+                ]
+            },
+            {
+                "number": 2019,
+                "prior_cumulative": {
+                    "total_liquid": {
+                        "value": 61211,
+                        "uom": "BBL"
+                    },
+                    "oil": {
+                        "value": 61211,
+                        "uom": "BBL"
+                    },
+                    "total_gas": {
+                        "value": 43470,
+                        "uom": "MCF"
+                    },
+                    "casinghead_gas": {
+                        "value": 43470,
+                        "uom": "MCF"
+                    },
+                    "water": {
+                        "value": 61211,
+                        "uom": "BBL"
+                    },
+                    "ratios": {
+                        "gas_oil": {
+                            "value": 710,
+                            "uom": "CFB"
+                        },
+                        "water_cut": 50
+                    }
+                },
+                "reported": {
+                    "total_liquid": {
+                        "value": 140438,
+                        "uom": "BBL"
+                    },
+                    "oil": {
+                        "value": 140438,
+                        "uom": "BBL"
+                    },
+                    "total_gas": {
+                        "value": 238208,
+                        "uom": "MCF"
+                    },
+                    "casinghead_gas": {
+                        "value": 238208,
+                        "uom": "MCF"
+                    },
+                    "water": {
+                        "value": 140438,
+                        "uom": "BBL"
+                    },
+                    "ratios": {
+                        "gas_oil": {
+                            "value": 1696,
+                            "uom": "CFB"
+                        },
+                        "water_cut": 50
+                    }
+                },
+                "month": [{
+                        "number": 1,
+                        "last_day": 31,
+                        "total_liquid": {
+                            "value": 20197,
+                            "uom": "BBL"
+                        },
+                        "oil": {
+                            "value": 20197,
+                            "uom": "BBL"
+                        },
+                        "total_gas": {
+                            "value": 16704,
+                            "uom": "MCF"
+                        },
+                        "casinghead_gas": {
+                            "value": 16704,
+                            "uom": "MCF"
+                        },
+                        "water": {
+                            "value": 20197,
+                            "uom": "BBL"
+                        },
+                        "ratios": {
+                            "gas_oil": {
+                                "value": 827,
+                                "uom": "CFB"
+                            },
+                            "water_cut": 50
+                        },
+                        "wells": {
+                            "total": 1,
+                            "oil": 1
+                        }
+                    },
+                    {
+                        "number": 2,
+                        "last_day": 28,
+                        "total_liquid": {
+                            "value": 19173,
+                            "uom": "BBL"
+                        },
+                        "oil": {
+                            "value": 19173,
+                            "uom": "BBL"
+                        },
+                        "total_gas": {
+                            "value": 16394,
+                            "uom": "MCF"
+                        },
+                        "casinghead_gas": {
+                            "value": 16394,
+                            "uom": "MCF"
+                        },
+                        "water": {
+                            "value": 19173,
+                            "uom": "BBL"
+                        },
+                        "ratios": {
+                            "gas_oil": {
+                                "value": 855,
+                                "uom": "CFB"
+                            },
+                            "water_cut": 50
+                        },
+                        "wells": {
+                            "total": 1,
+                            "oil": 1
+                        }
+                    },
+                    {
+                        "number": 3,
+                        "last_day": 31,
+                        "total_liquid": {
+                            "value": 20302,
+                            "uom": "BBL"
+                        },
+                        "oil": {
+                            "value": 20302,
+                            "uom": "BBL"
+                        },
+                        "total_gas": {
+                            "value": 26699,
+                            "uom": "MCF"
+                        },
+                        "casinghead_gas": {
+                            "value": 26699,
+                            "uom": "MCF"
+                        },
+                        "water": {
+                            "value": 20302,
+                            "uom": "BBL"
+                        },
+                        "ratios": {
+                            "gas_oil": {
+                                "value": 1315,
+                                "uom": "CFB"
+                            },
+                            "water_cut": 50
+                        },
+                        "wells": {
+                            "total": 1,
+                            "oil": 1
+                        }
+                    },
+                    {
+                        "number": 4,
+                        "last_day": 30,
+                        "total_liquid": {
+                            "value": 16893,
+                            "uom": "BBL"
+                        },
+                        "oil": {
+                            "value": 16893,
+                            "uom": "BBL"
+                        },
+                        "total_gas": {
+                            "value": 35229,
+                            "uom": "MCF"
+                        },
+                        "casinghead_gas": {
+                            "value": 35229,
+                            "uom": "MCF"
+                        },
+                        "water": {
+                            "value": 16893,
+                            "uom": "BBL"
+                        },
+                        "ratios": {
+                            "gas_oil": {
+                                "value": 2085,
+                                "uom": "CFB"
+                            },
+                            "water_cut": 50
+                        },
+                        "wells": {
+                            "total": 1,
+                            "oil": 1
+                        }
+                    },
+                    {
+                        "number": 5,
+                        "last_day": 31,
+                        "total_liquid": {
+                            "value": 16591,
+                            "uom": "BBL"
+                        },
+                        "oil": {
+                            "value": 16591,
+                            "uom": "BBL"
+                        },
+                        "total_gas": {
+                            "value": 34690,
+                            "uom": "MCF"
+                        },
+                        "casinghead_gas": {
+                            "value": 34690,
+                            "uom": "MCF"
+                        },
+                        "water": {
+                            "value": 16591,
+                            "uom": "BBL"
+                        },
+                        "ratios": {
+                            "gas_oil": {
+                                "value": 2091,
+                                "uom": "CFB"
+                            },
+                            "water_cut": 50
+                        },
+                        "wells": {
+                            "total": 1,
+                            "oil": 1
+                        }
+                    },
+                    {
+                        "number": 6,
+                        "last_day": 30,
+                        "total_liquid": {
+                            "value": 11062,
+                            "uom": "BBL"
+                        },
+                        "oil": {
+                            "value": 11062,
+                            "uom": "BBL"
+                        },
+                        "total_gas": {
+                            "value": 11312,
+                            "uom": "MCF"
+                        },
+                        "casinghead_gas": {
+                            "value": 11312,
+                            "uom": "MCF"
+                        },
+                        "water": {
+                            "value": 11062,
+                            "uom": "BBL"
+                        },
+                        "ratios": {
+                            "gas_oil": {
+                                "value": 1023,
+                                "uom": "CFB"
+                            },
+                            "water_cut": 50
+                        },
+                        "wells": {
+                            "total": 1,
+                            "oil": 1
+                        }
+                    },
+                    {
+                        "number": 7,
+                        "last_day": 31,
+                        "total_liquid": {
+                            "value": 14183,
+                            "uom": "BBL"
+                        },
+                        "oil": {
+                            "value": 14183,
+                            "uom": "BBL"
+                        },
+                        "total_gas": {
+                            "value": 35226,
+                            "uom": "MCF"
+                        },
+                        "casinghead_gas": {
+                            "value": 35226,
+                            "uom": "MCF"
+                        },
+                        "water": {
+                            "value": 14183,
+                            "uom": "BBL"
+                        },
+                        "ratios": {
+                            "gas_oil": {
+                                "value": 2484,
+                                "uom": "CFB"
+                            },
+                            "water_cut": 50
+                        },
+                        "wells": {
+                            "total": 1,
+                            "oil": 1
+                        }
+                    },
+                    {
+                        "number": 8,
+                        "last_day": 31,
+                        "total_liquid": {
+                            "value": 11328,
+                            "uom": "BBL"
+                        },
+                        "oil": {
+                            "value": 11328,
+                            "uom": "BBL"
+                        },
+                        "total_gas": {
+                            "value": 32955,
+                            "uom": "MCF"
+                        },
+                        "casinghead_gas": {
+                            "value": 32955,
+                            "uom": "MCF"
+                        },
+                        "water": {
+                            "value": 11328,
+                            "uom": "BBL"
+                        },
+                        "ratios": {
+                            "gas_oil": {
+                                "value": 2909,
+                                "uom": "CFB"
+                            },
+                            "water_cut": 50
+                        },
+                        "wells": {
+                            "total": 1,
+                            "oil": 1
+                        }
+                    },
+                    {
+                        "number": 9,
+                        "last_day": 30,
+                        "total_liquid": {
+                            "value": 10709,
+                            "uom": "BBL"
+                        },
+                        "oil": {
+                            "value": 10709,
+                            "uom": "BBL"
+                        },
+                        "total_gas": {
+                            "value": 28999,
+                            "uom": "MCF"
+                        },
+                        "casinghead_gas": {
+                            "value": 28999,
+                            "uom": "MCF"
+                        },
+                        "water": {
+                            "value": 10709,
+                            "uom": "BBL"
+                        },
+                        "ratios": {
+                            "gas_oil": {
+                                "value": 2708,
+                                "uom": "CFB"
+                            },
+                            "water_cut": 50
+                        },
+                        "wells": {
+                            "total": 1,
+                            "oil": 1
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    "disposition": {
+        "year": [{
+                "number": 2019,
+                "month": {
+                    "number": 1,
+                    "dmy": "30-Apr-2019",
+                    "last_day": 30,
+                    "prod_zone": {
+                        "code": "452SPRB",
+                        "name": "SPRABERRY"
+                    },
+                    "purchaser": {
+                        "code": 282433,
+                        "name": "COGENT MIDSTREAM WESTEX LLC"
+                    },
+                    "fluid": {
+                        "code": "CG",
+                        "name": "CASINGHEAD GAS"
+                    },
+                    "type": "UNKWN"
+                }
+            },
+            {
+                "number": 2019,
+                "month": {
+                    "number": 1,
+                    "dmy": "30-Sep-2019",
+                    "last_day": 30,
+                    "prod_zone": {
+                        "code": "452SPRB",
+                        "name": "SPRABERRY"
+                    },
+                    "purchaser": {
+                        "code": 267037,
+                        "name": "TARGA PL MID-CONT WESTTEX LLC"
+                    },
+                    "fluid": {
+                        "code": "CG",
+                        "name": "CASINGHEAD GAS"
+                    },
+                    "type": "UNKWN"
+                }
+            },
+            {
+                "number": 2018,
+                "month": {
+                    "number": 1,
+                    "dmy": "31-Oct-2018",
+                    "last_day": 31,
+                    "prod_zone": {
+                        "code": "452SPRB",
+                        "name": "SPRABERRY"
+                    },
+                    "purchaser": {
+                        "code": 34633,
+                        "name": "UNKNOWN"
+                    },
+                    "fluid": {
+                        "code": "O",
+                        "name": "CRUDE OIL"
+                    },
+                    "volume": {
+                        "value": 9587,
+                        "uom": "BBL"
+                    },
+                    "type": "SALES"
+                }
+            },
+            {
+                "number": 2018,
+                "month": {
+                    "number": 1,
+                    "dmy": "30-Nov-2018",
+                    "last_day": 30,
+                    "prod_zone": {
+                        "code": "452SPRB",
+                        "name": "SPRABERRY"
+                    },
+                    "purchaser": {
+                        "code": 34633,
+                        "name": "UNKNOWN"
+                    },
+                    "fluid": {
+                        "code": "O",
+                        "name": "CRUDE OIL"
+                    },
+                    "volume": {
+                        "value": 27092,
+                        "uom": "BBL"
+                    },
+                    "type": "SALES"
+                }
+            },
+            {
+                "number": 2018,
+                "month": {
+                    "number": 1,
+                    "dmy": "31-Dec-2018",
+                    "last_day": 31,
+                    "prod_zone": {
+                        "code": "452SPRB",
+                        "name": "SPRABERRY"
+                    },
+                    "purchaser": {
+                        "code": 34633,
+                        "name": "UNKNOWN"
+                    },
+                    "fluid": {
+                        "code": "O",
+                        "name": "CRUDE OIL"
+                    },
+                    "volume": {
+                        "value": 23853,
+                        "uom": "BBL"
+                    },
+                    "type": "SALES"
+                }
+            },
+            {
+                "number": 2019,
+                "month": {
+                    "number": 1,
+                    "dmy": "31-Jan-2019",
+                    "last_day": 31,
+                    "prod_zone": {
+                        "code": "452SPRB",
+                        "name": "SPRABERRY"
+                    },
+                    "purchaser": {
+                        "code": 34633,
+                        "name": "UNKNOWN"
+                    },
+                    "fluid": {
+                        "code": "O",
+                        "name": "CRUDE OIL"
+                    },
+                    "volume": {
+                        "value": 20836,
+                        "uom": "BBL"
+                    },
+                    "type": "SALES"
+                }
+            },
+            {
+                "number": 2019,
+                "month": {
+                    "number": 1,
+                    "dmy": "28-Feb-2019",
+                    "last_day": 28,
+                    "prod_zone": {
+                        "code": "452SPRB",
+                        "name": "SPRABERRY"
+                    },
+                    "purchaser": {
+                        "code": 34633,
+                        "name": "UNKNOWN"
+                    },
+                    "fluid": {
+                        "code": "O",
+                        "name": "CRUDE OIL"
+                    },
+                    "volume": {
+                        "value": 18754,
+                        "uom": "BBL"
+                    },
+                    "type": "SALES"
+                }
+            },
+            {
+                "number": 2019,
+                "month": {
+                    "number": 1,
+                    "dmy": "31-Mar-2019",
+                    "last_day": 31,
+                    "prod_zone": {
+                        "code": "452SPRB",
+                        "name": "SPRABERRY"
+                    },
+                    "purchaser": {
+                        "code": 34633,
+                        "name": "UNKNOWN"
+                    },
+                    "fluid": {
+                        "code": "O",
+                        "name": "CRUDE OIL"
+                    },
+                    "volume": {
+                        "value": 20362,
+                        "uom": "BBL"
+                    },
+                    "type": "SALES"
+                }
+            },
+            {
+                "number": 2019,
+                "month": {
+                    "number": 1,
+                    "dmy": "30-Apr-2019",
+                    "last_day": 30,
+                    "prod_zone": {
+                        "code": "452SPRB",
+                        "name": "SPRABERRY"
+                    },
+                    "purchaser": {
+                        "code": 34633,
+                        "name": "UNKNOWN"
+                    },
+                    "fluid": {
+                        "code": "O",
+                        "name": "CRUDE OIL"
+                    },
+                    "volume": {
+                        "value": 16319,
+                        "uom": "BBL"
+                    },
+                    "type": "SALES"
+                }
+            },
+            {
+                "number": 2019,
+                "month": {
+                    "number": 1,
+                    "dmy": "30-Apr-2019",
+                    "last_day": 30,
+                    "prod_zone": {
+                        "code": "452SPRB",
+                        "name": "SPRABERRY"
+                    },
+                    "purchaser": {
+                        "code": 212542,
+                        "name": "SHELL TRADING (US) COMPANY"
+                    },
+                    "fluid": {
+                        "code": "O",
+                        "name": "CRUDE OIL"
+                    },
+                    "type": "UNKWN"
+                }
+            },
+            {
+                "number": 2019,
+                "month": {
+                    "number": 1,
+                    "dmy": "31-May-2019",
+                    "last_day": 31,
+                    "prod_zone": {
+                        "code": "452SPRB",
+                        "name": "SPRABERRY"
+                    },
+                    "purchaser": {
+                        "code": 34633,
+                        "name": "UNKNOWN"
+                    },
+                    "fluid": {
+                        "code": "O",
+                        "name": "CRUDE OIL"
+                    },
+                    "volume": {
+                        "value": 15787,
+                        "uom": "BBL"
+                    },
+                    "type": "SALES"
+                }
+            },
+            {
+                "number": 2019,
+                "month": {
+                    "number": 1,
+                    "dmy": "30-Jun-2019",
+                    "last_day": 30,
+                    "prod_zone": {
+                        "code": "452SPRB",
+                        "name": "SPRABERRY"
+                    },
+                    "purchaser": {
+                        "code": 34633,
+                        "name": "UNKNOWN"
+                    },
+                    "fluid": {
+                        "code": "O",
+                        "name": "CRUDE OIL"
+                    },
+                    "volume": {
+                        "value": 11768,
+                        "uom": "BBL"
+                    },
+                    "type": "SALES"
+                }
+            },
+            {
+                "number": 2019,
+                "month": {
+                    "number": 1,
+                    "dmy": "31-Jul-2019",
+                    "last_day": 31,
+                    "prod_zone": {
+                        "code": "452SPRB",
+                        "name": "SPRABERRY"
+                    },
+                    "purchaser": {
+                        "code": 34633,
+                        "name": "UNKNOWN"
+                    },
+                    "fluid": {
+                        "code": "O",
+                        "name": "CRUDE OIL"
+                    },
+                    "volume": {
+                        "value": 14124,
+                        "uom": "BBL"
+                    },
+                    "type": "SALES"
+                }
+            },
+            {
+                "number": 2019,
+                "month": {
+                    "number": 1,
+                    "dmy": "31-Aug-2019",
+                    "last_day": 31,
+                    "prod_zone": {
+                        "code": "452SPRB",
+                        "name": "SPRABERRY"
+                    },
+                    "purchaser": {
+                        "code": 34633,
+                        "name": "UNKNOWN"
+                    },
+                    "fluid": {
+                        "code": "O",
+                        "name": "CRUDE OIL"
+                    },
+                    "volume": {
+                        "value": 12191,
+                        "uom": "BBL"
+                    },
+                    "type": "SALES"
+                }
+            },
+            {
+                "number": 2019,
+                "month": {
+                    "number": 1,
+                    "dmy": "30-Sep-2019",
+                    "last_day": 30,
+                    "prod_zone": {
+                        "code": "452SPRB",
+                        "name": "SPRABERRY"
+                    },
+                    "purchaser": {
+                        "code": 174303,
+                        "name": "PLAINS MARKETING LP"
+                    },
+                    "fluid": {
+                        "code": "O",
+                        "name": "CRUDE OIL"
+                    },
+                    "type": "UNKWN"
+                }
+            }
+        ]
+    },
+    "content": {
+        "data_provider": {
+            "code": "IHSE"
+        },
+        "location": 1,
+        "wellbore": 1,
+        "production": {
+            "year": 2,
+            "month": 12
+        }
+    }
+}]
