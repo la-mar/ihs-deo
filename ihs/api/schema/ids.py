@@ -8,7 +8,7 @@ class IDListSchema(Schema):
     name = fields.Str()
     ids = fields.List(fields.Str())
     count = fields.Int()
-    last_update = fields.DateTime()
+    last_update_at = fields.DateTime()
 
 
 if __name__ == "__main__":
