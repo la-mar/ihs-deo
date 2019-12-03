@@ -2,16 +2,23 @@ every_minute: &every_minute
   seconds: 60
 
 nightly: &nightly
-  <<: *every_minute
-  # cron:
-  #   minute: 0
-  #   hour: 3
+  # <<: *every_minute
+  cron:
+    minute: 0
+    hour: 3
 
 every_6_hours: &every_6_hours
-  <<: *every_minute
-  # cron:
-  #   minute: 0
-  #   hour: "*/6"
+  # <<: *every_minute
+  cron:
+    minute: 0
+    hour: "*/6"
+
+weekly:
+  # <<: *every_minute
+  cron:
+    minute: 0
+    hour: 16
+    day_of_week: 5
 
 default_aliases: &default_aliases
   created_at: ihs_created_at
@@ -180,6 +187,7 @@ endpoints:
           query_path: well_horizontal_by_county.xml
           matrix:
             <<: *counties
+
   well_horizontal:
     enabled: true
     version: v10
@@ -210,6 +218,7 @@ endpoints:
           matrix:
             sequoia:
               api: "42461409160000"
+
   production_master_horizontal:
     enabled: true
     version: v10
@@ -229,6 +238,7 @@ endpoints:
           query_path: production_horizontal_by_county.xml
           matrix:
             <<: *counties
+
   production_horizontal:
     enabled: true
     version: v10
@@ -255,6 +265,7 @@ endpoints:
           matrix:
             sequoia:
               api: "42461409160000"
+
   well_master_vertical:
     enabled: true
     version: v10
@@ -287,7 +298,7 @@ endpoints:
         hole_direction: V
     tasks:
       sync:
-        <<: *nightly
+        <<: *weekly
         options:
           query_path: well_by_api.xml
           matrix:
@@ -329,7 +340,7 @@ endpoints:
         hole_direction: V
     tasks:
       sync:
-        <<: *nightly
+        <<: *weekly
         options:
           query_path: production_by_entity.xml
           matrix:
