@@ -23,7 +23,7 @@ def hole_direction_router(name, args, kwargs, options, task=None, **kw):
 
     # base queue definitions
     queue_map = {
-        "celery_queue.tasks.submit_job": f"{project}-deletions",
+        "celery_queue.tasks.submit_job": f"{project}-submissions",
         "celery_queue.tasks.collect_job_result": f"{project}-collections",
         "celery_queue.tasks.delete_job": f"{project}-deletions",
     }

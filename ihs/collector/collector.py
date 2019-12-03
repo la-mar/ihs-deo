@@ -64,8 +64,8 @@ if __name__ == "__main__":
     url = conf.API_BASE_URL
     endpoints = Endpoint.load_from_config(conf)
 
-    endpoint = endpoints["production_master_horizontal"]
-    task = endpoint.tasks["sync"]
+    endpoint = endpoints["production_horizontal"]
+    task = endpoint.tasks["sequoia"]
 
     #! Dont delete
     # import pandas as pd

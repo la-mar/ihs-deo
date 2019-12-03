@@ -133,6 +133,28 @@ if __name__ == "__main__":
     app = create_app()
     app.app_context().push()
 
+    endpoint_name = "production_horizontal"
+    task_name = "sequoia"
+    results = [x for x in run_endpoint_task(endpoint_name, task_name) if x is not None]
+    opts = results[0]
+    opts.get("job_options")
+    job = submit_job(**opts)
+    dir(job)
+    job.to_dict()
+    result = get_job_results(job)
+    collect_data(job, result)
+
+    endpoint_name = "well_horizontal"
+    task_name = "sequoia"
+    results = [x for x in run_endpoint_task(endpoint_name, task_name) if x is not None]
+    opts = results[0]
+    opts.get("job_options")
+    job = submit_job(**opts)
+    dir(job)
+    job.to_dict()
+    result = get_job_results(job)
+    collect_data(job, result)
+
     endpoint_name = "production_master_horizontal"
     task_name = "sync"
     results = [x for x in run_endpoint_task(endpoint_name, task_name) if x is not None]
@@ -141,3 +163,16 @@ if __name__ == "__main__":
     job = submit_job(**opts)
     dir(job)
     job.to_dict()
+    result = get_job_results(job)
+    collect_identities(job, result)
+
+    endpoint_name = "well_master_horizontal"
+    task_name = "sync"
+    results = [x for x in run_endpoint_task(endpoint_name, task_name) if x is not None]
+    opts = results[0]
+    opts.get("job_options")
+    job = submit_job(**opts)
+    dir(job)
+    job.to_dict()
+    result = get_job_results(job)
+    collect_identities(job, result)

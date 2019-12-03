@@ -37,7 +37,7 @@ upgrade:
 
 celery-worker:
 	# celery -E -A ihs.celery_queue.worker:celery worker --loglevel=INFO --purge
-	ihs run worker -Q ihs-default,ihs-collections,ihs-submissions --purge
+	ihs run worker -Q ihs-default,ihs-submissions-h,ihs-collections-h,ihs-deletions-h,ihs-submissions-v,ihs-collections-v,ihs-deletions-v
 
 celery-beat:
 	# celery -A ihs.celery_queue.worker:celery beat --loglevel=DEBUG
