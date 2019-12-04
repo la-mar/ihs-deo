@@ -1,16 +1,74 @@
 
 ### Task Definitions ###
 
-data "aws_ecs_task_definition" "ihs" {
-  task_definition = "ihs-deo"
+data "aws_ecs_task_definition" "ihs_web" {
+  task_definition = "ihs-web"
+}
+
+data "aws_ecs_task_definition" "ihs_worker" {
+  task_definition = "ihs-worker"
+}
+
+data "aws_ecs_task_definition" "ihs_cron" {
+  task_definition = "ihs-cron"
 }
 
 
 ### ECS Services ###
-resource "aws_ecs_service" "ihs" {
-  name            = var.service_name
+resource "aws_ecs_service" "ihs_web" {
+  name            = "ihs-web"
   cluster         = data.terraform_remote_state.ecs_cluster.outputs.collector_cluster_arn
-  task_definition = data.aws_ecs_task_definition.ihs.family
+  task_definition = data.aws_ecs_task_definition.ihs_web.family
+
+  scheduling_strategy     = "REPLICA"
+  desired_count           = 1
+  enable_ecs_managed_tags = true
+  propagate_tags          = "TASK_DEFINITION"
+  tags                    = local.tags
+
+  # Optional: Allow external changes without Terraform plan difference
+  lifecycle {
+    # create_before_destroy = true
+    ignore_changes = [
+      desired_count,
+      task_definition,
+    ]
+  }
+
+  service_registries {
+    registry_arn = aws_service_discovery_service.web.arn
+    # container_name = "web"
+    # container_port = 6379
+    # port = 6379
+  }
+
+}
+
+resource "aws_ecs_service" "ihs_worker" {
+  name            = "ihs-worker"
+  cluster         = data.terraform_remote_state.ecs_cluster.outputs.collector_cluster_arn
+  task_definition = data.aws_ecs_task_definition.ihs_worker.family
+
+  scheduling_strategy     = "REPLICA"
+  desired_count           = 1
+  enable_ecs_managed_tags = true
+  propagate_tags          = "TASK_DEFINITION"
+  tags                    = local.tags
+
+  # Optional: Allow external changes without Terraform plan difference
+  lifecycle {
+    # create_before_destroy = true
+    ignore_changes = [
+      desired_count,
+      task_definition,
+    ]
+  }
+}
+
+resource "aws_ecs_service" "ihs_cron" {
+  name            = "ihs-cron"
+  cluster         = data.terraform_remote_state.ecs_cluster.outputs.collector_cluster_arn
+  task_definition = data.aws_ecs_task_definition.ihs_cron.family
 
   scheduling_strategy     = "REPLICA"
   desired_count           = 1

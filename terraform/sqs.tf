@@ -123,7 +123,7 @@ data "aws_iam_policy_document" "allow_ecs_access_to_sqs" {
     condition {
       test     = "ArnEquals"
       variable = "ecs:service"
-      values   = [aws_ecs_service.ihs.id]
+      values   = [aws_ecs_service.ihs_worker.id, aws_ecs_service.ihs_cron.id]
     }
   }
 }
