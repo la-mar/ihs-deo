@@ -36,10 +36,9 @@ resource "aws_ecs_service" "ihs_web" {
   }
 
   service_registries {
-    registry_arn = aws_service_discovery_service.web.arn
-    # container_name = "web"
-    # container_port = 6379
-    # port = 6379
+    registry_arn   = aws_service_discovery_service.web.arn
+    container_name = "ihs-web"
+    container_port = 8000
   }
 
 }
@@ -144,3 +143,5 @@ resource "aws_iam_role_policy_attachment" "attach_sqs_policy_to_task_role" {
   role       = aws_iam_role.ecs_task_role.name
   policy_arn = aws_iam_policy.allow_task_access_to_sqs.arn
 }
+
+
