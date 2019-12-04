@@ -2,16 +2,16 @@ from typing import List, Dict, Tuple, Union
 import logging
 
 
-from config import get_active_config
+from config import get_active_config, project
 
 logger = logging.getLogger(__name__)
 conf = get_active_config()
-logger.setLevel(int(conf.LOG_LEVEL))
+logger.setLevel(10)
 
 datadog = None
 
 
-def load_datadog():
+def load():
 
     # print("Loading Datadog")
     try:
@@ -36,11 +36,11 @@ def load_datadog():
         logger.error(f"Failed to load Datadog configuration: {e}")
 
 
-def send(name: str, points: Union[int, float, List[Tuple]]):
-    """ Send a metric through the Datadog http apiself.
+def post(name: str, points: Union[int, float, List[Tuple]]):
+    """ Send a metric through the Datadog http api.
 
         Example:
-                    api.Metric.send(
+                    api.Metric.post(
                         metric='my.series',
                         points=[
                             (now, 15),
@@ -53,6 +53,7 @@ def send(name: str, points: Union[int, float, List[Tuple]]):
         points {Union[int, float, List[Tuple]]} -- metric value(s)
     """
     try:
+        name = f"{project}.{name}"
         if datadog:
             result = datadog.api.Metric.send(metric=name, points=points)
             if result.get("status") == "ok":
@@ -78,11 +79,15 @@ def send(name: str, points: Union[int, float, List[Tuple]]):
         logger.debug("Failed to send Datadog metric: %s", e)
 
 
+def post_heartbeat():
+    return send("heartbeat", 1)
+
+
 if __name__ == "__main__":
     logging.basicConfig()
     logger = logging.getLogger()
     logger.setLevel(10)
-    load_datadog()
+    load()
     name = "app.test"
     points = 15
-    send(name, points)
+    post(name, points)
