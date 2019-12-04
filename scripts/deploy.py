@@ -54,10 +54,9 @@ import docker
 ENV = os.getenv("ENV", "prod")
 PROJECT_NAME: str = os.getenv("COMPOSE_PROJECT_NAME")  # type: ignore
 CLUSTER_NAME = f"{os.getenv('ECS_CLUSTER')}-{ENV}"  # type: ignore
-SERVICE_NAME = PROJECT_NAME
 TASK_IAM_ROLE = f"arn:aws:iam::864494265830:role/{PROJECT_NAME}-task-role"
 
-SERVICES: List[str] = [PROJECT_NAME]
+SERVICES: List[str] = ["ihs-web", "ihs-worker", "ihs-cron"]
 
 IMAGES = [
     {"name": PROJECT_NAME, "dockerfile": "Dockerfile", "build_context": "."},
@@ -65,7 +64,7 @@ IMAGES = [
 
 TAGS = [
     {"key": "domain", "value": "technology"},
-    {"key": "service_name", "value": SERVICE_NAME},
+    {"key": "service_name", "value": PROJECT_NAME},
     {"key": "environment", "value": ENV},
     {"key": "terraform", "value": "true"},
 ]
@@ -99,6 +98,37 @@ def get_task_definition(
     task_iam_role_arn: str = "ecsTaskExecutionRole",
 ):
     defs = {
+        "ihs-web": {
+            "containerDefinitions": [
+                {
+                    "name": "ihs-web",
+                    "logConfiguration": {
+                        "logDriver": "awslogs",
+                        "options": {
+                            "awslogs-group": f"/ecs/{service_name}",
+                            "awslogs-region": "us-east-1",
+                            "awslogs-stream-prefix": "ecs",
+                        },
+                    },
+                    "command": ["ihs", "run", "web", "-b 0.0.0.0:8000"],
+                    "memoryReservation": 128,
+                    "image": f"{account_id}.dkr.ecr.us-east-1.amazonaws.com/{image_name}:{environment}",
+                    "essential": True,
+                    "environment": transform_envs(envs),
+                    "portMappings": [
+                        {
+                            "containerPort": 8000,
+                            "protocol": "tcp",
+                        },  # dynamically allocates host port
+                    ],
+                },
+            ],
+            "executionRoleArn": "ecsTaskExecutionRole",
+            "family": f"{service_name}",
+            "networkMode": "bridge",
+            "taskRoleArn": task_iam_role_arn,
+            "tags": tags,
+        },
         "ihs-worker": {
             "containerDefinitions": [
                 {
@@ -479,6 +509,7 @@ def get_latest_revision(task_name: str):
     return response["taskDefinition"]["revision"]
 
 
+results = []
 for service in SERVICES:
     print(f"{service}: Creating new task definition")
     cdef = get_task_definition(
@@ -496,13 +527,14 @@ for service in SERVICES:
 
     rev_num = get_latest_revision(f"{service}")
     print(f"{service}: Updating service to {service}:{rev_num}")
+    results.append((service, rev_num))
+
+for service, rev_num in results:
     response = client.update_service(
         cluster=CLUSTER_NAME,
-        service=SERVICE_NAME,
+        service=service,
         forceNewDeployment=True,
         taskDefinition=f"{service}:{rev_num}",
     )
     print(f"{service}: Updated service to {service}:{rev_num}")
-
-    # print(response)
 
