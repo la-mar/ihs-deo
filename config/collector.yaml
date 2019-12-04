@@ -1,20 +1,17 @@
 every_minute: &every_minute
   seconds: 60
 
-nightly: &nightly
-  # <<: *every_minute
+nightly: &nightly # <<: *every_minute
   cron:
     minute: 0
     hour: 3
 
-every_6_hours: &every_6_hours
-  # <<: *every_minute
+every_6_hours: &every_6_hours # <<: *every_minute
   cron:
     minute: 0
     hour: "*/6"
 
-weekly:
-  # <<: *every_minute
+weekly: &weekly # <<: *every_minute
   cron:
     minute: 0
     hour: 16
