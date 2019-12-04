@@ -24,7 +24,6 @@ class WellResource(Resource):
 
     def _get(self, **kwargs) -> Dict:
         data = self.get_wells(**kwargs)
-        logger.debug(f"retrieved data: {data}")
         if self.data_key:
             data = [getattr(d, self.data_key) for d in data]
         response_object = {
