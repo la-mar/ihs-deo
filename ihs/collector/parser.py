@@ -102,11 +102,18 @@ class ParserRule:
         self.criteria = criteria
         self.allow_partial = allow_partial
 
-    def __call__(self, value: Any, return_partials: bool = False) -> Any:
+    def __call__(
+        self, value: Any, return_partials: bool = False
+    ) -> Union[bool, List[bool]]:
         """ Enables the ParserRule to be callable, such that invoking the rule with
             a passed value will return the evaluation result of the called rule.
 
             Example: MyIntegerParserRule("13") -> True
+
+            return_partials: set to True to return a list of the result of each criteria.
+                             if set to False (default), return the result of the appropriate
+                             boolean operation (any([partial1, partial2, ...]) if self.allow_partials = True (defualt))
+                             or (all([partial1, partial2, ...]) otherwise).
         """
         partials = [c(value) for c in self.criteria]
         if return_partials:
