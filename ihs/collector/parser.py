@@ -49,7 +49,7 @@ class Criterion:
 
 
 class RegexCriterion(Criterion):
-    """ Regex Parser rule """
+    """ Regex extraction harness for parser rule"""
 
     def __init__(self, regex: str, name: str = None):
         self.pattern = regex
@@ -64,7 +64,7 @@ class RegexCriterion(Criterion):
 
 
 class TypeCriterion(Criterion):
-    """ Type check Parser rule """
+    """ Type check harness for parser rule """
 
     def __init__(self, dtype: type, name: str = None):
         func = lambda v: isinstance(v, dtype)
@@ -72,7 +72,7 @@ class TypeCriterion(Criterion):
 
 
 class ValueCriterion(Criterion):
-    """ Value comparison Parser rule """
+    """ Value comparison harness for parser rule """
 
     def __init__(self, value: Union[str, int, float, bool], name: str = None):
         func = lambda v: v == value
@@ -103,8 +103,12 @@ class ParserRule:
         self.allow_partial = allow_partial
 
     def __call__(self, value: Any, return_partials: bool = False) -> Any:
+        """ Enables the ParserRule to be callable, such that invoking the rule with
+            a passed value will return the evaluation result of the called rule.
+
+            Example: MyIntegerParserRule("13") -> True
+        """
         partials = [c(value) for c in self.criteria]
-        # print(f"{value} ({type(value).__name__})=> {partials}")
         if return_partials:
             return partials
         if self.allow_partial:
@@ -114,6 +118,7 @@ class ParserRule:
 
     @property
     def match_mode(self):
+        """ Determins if all criteria must be satisfied to consider a parse successful """
         return "PARTIAL" if self.allow_partial else "FULL"
 
     def __repr__(self):
@@ -141,7 +146,7 @@ class ParserRule:
 
 
 class Parser:
-    """ Parses text values according to a set of arbitrary rules"""
+    """ Parses text values according to a set of arbitrary rules """
 
     def __init__(
         self, rules: List[ParserRule], name: str = None, parse_dtypes: bool = True
@@ -194,14 +199,13 @@ class Parser:
             else:
                 logger.debug("Parser check passed: %s", (Rule,))
 
-        # print(f"{value} ({type(value).__name__})=> {checks}")
         return all(checks) if not return_partials else checks
 
     def parse_dtype(self, value: str) -> Union[int, float, str, datetime]:
         return self.try_int(value) or self.try_float(value) or self.try_date(value)
 
     def parse(self, value: Any) -> Any:
-        """ Attempt to parse a value if all rules are satisfied """
+        """ Attempt to parse a value if all checks are satisfied """
         if not self.run_checks(value):
             return value
         else:
