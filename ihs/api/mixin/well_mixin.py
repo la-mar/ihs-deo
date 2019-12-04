@@ -15,6 +15,8 @@ projector = CoordinateTransformer(conf.DEFAULT_PROJECTION)
 class WellMixin(BaseMixin):
     @property
     def well_header(self):
+        """ Assemble and return the well's header information """
+
         output = OrderedDict()
 
         if hasattr(self, "header"):
@@ -42,6 +44,7 @@ class WellMixin(BaseMixin):
 
     @property
     def well_locations(self) -> Dict[str, Dict[str, Union[Any]]]:
+        """ Assemble and return the available well locations, usually SHL, PBHL, and ABHL """
         locs = {}
         loc_type_map = {
             "shl": ["surface", "shl"],
@@ -76,6 +79,9 @@ class WellMixin(BaseMixin):
 
     @property
     def active_survey(self) -> Dict[str, Any]:
+        """ Return the currently active survey for the wellbore, projected to
+            WGS84 (4326). The active survey is usually the most current survey
+            that is reported for the wellbore. """
 
         shl_lat = query_dict("shl.lat", self.well_locations)
         shl_lon = query_dict("shl.lon", self.well_locations)
@@ -112,6 +118,7 @@ class WellMixin(BaseMixin):
 
     @property
     def ip_tests(self) -> List[Dict[str, Any]]:
+        """ Assemble and return a list of initial production tests for the wellbore """
         data: Dict[str, dict] = {}
         output = []
 
@@ -159,6 +166,7 @@ class WellMixin(BaseMixin):
 
     @property
     def frac(self) -> Dict[str, Union[int, float, str]]:
+        """ Get the treatmen summary for the wellbore """
         data: Dict[str, dict] = {}
         output = {}
 
@@ -184,6 +192,9 @@ class WellMixin(BaseMixin):
 
     @property
     def well_elevations(self) -> Dict[str, Union[int, str]]:
+        """ Get the reported ground and kelly bushing elevations for the well's
+            surface location. """
+
         data: Dict[str, dict] = {}
         output = {}
 
@@ -203,6 +214,19 @@ class WellMixin(BaseMixin):
 
     @property
     def well_dates(self) -> Dict[str, Union[int, str]]:
+        """ Collection of relevant dates for the wellbore.
+
+            Returns the following date fields, if available:
+                - permit
+                - permit_expiration
+                - spud
+                - comp
+                - final_drill
+                - rig_release
+                - first_report
+                - ihs_last_update
+
+        """
         data: Dict[str, dict] = {}
         output = {}
 
@@ -224,6 +248,7 @@ class WellMixin(BaseMixin):
 
     @property
     def well_statuses(self) -> Dict[str, str]:
+        """ Current status names/codes assigned to the well"""
         data: Dict[str, dict] = {}
         output = {}
 
