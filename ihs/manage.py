@@ -11,7 +11,7 @@ from flask.cli import AppGroup, FlaskGroup
 import loggers
 from api.models import *
 from config import get_active_config
-from ihs import create_app, db
+from ihs import create_app
 
 loggers.standard_config()
 logger = logging.getLogger()
@@ -77,6 +77,15 @@ def ipython_embed():
     ctx.update(app.make_shell_context())
 
     IPython.embed(banner1=banner, user_ns=ctx)
+
+
+@run_cli.command(context_settings=dict(ignore_unknown_options=True))
+@click.argument("args", nargs=-1, type=click.UNPROCESSED)
+def web(args):
+    # from celery_queue.worker import celery
+
+    cmd = ["gunicorn", "wsgi",] + list(args)
+    subprocess.call(cmd)
 
 
 @run_cli.command(context_settings=dict(ignore_unknown_options=True))
