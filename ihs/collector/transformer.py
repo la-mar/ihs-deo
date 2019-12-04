@@ -18,6 +18,7 @@ class Transformer:
 
     @classmethod
     def add_document_hash(cls, data: OrderedDict) -> OrderedDict:
+        data = cls.remove_variants(data)
         data["md5"] = hashlib.md5(str(data).encode()).hexdigest()
         data.move_to_end("md5", last=False)
         return data
@@ -69,6 +70,16 @@ class Transformer:
         for key, value in meta.items():
             data[key] = str(value)  # force to string
             data.move_to_end(key, last=False)
+
+        return data
+
+    @classmethod
+    def remove_variants(cls, data: OrderedDict) -> OrderedDict:
+        """ Remove fields that affect the output hash and are not representative of
+            actual document changes """
+        keys = ["date_creation"]
+        for key in keys:
+            data.pop(key, None)
 
         return data
 
