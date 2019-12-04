@@ -62,13 +62,19 @@ class IDResource(DataResource):
 class WellListResource(WellResource):
     def get(self) -> Tuple[Dict, int]:  # type: ignore
         api14 = request.args.get("api14")
-        return self._get(api14__in=str(api14).split(",")), 200
+        if api14:
+            return self._get(api14__in=str(api14).split(",")), 200
+        else:
+            return {"status": "missing_argument"}, 400
 
 
 class IDListResource(IDResource):
     def get(self) -> Tuple[Dict, int]:  # type: ignore
         areas = request.args.get("areas")
-        return self._get(name__in=str(areas).split(",")), 200
+        if areas:
+            return self._get(name__in=str(areas).split(",")), 200
+        else:
+            return {"status": "missing_argument"}, 400
 
 
 class Well(WellResource):
