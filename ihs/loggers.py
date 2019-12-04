@@ -79,14 +79,6 @@ def logging_config(level: int, formatter: str = None) -> dict:
                 "class": "loggers.ColorizingStreamHandler",  # "logging.StreamHandler",
                 "formatter": formatter or "verbose",
             },
-            # "file_handler": {
-            #     "level": level,
-            #     "class": "logging.handlers.RotatingFileHandler",
-            #     "formatter": "funcnames",
-            #     # "filename": f"log/{__release__}.log",
-            #     "maxBytes": 10485760,  # 10MB
-            #     "backupCount": 20,
-            # },
         },
         "root": {"level": level, "handlers": ["console"]},
     }
