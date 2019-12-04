@@ -4,6 +4,7 @@ from celery.utils.log import get_task_logger
 
 import collector.tasks
 from collector import Endpoint, ExportJob
+import metrics
 from config import get_active_config
 from ihs import celery
 
@@ -46,7 +47,7 @@ def log(message):
 @celery.task
 def post_heartbeat():
     """ Sync model from source to data warehouse"""
-    return metrics.send(f"{project}.heartbeat", 1)
+    return metrics.post(f"heartbeat", 1)
 
 
 # pylint: disable=unused-argument
