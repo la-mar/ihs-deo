@@ -19,13 +19,15 @@ from collector import (  # noqa
 )
 from collector.identity_list import IdentityList
 from collector.collector import Collector
-from config import get_active_config, project, IdentityTemplates, ExportDataTypes
+from config import get_active_config, IdentityTemplates, ExportDataTypes
 import metrics
 
+# TODO: Move these to logging.yaml and reincorporate to logging_setup
 logger = logging.getLogger(__name__)
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 logging.getLogger("boto3").setLevel(logging.WARNING)
 logging.getLogger("botocore").setLevel(logging.CRITICAL)
+logging.getLogger("zeep").setLevel(logging.CRITICAL)
 conf = get_active_config()
 endpoints = Endpoint.load_from_config(conf)
 
@@ -115,9 +117,9 @@ def delete_job(job: ExportJob) -> bool:
 def post_metric(endpoint: Endpoint, result: dict):
     for k, v in result.items():
         try:
-            name = f"{project}.{endpoint.name}.{k}"
+            name = f"{endpoint.name}.{k}"
             points = v
-            metrics.send(name, points)
+            metrics.post(name, points)
         except Exception as e:
             logger.debug(
                 "Failed to post metric: name=%s, points=%s, error=%s", name, points, e
@@ -129,7 +131,7 @@ if __name__ == "__main__":
 
     from ihs import create_app
 
-    logging.basicConfig(level=20)
+    logging.basicConfig(level=10)
     app = create_app()
     app.app_context().push()
 
