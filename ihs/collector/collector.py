@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 from typing import Dict, Union, List
 from collections import OrderedDict
+import metrics
 
 logger = logging.getLogger(__name__)
 
@@ -12,6 +13,7 @@ class Collector(object):
 
     def __init__(self, model):
         self.model = model
+        self.model_name = model.__name__
 
     def save(self, documents: List[OrderedDict]):
         succeeded = 0
@@ -33,39 +35,58 @@ class Collector(object):
                 self.model,
                 failed,
             )
-        logger.info("Saved %s documents to %s", succeeded, self.model)
+            metrics.post(f"persistance.failed.{self.model_name}", len(failed))
+
+        if succeeded > 0:
+            logger.info("Saved %s documents to %s", succeeded, self.model)
+            metrics.post(f"persistance.success.{self.model_name}", succeeded)
 
 
 if __name__ == "__main__":
     # pylint: disable-all
 
     from ihs import create_app
-    from api.models import WellHorizontal
-    from collector import (
-        XMLParser,
-        Endpoint,
-        ExportParameter,
-        ExportBuilder,
-        ExportJob,
-        ExportParameter,
-        ExportRetriever,
-        WellboreTransformer,
-        ProductionTransformer,
-    )
+
     from config import get_active_config
+    from collector import XMLParser, Endpoint, Collector
+    from collector.tasks import run_endpoint_task, get_job_results, submit_job, collect
     from util import to_json
     from time import sleep
-    from collector.identity_list import ProductionList
+    from collector.transformer import WellboreTransformer
+    from api.models import WellHorizontal
 
     app = create_app()
     app.app_context().push()
 
+    logging.basicConfig(level=20)
+
     conf = get_active_config()
-    url = conf.API_BASE_URL
     endpoints = Endpoint.load_from_config(conf)
 
-    endpoint = endpoints["production_horizontal"]
-    task = endpoint.tasks["sequoia"]
+    endpoint_name = "well_horizontal"
+    task_name = "sequoia"
+    job_config = [
+        x for x in run_endpoint_task(endpoint_name, task_name) if x is not None
+    ][0]
+
+    job = submit_job(**job_config)
+    xml = get_job_results(job)
+
+    parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
+    document = parser.parse(xml)
+    new = WellboreTransformer.extract_from_collection(document)
+    new = new[0]
+    existing = WellHorizontal.objects.get(api14="42461409160000")
+
+    new["date_creation"] = existing.date_creation
+    new["date_creation"]
+
+    existing.md5 == WellboreTransformer.add_document_hash(new)["md5"]
+
+    import json
+
+    to_json(json.loads(existing.to_json()), "test/data/existing_example.json")
+    to_json(new, "test/data/incomming_example.json")
 
     #! Dont delete
     # import pandas as pd
