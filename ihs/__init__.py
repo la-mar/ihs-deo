@@ -4,7 +4,6 @@ import os
 from flask import Flask
 from flask_mongoengine import MongoEngine
 from flask_debugtoolbar import DebugToolbarExtension
-from flask_migrate import Migrate
 from celery import Celery
 
 from api.well import well_blueprint
@@ -17,7 +16,6 @@ conf = get_active_config()
 # instantiate the extensions
 db = MongoEngine()
 toolbar = DebugToolbarExtension()
-migrate = Migrate()
 celery = Celery()
 
 
@@ -29,13 +27,12 @@ def create_app(script_info=None):
     app.config["MONGODB_SETTINGS"] = {
         "db": conf.DATABASE_NAME,
         "host": conf.database_uri(),
-        "connect": False,
+        "connect": False,  # prevents prefork connection
     }
 
     # set up extensions
     db.init_app(app)
     toolbar.init_app(app)
-    migrate.init_app(app, db)
     celery.config_from_object(app.config)
 
     # register blueprints
