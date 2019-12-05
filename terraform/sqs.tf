@@ -102,7 +102,7 @@ data "aws_iam_policy_document" "allow_ecs_access_to_sqs" {
     principals {
       type = "Service"
       identifiers = [
-        "ecs.amazonaws.com",
+        "ecs-tasks.amazonaws.com",
       ]
     }
 
