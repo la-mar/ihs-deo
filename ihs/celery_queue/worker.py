@@ -1,14 +1,11 @@
 from __future__ import annotations
 
 import logging
-from typing import List, Union
 
 from celery import Celery
-from celery.schedules import crontab
 
-from collector import Endpoint
 import celery_queue.tasks
-from collector.task import Task
+from collector import Endpoint
 from config import get_active_config
 from ihs import create_app
 
@@ -43,7 +40,7 @@ celery = create_celery(flask_app)
 
 
 @celery.on_after_configure.connect
-def setup_periodic_tasks(sender, **kwargs):
+def setup_periodic_tasks(sender, **kwargs):  # pylint: disable=unused-argument
     """ Schedules a periodic task for each configured endpoint task """
     for endpoint_name, endpoint in endpoints.items():
         for task_name, task in endpoint.tasks.items():
@@ -58,10 +55,9 @@ def setup_periodic_tasks(sender, **kwargs):
             else:
                 logger.info("Task %s is disabled -- skipping", name)
     sender.add_periodic_task(
-        30, post_heartbeat, name="heartbeat",
+        30, celery_queue.tasks.post_heartbeat, name="heartbeat",
     )
 
 
 if __name__ == "__main__":
     endpoint = endpoints["wells"]
-

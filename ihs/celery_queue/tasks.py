@@ -47,7 +47,7 @@ def log(message):
 @celery.task
 def post_heartbeat():
     """ Sync model from source to data warehouse"""
-    return metrics.post(f"heartbeat", 1)
+    return metrics.post_heartbeat()
 
 
 # pylint: disable=unused-argument
