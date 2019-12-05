@@ -54,7 +54,7 @@ import docker
 ENV = os.getenv("ENV", "prod")
 PROJECT_NAME: str = os.getenv("COMPOSE_PROJECT_NAME")  # type: ignore
 CLUSTER_NAME = f"{os.getenv('ECS_CLUSTER')}-{ENV}"  # type: ignore
-TASK_IAM_ROLE = f"arn:aws:iam::864494265830:role/{PROJECT_NAME}-task-role"
+TASK_IAM_ROLE = f"arn:aws:iam::864494265830:role/ihs-task-role"
 
 SERVICES: List[str] = ["ihs-web", "ihs-worker", "ihs-cron"]
 
@@ -105,7 +105,7 @@ def get_task_definition(
                     "logConfiguration": {
                         "logDriver": "awslogs",
                         "options": {
-                            "awslogs-group": f"/ecs/{service_name}",
+                            "awslogs-group": f"/ecs/{PROJECT_NAME}",
                             "awslogs-region": "us-east-1",
                             "awslogs-stream-prefix": "ecs",
                         },
@@ -136,12 +136,20 @@ def get_task_definition(
                     "logConfiguration": {
                         "logDriver": "awslogs",
                         "options": {
-                            "awslogs-group": f"/ecs/{service_name}",
+                            "awslogs-group": f"/ecs/{PROJECT_NAME}",
                             "awslogs-region": "us-east-1",
                             "awslogs-stream-prefix": "ecs",
                         },
                     },
-                    "command": ["ihs", "run", "worker"],
+                    "command": [
+                        "ihs",
+                        "run",
+                        "worker",
+                        "-c",
+                        "10",
+                        "-Q",
+                        "ihs-default,ihs-submissions-h,ihs-collections-h,ihs-deletions-h,ihs-submissions-v,ihs-collections-v,ihs-deletions-v",
+                    ],
                     "memoryReservation": 128,
                     "image": f"{account_id}.dkr.ecr.us-east-1.amazonaws.com/{image_name}:{environment}",
                     "essential": True,
@@ -161,7 +169,7 @@ def get_task_definition(
                     "logConfiguration": {
                         "logDriver": "awslogs",
                         "options": {
-                            "awslogs-group": f"/ecs/{service_name}",
+                            "awslogs-group": f"/ecs/{PROJECT_NAME}",
                             "awslogs-region": "us-east-1",
                             "awslogs-stream-prefix": "ecs",
                         },
@@ -518,7 +526,7 @@ for service in SERVICES:
         account_id=image_manager.account_id,  # type: ignore
         service_name=service,
         environment=ENV,
-        image_name=service,
+        image_name=PROJECT_NAME,
         tags=TAGS,
         task_iam_role_arn=TASK_IAM_ROLE,
     )
