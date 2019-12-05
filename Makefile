@@ -14,7 +14,6 @@ prod:
 
 ihs-deo:
 	${eval export DOCKERFILE=Dockerfile}
-	${eval export IMAGE_NAME=ihs-deo}
 
 export-deps:
 	poetry export -f requirements.txt > requirements.txt --without-hashes
@@ -97,8 +96,14 @@ push:
 	docker push ${ECR_HASH}
 	docker push ${ECR_DATE}
 
-redeploy:
-	aws ecs update-service --cluster ${ECS_CLUSTER} --service ${COMPOSE_PROJECT_NAME} --force-new-deployment
+redeploy-cron:
+	aws ecs update-service --cluster ${ECS_CLUSTER}-prod --service ihs-cron --force-new-deployment --profile prod
+
+redeploy-worker:
+	aws ecs update-service --cluster ${ECS_CLUSTER}-prod --service ihs-worker --force-new-deployment --profile prod
+
+redeploy-web:
+	aws ecs update-service --cluster ${ECS_CLUSTER}-prod --service ihs-web --force-new-deployment --profile prod
 
 aws-ps-test:
 	@echo $$(aws ssm get-parameter --name datadog_api_key | jq '.Parameter.Value')
