@@ -3,6 +3,13 @@ from config import HoleDirection, project, get_active_config
 
 conf = get_active_config()
 
+# base queue definitions
+QUEUE_MAP = {
+    "celery_queue.tasks.submit_job": f"{project}-submissions",
+    "celery_queue.tasks.collect_job_result": f"{project}-collections",
+    "celery_queue.tasks.delete_job": f"{project}-deletions",
+}
+
 
 def hole_direction_router(name, args, kwargs, options, task=None, **kw):
     """ Route tasks based on name and the hole_direction (H or V) given as the first arg in the task signature.
@@ -19,24 +26,22 @@ def hole_direction_router(name, args, kwargs, options, task=None, **kw):
         - ihs-collections-v
         - ihs-deletions-v
     """
-    is_horizontal = args[0] == HoleDirection.H.name
 
-    # base queue definitions
-    queue_map = {
-        "celery_queue.tasks.submit_job": f"{project}-submissions",
-        "celery_queue.tasks.collect_job_result": f"{project}-collections",
-        "celery_queue.tasks.delete_job": f"{project}-deletions",
-    }
+    queue_name = conf.CELERY_DEFAULT_QUEUE
 
-    queue_name = queue_map.get(name)
+    # route to hole_dir specific queue, if hole_dir was passed as routing key
+    if args:
+        is_horizontal = args[0] == HoleDirection.H.name
 
-    # append hole direction to the destination queue name
-    if queue_name:
-        if is_horizontal:
-            queue_name += "-h"
-        else:
-            queue_name += "-v"
-    else:
-        queue_name = conf.CELERY_DEFAULT_QUEUE
+        mapped_queue = QUEUE_MAP.get(name)
+
+        # append hole direction to the destination queue name
+        if mapped_queue:
+            if is_horizontal:
+                mapped_queue += "-h"
+            else:
+                mapped_queue += "-v"
+
+            queue_name = mapped_queue
 
     return {"queue": queue_name}
