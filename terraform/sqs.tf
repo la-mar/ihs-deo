@@ -8,7 +8,7 @@ resource "aws_sqs_queue" "default" {
   delay_seconds              = 30   # hide message for 30 seconds before making available to consumers
   message_retention_seconds  = 3600 # 1 hour
   receive_wait_time_seconds  = 0
-  visibility_timeout_seconds = 360 # 5 mintues
+  visibility_timeout_seconds = 3600 # 1 hour
   tags                       = local.tags
 }
 
@@ -22,7 +22,7 @@ resource "aws_sqs_queue" "collections_h" {
   delay_seconds              = 30       # hide message for 30 seconds before making available to consumers
   message_retention_seconds  = 3600 * 6 # 6 hours
   receive_wait_time_seconds  = 0
-  visibility_timeout_seconds = 360 # 5 mintues
+  visibility_timeout_seconds = 3600 # 1 hour
   tags                       = merge(local.tags, { class = local.hz })
 }
 
@@ -36,7 +36,7 @@ resource "aws_sqs_queue" "submissions_h" {
   delay_seconds              = 0
   message_retention_seconds  = 3600 * 6 # 6 hours
   receive_wait_time_seconds  = 0
-  visibility_timeout_seconds = 360 # 5 mintues
+  visibility_timeout_seconds = 3600 # 1 hour
   tags                       = merge(local.tags, { class = local.hz })
 }
 
@@ -50,7 +50,7 @@ resource "aws_sqs_queue" "deletions_h" {
   delay_seconds              = 0
   message_retention_seconds  = 3600 * 6 # 6 hours
   receive_wait_time_seconds  = 0
-  visibility_timeout_seconds = 360 # 5 mintues
+  visibility_timeout_seconds = 3600 # 1 hour
   tags                       = merge(local.tags, { class = local.hz })
 }
 
@@ -64,7 +64,7 @@ resource "aws_sqs_queue" "collections_v" {
   delay_seconds              = 30       # hide message for 30 seconds before making available to consumers
   message_retention_seconds  = 3600 * 6 # 6 hours
   receive_wait_time_seconds  = 0
-  visibility_timeout_seconds = 360 # 5 mintues
+  visibility_timeout_seconds = 3600 # 1 hour
   tags                       = merge(local.tags, { class = local.vt })
 }
 
@@ -78,7 +78,7 @@ resource "aws_sqs_queue" "submissions_v" {
   delay_seconds              = 0
   message_retention_seconds  = 3600 * 6 # 6 hours
   receive_wait_time_seconds  = 0
-  visibility_timeout_seconds = 360 # 5 mintues
+  visibility_timeout_seconds = 3600 # 1 hour
   tags                       = merge(local.tags, { class = local.vt })
 }
 
@@ -92,7 +92,7 @@ resource "aws_sqs_queue" "deletions_v" {
   delay_seconds              = 0
   message_retention_seconds  = 3600 * 6 # 6 hours
   receive_wait_time_seconds  = 0
-  visibility_timeout_seconds = 360 # 5 mintues
+  visibility_timeout_seconds = 3600 # 1 hour
   tags                       = merge(local.tags, { class = local.vt })
 }
 
