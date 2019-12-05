@@ -89,10 +89,7 @@ def load_sentry():
     from sentry_sdk.integrations.logging import LoggingIntegration
     from sentry_sdk.integrations.celery import CeleryIntegration
     from sentry_sdk.integrations.flask import FlaskIntegration
-    from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
     from sentry_sdk.integrations.redis import RedisIntegration
-
-    # from sentry_sdk.integrations.aws_lambda import AwsLambdaIntegration
 
     logger = logging.getLogger()
 
@@ -114,7 +111,6 @@ def load_sentry():
             sentry_logging,
             CeleryIntegration(),
             FlaskIntegration(),
-            SqlalchemyIntegration(),
             RedisIntegration(),
         ]
 
