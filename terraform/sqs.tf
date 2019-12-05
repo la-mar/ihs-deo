@@ -96,6 +96,7 @@ resource "aws_sqs_queue_policy" "deletions_v" {
   policy    = data.aws_iam_policy_document.allow_ecs_access_to_sqs.json
 }
 
+# TODO: fix policy
 data "aws_iam_policy_document" "allow_ecs_access_to_sqs" {
   statement {
 

@@ -21,7 +21,7 @@ resource "aws_ecs_service" "ihs_web" {
   task_definition = data.aws_ecs_task_definition.ihs_web.family
 
   scheduling_strategy     = "REPLICA"
-  desired_count           = 1
+  desired_count           = 2
   enable_ecs_managed_tags = true
   propagate_tags          = "TASK_DEFINITION"
   tags                    = local.tags
@@ -49,7 +49,7 @@ resource "aws_ecs_service" "ihs_worker" {
   task_definition = data.aws_ecs_task_definition.ihs_worker.family
 
   scheduling_strategy     = "REPLICA"
-  desired_count           = 1
+  desired_count           = 5
   enable_ecs_managed_tags = true
   propagate_tags          = "TASK_DEFINITION"
   tags                    = local.tags
