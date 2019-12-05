@@ -188,7 +188,7 @@ class BaseConfig:
         "CELERYD_MAX_MEMORY_PER_CHILD", 24000
     )  # 24MB
     CELERY_ENABLE_REMOTE_CONTROL = False  # required for sqs
-    CELERY_SEND_EVENTS = False
+    CELERY_SEND_EVENTS = False  # required for sqs
     CELERY_DEFAULT_QUEUE = f"{project}-default"  # sqs queue name
     CELERY_ROUTES = ("celery_queue.routers.hole_direction_router",)
     CELERY_TASK_CREATE_MISSING_QUEUES = False
@@ -291,7 +291,6 @@ class DevelopmentConfig(BaseConfig):
 
     # load_dotenv(".env.development")
 
-    # SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
     DEBUG_TB_ENABLED = True
     SECRET_KEY = os.getenv("SECRET_KEY", "test")
     CELERY_TASK_CREATE_MISSING_QUEUES = True
@@ -306,7 +305,6 @@ class TestingConfig(BaseConfig):
     # COLLECTOR_CONFIG_PATH = abs_path(CONFIG_BASEPATH, "collector.yaml")
     # COLLECTOR_CONFIG = load_config(COLLECTOR_CONFIG_PATH)
     TESTING = True
-    # SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_TEST_URL")
     TOKEN_EXPIRATION_DAYS = 0
     TOKEN_EXPIRATION_SECONDS = 3
 
@@ -325,6 +323,9 @@ class CIConfig(BaseConfig):
 
 class ProductionConfig(BaseConfig):
     """Production configuration"""
+
+    CELERYD_PREFETCH_MULTIPLIER = 50
+    CELERYD_CONCURRENCY = 12
 
 
 if __name__ == "__main__":
