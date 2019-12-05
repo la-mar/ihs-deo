@@ -5,8 +5,20 @@ data "aws_ecs_task_definition" "ihs_web" {
   task_definition = "ihs-web"
 }
 
-data "aws_ecs_task_definition" "ihs_worker" {
-  task_definition = "ihs-worker"
+data "aws_ecs_task_definition" "ihs_worker_submitter" {
+  task_definition = "ihs-worker-submitter"
+}
+
+data "aws_ecs_task_definition" "ihs_worker_deleter" {
+  task_definition = "ihs-worker-deleter"
+}
+
+data "aws_ecs_task_definition" "ihs_worker_collector" {
+  task_definition = "ihs-worker-collector"
+}
+
+data "aws_ecs_task_definition" "ihs_worker_default" {
+  task_definition = "ihs-worker-default"
 }
 
 data "aws_ecs_task_definition" "ihs_cron" {
