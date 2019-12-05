@@ -1,15 +1,21 @@
 from __future__ import annotations
-from typing import Dict, List, Union, Any, Tuple, ItemsView
+from typing import Dict, List, Union, Any, Tuple, ItemsView, TypeVar, Generic
 import logging
 from pydoc import locate
 
 from attrdict import AttrDict
-from sqlalchemy import Column
 from api.models import *
 
 from collector.task import Task
 
 logger = logging.getLogger(__name__)
+
+M = TypeVar("M")
+Column = TypeVar("Column")
+
+
+class Model(Generic[M]):
+    pass
 
 
 class Endpoint(object):
@@ -37,12 +43,11 @@ class Endpoint(object):
         self.path = path
         self.mappings = AttrDict(mappings or {})
         self.model_name = model
-        self._model = None
+        self._model: Union[Model, None] = None
         self.updated_column = updated_column
         self.url_params = url_params
         self.exclude = exclude or []
         self._dependency_map = depends_on or {}
-        self._depends_on: Union[Dict[str, Model], None] = None
         self.normalize = normalize
         self.options = options or {}
         self.enabled = enabled
@@ -59,31 +64,13 @@ class Endpoint(object):
             yield a, getattr(self, a)
 
     @property
-    def model(self) -> Model:
+    def model(self) -> Union[Model, None]:
         if self._model is None:
             self._model = self.locate_model(self.model_name)
         return self._model
 
-    @property
-    def depends_on(self) -> Dict[str, Column]:
-        if self._depends_on is None:
-            self._depends_on = self.link_upstream_columns()
-        return self._depends_on
-
-    def link_upstream_columns(self) -> Dict[str, Column]:
-        linked_columns: Dict[Any, Any] = {}
-        for key_field, model_name in self._dependency_map.items():
-            model_name, column_name = model_name.rsplit(".", maxsplit=1)
-            columns = list(self.locate_model(model_name).__table__.columns)
-            column_map = {c.name: c for c in columns}
-            if linked_columns.get(key_field) is None:
-                linked_columns[key_field] = column_map[column_name]
-            else:
-                linked_columns[key_field] += column_map[column_name]
-        return linked_columns
-
     def locate_model(self, model_name: str) -> Model:
-        model: Model = None
+        model: Any = None
         try:
             # try to import dotted model name. ex: api.models.MyModel
             model = locate(model_name)
@@ -150,9 +137,5 @@ if __name__ == "__main__":
     endpoints = conf.endpoints
     dict(endpoints.wells.tasks)
 
-    # e = Endpoint("test", **{"model": "test"})
     wells = Endpoint(name="wells", **endpoints.wells)
-    # prod = Endpoint(name="production_allocated", **endpoints.production_allocated)
-
     wells.tasks["sync"].options
-    prod.tasks["sync"].options
