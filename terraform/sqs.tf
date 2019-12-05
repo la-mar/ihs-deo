@@ -12,10 +12,10 @@ resource "aws_sqs_queue" "default" {
   tags                       = local.tags
 }
 
-resource "aws_sqs_queue_policy" "default" {
-  queue_url = aws_sqs_queue.default.id
-  policy    = data.aws_iam_policy_document.allow_ecs_access_to_sqs.json
-}
+# resource "aws_sqs_queue_policy" "default" {
+#   queue_url = aws_sqs_queue.default.id
+#   policy    = data.aws_iam_policy_document.allow_ecs_access_to_sqs.json
+# }
 
 resource "aws_sqs_queue" "collections_h" {
   name                       = "${var.service_name}-collections-h"
