@@ -7,6 +7,13 @@ test/
 .terraform
 config/token.yaml
 .vscode/settings.json
+terraform/
+doc/
+.venv/
+.idea/
+.mypy_cache/
+ihs.egg-info/
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
