@@ -143,5 +143,3 @@ resource "aws_iam_role_policy_attachment" "attach_sqs_policy_to_task_role" {
   role       = aws_iam_role.ecs_task_role.name
   policy_arn = aws_iam_policy.allow_task_access_to_sqs.arn
 }
-
-
