@@ -29,7 +29,7 @@ data "aws_ecs_task_definition" "ihs_cron" {
 ### ECS Services ###
 resource "aws_ecs_service" "ihs_web" {
   name            = "ihs-web"
-  cluster         = data.terraform_remote_state.ecs_cluster.outputs.collector_cluster_arn
+  cluster         = data.terraform_remote_state.ecs_cluster.outputs.cluster_arn
   task_definition = data.aws_ecs_task_definition.ihs_web.family
 
   scheduling_strategy     = "REPLICA"
@@ -57,7 +57,7 @@ resource "aws_ecs_service" "ihs_web" {
 
 resource "aws_ecs_service" "ihs_worker_default" {
   name            = "ihs-worker-default"
-  cluster         = data.terraform_remote_state.ecs_cluster.outputs.collector_cluster_arn
+  cluster         = data.terraform_remote_state.ecs_cluster.outputs.cluster_arn
   task_definition = data.aws_ecs_task_definition.ihs_worker_default.family
 
   scheduling_strategy     = "REPLICA"
@@ -78,7 +78,7 @@ resource "aws_ecs_service" "ihs_worker_default" {
 
 resource "aws_ecs_service" "ihs_worker_collector" {
   name            = "ihs-worker-collector"
-  cluster         = data.terraform_remote_state.ecs_cluster.outputs.collector_cluster_arn
+  cluster         = data.terraform_remote_state.ecs_cluster.outputs.cluster_arn
   task_definition = data.aws_ecs_task_definition.ihs_worker_collector.family
 
   scheduling_strategy     = "REPLICA"
@@ -99,7 +99,7 @@ resource "aws_ecs_service" "ihs_worker_collector" {
 
 resource "aws_ecs_service" "ihs_worker_deleter" {
   name            = "ihs-worker-deleter"
-  cluster         = data.terraform_remote_state.ecs_cluster.outputs.collector_cluster_arn
+  cluster         = data.terraform_remote_state.ecs_cluster.outputs.cluster_arn
   task_definition = data.aws_ecs_task_definition.ihs_worker_deleter.family
 
   scheduling_strategy     = "REPLICA"
@@ -120,7 +120,7 @@ resource "aws_ecs_service" "ihs_worker_deleter" {
 
 resource "aws_ecs_service" "ihs_worker_submitter" {
   name            = "ihs-worker-submitter"
-  cluster         = data.terraform_remote_state.ecs_cluster.outputs.collector_cluster_arn
+  cluster         = data.terraform_remote_state.ecs_cluster.outputs.cluster_arn
   task_definition = data.aws_ecs_task_definition.ihs_worker_submitter.family
 
   scheduling_strategy     = "REPLICA"
@@ -141,7 +141,7 @@ resource "aws_ecs_service" "ihs_worker_submitter" {
 
 resource "aws_ecs_service" "ihs_cron" {
   name            = "ihs-cron"
-  cluster         = data.terraform_remote_state.ecs_cluster.outputs.collector_cluster_arn
+  cluster         = data.terraform_remote_state.ecs_cluster.outputs.cluster_arn
   task_definition = data.aws_ecs_task_definition.ihs_cron.family
 
   scheduling_strategy     = "REPLICA"
