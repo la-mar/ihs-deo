@@ -25,14 +25,17 @@ class OptionMatrix:
             self.matrix = self._matrix_from_model()
 
         if len(self.matrix):
-            values = [
-                {"name": key, **self.kwargs, **value}
-                for key, value in self.matrix.items()
-            ]
+            for key, value in self.matrix.items():
+                v = {"name": key, **self.kwargs}
+                if isinstance(value, dict):
+                    v.update(**value)
+                else:
+                    v[key] = value
+                optset.append(v)
         else:
-            values = [self.kwargs or {}]
+            optset = [self.kwargs or {}]
 
-        return values
+        return optset
 
     def to_list(self) -> List[Dict]:
         return self._cross_apply()
