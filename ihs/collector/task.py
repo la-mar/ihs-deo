@@ -20,10 +20,14 @@ class OptionMatrix:
         for d in self._cross_apply():
             yield d
 
+    def generate(self) -> List[Dict]:
+        """ Generate the option matrix from the instance's parameters """
+
     def _cross_apply(self) -> List[Dict]:
         if self.using:
             self.matrix = self._matrix_from_model()
 
+        optset = []
         if len(self.matrix):
             for key, value in self.matrix.items():
                 v = {"name": key, **self.kwargs}
@@ -60,6 +64,9 @@ class OptionMatrix:
             matrix[f"{self.label}-{v}"] = {self.label: v}
 
         return matrix
+
+    def _matrix_from_ids(self) -> List[Dict]:
+        """ Generate a matrix from a delimited string or list of identifiers """
 
     def locate_model(self, model_name: str) -> Model:  # type: ignore
         model: Model = None  # type: ignore
@@ -148,10 +155,12 @@ if __name__ == "__main__":
 
     conf = get_active_config()
     endpoints = conf.endpoints
-    tasks = endpoints.well_horizontal.tasks
-    # t = AttrDict(list(tasks.items())[1][1])
-    t = tasks.sync
-    task = Task("wells", "sync", **t)
+    tasks = endpoints.production_horizontal.tasks
+
+    task_def = tasks.welllist
+    task = Task("production_horizontal", "welllist", **task_def)
     to = task.options
     print(to)
+    OptionMatrix(**task_def.options)
+    task_def
 
