@@ -7,6 +7,7 @@ from typing import Union, List, Tuple
 from collector.soap_requestor import SoapRequestor
 from collector.export_parameter import ExportParameter
 from config import get_active_config
+import metrics
 
 conf = get_active_config()
 
@@ -109,8 +110,10 @@ class Builder(SoapRequestor):
         try:
             result = self.service.DeleteExport(job)
             logger.info("Deleted job: %s", job)
+            metrics.post("job.delete.success", 1)
         except Exception as e:
             logger.info("Encountered error when deleting job %s -- %s", job, e)
+            metrics.post("job.delete.error", 1)
 
         return result
 
@@ -120,11 +123,15 @@ class Builder(SoapRequestor):
         return self.service.Exists(job)
 
     def list_completed_jobs(self) -> List[str]:
-        return self.service.GetCompleteExports()
+        return self.service.GetCompleteExports() or []
 
     def delete_all_jobs(self):
-        for job in eb.list_completed_jobs():
-            eb.delete_job(job)
+        jobs = self.list_completed_jobs()
+        deleted = 0
+        print(f"Deleting {len(jobs)} exports from remote")
+        for job in jobs:
+            deleted += 1 if self.delete_job(job) else 0
+        print(f"Deleted {deleted} of {len(jobs)} exports from remote")
 
 
 class ExportBuilder(Builder):
@@ -137,6 +144,7 @@ class ExportBuilder(Builder):
 
         try:
             job_id = self.build(export_param.params, export_param.target)
+            metrics.post("job.submitted.success", 1)
             return ExportJob(
                 job_id=job_id, **{**(metadata or {}), **dict(export_param)}
             )
@@ -147,6 +155,8 @@ class ExportBuilder(Builder):
                 + str(metadata)
                 + "\n\n"
             )
+            metrics.post("job.submitted.error", 1)
+
         return None
 
 

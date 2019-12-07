@@ -18,7 +18,7 @@ from collector import (  # noqa
     ProductionList,
 )
 from collector.identity_list import IdentityList
-from collector.collector import Collector
+from collector import Endpoint, Collector
 from config import get_active_config, IdentityTemplates, ExportDataTypes
 import metrics
 
@@ -38,8 +38,9 @@ def run_endpoint_task(
     """ Unpack task options and assemble metadata for job configuration """
     endpoint = endpoints[endpoint_name]
     task = endpoint.tasks[task_name]
+    metrics.post("task.execution", 1, tags=[endpoint_name, task_name])
     for opts in task.options:
-        yield dict(
+        job_config = dict(
             job_options=opts,
             metadata={
                 "endpoint": endpoint_name,
@@ -49,6 +50,8 @@ def run_endpoint_task(
                 **opts,  # duplicate job options here to they travel with the job throughout its lifecycle
             },
         )
+        metrics.post("task.job.created", 1, tags=list(job_config.values()))
+        yield job_config
 
 
 def submit_job(job_options: dict, metadata: dict) -> ExportJob:
