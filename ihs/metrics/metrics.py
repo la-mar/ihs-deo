@@ -6,14 +6,12 @@ from config import get_active_config, project
 
 logger = logging.getLogger(__name__)
 conf = get_active_config()
-# logger.setLevel(int(conf.LOG_LEVEL))
 
 datadog = None
 
 
 def load():
-
-    # print("Loading Datadog")
+    """ Load and initialize the Datadog library """
     try:
         parms = conf.datadog_params
         if parms.get("enabled"):
@@ -36,7 +34,21 @@ def load():
         logger.error(f"Failed to load Datadog configuration: {e}")
 
 
-def post(name: str, points: Union[int, float, List[Tuple]], metric_type: str = "count"):
+def parse_tags(tags: list) -> List[str]:
+    """ Ensure all tags are strings """
+    result = []
+    for x in tags:
+        if isinstance(x, str):
+            result.append(x.lower())
+    return result
+
+
+def post(
+    name: str,
+    points: Union[int, float, List[Tuple]],
+    metric_type: str = "count",
+    tags: list = None,
+):
     """ Send a metric through the Datadog http api.
 
         Example:
@@ -45,7 +57,9 @@ def post(name: str, points: Union[int, float, List[Tuple]], metric_type: str = "
                         points=[
                             (now, 15),
                             (future_10s, 16)
-                        ]
+                        ],
+                        metric_type="count",
+                        tags=["tag1", "tag2"]
                     )
 
     Arguments:
@@ -56,7 +70,10 @@ def post(name: str, points: Union[int, float, List[Tuple]], metric_type: str = "
         name = f"{project}.{name}".lower()
         if datadog:
             result = datadog.api.Metric.send(
-                metric=name, points=points, type=metric_type
+                metric=name,
+                points=points,
+                type=str(metric_type).lower(),
+                tags=parse_tags(tags or []),
             )
             if result.get("status") == "ok":
                 logger.debug(
