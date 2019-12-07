@@ -324,7 +324,7 @@ class CIConfig(BaseConfig):
 class ProductionConfig(BaseConfig):
     """Production configuration"""
 
-    CELERYD_PREFETCH_MULTIPLIER = 50
+    CELERYD_PREFETCH_MULTIPLIER = 8
     CELERYD_CONCURRENCY = 12
 
 
