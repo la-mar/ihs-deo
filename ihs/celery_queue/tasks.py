@@ -94,3 +94,7 @@ def delete_job(self, route_key: str, job: Union[dict, ExportJob]):
     except Exception as exc:
         raise self.retry(exc=exc, countdown=2 ** self.request.retries)
 
+
+def process_changes_and_deletes():  # TODO: implement
+
+    pass
