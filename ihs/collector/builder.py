@@ -296,7 +296,13 @@ class ExportRetriever:
                 self.client.delete_job(self.job)
             return result
         except Exception as e:
-            logger.warning(f"Failed retrieving export {self.job} -- {e}")
+            msg = f"Failed retrieving export {self.job} -- {e}"
+            if e.args:
+                if "No ids to export" in e.args[0]:
+                    logger.debug(msg)
+                    return None
+
+            logger.warning(msg)
 
         return None
 

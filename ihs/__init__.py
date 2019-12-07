@@ -11,8 +11,10 @@ from api.production import production_blueprint
 
 from config import APP_SETTINGS, project, get_active_config
 import loggers
+import sentry
 
 loggers.config()
+sentry.load()
 
 conf = get_active_config()
 

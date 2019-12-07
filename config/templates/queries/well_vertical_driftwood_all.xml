@@ -3,7 +3,7 @@
         <domain>US</domain>
         <datatype>{data_type}</datatype>
         <attribute_group>Identification</attribute_group>
-        <attribute>Current Operator</attribute>
+        <attribute>Operator</attribute>
         <filter logic="include">
             <value id="0" ignored="false">
                 <group_actual>

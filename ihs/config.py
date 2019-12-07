@@ -162,6 +162,7 @@ class BaseConfig:
 
     """ Logging """
     LOG_LEVEL = os.getenv("LOG_LEVEL", 20)
+    LOG_FORMAT = os.getenv("LOG_FORMAT", "funcname")
 
     """ --------------- Database --------------- """
 
@@ -326,6 +327,7 @@ class ProductionConfig(BaseConfig):
 
     CELERYD_PREFETCH_MULTIPLIER = 8
     CELERYD_CONCURRENCY = 12
+    LOG_FORMAT = "json"
 
 
 if __name__ == "__main__":

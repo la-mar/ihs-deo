@@ -24,10 +24,7 @@ import metrics
 
 # TODO: Move these to logging.yaml and reincorporate to logging_setup
 logger = logging.getLogger(__name__)
-logging.getLogger("urllib3").setLevel(logging.WARNING)
-logging.getLogger("boto3").setLevel(logging.WARNING)
-logging.getLogger("botocore").setLevel(logging.CRITICAL)
-logging.getLogger("zeep").setLevel(logging.CRITICAL)
+
 conf = get_active_config()
 endpoints = Endpoint.load_from_config(conf)
 
