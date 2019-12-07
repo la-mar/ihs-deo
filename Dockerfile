@@ -1,5 +1,9 @@
 FROM python:3.7 as base
 
+LABEL "com.datadoghq.ad.logs"='[{"source": "python", "service": "ihs"}]'
+
+
+
 ENV PYTHONFAULTHANDLER=1 \
     PYTHONUNBUFFERED=1 \
     PYTHONHASHSEED=random \
