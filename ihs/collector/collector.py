@@ -48,7 +48,7 @@ if __name__ == "__main__":
     from ihs import create_app
 
     from config import get_active_config
-    from collector import XMLParser, Endpoint, Collector
+    from collector import XMLParser, Endpoint
     from collector.tasks import run_endpoint_task, get_job_results, submit_job, collect
     from util import to_json
     from time import sleep

@@ -1,5 +1,4 @@
 """ Entrypoint for WSGI HTTP Server, usually gunicorn """
-import loggers
 from ihs import create_app
 
 

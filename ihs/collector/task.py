@@ -155,10 +155,10 @@ if __name__ == "__main__":
 
     conf = get_active_config()
     endpoints = conf.endpoints
-    tasks = endpoints.production_horizontal.tasks
+    tasks = endpoints.production_master_horizontal.tasks
 
-    task_def = tasks.welllist
-    task = Task("production_horizontal", "welllist", **task_def)
+    task_def = tasks.sync
+    task = Task("production_master_horizontal", "sync", **task_def)
     to = task.options
     print(to)
     OptionMatrix(**task_def.options)
