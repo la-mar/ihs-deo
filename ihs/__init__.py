@@ -10,6 +10,9 @@ from api.well import well_blueprint
 from api.production import production_blueprint
 
 from config import APP_SETTINGS, project, get_active_config
+import loggers
+
+loggers.config()
 
 conf = get_active_config()
 
