@@ -114,6 +114,12 @@ def delete_job(job: ExportJob) -> bool:
     return result
 
 
+def purge_remote_jobs() -> bool:
+    eb = ExportBuilder(None)
+    eb.delete_all_jobs()
+    return True
+
+
 def post_metric(endpoint: Endpoint, result: dict):
     for k, v in result.items():
         try:
