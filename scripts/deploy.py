@@ -53,10 +53,17 @@ import docker
 
 ENV = os.getenv("ENV", "prod")
 PROJECT_NAME: str = os.getenv("COMPOSE_PROJECT_NAME")  # type: ignore
-CLUSTER_NAME = f"{os.getenv('ECS_CLUSTER')}-{ENV}"  # type: ignore
+CLUSTER_NAME = os.getenv("ECS_CLUSTER")  # type: ignore
 TASK_IAM_ROLE = f"arn:aws:iam::864494265830:role/ihs-task-role"
 
-SERVICES: List[str] = ["ihs-web", "ihs-worker", "ihs-cron"]
+SERVICES: List[str] = [
+    "ihs-web",
+    "ihs-worker-collector",
+    "ihs-worker-deleter",
+    "ihs-worker-submitter",
+    "ihs-worker-default",
+    "ihs-cron",
+]
 
 IMAGES = [
     {"name": PROJECT_NAME, "dockerfile": "Dockerfile", "build_context": "."},
@@ -102,14 +109,6 @@ def get_task_definition(
             "containerDefinitions": [
                 {
                     "name": "ihs-web",
-                    "logConfiguration": {
-                        "logDriver": "awslogs",
-                        "options": {
-                            "awslogs-group": f"/ecs/{PROJECT_NAME}",
-                            "awslogs-region": "us-east-1",
-                            "awslogs-stream-prefix": "ecs",
-                        },
-                    },
                     "command": ["ihs", "run", "web", "-b 0.0.0.0:8000"],
                     "memoryReservation": 128,
                     "image": f"{account_id}.dkr.ecr.us-east-1.amazonaws.com/{image_name}:{environment}",
@@ -129,18 +128,10 @@ def get_task_definition(
             "taskRoleArn": task_iam_role_arn,
             "tags": tags,
         },
-        "ihs-worker": {
+        "ihs-worker-submitter": {
             "containerDefinitions": [
                 {
                     "name": "ihs-worker",
-                    "logConfiguration": {
-                        "logDriver": "awslogs",
-                        "options": {
-                            "awslogs-group": f"/ecs/{PROJECT_NAME}",
-                            "awslogs-region": "us-east-1",
-                            "awslogs-stream-prefix": "ecs",
-                        },
-                    },
                     "command": [
                         "ihs",
                         "run",
@@ -148,7 +139,90 @@ def get_task_definition(
                         "-c",
                         "10",
                         "-Q",
-                        "ihs-default,ihs-submissions-h,ihs-collections-h,ihs-deletions-h,ihs-submissions-v,ihs-collections-v,ihs-deletions-v",
+                        "ihs-submissions-h,ihs-submissions-v",
+                        # "--loglevel",
+                        # "info",
+                    ],
+                    "memoryReservation": 128,
+                    "image": f"{account_id}.dkr.ecr.us-east-1.amazonaws.com/{image_name}:{environment}",
+                    "essential": True,
+                    "environment": transform_envs(envs),
+                },
+            ],
+            "executionRoleArn": "ecsTaskExecutionRole",
+            "family": f"{service_name}",
+            "networkMode": "bridge",
+            "taskRoleArn": task_iam_role_arn,
+            "tags": tags,
+        },
+        "ihs-worker-collector": {
+            "containerDefinitions": [
+                {
+                    "name": "ihs-worker",
+                    "command": [
+                        "ihs",
+                        "run",
+                        "worker",
+                        "-c",
+                        "10",
+                        "-Q",
+                        "ihs-collections-h,ihs-collections-v",
+                        # "--loglevel",
+                        # "warn",
+                    ],
+                    "memoryReservation": 128,
+                    "image": f"{account_id}.dkr.ecr.us-east-1.amazonaws.com/{image_name}:{environment}",
+                    "essential": True,
+                    "environment": transform_envs(envs),
+                },
+            ],
+            "executionRoleArn": "ecsTaskExecutionRole",
+            "family": f"{service_name}",
+            "networkMode": "bridge",
+            "taskRoleArn": task_iam_role_arn,
+            "tags": tags,
+        },
+        "ihs-worker-deleter": {
+            "containerDefinitions": [
+                {
+                    "name": "ihs-worker",
+                    "command": [
+                        "ihs",
+                        "run",
+                        "worker",
+                        "-c",
+                        "10",
+                        "-Q",
+                        "ihs-deletions-h,ihs-deletions-v",
+                        # "--loglevel",
+                        # "warn",
+                    ],
+                    "memoryReservation": 128,
+                    "image": f"{account_id}.dkr.ecr.us-east-1.amazonaws.com/{image_name}:{environment}",
+                    "essential": True,
+                    "environment": transform_envs(envs),
+                },
+            ],
+            "executionRoleArn": "ecsTaskExecutionRole",
+            "family": f"{service_name}",
+            "networkMode": "bridge",
+            "taskRoleArn": task_iam_role_arn,
+            "tags": tags,
+        },
+        "ihs-worker-default": {
+            "containerDefinitions": [
+                {
+                    "name": "ihs-worker",
+                    "command": [
+                        "ihs",
+                        "run",
+                        "worker",
+                        "-c",
+                        "10",
+                        "-Q",
+                        "ihs-default",
+                        # "--loglevel",
+                        # "warn",
                     ],
                     "memoryReservation": 128,
                     "image": f"{account_id}.dkr.ecr.us-east-1.amazonaws.com/{image_name}:{environment}",
@@ -166,15 +240,7 @@ def get_task_definition(
             "containerDefinitions": [
                 {
                     "name": "ihs-cron",
-                    "logConfiguration": {
-                        "logDriver": "awslogs",
-                        "options": {
-                            "awslogs-group": f"/ecs/{PROJECT_NAME}",
-                            "awslogs-region": "us-east-1",
-                            "awslogs-stream-prefix": "ecs",
-                        },
-                    },
-                    "command": ["ihs", "run", "cron", "--loglevel=DEBUG"],
+                    "command": ["ihs", "run", "cron", "--loglevel", "debug"],
                     "memoryReservation": 128,
                     "image": f"{account_id}.dkr.ecr.us-east-1.amazonaws.com/{image_name}:{environment}",
                     "essential": True,
