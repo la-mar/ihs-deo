@@ -63,22 +63,7 @@ def setup_periodic_tasks(sender, **kwargs):  # pylint: disable=unused-argument
 
 @after_setup_logger.connect
 def setup_loggers(logger, *args, **kwargs):  # pylint: disable=unused-argument
-    logger.setLevel(loggers.mlevel(conf.LOG_LEVEL))
-    console_handler = loggers.ColorizingStreamHandler()
-    console_handler.setFormatter(loggers.DatadogJSONFormatter())
-    if logger.handlers:
-        logger.removeHandler(logger.handlers[0])
-    logger.addHandler(console_handler)
-
-
-# @after_setup_task_logger.connect
-# def setup_task_logger(logger, *args, **kwargs):
-#     for handler in logger.handlers:
-#         handler.setFormatter(
-#             TaskFormatter(
-#                 "%(asctime)s - %(task_id)s - %(task_name)s - %(name)s - %(levelname)s - %(message)s"
-#             )
-#         )
+    loggers.config(logger=logger)
 
 
 if __name__ == "__main__":

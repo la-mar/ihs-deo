@@ -124,7 +124,7 @@ class Task:
 
     @property
     def qualified_name(self):
-        return f"{self.model_name}/{self.task_name}"
+        return f"{self.model_name}.{self.task_name}"
 
     @property
     def schedule(self) -> Union[crontab, int]:

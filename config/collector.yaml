@@ -259,8 +259,12 @@ endpoints:
           matrix:
             using: api.models.ProductionMasterHorizontal.ids
             label: producing_entity
+      driftwood:
+        seconds: 300
+        options:
+          query_path: well_horizontal_driftwood_all.xml
       sequoia:
-        enabled: false
+        enabled: true
         seconds: 300
         options:
           query_path: production_by_api.xml
@@ -370,3 +374,11 @@ endpoints:
         seconds: 300
         options:
           query_path: well_vertical_driftwood_all.xml
+      sequoia:
+        enabled: true
+        seconds: 300
+        options:
+          query_path: production_by_api.xml
+          matrix:
+            sequoia:
+              api: "42383362060000"

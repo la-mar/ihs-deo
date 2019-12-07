@@ -3,7 +3,7 @@
 """ Logger definitions """
 
 import numbers
-from typing import Any, Mapping
+from typing import Any, Mapping, Union
 import logging
 import logging.config
 import os
@@ -13,7 +13,6 @@ from logging import LogRecord
 import json_log_formatter
 import logutils.colorize
 
-# from ddtrace import helpers
 
 from config import get_active_config
 from util.jsontools import ObjectEncoder
@@ -27,6 +26,11 @@ LOG_LEVELS.update(logging._levelToName)  # type: ignore
 LOG_LEVELS.update({str(k): v for k, v in logging._levelToName.items()})  # type: ignore
 LOG_LEVELS.setdefault("FATAL", logging.FATAL)
 LOG_LEVELS.setdefault(logging.FATAL, "FATAL")  # type: ignore
+
+logging.getLogger("urllib3").setLevel(logging.WARNING)
+logging.getLogger("boto3").setLevel(logging.WARNING)
+logging.getLogger("botocore").setLevel(logging.CRITICAL)
+logging.getLogger("zeep").setLevel(logging.CRITICAL)
 
 
 def mlevel(level):
@@ -176,107 +180,31 @@ class DatadogJSONFormatter(json_log_formatter.JSONFormatter):
         return record_dict
 
 
-def logging_config(level: int, formatter: str = None) -> dict:
-    # print(f"logger level: {level}")
-    return {
-        "version": 1,
-        "disable_existing_loggers": False,
-        "formatters": {
-            "verbose": {
-                "format": "[%(asctime)s - %(filename)s:%(lineno)s - %(funcName)s()] %(levelname)s - %(message)s",
-                "datefmt": "%Y-%m-%d %H:%M:%S",
-            },
-            "funcnames": {
-                "format": "[%(name)s: %(lineno)s - %(funcName)s()] %(levelname)s - %(message)s",
-                "datefmt": "%Y-%m-%d %H:%M:%S",
-            },
-            "simple": {
-                "format": "%(name)s - %(levelname)s - %(message)s",
-                "datefmt": "%Y-%m-%d %H:%M:%S",
-            },
-            "layman": {"format": "%(message)s", "datefmt": "%Y-%m-%d %H:%M:%S"},
-            # "json": {"class": "json_log_formatter.JSONFormatter"},
-            "json": {"class": "DatadogJSONFormatter"},
-        },
-        "handlers": {
-            "console": {
-                "level": level,
-                "class": "loggers.ColorizingStreamHandler",  # "logging.StreamHandler",
-                "formatter": "json",
-            },
-        },
-        "root": {"level": level, "handlers": ["console"]},
+def get_formatter(name: Union[str, None]) -> logging.Formatter:
+    formatters = {
+        "verbose": logging.Formatter(
+            fmt="[%(asctime)s - %(filename)s:%(lineno)s - %(funcName)s()] %(levelname)s - %(message)s",
+            datefmt="%Y-%m-%d %H:%M:%S",
+        ),
+        "funcname": logging.Formatter(
+            fmt="[%(name)s: %(lineno)s - %(funcName)s()] %(levelname)s - %(message)s",
+            datefmt="%Y-%m-%d %H:%M:%S",
+        ),
+        "simple": logging.Formatter(
+            fmt="%(name)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
+        ),
+        "layman": logging.Formatter(fmt="%(message)s", datefmt="%Y-%m-%d %H:%M:%S"),
+        "json": DatadogJSONFormatter(),
     }
+    return formatters[name or "funcname"]  # type: ignore
 
 
-def load_sentry():
-    import sentry_sdk
-    from sentry_sdk.integrations.logging import LoggingIntegration
-    from sentry_sdk.integrations.celery import CeleryIntegration
-    from sentry_sdk.integrations.flask import FlaskIntegration
-    from sentry_sdk.integrations.redis import RedisIntegration
+def config(level: int = None, formatter: str = None, logger: logging.Logger = None):
 
-    logger = logging.getLogger()
-
-    def setup(
-        dsn: str,
-        level: int = 10,  # debug
-        event_level: int = 40,  # error
-        env_name: str = None,
-        release: str = None,
-        **kwargs,
-    ):
-
-        sentry_logging = LoggingIntegration(
-            level=level,  # Capture info and above as breadcrumbs
-            event_level=event_level,  # Send errors as events
-        )
-
-        sentry_integrations = [
-            sentry_logging,
-            CeleryIntegration(),
-            FlaskIntegration(),
-            RedisIntegration(),
-        ]
-
-        sentry_sdk.init(
-            dsn=dsn,
-            release=release,
-            integrations=sentry_integrations,
-            environment=env_name,
-        )
-        logger.info(
-            f"Sentry enabled with {len(sentry_integrations)} integrations: {', '.join([x.identifier for x in sentry_integrations])}"
-        )
-
-    try:
-        parms = conf.sentry_params
-        if (
-            parms.get("enabled")
-            and parms.get("dsn") is not None
-            and parms.get("dsn") != ""
-        ):
-            setup(**parms)
-            logger.info(f"Sentry enabled")
-        else:
-            logger.info(f"Sentry disabled")
-            logger.debug(f"Sentry disabled: no DSN in sentry config")
-
-    except Exception as e:
-        logger.error(f"Failed to load Sentry configuration: {e}")
-
-
-def config(verbosity: int = -1, level: int = None, formatter: str = None):
-
-    if str(conf.sentry_params.get("enabled")).lower() == "true":
-        load_sentry()
-
-    root_logger = logging.getLogger()
-    root_logger.setLevel(mlevel(conf.LOG_LEVEL))
-
-    formatter = DatadogJSONFormatter()
+    root_logger = logger or logging.getLogger()
+    root_logger.setLevel(mlevel(conf.LOG_LEVEL) or level or 20)
     console_handler = ColorizingStreamHandler()
-    console_handler.setFormatter(formatter)
+    console_handler.setFormatter(get_formatter(formatter or conf.LOG_FORMAT))
     if root_logger.handlers:
         root_logger.removeHandler(root_logger.handlers[0])
     root_logger.addHandler(console_handler)
