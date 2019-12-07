@@ -121,3 +121,4 @@ dmypy.json
 celerybeat-schedule.db
 celerybeat.pid
 doc/.DS_Store
+.env.production
