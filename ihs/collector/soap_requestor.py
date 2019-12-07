@@ -80,10 +80,11 @@ class SoapRequestor(Requestor):
     _wsdls = conf.api_params.get("wsdls")
     _soapheaders = IHSHeaders(conf.api_params.get("base_url")).soapheaders
     _session = None
+    _default_version = "v10"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.client = self.get_client(kwargs.pop("client_type", "session"))
+        self.client = self.get_client(kwargs.pop("client_type", None))
 
     @property
     def service(self):
@@ -94,13 +95,17 @@ class SoapRequestor(Requestor):
         return self._soapheaders
 
     def get_client(self, name: str) -> zeep.Client:
-        client = zeep.Client(wsdl=self.get_wsdl(name))
-        client.set_default_soapheaders(self.soapheaders or [])
-        return client
+        if name:
+            client = zeep.Client(wsdl=self.get_wsdl(name))
+            client.set_default_soapheaders(self.soapheaders or [])
+            return client
 
     def get_wsdl(self, name: str) -> str:
         """ Get a versioned path to a named wsdl file """
-        return self._wsdls[name].format(version=self.endpoint.version)
+        version = self._default_version
+        if self.endpoint:
+            version = self.endpoint.version
+        return self._wsdls[name].format(version=version)
 
     @property
     def session(self):
