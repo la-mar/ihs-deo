@@ -177,6 +177,7 @@ endpoints:
       template: Well ID List
       criteria:
         hole_direction: H
+        operator: 278107
     tasks:
       sync:
         cron:

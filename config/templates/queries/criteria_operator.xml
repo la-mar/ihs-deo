@@ -1,0 +1,21 @@
+<criteria type="group" groupId="" ignored="false">
+    <domain>US</domain>
+    <datatype>{data_type}</datatype>
+    <attribute_group>Identification</attribute_group>
+    <attribute>Current Operator</attribute>
+    <filter logic="include">
+        <value id="0" ignored="false">
+            <group_actual>
+                <operator logic="and">
+                    <condition logic="equals">
+                        <attribute>code</attribute>
+                        <value_list>
+                            <value>{value}</value>
+                        </value_list>
+                    </condition>
+                </operator>
+            </group_actual>
+            <group_display>name = {name}</group_display>
+        </value>
+    </filter>
+</criteria>

@@ -2,121 +2,91 @@ from collector.yammler import Yammler
 from config import get_active_config
 from typing import Dict, List, Union, no_type_check
 import logging
-import json
-import xml.etree.ElementTree as ET
+import os
+import util
 import pprint
+from util import query_dict
+import functools
 
 conf = get_active_config()
 logger = logging.getLogger(__name__)
 
-collector_yaml = conf.COLLECTOR_CONFIG_PATH
-criteria_hole_direction = """
-<criteria type="group" groupId="" ignored="false">
-        <domain>US</domain>
-        <datatype>{data_type}</datatype>
-        <attribute_group>Well</attribute_group>
-        <attribute>Hole Direction</attribute>
-        <filter logic="include">
-            <value id="0" ignored="false">
-                <group_actual>
-                    <operator logic="and">
-                        <condition logic="equals">
-                            <attribute>code</attribute>
-                            <value_list>
-                                <value>{value}</value>
-                            </value_list>
-                        </condition>
-                    </operator>
-                </group_actual>
-                <group_display>name = HORIZONTAL</group_display>
-            </value>
-        </filter>
-    </criteria>
-    """
+criteria_hole_direction = "criteria_hole_direction.xml"  # move to config
+criteria_operator = "criteria_operator.xml"  # move to config
 # mappings for yaml
-data_type_map = "/options/data_type"
-criteria_map = "/options/criteria"
+data_type_map = "options.data_type"  # move to config
+criteria_map = "options.criteria"  # move to config
+query_basepath = conf.QUERY_PATH
 
 
 class XmlSchemaBuilder:
-    def __init__(
-        self, cache: str = None, **kwargs,
-    ):
-        self.cache = Yammler(cache or collector_yaml)
-
-    def get_criterias(self) -> Union[dict, None]:
-        if not self.cache:
-            logger.info("Yaml file not found when building xml schema")
-            return None
-
+    def get_criteria(self, endpoint_name: str = None) -> Union[dict, None]:
         criterias = {}
-
-        if "endpoints" in self.cache:
-            endpoints = self.cache["endpoints"]
-            endpoint_keys = endpoints.keys()
-            for key in endpoint_keys:
-                record = {key: endpoints[key] for key in endpoints.keys() & {key}}
-                dict_test = QueryableDictionary(record)
-                data_type = dict_test.get(f"{key}{data_type_map}")
-                criteria = dict_test.get(f"{key}{criteria_map}")
+        endpoints = conf.endpoints
+        if any(endpoints):
+            try:
+                record = endpoints[endpoint_name]
+                get = functools.partial(query_dict, data=record)
+                data_type = get(data_type_map)
+                criteria = get(criteria_map)
+                print(len(criteria.items()))
                 for k, v in criteria.items():
                     if k == "hole_direction":
-                        criterias[key] = criteria_hole_direction.format(
-                            data_type=data_type, value=v
+                        query = self.load_query(
+                            criteria_hole_direction, data_type=data_type, value=v
                         )
+                        criterias[endpoint_name] = query
+                    if k == "operator":
+                        query = self.load_query(
+                            criteria_operator,
+                            data_type=data_type,
+                            value=v,
+                            name="DRIFTWOOD ENERGY OPERATING LLC",  # not sure yet where to dynamically get this. Add new item in yaml?
+                        )
+                        criterias[endpoint_name] = query
+            except Exception as e:
+                logger.error(
+                    "Encountered error when building criteria xml for endpoint %s -- %s",
+                    endpoint_name,
+                    e,
+                )
+                return None
         else:
-            logger.info("Criterias do not exist in yaml file")
+            logger.error("Endpoints do not exist in yaml file")
+            return None
 
         return criterias
 
+    def finalize_criteria_xml(self, criterias: dict) -> str:
+        st_builder = "<criterias>\n"
 
-class QueryableDictionary(dict):
-    def get(self, path, default=None):
-        keys = path.split("/")
-        val = None
+        for v in criterias.values():
+            st_builder += v
 
-        for key in keys:
-            if val:
-                if isinstance(val, list):
-                    val = [v.get(key, default) if v else None for v in val]
-                else:
-                    val = val.get(key, default)
-            else:
-                val = dict.get(self, key, default)
+        st_builder += "\n</criterias>"
 
-            if not val:
-                break
+        return st_builder
 
-        return val
+    # move this to utility class that anything can access
+    def load_query(self, path: Union[str, None], **kwargs) -> Union[str, None]:
+        if path:
+            if not os.path.exists(path):
+                path = os.path.join(query_basepath, path)
+
+            try:
+                return util.load_xml(path).format(**kwargs)
+            except FileNotFoundError as fe:
+                logger.warning("Failed to load xml file %s -- %s", path, fe)
+                raise
+        else:
+            return None
 
 
 if __name__ == "__main__":
 
     pp = pprint.PrettyPrinter(indent=3)
-
-    endpoints = conf.endpoints
-
-    # builder = XmlSchemaBuilder(collector_yaml)
-    # d = builder.get_criterias()
-    # pp.pprint(d)
-    # keyword = "well_horizontal"
-    # endpoints = builder.cache["endpoints"]
-
-    # for k, v in test.cache["endpoints"].items():
-    #     if k == endpoint:
-    #         json.dumps(v, indent=4)
-
-    # endpoint_keys = endpoints.keys()
-    # for key in endpoint_keys:
-    #     record = {key: endpoints[key] for key in endpoints.keys() & {key}}
-    #     dict_test = QueryableDictionary(record)
-    #     data_type = dict_test.get(f"{key}/options/data_type")
-    #     criteria = dict_test.get(f"{key}/options/criteria")
-    #     for k, v in criteria.items():
-    #         if k == "hole_direction":
-    #             criterias[key] = criteria_hole_direction.format(
-    #                 data_type=data_type, value=v
-    #             )
-    #     pp.pprint(criterias)
-    # res = {key: values[key] for key in values.keys() & {"options"}}
+    builder = XmlSchemaBuilder()
+    d = builder.get_criteria("well_master_horizontal")
+    final = builder.finalize_criteria_xml(d)
+    pp.pprint(final)
 
