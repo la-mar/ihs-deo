@@ -198,14 +198,14 @@ endpoints:
         hole_direction: H
     tasks:
       sync:
-        <<: *every_6_hours
+        <<: *nightly
         options:
           query_path: well_by_api.xml
           matrix:
             using: api.models.WellMasterHorizontal.ids
             label: api
       driftwood:
-        <<: *every_6_hours
+        <<: *nightly
         options:
           query_path: well_horizontal_driftwood_all.xml
       sequoia:
@@ -235,6 +235,8 @@ endpoints:
           query_path: production_horizontal_by_county.xml
           matrix:
             <<: *counties
+      # check_for_new:
+      # TODO: Check for wells in master list that arent in database and download them
 
   production_horizontal:
     enabled: true
@@ -249,7 +251,7 @@ endpoints:
         hole_direction: H
     tasks:
       sync:
-        <<: *every_6_hours
+        <<: *nightly
         options:
           query_path: production_by_entity.xml
           matrix:
@@ -262,6 +264,17 @@ endpoints:
           matrix:
             sequoia:
               api: "42461409160000"
+      # welllist:
+      #   seconds: 300
+      #   options:
+      #     query_path: production_by_api.xml
+      #     matrix:
+      #       api:
+      #         - 42461409160000
+      #         - 42461409160001
+      #         - 42461409160002
+      #         - 42461409160003
+      #         - 42461409160004
 
   well_master_vertical:
     enabled: true
@@ -295,16 +308,18 @@ endpoints:
         hole_direction: V
     tasks:
       sync:
-        <<: *weekly
+        <<: *nightly
         options:
           query_path: well_by_api.xml
           matrix:
             using: api.models.WellMasterVertical.ids
             label: api
       driftwood:
-        <<: *every_6_hours
+        <<: *nightly
         options:
           query_path: well_vertical_driftwood_all.xml
+      # check_for_new:
+      # TODO: Check for wells in master list that arent in database and download them
   production_master_vertical:
     enabled: true
     version: v10
@@ -337,16 +352,13 @@ endpoints:
         hole_direction: V
     tasks:
       sync:
-        <<: *weekly
+        <<: *nightly
         options:
           query_path: production_by_entity.xml
           matrix:
             using: api.models.ProductionMasterVertical.ids
             label: producing_entity
-      # sequoia:
-      #   seconds: 300
-      #   options:
-      #     query_path: production_by_api.xml
-      #     matrix:
-      #       sequoia:
-      #         api: "42461409160000"
+      driftwood:
+        <<: *nightly
+        options:
+          query_path: well_vertical_driftwood_all.xml
