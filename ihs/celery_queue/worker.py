@@ -3,7 +3,10 @@ from __future__ import annotations
 import logging
 
 from celery import Celery
+from celery.signals import after_setup_logger  # after_setup_task_logger
+from celery.app.log import TaskFormatter
 
+import loggers
 import celery_queue.tasks
 from collector import Endpoint
 from config import get_active_config
@@ -46,18 +49,38 @@ def setup_periodic_tasks(sender, **kwargs):  # pylint: disable=unused-argument
         for task_name, task in endpoint.tasks.items():
             if task.enabled:
                 name = f"{endpoint_name}:{task_name}"
-                logger.info("Registering periodic task: %s", name)
+                logger.warning("Registering periodic task: %s", name)
                 sender.add_periodic_task(
                     task.schedule,
                     celery_queue.tasks.sync_endpoint.s(endpoint_name, task_name),
                     name=name,
                 )
             else:
-                logger.info("Task %s is disabled -- skipping", name)
+                logger.warning("Task %s is DISABLED -- skipping", name)
     sender.add_periodic_task(
         30, celery_queue.tasks.post_heartbeat, name="heartbeat",
     )
 
 
+@after_setup_logger.connect
+def setup_loggers(logger, *args, **kwargs):  # pylint: disable=unused-argument
+    logger.setLevel(loggers.mlevel(conf.LOG_LEVEL))
+    console_handler = loggers.ColorizingStreamHandler()
+    console_handler.setFormatter(loggers.DatadogJSONFormatter())
+    if logger.handlers:
+        logger.removeHandler(logger.handlers[0])
+    logger.addHandler(console_handler)
+
+
+# @after_setup_task_logger.connect
+# def setup_task_logger(logger, *args, **kwargs):
+#     for handler in logger.handlers:
+#         handler.setFormatter(
+#             TaskFormatter(
+#                 "%(asctime)s - %(task_id)s - %(task_name)s - %(name)s - %(levelname)s - %(message)s"
+#             )
+#         )
+
+
 if __name__ == "__main__":
-    endpoint = endpoints["wells"]
+    print("test")

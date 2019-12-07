@@ -13,7 +13,6 @@ from api.models import *
 from config import get_active_config
 from ihs import create_app
 
-loggers.standard_config()
 logger = logging.getLogger()
 
 
@@ -30,11 +29,12 @@ app = create_app()
 cli = FlaskGroup(create_app=create_app, context_settings=CONTEXT_SETTINGS)
 run_cli = AppGroup("run")
 test_cli = AppGroup("test")
+delete_cli = AppGroup("delete")
 
 
-def update_logger(level: int, formatter: str = None):
+def update_logger(level: int):
     if level is not None:
-        loggers.standard_config(verbosity=level, formatter=formatter)
+        loggers.config(verbosity=level)
 
 
 def get_terminal_columns():
@@ -67,8 +67,7 @@ def ipython_embed():
 
     ctx = {}
 
-    # Support the regular Python interpreter startup script if someone
-    # is using it.
+    # Supports the regular Python interpreter startup script if it's being used
     startup = os.environ.get("PYTHONSTARTUP")
     if startup and os.path.isfile(startup):
         with open(startup, "r") as f:
@@ -82,8 +81,6 @@ def ipython_embed():
 @run_cli.command(context_settings=dict(ignore_unknown_options=True))
 @click.argument("args", nargs=-1, type=click.UNPROCESSED)
 def web(args):
-    # from celery_queue.worker import celery
-
     cmd = ["gunicorn", "wsgi",] + list(args)
     subprocess.call(cmd)
 
@@ -91,8 +88,6 @@ def web(args):
 @run_cli.command(context_settings=dict(ignore_unknown_options=True))
 @click.argument("celery_args", nargs=-1, type=click.UNPROCESSED)
 def worker(celery_args):
-    # from celery_queue.worker import celery
-
     cmd = ["celery", "-E", "-A", "celery_queue.worker:celery", "worker",] + list(
         celery_args
     )
@@ -102,8 +97,6 @@ def worker(celery_args):
 @run_cli.command(context_settings=dict(ignore_unknown_options=True))
 @click.argument("celery_args", nargs=-1, type=click.UNPROCESSED)
 def cron(celery_args):
-    # from celery_queue.worker import celery
-
     cmd = ["celery", "-A", "celery_queue.worker:celery", "beat",] + list(celery_args)
     subprocess.call(cmd)
 
@@ -111,10 +104,31 @@ def cron(celery_args):
 @run_cli.command(context_settings=dict(ignore_unknown_options=True))
 @click.argument("celery_args", nargs=-1, type=click.UNPROCESSED)
 def monitor(celery_args):
-    # from celery_queue.worker import celery
-
     cmd = ["celery", "-A", "celery_queue.worker:celery", "flower",] + list(celery_args)
     subprocess.call(cmd)
+
+
+@run_cli.command(context_settings=dict(ignore_unknown_options=True))
+@click.argument("task")
+def task(task: str):
+    "Run a one-off task. Pass the name of the scoped task to run.  Ex. endpoint_name.task_name"
+    from celery_queue.tasks import sync_endpoint
+
+    endpoint, task = task.split(".")
+    if not endpoint or not task:
+        click.secho("endpoint name is missing. try specifying ENDPOINT_NAME.TASK_NAME")
+        sys.exit(0)
+    # sync_endpoint.apply((endpoint, task), countdown=3)
+    sync_endpoint.delay(endpoint, task)
+
+
+@delete_cli.command(context_settings=dict(ignore_unknown_options=True))
+def exports():
+    """ Purge all completed exports from the backing IHS remote account"""
+
+    from collector.tasks import purge_remote_jobs
+
+    purge_remote_jobs()
 
 
 @test_cli.command()
@@ -167,6 +181,7 @@ def main(argv=sys.argv):  # pylint: disable=unused-argument
 
 cli.add_command(run_cli)
 cli.add_command(test_cli)
+cli.add_command(delete_cli)
 
 if __name__ == "__main__":
     cli()
