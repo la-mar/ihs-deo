@@ -179,7 +179,8 @@ endpoints:
         hole_direction: H
     tasks:
       sync:
-        <<: *nightly
+        cron:
+          minute: "*/15"
         options:
           query_path: well_horizontal_by_county.xml
           matrix:
@@ -205,16 +206,16 @@ endpoints:
             using: api.models.WellMasterHorizontal.ids
             label: api
       driftwood:
-        <<: *nightly
-        options:
-          query_path: well_horizontal_driftwood_all.xml
-      sequoia:
         seconds: 300
         options:
-          query_path: well_by_api.xml
-          matrix:
-            sequoia:
-              api: "42461409160000"
+          query_path: well_horizontal_driftwood_all.xml
+      # sequoia:
+      #   seconds: 300
+      #   options:
+      #     query_path: well_by_api.xml
+      #     matrix:
+      #       sequoia:
+      #         api: "42461409160000"
 
   production_master_horizontal:
     enabled: true
@@ -230,7 +231,8 @@ endpoints:
         hole_direction: H
     tasks:
       sync:
-        <<: *nightly
+        cron:
+          minute: "*/15"
         options:
           query_path: production_horizontal_by_county.xml
           matrix:
@@ -258,6 +260,7 @@ endpoints:
             using: api.models.ProductionMasterHorizontal.ids
             label: producing_entity
       sequoia:
+        enabled: false
         seconds: 300
         options:
           query_path: production_by_api.xml
@@ -290,11 +293,13 @@ endpoints:
         hole_direction: V
     tasks:
       sync:
-        <<: *nightly
+        cron:
+          minute: "*/15"
         options:
           query_path: well_vertical_by_county.xml
           matrix:
             <<: *counties
+
   well_vertical:
     enabled: true
     version: v10
@@ -315,11 +320,12 @@ endpoints:
             using: api.models.WellMasterVertical.ids
             label: api
       driftwood:
-        <<: *nightly
+        seconds: 300
         options:
           query_path: well_vertical_driftwood_all.xml
       # check_for_new:
       # TODO: Check for wells in master list that arent in database and download them
+
   production_master_vertical:
     enabled: true
     version: v10
@@ -334,11 +340,13 @@ endpoints:
         hole_direction: V
     tasks:
       sync:
-        <<: *nightly
+        cron:
+          minute: "*/15"
         options:
           query_path: production_vertical_by_county.xml
           matrix:
             <<: *counties
+
   production_vertical:
     enabled: true
     version: v10
@@ -359,6 +367,6 @@ endpoints:
             using: api.models.ProductionMasterVertical.ids
             label: producing_entity
       driftwood:
-        <<: *nightly
+        seconds: 300
         options:
           query_path: well_vertical_driftwood_all.xml
