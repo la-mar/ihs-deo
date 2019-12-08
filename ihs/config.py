@@ -180,8 +180,8 @@ class BaseConfig:
     BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://localhost:6379/0")
     CELERY_TASK_LIST = ["celery_queue.tasks"]
     CELERYD_TASK_TIME_LIMIT = os.getenv(
-        "CELERYD_TASK_TIME_LIMIT", 60 * 60 * 3
-    )  # 3 hours
+        "CELERYD_TASK_TIME_LIMIT", 60 * 60 * 12
+    )  # 12 hours
     CELERY_TASK_SERIALIZER = "json"
     CELERY_ACCEPT_CONTENT = ["json"]
     CELERYD_MAX_TASKS_PER_CHILD = os.getenv("CELERYD_MAX_TASKS_PER_CHILD", 1000)
