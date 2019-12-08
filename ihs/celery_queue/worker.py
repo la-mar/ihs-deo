@@ -56,8 +56,17 @@ def setup_periodic_tasks(sender, **kwargs):  # pylint: disable=unused-argument
                 )
             else:
                 logger.warning("Task %s is DISABLED -- skipping", name)
+
+    logger.warning("Registering periodic task: %s", "heartbeat")
     sender.add_periodic_task(
         30, celery_queue.tasks.post_heartbeat, name="heartbeat",
+    )
+
+    logger.warning("Registering periodic task: %s", "calc_remote_export_capacity")
+    sender.add_periodic_task(
+        60,  # 1 minute
+        celery_queue.tasks.post_remote_export_capacity,
+        name="calc_remote_export_capacity",
     )
 
 

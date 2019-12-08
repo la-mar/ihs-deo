@@ -28,6 +28,23 @@ class ExportJob:
     def to_dict(self):
         return {"job_id": self.job_id, **self._kwargs}
 
+    def limited_dict(
+        self,
+        limit_keys: list = [
+            "endpoint",
+            "task",
+            "hole_direction",
+            "data_type",
+            "template",
+            "api",
+        ],
+    ):
+        job_dict = {}
+        for key, value in self.to_dict().items():
+            if key in limit_keys:
+                job_dict[key] = value
+        return job_dict
+
 
 class Builder(SoapRequestor):
     """ IHS specific builder """
@@ -104,16 +121,18 @@ class Builder(SoapRequestor):
     def delete_job(self, job: Union[ExportJob, str]) -> bool:
 
         result = False
+        tags = {}
         if isinstance(job, ExportJob):
+            tags = job.limited_dict()
             job = job.job_id
 
         try:
             result = self.service.DeleteExport(job)
             logger.info("Deleted job: %s", job)
-            metrics.post("job.delete.success", 1)
+            metrics.post("job.delete.success", 1, tags=tags)
         except Exception as e:
             logger.info("Encountered error when deleting job %s -- %s", job, e)
-            metrics.post("job.delete.error", 1)
+            metrics.post("job.delete.error", 1, tags=tags)
 
         return result
 
@@ -144,18 +163,23 @@ class ExportBuilder(Builder):
 
         try:
             job_id = self.build(export_param.params, export_param.target)
-            metrics.post("job.submitted.success", 1)
+            metrics.post("job.submitted.success", 1, tags=metadata)
             return ExportJob(
                 job_id=job_id, **{**(metadata or {}), **dict(export_param)}
             )
         except Exception as e:
-            logger.warning(
-                f"Error getting job id from service for data type {export_param.data_type} -- {e}"
-                + "\nmetadata: "
-                + str(metadata)
-                + "\n\n"
-            )
-            metrics.post("job.submitted.error", 1)
+            msg = f"Error getting job id from service for data type {export_param.data_type} -- {e}"
+            # if e.args:
+            if "No ids to export" in e.args[0]:
+                logger.info(msg)
+            else:
+                logger.warning(
+                    msg,
+                    extra={
+                        k: v for k, v in (metadata or {}).items() if k not in ["name"]
+                    },
+                )
+                metrics.post("job.submitted.error", 1, tags=metadata)
 
         return None
 
@@ -297,12 +321,11 @@ class ExportRetriever:
             return result
         except Exception as e:
             msg = f"Failed retrieving export {self.job} -- {e}"
-            if e.args:
-                if "No ids to export" in e.args[0]:
-                    logger.debug(msg)
-                    return None
-
-            logger.warning(msg)
+            # if e.args:
+            if "No ids to export" in e.args[0]:
+                logger.debug(msg)
+            else:
+                logger.warning(msg)
 
         return None
 
@@ -323,6 +346,9 @@ if __name__ == "__main__":
     app.app_context().push()
 
     logging.basicConfig(level=20)
+
+    eb = ExportBuilder(None)
+    len(eb.list_completed_jobs())
 
     endpoints = Endpoint.load_from_config(conf, load_disabled=True)
     endpoint = endpoints.get("well_master_horizontal")

@@ -46,8 +46,17 @@ def log(message):
 
 @celery.task
 def post_heartbeat():
-    """ Sync model from source to data warehouse"""
+    """ Send heartbeat to metrics backend"""
     return metrics.post_heartbeat()
+
+
+@celery.task
+def post_remote_export_capacity():
+    """ Send remote export capacity to metrics backend"""
+    # logger.warning("post_remote_export_capacity")
+    calcs = collector.tasks.calc_remote_export_capacity()
+    for key, value in calcs.items():
+        metrics.post(key, value, metric_type="gauge")
 
 
 # pylint: disable=unused-argument
