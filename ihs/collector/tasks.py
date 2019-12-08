@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Union, Generator
+from typing import Union, Generator, Dict
 import logging
 
 
@@ -22,7 +22,6 @@ from collector import Endpoint, Collector
 from config import get_active_config, IdentityTemplates, ExportDataTypes
 import metrics
 
-# TODO: Move these to logging.yaml and reincorporate to logging_setup
 logger = logging.getLogger(__name__)
 
 conf = get_active_config()
@@ -35,7 +34,9 @@ def run_endpoint_task(
     """ Unpack task options and assemble metadata for job configuration """
     endpoint = endpoints[endpoint_name]
     task = endpoint.tasks[task_name]
-    metrics.post("task.execution", 1, tags=[endpoint_name, task_name])
+    metrics.post(
+        "task.execution", 1, tags={"endpoint": endpoint_name, "task": task_name}
+    )
     for opts in task.options:
         job_config = dict(
             job_options=opts,
@@ -47,7 +48,7 @@ def run_endpoint_task(
                 **opts,  # duplicate job options here to they travel with the job throughout its lifecycle
             },
         )
-        metrics.post("task.job.created", 1, tags=list(job_config.values()))
+        metrics.post("task.job.created", 1, tags=job_config.get("metadata"))
         yield job_config
 
 
@@ -75,7 +76,6 @@ def collect(job: Union[dict, ExportJob]):
 def get_job_results(job: Union[ExportJob, dict]) -> bytes:
     if not isinstance(job, ExportJob):
         job = ExportJob(**job)
-    # logger.info(f"Fetching job results: {job}")
     retr = ExportRetriever(job, base_url=job.url, endpoint=endpoints[job.endpoint])
     data = retr.get()
     return data
@@ -120,16 +120,25 @@ def purge_remote_jobs() -> bool:
     return True
 
 
-def post_metric(endpoint: Endpoint, result: dict):
-    for k, v in result.items():
-        try:
-            name = f"{endpoint.name}.{k}"
-            points = v
-            metrics.post(name, points)
-        except Exception as e:
-            logger.debug(
-                "Failed to post metric: name=%s, points=%s, error=%s", name, points, e
-            )
+def calc_remote_export_capacity() -> Dict[str, Union[float, int]]:
+    """Calculate the amount of storage space currently consumed by job exports on IHS' servers.
+
+    Returns:
+        dict -- {
+                 capacity_used: space used in KB,
+                 njobs: number of existing completed jobs
+    """
+    mean_doc_size_bytes = 90000
+    inflation_pct = 0.25
+    doc_size_bytes = mean_doc_size_bytes + (0.25 * mean_doc_size_bytes)
+    remote_capacity_bytes = 1000000000  # 1 GB
+    eb = ExportBuilder(None)
+    njobs = len(eb.list_completed_jobs())
+    return {
+        "remote.capacity.used": njobs * doc_size_bytes,
+        "remote.capacity.available": remote_capacity_bytes - (njobs * doc_size_bytes),
+        "remote.jobs": njobs,
+    }
 
 
 if __name__ == "__main__":
@@ -141,13 +150,14 @@ if __name__ == "__main__":
     app = create_app()
     app.app_context().push()
 
+    # x = list(run_endpoint_task(endpoint_name, task_name))[0]
+
     endpoint_name = "production_horizontal"
-    task_name = "sequoia"
+    task_name = "driftwood"
     results = [x for x in run_endpoint_task(endpoint_name, task_name) if x is not None]
     opts = results[0]
     opts.get("job_options")
     job = submit_job(**opts)
-    dir(job)
     job.to_dict()
     result = get_job_results(job)
     collect_data(job, result)
@@ -158,7 +168,6 @@ if __name__ == "__main__":
     opts = results[0]
     opts.get("job_options")
     job = submit_job(**opts)
-    dir(job)
     job.to_dict()
     result = get_job_results(job)
     collect_data(job, result)
@@ -169,7 +178,6 @@ if __name__ == "__main__":
     opts = results[0]
     opts.get("job_options")
     job = submit_job(**opts)
-    dir(job)
     job.to_dict()
     result = get_job_results(job)
     collect_identities(job, result)
@@ -177,10 +185,18 @@ if __name__ == "__main__":
     endpoint_name = "well_master_horizontal"
     task_name = "sync"
     results = [x for x in run_endpoint_task(endpoint_name, task_name) if x is not None]
-    opts = results[0]
-    opts.get("job_options")
+
+    opts = results[5]  # tx-bailey
     job = submit_job(**opts)
-    dir(job)
+    if job:
+        get_job_results(job)
+
+    endpoint_name = "production_master_vertical"
+    task_name = "sync"
+    results = [x for x in run_endpoint_task(endpoint_name, task_name) if x is not None]
+    opts = results[0]
+    # opts.get("job_options")
+    job = submit_job(**opts)
     job.to_dict()
     result = get_job_results(job)
     collect_identities(job, result)
