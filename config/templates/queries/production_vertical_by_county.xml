@@ -28,11 +28,11 @@
     </criteria>
     <criteria type="group" groupId="" ignored="false">
         <domain>US</domain>
-        <datatype>Well</datatype>
+        <datatype>{data_type}</datatype>
         <attribute_group>Well</attribute_group>
         <attribute>Hole Direction</attribute>
         <filter logic="exclude">
-            <value id="0" ignored="false">
+            <value id="1" ignored="false">
                 <group_actual>
                     <operator logic="and" exclude="true">
                         <condition logic="equals">
