@@ -1,4 +1,4 @@
-from typing import List, Tuple, Union
+from typing import List, Tuple, Union, Any
 import logging
 
 
@@ -34,15 +34,6 @@ def load():
         logger.error(f"Failed to load Datadog configuration: {e}")
 
 
-def parse_tags(tags: list) -> List[str]:
-    """ Ensure all tags are strings """
-    result = []
-    for x in tags:
-        if isinstance(x, str):
-            result.append(x.lower())
-    return result
-
-
 def post(
     name: str,
     points: Union[int, float, List[Tuple]],
@@ -73,7 +64,7 @@ def post(
                 metric=name,
                 points=points,
                 type=str(metric_type).lower(),
-                tags=parse_tags(tags or []),
+                tags=to_tags(tags or []),
             )
             if result.get("status") == "ok":
                 logger.debug(
@@ -102,6 +93,24 @@ def post_heartbeat():
     return post("heartbeat", 1, metric_type="gauge")
 
 
+def to_tags(values: Any) -> List[str]:
+    result: List[str] = []
+    if isinstance(values, dict):
+        result = [
+            f"{key}:{str(value).lower().replace(' ','_')}"
+            for key, value in values.items()
+            if isinstance(value, (str, int))
+        ]
+    elif isinstance(values, str):
+        result = [values]
+    elif isinstance(values, list):
+        result = values
+    else:
+        result = []
+
+    return result
+
+
 if __name__ == "__main__":
     logging.basicConfig()
     logger = logging.getLogger()
@@ -110,3 +119,29 @@ if __name__ == "__main__":
     name = "app.test"
     points = 15
     post(name, points)
+
+    d = {
+        "job_options": {
+            "name": "sequoia",
+            "data_type": "Production Allocated",
+            "template": "EnerdeqML Production",
+            "criteria": {"hole_direction": "H"},
+            "query_path": "production_by_api.xml",
+            "api": "42461409160000",
+        },
+        "metadata": {
+            "endpoint": "production_horizontal",
+            "task": "sequoia",
+            "url": "http://www.ihsenergy.com",
+            "hole_direction": "H",
+            "name": "sequoia",
+            "data_type": "Production Allocated",
+            "template": "EnerdeqML Production",
+            "criteria": {"hole_direction": "H"},
+            "query_path": "production_by_api.xml",
+            "api": "42461409160000",
+        },
+    }
+
+    to_tags(d["metadata"])
+    to_tags(to_tags(d["metadata"]))
