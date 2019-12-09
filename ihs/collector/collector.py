@@ -25,7 +25,7 @@ class Collector(object):
                 self.model(**doc).save()
                 succeeded += 1
             except Exception as e:
-                logger.debug("Failed saving document to %s", self.model)
+                # logger.debug("Failed saving document to %s", self.model)
                 failed.append(e)
 
         if len(failed) > 0:
@@ -34,11 +34,12 @@ class Collector(object):
                 len(failed),
                 self.model,
                 failed,
+                extra={"faiure_messages": failed},
             )
             metrics.post(f"persistance.failed.{self.model_name}", len(failed))
 
         if succeeded > 0:
-            logger.info("Saved %s documents to %s", succeeded, self.model)
+            # logger.info("Saved %s documents to %s", succeeded, self.model)
             metrics.post(f"persistance.success.{self.model_name}", succeeded)
 
 
@@ -63,8 +64,8 @@ if __name__ == "__main__":
     conf = get_active_config()
     endpoints = Endpoint.load_from_config(conf)
 
-    endpoint_name = "well_horizontal"
-    task_name = "sequoia"
+    endpoint_name = "well_master_horizontal"
+    task_name = "sync"
     job_config = [
         x for x in run_endpoint_task(endpoint_name, task_name) if x is not None
     ][0]
