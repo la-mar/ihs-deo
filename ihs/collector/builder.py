@@ -121,7 +121,7 @@ class Builder(SoapRequestor):
     def delete_job(self, job: Union[ExportJob, str]) -> bool:
 
         result = False
-        tags = {}
+        tags: Dict = {}
         if isinstance(job, ExportJob):
             tags = job.limited_dict()
             job = job.job_id
@@ -147,10 +147,10 @@ class Builder(SoapRequestor):
     def delete_all_jobs(self):
         jobs = self.list_completed_jobs()
         deleted = 0
-        print(f"Deleting {len(jobs)} exports from remote")
+        logger.info(f"Deleting {len(jobs)} exports from remote")
         for job in jobs:
             deleted += 1 if self.delete_job(job) else 0
-        print(f"Deleted {deleted} of {len(jobs)} exports from remote")
+        logger.warning(f"Deleted {deleted} of {len(jobs)} exports from remote")
 
 
 class ExportBuilder(Builder):
