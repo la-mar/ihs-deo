@@ -3,8 +3,8 @@ from typing import Union
 from celery.utils.log import get_task_logger
 
 import collector.tasks
-from collector import Endpoint, ExportJob
 import metrics
+from collector import Endpoint, ExportJob
 from config import get_active_config
 from ihs import celery
 
@@ -57,6 +57,36 @@ def post_remote_export_capacity():
     calcs = collector.tasks.calc_remote_export_capacity()
     for key, value in calcs.items():
         metrics.post(key, value, metric_type="gauge")
+
+
+@celery.task
+def cleanup_remote_exports():
+    """ Periodically checks the available export capacity on the IHS servers, purging completed exports if the
+        used capacity >= ~1/3 of total export capacity. """
+    calcs = collector.tasks.calc_remote_export_capacity()
+    used = calcs.get("remote.capacity.used", 0)
+    available = calcs.get("remote.capacity.available", 0)
+    total = calcs.get("remote.capacity.total", 0)
+    threshold = total * 0.33  # bytes
+
+    if used >= threshold:
+        logger.info(
+            f"Initiating remote purge: threshold={threshold}, capacity.used={used}, capacity.available={available}, capacity.total={total}"
+        )
+        collector.tasks.purge_remote_exports()
+
+        calcs_after = collector.tasks.calc_remote_export_capacity()
+        used_after = calcs_after.get("remote.capacity.used", 0)
+        available_after = calcs_after.get("remote.capacity.available", 0)
+        total_after = calcs_after.get("remote.capacity.total", 0)
+        threshold_after = total * 0.33  # bytes
+
+        metrics.post_event(
+            title="Remote Export Purge",
+            text=f"Completed Export Purge: (before) threshold={threshold}, capacity.used={used}, capacity.available={available}, capacity.total={total}"
+            + "\n"
+            + f"(after) threshold={threshold_after}, capacity.used={used_after}, capacity.available={available_after}, capacity.total={total_after}",
+        )
 
 
 # pylint: disable=unused-argument

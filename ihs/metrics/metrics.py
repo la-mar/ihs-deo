@@ -89,6 +89,15 @@ def post(
         logger.debug("Failed to send Datadog metric: %s", e)
 
 
+def post_event(title: str, text: str, tags: list = None):
+    """ Send an event through the Datadog hhtp api. """
+    try:
+        if datadog:
+            datadog.api.Event.create(title=title, text=text, tags=to_tags(tags or []))
+    except Exception as e:
+        logger.debug("Failed to send Datadog event: %s", e)
+
+
 def post_heartbeat():
     return post("heartbeat", 1, metric_type="gauge")
 

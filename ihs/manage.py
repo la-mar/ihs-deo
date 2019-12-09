@@ -126,9 +126,9 @@ def task(task: str):
 def exports():
     """ Purge all completed exports from the backing IHS remote account"""
 
-    from collector.tasks import purge_remote_jobs
+    from collector.tasks import purge_remote_exports
 
-    purge_remote_jobs()
+    purge_remote_exports()
 
 
 @test_cli.command()

@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 
 from celery import Celery
+from celery.schedules import crontab
 from celery.signals import after_setup_logger  # after_setup_task_logger
 
 import loggers
@@ -66,6 +67,13 @@ def setup_periodic_tasks(sender, **kwargs):  # pylint: disable=unused-argument
     sender.add_periodic_task(
         60,  # 1 minute
         celery_queue.tasks.post_remote_export_capacity,
+        name="calc_remote_export_capacity",
+    )
+
+    logger.warning("Registering periodic task: %s", "cleanup_remote_exports")
+    sender.add_periodic_task(
+        crontab(0, 18),  # daily at 6pm, ~3 hours before nightly jobs start
+        celery_queue.tasks.cleanup_remote_exports,
         name="calc_remote_export_capacity",
     )
 
