@@ -114,7 +114,7 @@ def delete_job(job: ExportJob) -> bool:
     return result
 
 
-def purge_remote_jobs() -> bool:
+def purge_remote_exports() -> bool:
     eb = ExportBuilder(None)
     eb.delete_all_jobs()
     return True
@@ -137,6 +137,7 @@ def calc_remote_export_capacity() -> Dict[str, Union[float, int]]:
     return {
         "remote.capacity.used": njobs * doc_size_bytes,
         "remote.capacity.available": remote_capacity_bytes - (njobs * doc_size_bytes),
+        "remote.capacity.total": remote_capacity_bytes,
         "remote.jobs": njobs,
     }
 
