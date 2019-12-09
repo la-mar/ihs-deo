@@ -242,6 +242,7 @@ def get_task_definition(
                     "name": "ihs-cron",
                     "command": ["ihs", "run", "cron", "--loglevel", "debug"],
                     "memoryReservation": 128,
+                    "cpu": 256,
                     "image": f"{account_id}.dkr.ecr.us-east-1.amazonaws.com/{image_name}:{environment}",
                     "essential": True,
                     "environment": transform_envs(envs),
@@ -252,6 +253,7 @@ def get_task_definition(
             "networkMode": "bridge",
             "taskRoleArn": task_iam_role_arn,
             "tags": tags,
+            "cpu": "256",
         },
     }
 
