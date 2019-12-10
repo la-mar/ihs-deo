@@ -126,9 +126,9 @@ def task(task: str):
 def exports():
     """ Purge all completed exports from the backing IHS remote account"""
 
-    from collector.tasks import purge_remote_exports
+    from celery_queue.tasks import cleanup_remote_exports
 
-    purge_remote_exports()
+    cleanup_remote_exports.run()
 
 
 @test_cli.command()
