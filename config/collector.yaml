@@ -6,6 +6,12 @@ nightly: &nightly # <<: *every_minute
     minute: 0
     hour: 3
 
+hourly: &every_6_hours # <<: *every_minute
+  cron:
+    minute: 30
+    hour: "*/1"
+
+
 every_6_hours: &every_6_hours # <<: *every_minute
   cron:
     minute: 0
@@ -180,8 +186,7 @@ endpoints:
         operator: 278107
     tasks:
       sync:
-        cron:
-          minute: "*/15"
+        <<: *hourly
         options:
           query_path: well_horizontal_by_county.xml
           matrix:
@@ -298,8 +303,7 @@ endpoints:
         hole_direction: V
     tasks:
       sync:
-        cron:
-          minute: "*/15"
+        <<: *hourly
         options:
           query_path: well_vertical_by_county.xml
           matrix:
@@ -318,7 +322,7 @@ endpoints:
         hole_direction: V
     tasks:
       sync:
-        <<: *nightly
+        <<: *weekly
         options:
           query_path: well_by_api.xml
           matrix:
@@ -345,8 +349,7 @@ endpoints:
         hole_direction: V
     tasks:
       sync:
-        cron:
-          minute: "*/15"
+        <<: *hourly
         options:
           query_path: production_vertical_by_county.xml
           matrix:
@@ -365,7 +368,7 @@ endpoints:
         hole_direction: V
     tasks:
       sync:
-        <<: *nightly
+        <<: *weekly
         options:
           query_path: production_by_entity.xml
           matrix:
