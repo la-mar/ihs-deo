@@ -82,7 +82,7 @@ resource "aws_ecs_service" "ihs_worker_collector" {
   task_definition = data.aws_ecs_task_definition.ihs_worker_collector.family
 
   scheduling_strategy     = "REPLICA"
-  desired_count           = 3
+  desired_count           = 5
   enable_ecs_managed_tags = true
   propagate_tags          = "TASK_DEFINITION"
   tags                    = local.tags
@@ -103,7 +103,7 @@ resource "aws_ecs_service" "ihs_worker_deleter" {
   task_definition = data.aws_ecs_task_definition.ihs_worker_deleter.family
 
   scheduling_strategy     = "REPLICA"
-  desired_count           = 3
+  desired_count           = 4
   enable_ecs_managed_tags = true
   propagate_tags          = "TASK_DEFINITION"
   tags                    = local.tags
@@ -124,7 +124,7 @@ resource "aws_ecs_service" "ihs_worker_submitter" {
   task_definition = data.aws_ecs_task_definition.ihs_worker_submitter.family
 
   scheduling_strategy     = "REPLICA"
-  desired_count           = 1
+  desired_count           = 2
   enable_ecs_managed_tags = true
   propagate_tags          = "TASK_DEFINITION"
   tags                    = local.tags
