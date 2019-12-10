@@ -82,7 +82,7 @@ def cleanup_remote_exports():
         threshold_after = total * 0.33  # bytes
 
         metrics.post_event(
-            title="Remote Export Purge",
+            title="IHS Remote Export Purge",
             text=f"Completed Export Purge: (before) threshold={threshold}, capacity.used={used}, capacity.available={available}, capacity.total={total}"
             + "\n"
             + f"(after) threshold={threshold_after}, capacity.used={used_after}, capacity.available={available_after}, capacity.total={total_after}",
