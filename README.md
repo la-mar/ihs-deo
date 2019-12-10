@@ -1,26 +1,22 @@
 # ihs-deo
 
-# Functionality
+# Todo
 
-- Retry download => baked into queues
+- Unit Testing
+- Convert environment variables to SSM Parameters
 
-- Check for changes and deletes => TODO
-
-- Delete files in IHS exports if full => TODO
-
-- query the well header for a specific api => implemented via the HTTP API
-
-- query all production for a specific api => implemented via the HTTP API
-
+- <s>Retry download => baked into queues</s>
+- Process changes and deletes (nightly)
+- <s>Delete files in IHS exports if full => TODO </s>
+- <s>query the well header for a specific api => implemented via the HTTP API</s>
+- <s>query all production for a specific api => implemented via the HTTP API</s>
 - query production in a date range for a specific api => TODO
-
-- hash the json record and compare to existing hashs => TODO
-
-- Persist to mongodb
+- hash the json record and compare to existing hashs => NEEDS VALIDATION
+- <s>Persist to mongodb
   1. hash incomming json record
   2. look for existing records with the same hash
   3. if hash is found, disrgard the update
-  4. if hash is NOT found, perform the update, saving the hash value with the record
+  4. if hash is NOT found, perform the update, saving the hash value with the record</s>
 
 ### MongoDB Collections
 
