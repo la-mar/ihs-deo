@@ -97,6 +97,15 @@ resource "aws_ecs_service" "ihs_worker_collector" {
   }
 }
 
+module "collector_autoscaler" {
+  source       = "./service_autoscaling"
+  cluster_name = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
+  service_name = aws_ecs_service.ihs_worker_collector.name
+  min_capacity = 1
+  max_capacity = 10
+}
+
+
 resource "aws_ecs_service" "ihs_worker_deleter" {
   name            = "ihs-worker-deleter"
   cluster         = data.terraform_remote_state.ecs_cluster.outputs.cluster_arn
