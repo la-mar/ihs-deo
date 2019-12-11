@@ -321,11 +321,11 @@ class ExportRetriever:
             return result
         except Exception as e:
             msg = f"Failed retrieving export {self.job} -- {e}"
-            # if e.args:
+            # Suppress errors from empty exports
             if "No ids to export" in e.args[0]:
                 logger.debug(msg)
             else:
-                logger.warning(msg)
+                logger.warning(msg, exc_info=True)
 
         return None
 
