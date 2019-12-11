@@ -1,8 +1,8 @@
-from typing import List, Tuple, Union, Any
+from typing import List, Tuple, Union, Dict
 import logging
 
 
-from config import get_active_config, project
+from config import get_active_config, project, version
 
 logger = logging.getLogger(__name__)
 conf = get_active_config()
@@ -64,7 +64,7 @@ def post(
                 metric=name,
                 points=points,
                 type=str(metric_type).lower(),
-                tags=to_tags(tags or []),
+                tags=to_tags(conf.DEFAULT_TAGS) + to_tags(tags or []),
             )
             if result.get("status") == "ok":
                 logger.debug(
@@ -89,7 +89,7 @@ def post(
         logger.debug("Failed to send Datadog metric: %s", e)
 
 
-def post_event(title: str, text: str, tags: list = None):
+def post_event(title: str, text: str, tags: Union[Dict, List, str] = None):
     """ Send an event through the Datadog hhtp api. """
     try:
         if datadog:
@@ -102,7 +102,21 @@ def post_heartbeat():
     return post("heartbeat", 1, metric_type="gauge")
 
 
-def to_tags(values: Any) -> List[str]:
+def to_tags(values: Union[Dict, List, str], sep: str = ",") -> List[str]:
+    """ Coerce the passed values into a list of colon separated key-value pairs.
+
+        dict example:
+            {"tag1": "value1", "tag2": "value2", ...} -> ["tag1:value1", "tag2:value2", ...]
+
+        list example:
+            ["tag1", "tag2", ...] -> ["tag1", "tag2", ...]
+
+        str example (comma-delimited):
+            "tag1:value1, tag2:value2", ..." -> ["tag1:value1", "tag2:value2", ...]
+
+        str example (single):
+            "tag1:value1" -> ["tag1:value1"]
+    """
     result: List[str] = []
     if isinstance(values, dict):
         result = [
@@ -111,7 +125,10 @@ def to_tags(values: Any) -> List[str]:
             if isinstance(value, (str, int))
         ]
     elif isinstance(values, str):
-        result = [values]
+        if "," in values:
+            result = values.split(sep)
+        else:
+            result = [values]
     elif isinstance(values, list):
         result = values
     else:
