@@ -36,7 +36,7 @@ upgrade:
 
 celery-worker:
 	# celery -E -A ihs.celery_queue.worker:celery worker --loglevel=INFO --purge
-	ihs run worker -Q ihs-default,ihs-submissions-h,ihs-collections-h,ihs-deletions-h,ihs-submissions-v,ihs-collections-v,ihs-deletions-v
+	ihs run worker -Q ihs-default,ihs-submissions-h,ihs-collections-h,ihs-deletions-h,ihs-submissions-v,ihs-collections-v,ihs-deletions-v --loglevel DEBUG
 
 celery-beat:
 	# celery -A ihs.celery_queue.worker:celery beat --loglevel=DEBUG
@@ -69,7 +69,7 @@ login:
 	@eval $$(aws ecr get-login --no-include-email)
 
 create-ihs-repo:
-	aws ecr create-repository --repository-name ${COMPOSE_PROJECT_NAME} --tags Key=domain,Value=technology Key=service_name,Value=ihs --profile ${ENV}
+	aws ecr create-repository --repository-name ${COMPOSE_PROJECT_NAME} --tags Key=domain,Value=technology Key=service_name,Value=${SERVICE_NAME} --profile ${ENV}
 
 
 all:
@@ -107,3 +107,9 @@ redeploy-web:
 
 aws-ps-test:
 	@echo $$(aws ssm get-parameter --name datadog_api_key | jq '.Parameter.Value')
+
+ssm-export:
+	aws-vault exec ${ENV} -- chamber export dotenv ${SERVICE_NAME}
+
+ssm-write:
+	aws-vault exec ${ENV} -- chamber write ${}
