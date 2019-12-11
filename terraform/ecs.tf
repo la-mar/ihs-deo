@@ -38,9 +38,9 @@ resource "aws_ecs_service" "ihs_web" {
   propagate_tags          = "TASK_DEFINITION"
   tags                    = local.tags
 
-  # Optional: Allow external changes without Terraform plan difference
+  # allow external changes without Terraform plan difference
   lifecycle {
-    # create_before_destroy = true
+    create_before_destroy = true
     ignore_changes = [
       desired_count,
       task_definition,
@@ -52,7 +52,14 @@ resource "aws_ecs_service" "ihs_web" {
     container_name = "ihs-web"
     container_port = 8000
   }
+}
 
+module "collector_autoscaler" {
+  source       = "./service_target_tracking"
+  cluster_name = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
+  service_name = aws_ecs_service.ihs_web.name
+  min_capacity = 2 # change to 1 after service discovery testing
+  max_capacity = 5
 }
 
 resource "aws_ecs_service" "ihs_worker_default" {
@@ -66,9 +73,9 @@ resource "aws_ecs_service" "ihs_worker_default" {
   propagate_tags          = "TASK_DEFINITION"
   tags                    = local.tags
 
-  # Optional: Allow external changes without Terraform plan difference
+  # allow external changes without Terraform plan difference
   lifecycle {
-    # create_before_destroy = true
+    create_before_destroy = true
     ignore_changes = [
       desired_count,
       task_definition,
@@ -82,14 +89,14 @@ resource "aws_ecs_service" "ihs_worker_collector" {
   task_definition = data.aws_ecs_task_definition.ihs_worker_collector.family
 
   scheduling_strategy     = "REPLICA"
-  desired_count           = 5
+  desired_count           = 2
   enable_ecs_managed_tags = true
   propagate_tags          = "TASK_DEFINITION"
   tags                    = local.tags
 
-  # Optional: Allow external changes without Terraform plan difference
+  # allow external changes without Terraform plan difference
   lifecycle {
-    # create_before_destroy = true
+    create_before_destroy = true
     ignore_changes = [
       desired_count,
       task_definition,
@@ -98,11 +105,11 @@ resource "aws_ecs_service" "ihs_worker_collector" {
 }
 
 module "collector_autoscaler" {
-  source       = "./service_autoscaling"
+  source       = "./service_target_tracking"
   cluster_name = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
   service_name = aws_ecs_service.ihs_worker_collector.name
   min_capacity = 1
-  max_capacity = 10
+  max_capacity = 20
 }
 
 
@@ -112,19 +119,27 @@ resource "aws_ecs_service" "ihs_worker_deleter" {
   task_definition = data.aws_ecs_task_definition.ihs_worker_deleter.family
 
   scheduling_strategy     = "REPLICA"
-  desired_count           = 4
+  desired_count           = 3
   enable_ecs_managed_tags = true
   propagate_tags          = "TASK_DEFINITION"
   tags                    = local.tags
 
-  # Optional: Allow external changes without Terraform plan difference
+  # allow external changes without Terraform plan difference
   lifecycle {
-    # create_before_destroy = true
+    create_before_destroy = true
     ignore_changes = [
       desired_count,
       task_definition,
     ]
   }
+}
+
+module "collector_autoscaler" {
+  source       = "./service_target_tracking"
+  cluster_name = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
+  service_name = aws_ecs_service.ihs_worker_deleter.name
+  min_capacity = 1
+  max_capacity = 10
 }
 
 resource "aws_ecs_service" "ihs_worker_submitter" {
@@ -138,14 +153,22 @@ resource "aws_ecs_service" "ihs_worker_submitter" {
   propagate_tags          = "TASK_DEFINITION"
   tags                    = local.tags
 
-  # Optional: Allow external changes without Terraform plan difference
+  # allow external changes without Terraform plan difference
   lifecycle {
-    # create_before_destroy = true
+    create_before_destroy = true
     ignore_changes = [
       desired_count,
       task_definition,
     ]
   }
+}
+
+module "collector_autoscaler" {
+  source       = "./service_target_tracking"
+  cluster_name = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
+  service_name = aws_ecs_service.ihs_worker_submitter.name
+  min_capacity = 1
+  max_capacity = 10
 }
 
 resource "aws_ecs_service" "ihs_cron" {
@@ -159,9 +182,9 @@ resource "aws_ecs_service" "ihs_cron" {
   propagate_tags          = "TASK_DEFINITION"
   tags                    = local.tags
 
-  # Optional: Allow external changes without Terraform plan difference
+  # allow external changes without Terraform plan difference
   lifecycle {
-    # create_before_destroy = true
+    create_before_destroy = true
     ignore_changes = [
       desired_count,
       task_definition,
