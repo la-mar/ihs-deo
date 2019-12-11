@@ -6,11 +6,10 @@ nightly: &nightly # <<: *every_minute
     minute: 0
     hour: 3
 
-hourly: &every_6_hours # <<: *every_minute
+hourly: &hourly # <<: *every_minute
   cron:
     minute: 30
     hour: "*/1"
-
 
 every_6_hours: &every_6_hours # <<: *every_minute
   cron:
