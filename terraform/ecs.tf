@@ -54,7 +54,7 @@ resource "aws_ecs_service" "ihs_web" {
   }
 }
 
-module "collector_autoscaler" {
+module "web_autoscaler" {
   source       = "./service_target_tracking"
   cluster_name = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
   service_name = aws_ecs_service.ihs_web.name
@@ -134,7 +134,7 @@ resource "aws_ecs_service" "ihs_worker_deleter" {
   }
 }
 
-module "collector_autoscaler" {
+module "deleter_autoscaler" {
   source       = "./service_target_tracking"
   cluster_name = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
   service_name = aws_ecs_service.ihs_worker_deleter.name
@@ -163,7 +163,7 @@ resource "aws_ecs_service" "ihs_worker_submitter" {
   }
 }
 
-module "collector_autoscaler" {
+module "submitter_autoscaler" {
   source       = "./service_target_tracking"
   cluster_name = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
   service_name = aws_ecs_service.ihs_worker_submitter.name

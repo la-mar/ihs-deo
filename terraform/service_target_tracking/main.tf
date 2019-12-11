@@ -23,6 +23,7 @@ variable "max_capacity" {
 variable "target_value" {
   description = "App autoscaling target values"
   type        = string
+  default     = "90"
 }
 
 variable "scale_in_cooldown" {
@@ -35,11 +36,6 @@ variable "scale_out_cooldown" {
   description = "App autoscaling scale out cooldown (seconds)"
   type        = string
   default     = "300"
-}
-
-variable "target_value" {
-  description = "App autoscaling target values"
-  type        = string
 }
 
 variable "metric_namespace" {
