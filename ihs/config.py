@@ -25,6 +25,7 @@ _mongo_aliases = ["mongo", "mongodb"]
 
 APP_SETTINGS = os.getenv("APP_SETTINGS", "ihs.config.DevelopmentConfig")
 FLASK_APP = os.getenv("FLASK_APP", "ihs.manage.py")
+ENVIRONMENT_MAP = {"production": "prod", "staging": "stage", "development": "dev"}
 
 
 def abs_path(path: str, filename: str) -> str:
@@ -150,6 +151,11 @@ class BaseConfig:
     DATADOG_ENABLED = bool(os.getenv("DATADOG_ENABLED"))
     DATADOG_API_KEY = os.getenv("DATADOG_API_KEY", None)
     DATADOG_APP_KEY = os.getenv("DATADOG_APP_KEY", None)
+    DEFAULT_TAGS = {
+        "environment": ENVIRONMENT_MAP.get(FLASK_ENV, FLASK_ENV),
+        "service_name": project,
+        "service_version": version,
+    }
 
     """ Config """
     CONFIG_BASEPATH = "./config"
