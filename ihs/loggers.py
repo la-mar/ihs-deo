@@ -34,7 +34,7 @@ logging.getLogger("zeep").setLevel(logging.CRITICAL)
 
 
 def mlevel(level):
-    """Convert level name/int to log level. Borrowed from celery, with <3"""
+    """Convert level name/int to log level. Borrowed from Celery, with <3"""
     if level and not isinstance(level, numbers.Integral):
         return LOG_LEVELS[level.upper()]
     return level
@@ -82,7 +82,7 @@ class ColorizingStreamHandler(logutils.colorize.ColorizingStreamHandler):
 
 
 class DatadogJSONFormatter(json_log_formatter.JSONFormatter):
-    """JSON log formatter that includes Datadog standard attributes."""
+    """JSON log formatter that includes Datadog standard attributes. Source: https://github.com/dailymuse/muselog"""
 
     trace_enabled = False
 
@@ -90,9 +90,6 @@ class DatadogJSONFormatter(json_log_formatter.JSONFormatter):
         """Return the record in the format usable by Datadog."""
         json_record = self.json_record(record.getMessage(), record)
         mutated_record = self.mutate_json_record(json_record)
-        # Backwards compatibility: Functions that overwrite this but don't
-        # return a new value will return None because they modified the
-        # argument passed in.
         if mutated_record is None:
             mutated_record = json_record
         return self.to_json(mutated_record)
@@ -108,22 +105,31 @@ class DatadogJSONFormatter(json_log_formatter.JSONFormatter):
         record_dict = dict(record.__dict__)
 
         record_dict["message"] = message
-        # record_dict["tm.logger.library"] = "muselog"
 
-        if "timestamp" not in record_dict:
-            # UNIX time in milliseconds
-            record_dict["timestamp"] = int(record.created * 1000)
+        additional = {
+            "timestamp": int(record.created * 1000),
+            "severity": record.levelname,
+            "logger.name": record.name,
+            "logger.method_name": record.funcName,
+            "logger.thread_name": record.threadName,
+        }
 
-        if "severity" not in record_dict:
-            record_dict["severity"] = record.levelname
+        record_dict = {**additional, **conf.DEFAULT_TAGS, **record_dict}
 
-        # Source Code
-        if "logger.name" not in record_dict:
-            record_dict["logger.name"] = record.name
-        if "logger.method_name" not in record_dict:
-            record_dict["logger.method_name"] = record.funcName
-        if "logger.thread_name" not in record_dict:
-            record_dict["logger.thread_name"] = record.threadName
+        # if "timestamp" not in record_dict:
+        #     # UNIX time in milliseconds
+        #     record_dict["timestamp"] = int(record.created * 1000)
+
+        # if "severity" not in record_dict:
+        #     record_dict["severity"] = record.levelname
+
+        # # Source Code
+        # if "logger.name" not in record_dict:
+        #     record_dict["logger.name"] = record.name
+        # if "logger.method_name" not in record_dict:
+        #     record_dict["logger.method_name"] = record.funcName
+        # if "logger.thread_name" not in record_dict:
+        #     record_dict["logger.thread_name"] = record.threadName
 
         # NOTE: We do not inject 'host', 'source', or 'service', as we want
         # Datadog agent and docker labels to handle that for the time being.
@@ -212,7 +218,7 @@ def config(level: int = None, formatter: str = None, logger: logging.Logger = No
 
 if __name__ == "__main__":
 
-    config()
+    config(formatter="json")
     logger = logging.getLogger()
     logger.debug("test-debug")
     logger.info("test-info")
