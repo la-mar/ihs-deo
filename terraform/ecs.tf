@@ -194,9 +194,10 @@ resource "aws_ecs_service" "ihs_cron" {
 
 # Define Task Role
 resource "aws_iam_role" "task_role" {
-  name               = "${var.service_name}-task-role"
-  assume_role_policy = data.aws_iam_policy_document.task_sts_policy.json
-  tags               = local.tags
+  name                  = "${var.service_name}-task-role"
+  assume_role_policy    = data.aws_iam_policy_document.task_sts_policy.json
+  force_detach_policies = true
+  tags                  = local.tags
 }
 
 data "aws_iam_policy_document" "task_sts_policy" {
@@ -262,7 +263,7 @@ data "aws_iam_policy_document" "task_policy" {
 }
 
 resource "aws_iam_policy" "task_policy" {
-  name        = "${var.service_name}-task-access-sqs"
+  name        = "${var.service_name}-task-policy"
   path        = "/"
   description = "Allow ${var.service_name} tasks running in ECS to interface with SQS queues"
 
