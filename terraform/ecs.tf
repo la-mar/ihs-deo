@@ -241,7 +241,7 @@ data "aws_iam_policy_document" "task_policy" {
   statement {
     sid = "1" # task_access_secrets
     actions = [
-      "ssm:GetParameters*",
+      "ssm:GetParameter*",
     ]
     resources = [
       "arn:aws:ssm:*:*:parameter/${var.service_name}/*"
