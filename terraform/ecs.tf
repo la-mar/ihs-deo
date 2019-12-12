@@ -257,7 +257,7 @@ data "aws_iam_policy_document" "task_policy" {
       "kms:Decrypt"
     ]
     resources = [
-      data.terraform_remote_state.kms.outputs.ssm_key_alias_arn
+      data.terraform_remote_state.kms.outputs.ssm_key_arn
     ]
   }
 }
