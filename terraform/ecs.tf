@@ -228,13 +228,14 @@ data "aws_iam_policy_document" "task_policy" {
     ]
 
     resources = [
-      aws_sqs_queue.default.arn,
-      aws_sqs_queue.collections_h.arn,
-      aws_sqs_queue.submissions_h.arn,
-      aws_sqs_queue.deletions_h.arn,
-      aws_sqs_queue.collections_v.arn,
-      aws_sqs_queue.submissions_v.arn,
-      aws_sqs_queue.deletions_v.arn,
+      "*"
+      # aws_sqs_queue.default.arn,
+      # aws_sqs_queue.collections_h.arn,
+      # aws_sqs_queue.submissions_h.arn,
+      # aws_sqs_queue.deletions_h.arn,
+      # aws_sqs_queue.collections_v.arn,
+      # aws_sqs_queue.submissions_v.arn,
+      # aws_sqs_queue.deletions_v.arn,
     ]
   }
 
