@@ -3,53 +3,46 @@ Example docker deployment to AWS ECS cluster.
 
 The script does the following:
 
-    1. Loads environment variables from the .env
+    1. Loads environment variables from .env file in the project root
 
     For each service in SERVICES
     2. Generates a populated ECS task definition
         - You can configure your task definitions in the get_task_definition() method.
     3. Optionally authenticate Docker to ECR
-    4. Optionally build any configured containers (see line ~480)
+    4. Optionally build any configured containers
     5. Optionally push any configured containers to ECR
     6. Register the new task definition in ECR
     7. Retrieve the latest task definition revision number
     8. Update the running service with the new task definition and force a new deployment
-
-
-This script assumes AWS credentials are stored in an environment variable suffixed with
-the given environment name. I've found this to be the easiest way to deploy to different
-AWS accounts with travis-ci.
-
-    Ex: env_name = dev
-
-        --- .env ---
-        export AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID_DEV
-        export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_DEV
-        export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_DEV
-        ------------
-
-    Ex: env_name = prod
-
-        --- .env ---
-        export AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID_PROD
-        export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_PROD
-        export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_PROD
-        ------------
 """
 
+# pylint: disable=dangerous-default-value,too-many-arguments,missing-function-docstring
 
-from typing import List, Dict, Union, Optional
-import base64
+from typing import List
 import json
 import os
 import subprocess
 import datetime
-import sys
 
-from dotenv import load_dotenv, dotenv_values
+from dotenv import dotenv_values
 import boto3
 import docker
+import tomlkit
 
+
+def get_project_meta() -> dict:
+    pyproj_path = "./pyproject.toml"
+    if os.path.exists(pyproj_path):
+        with open(pyproj_path, "r") as pyproject:
+            file_contents = pyproject.read()
+        return tomlkit.parse(file_contents)["tool"]["poetry"]
+    else:
+        return {}
+
+
+pkg_meta = get_project_meta()
+project = pkg_meta.get("name")
+version = pkg_meta.get("version")
 
 ENV = os.getenv("ENV", "prod")
 PROJECT_NAME: str = os.getenv("COMPOSE_PROJECT_NAME")  # type: ignore
@@ -71,7 +64,7 @@ IMAGES = [
 
 TAGS = [
     {"key": "domain", "value": "technology"},
-    {"key": "service_name", "value": PROJECT_NAME},
+    {"key": "service_name", "value": project},
     {"key": "environment", "value": ENV},
     {"key": "terraform", "value": "true"},
 ]
@@ -127,6 +120,7 @@ def get_task_definition(
             "networkMode": "bridge",
             "taskRoleArn": task_iam_role_arn,
             "tags": tags,
+            "cpu": "256",  # from 128 CPU units (0.125 vCPUs) and 10240 CPU units (10 vCPUs)
         },
         "ihs-worker-submitter": {
             "containerDefinitions": [
@@ -154,6 +148,7 @@ def get_task_definition(
             "networkMode": "bridge",
             "taskRoleArn": task_iam_role_arn,
             "tags": tags,
+            "cpu": "256",  # from 128 CPU units (0.125 vCPUs) and 10240 CPU units (10 vCPUs)
         },
         "ihs-worker-collector": {
             "containerDefinitions": [
@@ -181,6 +176,7 @@ def get_task_definition(
             "networkMode": "bridge",
             "taskRoleArn": task_iam_role_arn,
             "tags": tags,
+            "cpu": "256",  # from 128 CPU units (0.125 vCPUs) and 10240 CPU units (10 vCPUs)
         },
         "ihs-worker-deleter": {
             "containerDefinitions": [
@@ -208,6 +204,7 @@ def get_task_definition(
             "networkMode": "bridge",
             "taskRoleArn": task_iam_role_arn,
             "tags": tags,
+            "cpu": "256",  # from 128 CPU units (0.125 vCPUs) and 10240 CPU units (10 vCPUs)
         },
         "ihs-worker-default": {
             "containerDefinitions": [
@@ -235,6 +232,7 @@ def get_task_definition(
             "networkMode": "bridge",
             "taskRoleArn": task_iam_role_arn,
             "tags": tags,
+            "cpu": "256",  # from 128 CPU units (0.125 vCPUs) and 10240 CPU units (10 vCPUs)
         },
         "ihs-cron": {
             "containerDefinitions": [
@@ -253,7 +251,7 @@ def get_task_definition(
             "networkMode": "bridge",
             "taskRoleArn": task_iam_role_arn,
             "tags": tags,
-            "cpu": "256",
+            "cpu": "256",  # from 128 CPU units (0.125 vCPUs) and 10240 CPU units (10 vCPUs)
         },
     }
 
@@ -551,8 +549,6 @@ class DockerImage:
         tag: str = None,
         build: bool = True,
         push: bool = True,
-        update_task=True,
-        update_service=False,
         show_log: bool = False,
     ):
 
@@ -570,12 +566,12 @@ class DockerImage:
 
 
 image_manager = AWSContainerInterface(ENV)
+
 # image_manager._docker_login()
 
 # for image in IMAGES:
 #     i = DockerImage(image_manager, **image)  # type: ignore
 #     i.deploy_all(build=BUILD, push=PUSH, show_log=True)
-
 
 client = image_manager.ecs()
 
