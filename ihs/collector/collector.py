@@ -25,7 +25,7 @@ class Collector(object):
                 self.model(**doc).save()
                 succeeded += 1
             except Exception as e:
-                # logger.debug("Failed saving document to %s", self.model)
+                logger.debug("Failed saving document to %s", self.model)
                 failed.append(e)
 
         if len(failed) > 0:
@@ -36,11 +36,9 @@ class Collector(object):
                 failed,
                 extra={"faiure_messages": failed},
             )
-            metrics.post(f"persistance.failed.{self.model_name}", len(failed))
 
-        if succeeded > 0:
-            # logger.info("Saved %s documents to %s", succeeded, self.model)
-            metrics.post(f"persistance.success.{self.model_name}", succeeded)
+        metrics.post(f"persistance.failed.{self.model_name}", len(failed))
+        metrics.post(f"persistance.success.{self.model_name}", succeeded)
 
 
 if __name__ == "__main__":
