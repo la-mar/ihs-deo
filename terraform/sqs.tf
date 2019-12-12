@@ -26,12 +26,12 @@ data "aws_iam_policy_document" "allow_ecs_task_access_to_sqs" {
       test     = "ArnEquals"
       variable = "aws:SourceArn"
       values = [
-        data.aws_ecs_task_definition.ihs_web.arn,
-        data.aws_ecs_task_definition.ihs_worker_submitter.arn,
-        data.aws_ecs_task_definition.ihs_worker_deleter.arn,
-        data.aws_ecs_task_definition.ihs_worker_collector.arn,
-        data.aws_ecs_task_definition.ihs_worker_default.arn,
-        data.aws_ecs_task_definition.ihs_cron.arn,
+        aws_ecs_service.ihs_web.arn,
+        aws_ecs_service.ihs_worker_submitter.arn,
+        aws_ecs_service.ihs_worker_deleter.arn,
+        aws_ecs_service.ihs_worker_collector.arn,
+        aws_ecs_service.ihs_worker_default.arn,
+        aws_ecs_service.ihs_cron.arn,
       ]
     }
     resources = [
