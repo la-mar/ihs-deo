@@ -3,6 +3,10 @@ ENV:=prod
 COMMIT_HASH    := $$(git log -1 --pretty=%h)
 DATE := $$(date +"%Y-%m-%d")
 CTX:=.
+AWS_ACCOUNT_ID:=$$(aws-vault exec prod -- aws sts get-caller-identity | jq .Account -r)
+
+testid:
+	@echo ${AWS_ACCOUNT_ID}
 
 dev:
 	${eval export ENV=dev}
@@ -17,42 +21,54 @@ ihs-deo:
 	${eval export DOCKERFILE=Dockerfile}
 
 export-deps:
+	# Export dependencies from poetry to requirements.txt in the project root
 	poetry export -f requirements.txt > requirements.txt --without-hashes
 
 redis-start:
+	# start a local redis container
 	docker run -d --name redis -p 6379:6379 redis
 
 init-db:
+	# shortcut to initialize the database
 	poetry run ihs db init
 
 migrate:
+	# shortcut for database migrations
 	# poetry run ihs db stamp head
 	poetry run ihs db migrate
 
 revision:
+	# Generate a new database revision file
 	poetry run ihs db revision
 
 upgrade:
+	# Upgrade database version using current revisions
 	poetry run ihs db upgrade
 
 celery-worker:
-	# celery -E -A ihs.celery_queue.worker:celery worker --loglevel=INFO --purge
+	# Launch a worker process that reads from all configured queues
 	ihs run worker -Q ihs-default,ihs-submissions-h,ihs-collections-h,ihs-deletions-h,ihs-submissions-v,ihs-collections-v,ihs-deletions-v --loglevel DEBUG
+	# Alternatively:
+	# celery -E -A ihs.celery_queue.worker:celery worker --loglevel=INFO --purge
+
 
 celery-beat:
-	# celery -A ihs.celery_queue.worker:celery beat --loglevel=DEBUG
+	# Launch a cron process
 	ihs run cron --loglevel=DEBUG
+	# Alternatively
+	# celery -A ihs.celery_queue.worker:celery beat --loglevel=DEBUG
+
 
 celery-flower:
+	# Launch a celery monitoring process using flower
 	celery -A ihs.celery_queue.worker:celery flower --loglevel=DEBUG --purge
 
-ihs-start:
-	poetry run ihs ipython
-
 kubectl-proxy:
+	# open a proxy to the configured kubernetes cluster
 	kubectl proxy --port=8080
 
 build:
+	# initiate a build of the dockerfile specified in the DOCKERFILE environment variable
 	@echo "Building docker image: ${IMAGE_NAME}"
 	docker build  -f ${DOCKERFILE} ${CTX} -t ${IMAGE_NAME}
 	docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:${ENV}
@@ -60,27 +76,29 @@ build:
 	docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:${DATE}
 
 login:
+	# Authenticate to ECR
 	${eval export ENV_UPPER=$(shell echo ${ENV} | tr '[:lower:]' '[:upper:]')}
 	@eval echo ${ENV_UPPER}
-	${eval export AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID_${ENV_UPPER}}}
-	${eval export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_${ENV_UPPER}}}
-	${eval export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_${ENV_UPPER}}}
-	@eval echo deploy environment: ${ENV_UPPER} - ${AWS_ACCOUNT_ID}
 	@echo account: ${AWS_ACCOUNT_ID}
-	@eval $$(aws ecr get-login --no-include-email)
+	@eval $$(aws-vault exec ${ENV} -- aws ecr get-login --no-include-email)
 
 create-ihs-repo:
+	# Create ECR repo where repository-name = COMPOSE_PROJECT_NAME
 	aws ecr create-repository --repository-name ${COMPOSE_PROJECT_NAME} --tags Key=domain,Value=technology Key=service_name,Value=${SERVICE_NAME} --profile ${ENV}
 
-
 all:
-	make ihs-deo build login push
+	# Rebuild the services docker image and push it to the remote repository
+	aws-vault exec prod -- make ihs-deo build login push
 
-deploy: ssm-update
-	poetry run python scripts/deploy.py
+deploy: # ssm-update
+	# Update SSM parameters from local dotenv and deploy a new version of the service to ECS
+	${eval AWS_ACCOUNT_ID=$(shell echo ${AWS_ACCOUNT_ID})}
+	@echo ${AWS_ACCOUNT_ID}
+	export AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID} && aws-vault exec ${ENV} -- poetry run python scripts/deploy.py
 
 push:
-	${eval export ECR=${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com}
+	${eval export ECR=$(shell echo ${AWS_ACCOUNT_ID}).dkr.ecr.us-east-1.amazonaws.com}
+	# @echo ${ECR}
 	${eval LATEST=${IMAGE_NAME}:latest}
 	${eval ECR_LATEST=${ECR}/${LATEST}}
 	${eval ECR_ENV=${ECR}/${IMAGE_NAME}:$${ENV}}
@@ -98,29 +116,51 @@ push:
 	docker push ${ECR_DATE}
 
 redeploy-cron:
+	# Force a new deployment for the cron service through the aws cli
 	aws ecs update-service --cluster ${ECS_CLUSTER}-prod --service ihs-cron --force-new-deployment --profile prod
 
 redeploy-worker:
+	# Force a new deployment for the worker service through the aws cli
 	aws ecs update-service --cluster ${ECS_CLUSTER}-prod --service ihs-worker --force-new-deployment --profile prod
 
 redeploy-web:
+	# Force a new deployment for the web service through the aws cli
 	aws ecs update-service --cluster ${ECS_CLUSTER}-prod --service ihs-web --force-new-deployment --profile prod
 
 ssm-export:
+	# Export all SSM parameters associated with this service to json
 	aws-vault exec ${ENV} -- chamber export ${SERVICE_NAME} | jq
 
 ssm-export-dotenv:
-	aws-vault exec ${ENV} -- chamber export --format=dotenv ${SERVICE_NAME}
+	# Export all SSM parameters associated with this service to dotenv format
+	aws-vault exec ${ENV} -- chamber export --format=dotenv ${SERVICE_NAME} | tee .env.ssm
 
 env-to-json:
 	# pipx install json-dotenv
 	python3 -c 'import json, os, dotenv;print(json.dumps(dotenv.dotenv_values(".env.production")))' | jq
 
 ssm-update:
+	# Update SSM environment variables using a local dotenv file (.env.production by default)
 	python3 -c 'import json, os, dotenv;print(json.dumps(dotenv.dotenv_values(".env.production")))' | jq | aws-vault exec ${ENV} -- chamber import ihs -
 
 view-credentials:
+	# print the current temporary credentials from aws-vault
 	aws-vault exec ${ENV} -- env | grep AWS
 
 compose:
+	# run docker-compose using aws-vault session credentials
 	aws-vault exec prod -- docker-compose up
+
+add-to-secret-scanner:
+	git secrets --install
+	git secrets --register-aws
+
+scan-git-secrets:
+	git secrets --scan-history
+
+scan-trufflehog:
+	trufflehog --regex --entropy=False --max_depth=1000 https://github.com/la-mar/ihs-deo.git
+
+
+scan-gitleaks:
+	gitleaks --repo=https://github.com/la-mar/ihs-deo.git --verbose --pretty
