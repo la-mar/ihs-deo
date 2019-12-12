@@ -33,7 +33,7 @@ data "aws_iam_policy_document" "allow_ecs_task_access_to_sqs" {
     #     aws_ecs_service.ihs_worker_default.id,
     #     # aws_ecs_service.ihs_cron.id,
     #   ]
-    }
+    # }
     resources = [
       aws_sqs_queue.default.arn,
       # aws_sqs_queue.collections_h.arn,
