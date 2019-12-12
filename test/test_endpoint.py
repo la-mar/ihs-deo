@@ -1,4 +1,5 @@
-import pytest  # noqa
+# pylint: disable=missing-function-docstring,missing-module-docstring,no-self-use
+import pytest  # pylint: disable=unused-import
 
 # from collector.endpoint import Endpoint, load_from_config
 

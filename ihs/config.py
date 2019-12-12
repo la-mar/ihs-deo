@@ -1,4 +1,5 @@
-# pylint: disable=invalid-envvar-default
+# pylint: disable=invalid-envvar-default,missing-function-docstring
+
 
 from __future__ import annotations
 
@@ -273,7 +274,16 @@ class BaseConfig:
             if include_auth_source
             else ""
         )
-        return f"{db.get('driver')}://{username or ''}{':' if username is not None else ''}{password or ''}{'@' if username else ''}{db.get('host')}:{db.get('port')}/{db.get('name')}{auth_source}"
+
+        driver = db.get("driver", "")
+        host = db.get("host", "")
+        port = db.get("port", "")
+        dbname = db.get("name", "")
+        at = "@" if username else ""
+        colon = ":" if username is not None else ""
+        username = username or ""
+        password = password or ""
+        return f"{driver}://{username}{colon}{password}{at}{host}:{port}/{dbname}{auth_source}"
 
     def __repr__(self):
         """ Print noteworthy configuration items """

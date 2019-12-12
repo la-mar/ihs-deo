@@ -1,7 +1,8 @@
+# pylint: disable=missing-function-docstring,missing-module-docstring,no-self-use,unused-import
 import os
 import json
 
-import pytest  # noqa
+import pytest
 
 # from collector.endpoint import Endpoint
 # from collector.request import Request
@@ -42,7 +43,7 @@ def endpoints(app_config):
 
 
 # @pytest.fixture()
-# def token_manager_legacy(app_config):  # TODO: needs to be mocked
+# def token_manager_legacy(app_config):
 #     yield TokenManager(**app_config.api_params)
 
 
