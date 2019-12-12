@@ -74,7 +74,7 @@ def setup_periodic_tasks(sender, **kwargs):  # pylint: disable=unused-argument
     sender.add_periodic_task(
         crontab(0, 18),  # daily at 6pm, ~3 hours before nightly jobs start
         celery_queue.tasks.cleanup_remote_exports,
-        name="calc_remote_export_capacity",
+        name="cleanup_remote_exports",
     )
 
 
