@@ -45,9 +45,10 @@ project = pkg_meta.get("name")
 version = pkg_meta.get("version")
 
 ENV = os.getenv("ENV", "prod")
+AWS_ACCOUNT_ID = os.getenv("AWS_ACCOUNT_ID")
 PROJECT_NAME: str = os.getenv("COMPOSE_PROJECT_NAME")  # type: ignore
 CLUSTER_NAME = os.getenv("ECS_CLUSTER")  # type: ignore
-TASK_IAM_ROLE = f"arn:aws:iam::864494265830:role/ihs-task-role"
+TASK_IAM_ROLE = f"arn:aws:iam::{AWS_ACCOUNT_ID}:role/ihs-task-role"
 
 SERVICES: List[str] = [
     "ihs-web",
@@ -75,6 +76,7 @@ PUSH = False
 
 print("\n\n" + "-" * 30)
 print(f"ENV: {ENV}")
+print(f"AWS_ACCOUNT_ID: {AWS_ACCOUNT_ID}")
 print(f"CLUSTER_NAME: {CLUSTER_NAME}")
 print(f"SERVICES: {SERVICES}")
 print("-" * 30 + "\n\n")
@@ -320,26 +322,16 @@ class AWSContainerInterface:
 
         env_name = env_name or self.env_name
 
-        if env_name:
-            print(f"Retrieving credentials for: {env_name}")
-            credentials = {
-                "access_key_id": os.getenv(f"AWS_ACCESS_KEY_ID_{env_name.upper()}"),
-                "secret_access_key": os.getenv(
-                    f"AWS_SECRET_ACCESS_KEY_{env_name.upper()}"
-                ),
-                "region": os.getenv(f"AWS_REGION_{env_name.upper()}", "us-east-1"),
-                "account_id": os.getenv(f"AWS_ACCOUNT_ID_{env_name.upper()}"),
-            }
+        # TODO: Incorporate session token
+        credentials = {
+            "access_key_id": os.getenv("AWS_ACCESS_KEY_ID"),
+            "secret_access_key": os.getenv("AWS_SECRET_ACCESS_KEY"),
+            "region": os.getenv("AWS_REGION", "us-east-1"),
+            "account_id": os.getenv("AWS_ACCOUNT_ID"),
+            "session_token": os.getenv("AWS_SESSION_TOKEN"),
+            "security_token": os.getenv("AWS_SECURITY_TOKEN"),
+        }
 
-        else:
-            credentials = {
-                "access_key_id": os.getenv(f"AWS_ACCESS_KEY_ID"),
-                "secret_access_key": os.getenv(f"AWS_SECRET_ACCESS_KEY"),
-                "region": os.getenv(f"AWS_REGION", "us-east-1"),
-                "account_id": os.getenv(f"AWS_ACCOUNT_ID"),
-            }
-
-        # print(credentials)
         [setattr(self, k, v) for k, v in credentials.items()]
 
         return credentials
@@ -354,6 +346,7 @@ class AWSContainerInterface:
             aws_access_key_id=self.access_key_id,
             aws_secret_access_key=self.secret_access_key,
             region_name=self.region,
+            aws_session_token=self.session_token,
         )
 
     def ecs(self):
