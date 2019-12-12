@@ -185,9 +185,75 @@ endpoints:
         operator: 278107
     tasks:
       sync:
-        <<: *hourly
+        cron:
+          minute: "*/15"
         options:
           query_path: well_horizontal_by_county.xml
+          matrix:
+            <<: *counties
+
+  well_master_vertical:
+    enabled: true
+    version: v10
+    model: api.models.WellMasterVertical
+    exclude: []
+    normalize: false
+    propagate_to_task: true
+    options:
+      data_type: Well
+      template: Well ID List
+      criteria:
+        hole_direction: V
+    tasks:
+      sync:
+        cron:
+          minute: "*/15"
+        options:
+          query_path: well_vertical_by_county.xml
+          matrix:
+            <<: *counties
+
+  production_master_horizontal:
+    enabled: true
+    version: v10
+    model: api.models.ProductionMasterHorizontal
+    exclude: []
+    normalize: false
+    propagate_to_task: true
+    options:
+      data_type: Production Allocated
+      template: Production ID List
+      criteria:
+        hole_direction: H
+    tasks:
+      sync:
+        cron:
+          minute: "*/15"
+        options:
+          query_path: production_horizontal_by_county.xml
+          matrix:
+            <<: *counties
+      # check_for_new:
+      # TODO: Check for wells in master list that arent in database and download them
+
+  production_master_vertical:
+    enabled: true
+    version: v10
+    model: api.models.ProductionMasterVertical
+    exclude: []
+    normalize: false
+    propagate_to_task: true
+    options:
+      data_type: Production Allocated
+      template: Production ID List
+      criteria:
+        hole_direction: V
+    tasks:
+      sync:
+        cron:
+          minute: "*/15"
+        options:
+          query_path: production_vertical_by_county.xml
           matrix:
             <<: *counties
 
@@ -214,34 +280,44 @@ endpoints:
         seconds: 300
         options:
           query_path: well_horizontal_driftwood_all.xml
-      # sequoia:
-      #   seconds: 300
-      #   options:
-      #     query_path: well_by_api.xml
-      #     matrix:
-      #       sequoia:
-      #         api: "42461409160000"
+      endpoint_check:
+        seconds: 60
+        options:
+          query_path: well_by_api.xml
+          matrix:
+            sequoia:
+              api: "42461409160000"
 
-  production_master_horizontal:
+  well_vertical:
     enabled: true
     version: v10
-    model: api.models.ProductionMasterHorizontal
+    model: api.models.WellVertical
     exclude: []
     normalize: false
-    propagate_to_task: true
     options:
-      data_type: Production Allocated
-      template: Production ID List
+      data_type: Well
+      template: EnerdeqML Well
       criteria:
-        hole_direction: H
+        hole_direction: V
     tasks:
       sync:
-        cron:
-          minute: "*/15"
+        <<: *weekly
         options:
-          query_path: production_horizontal_by_county.xml
+          query_path: well_by_api.xml
           matrix:
-            <<: *counties
+            using: api.models.WellMasterVertical.ids
+            label: api
+      driftwood:
+        seconds: 300
+        options:
+          query_path: well_vertical_driftwood_all.xml
+      endpoint_check:
+        seconds: 60
+        options:
+          query_path: well_by_api.xml
+          matrix:
+            sequoia:
+              api: "42383362060000"
       # check_for_new:
       # TODO: Check for wells in master list that arent in database and download them
 
@@ -268,9 +344,9 @@ endpoints:
         seconds: 300
         options:
           query_path: well_horizontal_driftwood_all.xml
-      sequoia:
+      endpoint_check:
         enabled: true
-        seconds: 300
+        seconds: 60
         options:
           query_path: production_by_api.xml
           matrix:
@@ -287,72 +363,6 @@ endpoints:
       #         - 42461409160002
       #         - 42461409160003
       #         - 42461409160004
-
-  well_master_vertical:
-    enabled: true
-    version: v10
-    model: api.models.WellMasterVertical
-    exclude: []
-    normalize: false
-    propagate_to_task: true
-    options:
-      data_type: Well
-      template: Well ID List
-      criteria:
-        hole_direction: V
-    tasks:
-      sync:
-        <<: *hourly
-        options:
-          query_path: well_vertical_by_county.xml
-          matrix:
-            <<: *counties
-
-  well_vertical:
-    enabled: true
-    version: v10
-    model: api.models.WellVertical
-    exclude: []
-    normalize: false
-    options:
-      data_type: Well
-      template: EnerdeqML Well
-      criteria:
-        hole_direction: V
-    tasks:
-      sync:
-        <<: *weekly
-        options:
-          query_path: well_by_api.xml
-          matrix:
-            using: api.models.WellMasterVertical.ids
-            label: api
-      driftwood:
-        seconds: 300
-        options:
-          query_path: well_vertical_driftwood_all.xml
-      # check_for_new:
-      # TODO: Check for wells in master list that arent in database and download them
-
-  production_master_vertical:
-    enabled: true
-    version: v10
-    model: api.models.ProductionMasterVertical
-    exclude: []
-    normalize: false
-    propagate_to_task: true
-    options:
-      data_type: Production Allocated
-      template: Production ID List
-      criteria:
-        hole_direction: V
-    tasks:
-      sync:
-        <<: *hourly
-        options:
-          query_path: production_vertical_by_county.xml
-          matrix:
-            <<: *counties
 
   production_vertical:
     enabled: true
@@ -377,9 +387,9 @@ endpoints:
         seconds: 300
         options:
           query_path: well_vertical_driftwood_all.xml
-      sequoia:
+      endpoint_check:
         enabled: true
-        seconds: 300
+        seconds: 60
         options:
           query_path: production_by_api.xml
           matrix:
