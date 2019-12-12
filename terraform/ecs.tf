@@ -221,7 +221,7 @@ resource "aws_iam_role_policy_attachment" "attach_ecs_service_policy_to_task_rol
 # Allow task role to talk to SQS
 data "aws_iam_policy_document" "task_policy" {
   statement {
-    sid = "task_access_sqs"
+    sid = "0" # task_access_sqs
     actions = [
       "sqs:*",
     ]
@@ -238,7 +238,7 @@ data "aws_iam_policy_document" "task_policy" {
   }
 
   statement {
-    sid = "task_access_secrets"
+    sid = "1" # task_access_secrets
     actions = [
       "ssm.GetParameters"
     ]
@@ -248,7 +248,7 @@ data "aws_iam_policy_document" "task_policy" {
   }
 
   statement {
-    sid = "task_access_kms"
+    sid = "2" # task_access_kms
     actions = [
       "kms:ListKeys",
       "kms:ListAliases",
