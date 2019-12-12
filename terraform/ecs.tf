@@ -219,7 +219,6 @@ resource "aws_iam_role_policy_attachment" "attach_ecs_service_policy_to_task_rol
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
 }
 
-# Allow task role to talk to SQS
 data "aws_iam_policy_document" "task_policy" {
   statement {
     sid = "0" # task_access_sqs
