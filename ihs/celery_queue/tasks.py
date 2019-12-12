@@ -55,6 +55,7 @@ def post_remote_export_capacity():
     """ Send remote export capacity to metrics backend"""
     # logger.warning("post_remote_export_capacity")
     calcs = collector.tasks.calc_remote_export_capacity()
+    logger.info("Posting metrics", extra=calcs)
     for key, value in calcs.items():
         metrics.post(key, value, metric_type="gauge")
 
