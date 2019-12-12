@@ -1,3 +1,4 @@
+SERVICE_NAME:=ihs
 ENV:=prod
 COMMIT_HASH    := $$(git log -1 --pretty=%h)
 DATE := $$(date +"%Y-%m-%d")
@@ -75,7 +76,7 @@ create-ihs-repo:
 all:
 	make ihs-deo build login push
 
-deploy:
+deploy: ssm-update
 	poetry run python scripts/deploy.py
 
 push:
@@ -105,11 +106,21 @@ redeploy-worker:
 redeploy-web:
 	aws ecs update-service --cluster ${ECS_CLUSTER}-prod --service ihs-web --force-new-deployment --profile prod
 
-aws-ps-test:
-	@echo $$(aws ssm get-parameter --name datadog_api_key | jq '.Parameter.Value')
-
 ssm-export:
-	aws-vault exec ${ENV} -- chamber export dotenv ${SERVICE_NAME}
+	aws-vault exec ${ENV} -- chamber export ${SERVICE_NAME} | jq
 
-ssm-write:
-	aws-vault exec ${ENV} -- chamber write ${}
+ssm-export-dotenv:
+	aws-vault exec ${ENV} -- chamber export --format=dotenv ${SERVICE_NAME}
+
+env-to-json:
+	# pipx install json-dotenv
+	python3 -c 'import json, os, dotenv;print(json.dumps(dotenv.dotenv_values(".env.production")))' | jq
+
+ssm-update:
+	python3 -c 'import json, os, dotenv;print(json.dumps(dotenv.dotenv_values(".env.production")))' | jq | aws-vault exec ${ENV} -- chamber import ihs -
+
+view-credentials:
+	aws-vault exec ${ENV} -- env | grep AWS
+
+compose:
+	aws-vault exec prod -- docker-compose up

@@ -2,6 +2,11 @@
 terraform/
 test/
 .vscode/
+Makefile
+log/
+scripts/
+Dockerfile
+docker-compose.yml
 
 # custom
 .terraform

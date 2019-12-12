@@ -6,26 +6,25 @@ x-defaults: &defaults
   #   context: .
   #   dockerfile: Dockerfile
   restart: unless-stopped
-  env_file:
-    - .env
+  environment:
+    - AWS_REGION
+    - AWS_ACCESS_KEY_ID
+    - AWS_SECRET_ACCESS_KEY
+    - AWS_SESSION_TOKEN
+    - AWS_SECURITY_TOKEN
 
 services:
-  # web:
+  web:
+    <<: *defaults
+    # user: celeryuser
+    command: ihs run web
+    # command: pwd
+    ports:
+      - "5000:5000"
+  worker:
+    <<: *defaults
+    command: ihs run worker
+    # entrypoint:
+  # cron:
   #   <<: *defaults
-  #   user: celeryuser
-  #   command: iwell run web
-  #   ports:
-  #     - "5000:5000"
-  worker:
-    <<: *defaults
-    command: ihs run worker -Q ihs-collector,ihs-collections
-    ports:
-      - 5000
-  worker:
-    <<: *defaults
-    command: ihs run worker -Q ihs-collector,ihs-collections
-    ports:
-      - 5000
-  cron:
-    <<: *defaults
-    command: ihs run cron --loglevel=DEBUG
+  #   command: ihs run cron --loglevel=DEBUG
