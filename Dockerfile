@@ -46,5 +46,5 @@ RUN find /app/ihs ! -user celeryuser -exec chown celeryuser {} \;
 
 COPY --from=build /chamber /chamber
 
-ENTRYPOINT ["/chamber", "exec", "ihs", "--"]
+ENTRYPOINT ["/chamber", "exec", "ihs datadog", "--"]
 
