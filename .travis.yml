@@ -24,15 +24,14 @@ python:
 #     recipients:
 #       - brock@driftwoodenergy.com
 
-# cache:
-#   apt: true
-#   directories:
-#     - "$HOME/.cache/pip"
+cache:
+  directories:
+    - "$HOME/.cache/pip"
 
-# services:
-#   - docker
-#   - mongodb
-#   - redis
+services:
+  - docker
+  - mongodb
+  - redis
 
 env:
   global:
@@ -42,8 +41,6 @@ env:
     # - PATH "/root/.poetry/bin:/opt/venv/bin:${PATH}"
 
 before_install:
-  # - sudo apt-get update
-  # - pip install pycurl
   - pip install awscli
   - pip install boto3
   - pip install poetry
@@ -70,15 +67,15 @@ script:
 
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
-# jobs:
-#   include:
-#     - stage: lint
-#       script: pylint ihs --exit-zero
-#     - stage: test
-#       script: make run-tests
-# name: build-backend-dev
-# if: branch = development
-# script: travis_wait make dev login backend build push
 
 after_success:
   - codecov
+
+deploy:
+  provider: releases
+  target_commitish: master
+  name: ihs
+  tag_name: $TRAVIS_TAG
+
+  on:
+    tags: true

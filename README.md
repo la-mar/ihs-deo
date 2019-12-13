@@ -1,8 +1,8 @@
 # ihs-deo
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/4e312abd1b377f0a38b0/maintainability)](https://codeclimate.com/github/la-mar/ihs-deo/maintainability)
+<a href="https://codeclimate.com/github/la-mar/ihs-deo/maintainability"><img src="https://api.codeclimate.com/v1/badges/4e312abd1b377f0a38b0/maintainability" /></a>
 
-[![Test Coverage](https://api.codeclimate.com/v1/badges/4e312abd1b377f0a38b0/test_coverage)](https://codeclimate.com/github/la-mar/ihs-deo/test_coverage)
+<a href="https://codeclimate.com/github/la-mar/ihs-deo/test_coverage"><img src="https://api.codeclimate.com/v1/badges/4e312abd1b377f0a38b0/test_coverage" /></a>
 
 [![Build Status](https://travis-ci.com/la-mar/ihs-deo.svg?branch=master)](https://travis-ci.com/la-mar/ihs-deo)
 
