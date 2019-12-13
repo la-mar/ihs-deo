@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ihs"
-version = "1.0.0"
+version = "1.0.1"
 description = ""
 authors = ["Brock Friedrich <brock@driftwoodenergy.com>"]
 
