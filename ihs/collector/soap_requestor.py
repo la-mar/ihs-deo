@@ -28,7 +28,7 @@ class IHSHeaders:
 
     @property
     def schema_header_url(self):
-        return util.urljoin(self.base_url, self._url_path)
+        return util.urljoin(self.base_url or "", self._url_path or "")
 
     def make_header_element(self, name: str, value: Any = xsd.String()):
         return xsd.Element("{%s}%s" % (self.schema_header_url, name), value,)
