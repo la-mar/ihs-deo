@@ -150,8 +150,8 @@ class BaseConfig:
 
     """ Datadog """
     DATADOG_ENABLED = bool(os.getenv("DATADOG_ENABLED"))
-    DATADOG_API_KEY = os.getenv("DATADOG_API_KEY", None)
-    DATADOG_APP_KEY = os.getenv("DATADOG_APP_KEY", None)
+    DATADOG_API_KEY = os.getenv("DATADOG_API_KEY", os.getenv("DD_API_KEY", None))
+    DATADOG_APP_KEY = os.getenv("DATADOG_APP_KEY", os.getenv("DD_APP_KEY", None))
     DEFAULT_TAGS = {
         "environment": ENVIRONMENT_MAP.get(FLASK_ENV, FLASK_ENV),
         "service_name": project,
@@ -316,14 +316,10 @@ class DevelopmentConfig(BaseConfig):
 class TestingConfig(BaseConfig):
     """Testing configuration"""
 
-    # load_dotenv(".env.testing")
-
-    CONFIG_BASEPATH = "./test/data"
-    # COLLECTOR_CONFIG_PATH = abs_path(CONFIG_BASEPATH, "collector.yaml")
-    # COLLECTOR_CONFIG = load_config(COLLECTOR_CONFIG_PATH)
+    CONFIG_BASEPATH = "./config"
+    COLLECTOR_CONFIG_PATH = abs_path(CONFIG_BASEPATH, "collector.yaml")
+    COLLECTOR_CONFIG = load_config(COLLECTOR_CONFIG_PATH)
     TESTING = True
-    TOKEN_EXPIRATION_DAYS = 0
-    TOKEN_EXPIRATION_SECONDS = 3
 
     API_BASE_URL = "https://api.example.com/v3"
     API_CLIENT_ID = "test_client_id"

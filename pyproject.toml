@@ -1,8 +1,9 @@
 [tool.poetry]
 name = "ihs"
 version = "1.0.1"
-description = ""
+description = "Automation service for downloading oil and gas data from IHS Energy"
 authors = ["Brock Friedrich <brock@driftwoodenergy.com>"]
+
 
 [tool.poetry.dependencies]
 python = "^3.7"
@@ -51,8 +52,24 @@ hypothesis = "*"
 requests-mock = "*"
 redis = "^3.3.11"
 
+
 [tool.poetry.scripts]
 ihs = "ihs.manage:main"
+
+[tool.poetry.extras]
+color = [ "colorama", ]
+docs = [ "doc8", "docutils","Sphinx","sphinx_rtd_theme","sphinx-autodoc-typehints","sphinxcontrib-apidoc",]
+pytest = [ "pytest", "pytest-html", "pytest-cov" ]
+lint = [ "flake8", "flake8-bugbear", "mypy", "bandit", "pylint", ]
+
+[tool.isort]
+force_grid_wrap = 0
+force_single_line = true
+include_trailing_comma = true
+line_length = 120
+lines_after_imports = 2
+multi_line_output = 3
+use_parentheses = true
 
 [build-system]
 requires = ["poetry>=0.12"]

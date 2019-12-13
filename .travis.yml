@@ -1,3 +1,4 @@
+version: ~> 1.0
 sudo: required
 dist: xenial
 language: python
@@ -5,77 +6,67 @@ language: python
 python:
   - "3.7"
 
-notifications:
-  email:
-    on_success: always
-    on_failure: always
-    recipients:
-      - brock@driftwoodenergy.com
+# run unit tests
+# Build image
+# smoke test
+# integration test
+# deploy
 
-cache:
-  apt: true
-  directories:
-    - "$HOME/.cache/pip"
+stages:
+  - lint
+  - unittest
+  # - name: deploy
+  #   if: tag IS present
 
-services:
-  - docker
+# notifications:
+#   email:
+#     on_failure: always
+#     recipients:
+#       - brock@driftwoodenergy.com
+
+# cache:
+#   apt: true
+#   directories:
+#     - "$HOME/.cache/pip"
+
+# services:
+#   - docker
+#   - mongodb
+#   - redis
 
 env:
   global:
-    - DJANGO_SETTINGS_MODULE="home.settings.ci"
-    - YARN_GPG=no
-    - PATH=$HOME/.local/bin:$PATH
-    - NODE_OPTIONS=--max_old_space_size=8000
+    # - PYCURL_SSL_LIBRARY=openssl
+    # - PATH=$HOME/.local/bin:$PATH
+    # - PATH "/root/.poetry/bin:/opt/venv/bin:${PATH}"
 
 before_install:
+  # - sudo apt-get update
+  # - pip install pycurl
   - pip install awscli
   - pip install boto3
+  - pip install poetry
   - pip install docker
-  - pip install python-dotenv
+  # - pip install pre-commit
+
+install:
+  - poetry install -v
+
+# before_script:
+#   - poetry run pre-commit install-hooks
+#   - poetry run pre-commit run --all-files
+
+# script:
+#   - poetry run pytest --doctest-modules --cov-report term-missing --cov-report html:htmlcov --cov=src/cltkv1 src/cltkv1/ tests
 
 jobs:
   include:
-    - stage: build-backend-dev
-      name: build-backend-dev
-      if: branch = development
-      script: travis_wait make dev login backend build push
+    - stage: lint
+      script: pylint ihs
+    - stage: test
+      script: make run-tests
+      # name: build-backend-dev
+      # if: branch = development
+      # script: travis_wait make dev login backend build push
 
-    - stage: build-backend-stage
-      name: build-backend-stage
-      if: branch = staging
-      script: travis_wait make stage login backend build push
-
-    - stage: build-backend-prod
-      name: build-backend-prod
-      if: branch = release
-      script: travis_wait make prod login backend build push
-
-    - stage: build-frontend-dev
-      name: build-frontend-dev
-      if: branch = development
-      script: travis_wait make dev login frontend build push
-
-    - stage: build-frontend-stage
-      name: build-frontend-stage
-      if: branch = staging
-      script: travis_wait make stage login frontend build push
-
-    - stage: build-frontend-prod
-      name: build-frontend-prod
-      if: branch = release
-      script: travis_wait make prod login frontend build push
-
-    - stage: deploy-dev
-      name: deploy-dev
-      if: branch = development
-      script: travis_wait make dev login travis-deploy
-
-    - stage: deploy-stage
-      name: deploy-stage
-      if: branch = staging
-      script: travis_wait make stage login travis-deploy
-
-    - stage: deploy-prod
-      name: deploy-prod
-      if: branch = release
-      script: travis_wait make prod login travis-deploy
+# after_success: poetry run coveralls

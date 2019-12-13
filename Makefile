@@ -4,6 +4,7 @@ COMMIT_HASH    := $$(git log -1 --pretty=%h)
 DATE := $$(date +"%Y-%m-%d")
 CTX:=.
 AWS_ACCOUNT_ID:=$$(aws-vault exec prod -- aws sts get-caller-identity | jq .Account -r)
+IMAGE_NAME=ihs-deo
 
 # version:
 # 	poetry version $(version)
@@ -21,6 +22,9 @@ prod:
 
 ihs-deo:
 	${eval export DOCKERFILE=Dockerfile}
+
+run-tests:
+	pytest --cov=ihs test/
 
 export-deps:
 	# Export dependencies from poetry to requirements.txt in the project root
@@ -49,7 +53,7 @@ upgrade:
 
 celery-worker:
 	# Launch a worker process that reads from all configured queues
-	ihs run worker -Q ihs-default,ihs-submissions-h,ihs-collections-h,ihs-deletions-h,ihs-submissions-v,ihs-collections-v,ihs-deletions-v --loglevel DEBUG
+	chamberprod exec ihs datadog -- ihs run worker -Q ihs-default,ihs-submissions-h,ihs-collections-h,ihs-deletions-h,ihs-submissions-v,ihs-collections-v,ihs-deletions-v --loglevel DEBUG
 	# Alternatively:
 	# celery -E -A ihs.celery_queue.worker:celery worker --loglevel=INFO --purge
 
@@ -145,8 +149,6 @@ ssm-update:
 	# Update SSM environment variables using a local dotenv file (.env.production by default)
 	python3 -c 'import json, os, dotenv; values={k.lower():v for k,v in dotenv.dotenv_values(".env.production").items()}; print(json.dumps(values))' | jq | aws-vault exec ${ENV} -- chamber import ihs -
 
-
-
 view-credentials:
 	# print the current temporary credentials from aws-vault
 	aws-vault exec ${ENV} -- env | grep AWS
@@ -163,10 +165,9 @@ scan-git-secrets:
 	git secrets --scan-history
 
 scan-trufflehog:
-	trufflehog --regex --entropy=False --max_depth=1000 https://github.com/la-mar/ihs-deo.git
-
+	trufflehog --regex --entropy=False --max_depth=1000 ./.git
 
 scan-gitleaks:
-	gitleaks --repo=https://github.com/la-mar/ihs-deo.git --verbose --pretty
+	gitleaks --repo=./.git --verbose --pretty
 
 
