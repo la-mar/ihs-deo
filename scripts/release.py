@@ -1,7 +1,5 @@
 # pylint: disable=subprocess-run-check
 import os
-import argparse
-import getpass
 import re
 import subprocess
 from datetime import datetime
@@ -129,7 +127,7 @@ def publish():
 
     # create github release
     print("Creating github release")
-    response = requests.post(
+    requests.post(
         f"{GITHUB_API_ENDPOINT}/releases",
         auth=(os.getenv("GITHUB_USERNAME", "la-mar"), os.getenv("GITHUB_ACCESS_KEY")),
         json={
