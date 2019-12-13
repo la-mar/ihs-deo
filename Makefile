@@ -4,12 +4,8 @@ COMMIT_HASH    := $$(git log -1 --pretty=%h)
 DATE := $$(date +"%Y-%m-%d")
 CTX:=.
 AWS_ACCOUNT_ID:=$$(aws-vault exec prod -- aws sts get-caller-identity | jq .Account -r)
-IMAGE_NAME=ihs-deo
-
-# version:
-# 	poetry version $(version)
-# 	$(eval PROJECT_VERSION := $(shell cat pyproject.toml | grep "^version = \"*\"" | cut -d'"' -f2))
-# 	sed -i "" "s/__version__ = .*/__version__ = \"$(PROJECT_VERSION)\"/g" __version__.py
+# IMAGE_NAME:=driftwood/ihs
+DOCKERFILE:=Dockerfile
 
 dev:
 	${eval export ENV=dev}
@@ -19,9 +15,6 @@ stage:
 
 prod:
 	${eval export ENV=prod}
-
-ihs-deo:
-	${eval export DOCKERFILE=Dockerfile}
 
 run-tests:
 	pytest --cov=ihs test/
@@ -73,13 +66,6 @@ kubectl-proxy:
 	# open a proxy to the configured kubernetes cluster
 	kubectl proxy --port=8080
 
-build:
-	# initiate a build of the dockerfile specified in the DOCKERFILE environment variable
-	@echo "Building docker image: ${IMAGE_NAME}"
-	docker build  -f ${DOCKERFILE} ${CTX} -t ${IMAGE_NAME}
-	docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:${ENV}
-	docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:${COMMIT_HASH}
-	docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:${DATE}
 
 login:
 	# Authenticate to ECR
@@ -88,21 +74,19 @@ login:
 	@echo account: ${AWS_ACCOUNT_ID}
 	@eval $$(aws-vault exec ${ENV} -- aws ecr get-login --no-include-email)
 
-create-ihs-repo:
-	# Create ECR repo where repository-name = COMPOSE_PROJECT_NAME
-	aws ecr create-repository --repository-name ${COMPOSE_PROJECT_NAME} --tags Key=domain,Value=technology Key=service_name,Value=${SERVICE_NAME} --profile ${ENV}
-
-all:
-	# Rebuild the services docker image and push it to the remote repository
-	make ihs-deo build login push
-
-deploy: ssm-update
-	# Update SSM parameters from local dotenv and deploy a new version of the service to ECS
-	${eval AWS_ACCOUNT_ID=$(shell echo ${AWS_ACCOUNT_ID})}
-	@echo ${AWS_ACCOUNT_ID}
-	export AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID} && aws-vault exec ${ENV} -- poetry run python scripts/deploy.py
+build:
+	# initiate a build of the dockerfile specified in the DOCKERFILE environment variable
+	@echo "Building docker image: ${IMAGE_NAME}"
+	docker build  -f ${DOCKERFILE} ${CTX} -t ${IMAGE_NAME}
+	docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:${ENV}
+	docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:${COMMIT_HASH}
+	docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:${DATE}
 
 push:
+	docker push ${IMAGE_NAME}:latest
+
+
+push-ecr:
 	${eval export ECR=$(shell echo ${AWS_ACCOUNT_ID}).dkr.ecr.us-east-1.amazonaws.com}
 	# @echo ${ECR}
 	${eval LATEST=${IMAGE_NAME}:latest}
@@ -120,6 +104,21 @@ push:
 	docker push ${ECR_ENV}
 	docker push ${ECR_HASH}
 	docker push ${ECR_DATE}
+
+
+create-ihs-repo:
+	# Create ECR repo where repository-name = COMPOSE_PROJECT_NAME
+	aws ecr create-repository --repository-name ${COMPOSE_PROJECT_NAME} --tags Key=domain,Value=technology Key=service_name,Value=${SERVICE_NAME} --profile ${ENV}
+
+all:
+	# Rebuild the services docker image and push it to the remote repository
+	make ihs-deo build login push
+
+deploy: ssm-update
+	# Update SSM parameters from local dotenv and deploy a new version of the service to ECS
+	${eval AWS_ACCOUNT_ID=$(shell echo ${AWS_ACCOUNT_ID})}
+	@echo ${AWS_ACCOUNT_ID}
+	export AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID} && aws-vault exec ${ENV} -- poetry run python scripts/deploy.py
 
 redeploy-cron:
 	# Force a new deployment for the cron service through the aws cli
