@@ -1,0 +1,81 @@
+sudo: required
+dist: xenial
+language: python
+
+python:
+  - "3.7"
+
+notifications:
+  email:
+    on_success: always
+    on_failure: always
+    recipients:
+      - brock@driftwoodenergy.com
+
+cache:
+  apt: true
+  directories:
+    - "$HOME/.cache/pip"
+
+services:
+  - docker
+
+env:
+  global:
+    - DJANGO_SETTINGS_MODULE="home.settings.ci"
+    - YARN_GPG=no
+    - PATH=$HOME/.local/bin:$PATH
+    - NODE_OPTIONS=--max_old_space_size=8000
+
+before_install:
+  - pip install awscli
+  - pip install boto3
+  - pip install docker
+  - pip install python-dotenv
+
+jobs:
+  include:
+    - stage: build-backend-dev
+      name: build-backend-dev
+      if: branch = development
+      script: travis_wait make dev login backend build push
+
+    - stage: build-backend-stage
+      name: build-backend-stage
+      if: branch = staging
+      script: travis_wait make stage login backend build push
+
+    - stage: build-backend-prod
+      name: build-backend-prod
+      if: branch = release
+      script: travis_wait make prod login backend build push
+
+    - stage: build-frontend-dev
+      name: build-frontend-dev
+      if: branch = development
+      script: travis_wait make dev login frontend build push
+
+    - stage: build-frontend-stage
+      name: build-frontend-stage
+      if: branch = staging
+      script: travis_wait make stage login frontend build push
+
+    - stage: build-frontend-prod
+      name: build-frontend-prod
+      if: branch = release
+      script: travis_wait make prod login frontend build push
+
+    - stage: deploy-dev
+      name: deploy-dev
+      if: branch = development
+      script: travis_wait make dev login travis-deploy
+
+    - stage: deploy-stage
+      name: deploy-stage
+      if: branch = staging
+      script: travis_wait make stage login travis-deploy
+
+    - stage: deploy-prod
+      name: deploy-prod
+      if: branch = release
+      script: travis_wait make prod login travis-deploy
