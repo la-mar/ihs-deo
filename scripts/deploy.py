@@ -18,16 +18,17 @@ The script does the following:
 
 # pylint: disable=dangerous-default-value,too-many-arguments,missing-function-docstring
 
-from typing import List
+import datetime
 import json
 import os
 import subprocess
-import datetime
+from pprint import pprint
+from typing import List
 
-from dotenv import dotenv_values
 import boto3
 import docker
 import tomlkit
+from dotenv import dotenv_values
 
 
 def get_project_meta() -> dict:
@@ -46,9 +47,14 @@ version = pkg_meta.get("version")
 
 ENV = os.getenv("ENV", "prod")
 AWS_ACCOUNT_ID = os.getenv("AWS_ACCOUNT_ID")
-PROJECT_NAME: str = os.getenv("COMPOSE_PROJECT_NAME")  # type: ignore
+SERVICE_NAME: str = os.getenv("SERVICE_NAME")  # type: ignore
+IMAGE_NAME: str = os.getenv("IMAGE_NAME")  # type: ignore
 CLUSTER_NAME = os.getenv("ECS_CLUSTER")  # type: ignore
 TASK_IAM_ROLE = f"arn:aws:iam::{AWS_ACCOUNT_ID}:role/ihs-task-role"
+
+if not any([ENV, AWS_ACCOUNT_ID, SERVICE_NAME, IMAGE_NAME, CLUSTER_NAME]):
+    raise ValueError("One or more environment variables are missing")
+
 
 SERVICES: List[str] = [
     "ihs-web",
@@ -60,7 +66,7 @@ SERVICES: List[str] = [
 ]
 
 IMAGES = [
-    {"name": PROJECT_NAME, "dockerfile": "Dockerfile", "build_context": "."},
+    {"name": SERVICE_NAME, "dockerfile": "Dockerfile", "build_context": "."},
 ]
 
 TAGS = [
@@ -99,6 +105,8 @@ def get_task_definition(
     tags: list = [],
     task_iam_role_arn: str = "ecsTaskExecutionRole",
 ):
+    # image = f"{account_id}.dkr.ecr.us-east-1.amazonaws.com/{image_name}:{environment}"
+    image = IMAGE_NAME
     defs = {
         "ihs-web": {
             "containerDefinitions": [
@@ -106,7 +114,7 @@ def get_task_definition(
                     "name": "ihs-web",
                     "command": ["ihs", "run", "web", "-b 0.0.0.0:8000"],
                     "memoryReservation": 128,
-                    "image": f"{account_id}.dkr.ecr.us-east-1.amazonaws.com/{image_name}:{environment}",
+                    "image": image,
                     "essential": True,
                     "environment": transform_envs(envs),
                     "portMappings": [
@@ -140,7 +148,7 @@ def get_task_definition(
                         # "info",
                     ],
                     "memoryReservation": 128,
-                    "image": f"{account_id}.dkr.ecr.us-east-1.amazonaws.com/{image_name}:{environment}",
+                    "image": image,
                     "essential": True,
                     "environment": transform_envs(envs),
                 },
@@ -168,7 +176,7 @@ def get_task_definition(
                         # "warn",
                     ],
                     "memoryReservation": 128,
-                    "image": f"{account_id}.dkr.ecr.us-east-1.amazonaws.com/{image_name}:{environment}",
+                    "image": image,
                     "essential": True,
                     "environment": transform_envs(envs),
                 },
@@ -196,7 +204,7 @@ def get_task_definition(
                         # "warn",
                     ],
                     "memoryReservation": 128,
-                    "image": f"{account_id}.dkr.ecr.us-east-1.amazonaws.com/{image_name}:{environment}",
+                    "image": image,
                     "essential": True,
                     "environment": transform_envs(envs),
                 },
@@ -224,7 +232,7 @@ def get_task_definition(
                         # "warn",
                     ],
                     "memoryReservation": 128,
-                    "image": f"{account_id}.dkr.ecr.us-east-1.amazonaws.com/{image_name}:{environment}",
+                    "image": image,
                     "essential": True,
                     "environment": transform_envs(envs),
                 },
@@ -243,7 +251,7 @@ def get_task_definition(
                     "command": ["ihs", "run", "cron", "--loglevel", "debug"],
                     "memoryReservation": 128,
                     "cpu": 256,
-                    "image": f"{account_id}.dkr.ecr.us-east-1.amazonaws.com/{image_name}:{environment}",
+                    "image": image,
                     "essential": True,
                     "environment": transform_envs(envs),
                 },
@@ -583,11 +591,12 @@ for service in SERVICES:
         account_id=image_manager.account_id,  # type: ignore
         service_name=service,
         environment=ENV,
-        image_name=PROJECT_NAME,
+        image_name=SERVICE_NAME,
         tags=TAGS,
         task_iam_role_arn=TASK_IAM_ROLE,
     )
     print(f"{service}: Registering new revision in {image_manager.account_id}")
+    # pprint(cdef)
     client.register_task_definition(**cdef)
 
     rev_num = get_latest_revision(f"{service}")
@@ -602,4 +611,3 @@ for service, rev_num in results:
         taskDefinition=f"{service}:{rev_num}",
     )
     print(f"{service}: Updated service to {service}:{rev_num}")
-
