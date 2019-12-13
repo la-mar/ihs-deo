@@ -5,8 +5,10 @@ DATE := $$(date +"%Y-%m-%d")
 CTX:=.
 AWS_ACCOUNT_ID:=$$(aws-vault exec prod -- aws sts get-caller-identity | jq .Account -r)
 
-testid:
-	@echo ${AWS_ACCOUNT_ID}
+# version:
+# 	poetry version $(version)
+# 	$(eval PROJECT_VERSION := $(shell cat pyproject.toml | grep "^version = \"*\"" | cut -d'"' -f2))
+# 	sed -i "" "s/__version__ = .*/__version__ = \"$(PROJECT_VERSION)\"/g" __version__.py
 
 dev:
 	${eval export ENV=dev}
@@ -88,9 +90,9 @@ create-ihs-repo:
 
 all:
 	# Rebuild the services docker image and push it to the remote repository
-	aws-vault exec prod -- make ihs-deo build login push
+	make ihs-deo build login push
 
-deploy: # ssm-update
+deploy: ssm-update
 	# Update SSM parameters from local dotenv and deploy a new version of the service to ECS
 	${eval AWS_ACCOUNT_ID=$(shell echo ${AWS_ACCOUNT_ID})}
 	@echo ${AWS_ACCOUNT_ID}
@@ -141,7 +143,9 @@ env-to-json:
 
 ssm-update:
 	# Update SSM environment variables using a local dotenv file (.env.production by default)
-	python3 -c 'import json, os, dotenv;print(json.dumps(dotenv.dotenv_values(".env.production")))' | jq | aws-vault exec ${ENV} -- chamber import ihs -
+	python3 -c 'import json, os, dotenv; values={k.lower():v for k,v in dotenv.dotenv_values(".env.production").items()}; print(json.dumps(values))' | jq | aws-vault exec ${ENV} -- chamber import ihs -
+
+
 
 view-credentials:
 	# print the current temporary credentials from aws-vault
@@ -164,3 +168,5 @@ scan-trufflehog:
 
 scan-gitleaks:
 	gitleaks --repo=https://github.com/la-mar/ihs-deo.git --verbose --pretty
+
+
