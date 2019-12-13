@@ -109,7 +109,7 @@ module "collector_autoscaler" {
   cluster_name = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
   service_name = aws_ecs_service.ihs_worker_collector.name
   min_capacity = 1
-  max_capacity = 20
+  max_capacity = 10
 }
 
 
