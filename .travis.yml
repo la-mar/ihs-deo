@@ -62,7 +62,7 @@ before_script:
 #   - poetry run pytest --doctest-modules --cov-report term-missing --cov-report html:htmlcov --cov=src/cltkv1 src/cltkv1/ tests
 
 script:
-  - pylint ihs --exit-zero
+  - pylint ihs --exit-zero --rcfile=.pylintrc
   - make run-tests
 
 after_script:
@@ -72,10 +72,11 @@ after_success:
   - codecov
 
 deploy:
+  # deploy to github releases on tags
   provider: releases
+  skip_cleanup: true
   target_commitish: master
   name: ihs
   tag_name: $TRAVIS_TAG
-
   on:
     tags: true
