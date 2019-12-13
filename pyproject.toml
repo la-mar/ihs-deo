@@ -36,7 +36,6 @@ gunicorn = "^20.0.4"
 JSON-log-formatter = "^0.2.0"
 ddtrace = "^0.31.0"
 
-
 [tool.poetry.dev-dependencies]
 black = { version = "*", allow-prereleases = true }
 mypy = "*"
@@ -51,7 +50,7 @@ boto3 = "*"
 hypothesis = "*"
 requests-mock = "*"
 redis = "^3.3.11"
-
+codecov = "^2.0.15"
 
 [tool.poetry.scripts]
 ihs = "ihs.manage:main"
