@@ -12,11 +12,11 @@ python:
 # integration test
 # deploy
 
-stages:
-  - lint
-  - unittest
-  # - name: deploy
-  #   if: tag IS present
+# stages:
+#   - lint
+#   - unittest
+# - name: deploy
+#   if: tag IS present
 
 # notifications:
 #   email:
@@ -52,21 +52,30 @@ before_install:
 install:
   - poetry install -v
 
-# before_script:
-#   - poetry run pre-commit install-hooks
-#   - poetry run pre-commit run --all-files
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+  # - poetry run pre-commit install-hooks
+  # - poetry run pre-commit run --all-files
 
 # script:
 #   - poetry run pytest --doctest-modules --cov-report term-missing --cov-report html:htmlcov --cov=src/cltkv1 src/cltkv1/ tests
 
-jobs:
-  include:
-    - stage: lint
-      script: pylint ihs
-    - stage: test
-      script: make run-tests
-      # name: build-backend-dev
-      # if: branch = development
-      # script: travis_wait make dev login backend build push
+script:
+  - pylint ihs --exit-zero
+  - make run-tests
+
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+# jobs:
+#   include:
+#     - stage: lint
+#       script: pylint ihs --exit-zero
+#     - stage: test
+#       script: make run-tests
+# name: build-backend-dev
+# if: branch = development
+# script: travis_wait make dev login backend build push
 
 # after_success: poetry run coveralls
