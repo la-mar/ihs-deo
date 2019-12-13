@@ -4,6 +4,8 @@
 
 [![Test Coverage](https://api.codeclimate.com/v1/badges/4e312abd1b377f0a38b0/test_coverage)](https://codeclimate.com/github/la-mar/ihs-deo/test_coverage)
 
+[![Build Status](https://travis-ci.com/la-mar/ihs-deo.svg?branch=master)](https://travis-ci.com/la-mar/ihs-deo)
+
 # Todo
 
 - Unit Testing
