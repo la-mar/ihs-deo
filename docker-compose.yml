@@ -25,6 +25,6 @@ services:
     <<: *defaults
     command: ihs run worker
     # entrypoint:
-  # cron:
-  #   <<: *defaults
-  #   command: ihs run cron --loglevel=DEBUG
+  cron:
+    <<: *defaults
+    command: ihs run cron --loglevel=DEBUG
