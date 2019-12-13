@@ -68,15 +68,3 @@ class XMLParser(object):
             parsers.append(Parser.init(ruleset, name))
 
         return XMLParser(parsers=parsers)
-
-
-if __name__ == "__main__":
-
-    from collector.endpoint import load_from_config
-    from config import get_active_config
-
-    conf = get_active_config()
-    endpoints = load_from_config(conf)
-    endpoint = endpoints.get("wells")
-
-    parser = XMLParser.load_from_config(conf.PARSER_CONFIG)

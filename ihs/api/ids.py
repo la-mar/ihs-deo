@@ -1,10 +1,9 @@
 # pylint: disable=not-an-iterable, no-member
-from typing import Dict, Tuple, Union, no_type_check
+from typing import Dict, Tuple, Union, no_type_check, List
 
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, request
 from flask_restful import Api, Resource
 
-import api.schema as schemas
 from api.models import WellMasterHorizontal, WellMasterVertical
 
 id_blueprint = Blueprint("ids", __name__, url_prefix="/ids")

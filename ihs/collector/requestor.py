@@ -1,17 +1,12 @@
 from __future__ import annotations
-from typing import Dict, List, Union, Generator
+from typing import Dict, Union, Generator
 import logging
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta
 
-from attrdict import AttrDict
-import pandas as pd
 import requests
-from oauthlib.oauth2 import LegacyApplicationClient, TokenExpiredError
-from requests_oauthlib import OAuth2Session
 
-
+import util
 from config import get_active_config
-from collector.token_manager import TokenManager
 from collector.request import Request
 from collector.endpoint import Endpoint
 
@@ -59,7 +54,6 @@ class RestRequestor(Requestor):
         super().__init__(
             base_url, endpoint, functions=functions, headers=headers, params=params
         )
-        self.token_manager = TokenManager.from_app_config()
 
     def __repr__(self):
         return f"({self.endpoint.name})  {self.url} -> {self.model}"
@@ -95,9 +89,6 @@ class RestRequestor(Requestor):
     @session.setter  # type: ignore
     def session(self, value):
         self._session = value
-
-    def get_token(self, force_refresh=False):
-        return self.token_manager.get_token(force_refresh=force_refresh)
 
     def get_function(
         self,
@@ -170,19 +161,3 @@ class RestRequestor(Requestor):
         for r in self:
             logger.info(f"Sending request: {r}")
             yield r.get()
-
-
-if __name__ == "__main__":
-    from ihs import create_app, db
-
-    from collector.endpoint import load_from_config
-
-    logging.basicConfig()
-    logger.setLevel(10)
-
-    app = create_app()
-    app.app_context().push()
-
-    config = get_active_config()
-    endpoints = load_from_config(config)
-    url = config.API_BASE_URL

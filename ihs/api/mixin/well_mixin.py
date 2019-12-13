@@ -17,7 +17,7 @@ class WellMixin(BaseMixin):
     def well_header(self):
         """ Assemble and return the well's header information """
 
-        output = OrderedDict()
+        output = {}
 
         if hasattr(self, "header"):
             data = self.header

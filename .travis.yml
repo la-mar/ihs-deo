@@ -36,7 +36,7 @@ stages:
 
 env:
   global:
-    # - PYCURL_SSL_LIBRARY=openssl
+    - PYCURL_SSL_LIBRARY=openssl
     # - PATH=$HOME/.local/bin:$PATH
     # - PATH "/root/.poetry/bin:/opt/venv/bin:${PATH}"
 

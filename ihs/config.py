@@ -103,15 +103,15 @@ class Enum(enum.Enum):
 
     @classmethod
     def member_values(cls):
-        return [v.value for v in self.value_map().values()]
+        return [v.value for v in cls.value_map().values()]
 
     @classmethod
     def member_names(cls):
-        return [v.name for v in self.value_map().values()]
+        return [v.name for v in cls.value_map().values()]
 
     @classmethod
     def members(cls):
-        return self.value_map.values()
+        return cls.value_map().values()
 
 
 class IdentityTemplates(Enum):

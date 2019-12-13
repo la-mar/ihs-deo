@@ -34,7 +34,7 @@ delete_cli = AppGroup("delete")
 
 def update_logger(level: int):
     if level is not None:
-        loggers.config(verbosity=level)
+        loggers.config(level=level)
 
 
 def get_terminal_columns():
@@ -133,11 +133,11 @@ def exports():
 
 @test_cli.command()
 def sentry():
-    from loggers import load_sentry
+    import sentry
 
     conf.SENTRY_ENABLED = True
     conf.SENTRY_EVENT_LEVEL = 10
-    load_sentry()
+    sentry.load()
     logger.error("Sentry Integration Test")
 
 

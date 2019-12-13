@@ -7,7 +7,6 @@ import pytest
 # from collector.endpoint import Endpoint
 # from collector.request import Request
 # from collector.requestor import Requestor
-# from collector.token_manager import TokenManager
 # from collector.collector import Collector
 from collector.endpoint import Endpoint
 from config import TestingConfig
@@ -40,11 +39,6 @@ def endpoints(app_config):
 # @pytest.fixture()
 # def endpoint_simple(endpoints):
 #     yield endpoints.get("simple")
-
-
-# @pytest.fixture()
-# def token_manager_legacy(app_config):
-#     yield TokenManager(**app_config.api_params)
 
 
 # @pytest.fixture()

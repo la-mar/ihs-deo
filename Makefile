@@ -147,7 +147,7 @@ env-to-json:
 
 ssm-update:
 	# Update SSM environment variables using a local dotenv file (.env.production by default)
-	python3 -c 'import json, os, dotenv; values={k.lower():v for k,v in dotenv.dotenv_values(".env.production").items()}; print(json.dumps(values))' | jq | aws-vault exec ${ENV} -- chamber import ihs -
+	python3 -c 'import json, os, dotenv; values={k.lower():v for k,v in dotenv.dotenv_values(".env.production").items()}; print(json.dumps(values))' | jq | aws-vault exec ${ENV} -- chamber import ${SERVICE_NAME} -
 
 view-credentials:
 	# print the current temporary credentials from aws-vault
