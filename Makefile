@@ -17,7 +17,7 @@ prod:
 	${eval export ENV=prod}
 
 run-tests:
-	pytest --cov=ihs test/
+	pytest --cov=ihs tests/
 
 export-deps:
 	# Export dependencies from poetry to requirements.txt in the project root
