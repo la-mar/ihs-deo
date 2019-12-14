@@ -62,14 +62,21 @@ before_script:
 # script:
 #   - poetry run pytest --doctest-modules --cov-report term-missing --cov-report html:htmlcov --cov=src/cltkv1 src/cltkv1/ tests
 
-script:
-  - pylint ihs --exit-zero $PYLINT_ARGS
-  - make run-tests
-
-after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+jobs:
+  include:
+    - stage: lint
+      script: pylint ihs --exit-zero $PYLINT_ARGS
+    - stage: unit tests
+      script: make run-tests
+    # - stage: integration tests
+    #   script: make integration-tests
+    - stage: build image
+      script: make build
+    - stage: smoke test
+      script: make smoke-test
 
 after_success:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
   - codecov
 
 deploy:
@@ -83,12 +90,12 @@ deploy:
       tags: true
   # push docker image on git tag
   - provider: script
-    script: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD && docker push $IMAGE_NAME:latest && docker push IMAGE_NAME:$TRAVIS_TAG
+    script: make travis-deploy-docker-tags
     on:
       branch: master
       tags: true
   # push dev docker image
   - provider: script
-    script: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD && docker push $IMAGE_NAME:dev
+    script: make travis-deploy-docker-dev
     on:
       branch: master

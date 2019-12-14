@@ -19,6 +19,9 @@ prod:
 run-tests:
 	pytest --cov=ihs tests/
 
+smoke-test:
+	docker run --entrypoint ihs driftwood/ihs test smoke-test
+
 coverage:
 	pytest --cov ihs --cov-report xml:cov.xml
 
@@ -56,7 +59,6 @@ celery-worker:
 	# Alternatively:
 	# celery -E -A ihs.celery_queue.worker:celery worker --loglevel=INFO --purge
 
-
 celery-beat:
 	# Launch a cron process
 	ihs run cron --loglevel=DEBUG
@@ -84,12 +86,24 @@ build:
 	# initiate a build of the dockerfile specified in the DOCKERFILE environment variable
 	@echo "Building docker image: ${IMAGE_NAME}"
 	docker build  -f ${DOCKERFILE} ${CTX} -t ${IMAGE_NAME}
-	docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:${ENV}
+	# docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:${ENV}
 	docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:${COMMIT_HASH}
 	docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:${DATE}
 
-push:
+travis-deploy-docker-tags:
+	docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
 	docker push ${IMAGE_NAME}:latest
+	docker push ${IMAGE_NAME}:${COMMIT_HASH}
+	docker push ${IMAGE_NAME}:${DATE}
+	docker push ${IMAGE_NAME}:${TRAVIS_TAG}
+
+travis-deploy-docker-dev:
+	docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
+	docker push ${IMAGE_NAME}:dev
+	docker push ${IMAGE_NAME}:${COMMIT_HASH}
+	docker push ${IMAGE_NAME}:${DATE}
+
+push:
 
 
 push-ecr:

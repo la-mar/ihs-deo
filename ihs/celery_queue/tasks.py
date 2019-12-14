@@ -25,6 +25,12 @@ def log(message):
 
 
 @celery.task
+def smoke_test():
+    """ Verify an arbitrary Celery task can run """
+    return "verified"
+
+
+@celery.task
 def post_heartbeat():
     """ Send heartbeat to metrics backend"""
     return metrics.post_heartbeat()

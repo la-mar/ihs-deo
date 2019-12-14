@@ -141,6 +141,15 @@ def sentry():
     logger.error("Sentry Integration Test")
 
 
+@test_cli.command()
+def smoke_test():
+    from celery_queue.tasks import smoke_test
+
+    result = smoke_test()
+    assert result == "verified"
+    print(result)
+
+
 def main(argv=sys.argv):  # pylint: disable=unused-argument
     """
     Args:

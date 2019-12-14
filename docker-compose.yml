@@ -1,7 +1,7 @@
 version: "3.7"
 
 x-defaults: &defaults
-  image: ihs-deo
+  image: driftwood/ihs
   # build:
   #   context: .
   #   dockerfile: Dockerfile
@@ -23,8 +23,8 @@ services:
       - "5000:5000"
   worker:
     <<: *defaults
-    command: ihs run worker
+    command: ihs run worker -Q ihs-default,ihs-submissions-h,ihs-collections-h,ihs-deletions-h,ihs-submissions-v,ihs-collections-v,ihs-deletions-v --loglevel DEBUG
     # entrypoint:
-  # cron:
-  #   <<: *defaults
-  #   command: ihs run cron --loglevel=DEBUG
+  cron:
+    <<: *defaults
+    command: ihs run cron --loglevel=DEBUG
