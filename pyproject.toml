@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ihs"
-version = "1.0.3"
+version = "1.0.4-alpha.0"
 description = "Automation service for downloading oil and gas data from IHS Energy"
 authors = ["Brock Friedrich <brock@driftwoodenergy.com>"]
 
