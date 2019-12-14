@@ -17,7 +17,7 @@ doc/
 .venv/
 .idea/
 .mypy_cache/
-ihs.egg-info/
+*.pid
 
 
 # Byte-compiled / optimized / DLL files

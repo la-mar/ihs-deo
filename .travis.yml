@@ -18,11 +18,11 @@ python:
 # - name: deploy
 #   if: tag IS present
 
-# notifications:
-#   email:
-#     on_failure: always
-#     recipients:
-#       - brock@driftwoodenergy.com
+notifications:
+  email:
+    on_failure: always
+    recipients:
+      - brock@driftwoodenergy.com
 
 cache:
   directories:
@@ -37,6 +37,7 @@ env:
   global:
     - PYCURL_SSL_LIBRARY=openssl
     - GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
+    - IMAGE_NAME: driftwood/ihs
     # - PATH=$HOME/.local/bin:$PATH
     # - PATH "/root/.poetry/bin:/opt/venv/bin:${PATH}"
 
@@ -72,11 +73,22 @@ after_success:
   - codecov
 
 deploy:
-  # deploy to github releases on tags
-  provider: releases
-  skip_cleanup: true
-  target_commitish: master
-  name: ihs
-  tag_name: $TRAVIS_TAG
-  on:
-    tags: true
+  # deploy to github releases on git tag
+  - provider: releases
+    skip_cleanup: true
+    target_commitish: master
+    name: ihs
+    tag_name: $TRAVIS_TAG
+    on:
+      tags: true
+  # push docker image on git tag
+  - provider: script
+    script: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD && docker push $IMAGE_NAME:latest && docker push IMAGE_NAME:$TRAVIS_TAG
+    on:
+      branch: master
+      tags: true
+  # push dev docker image
+  - provider: script
+    script: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD && docker push $IMAGE_NAME:dev
+    on:
+      branch: master
