@@ -126,21 +126,21 @@ def publish():
     # subprocess.run(["poetry", "publish"], check=True)
 
     # create github release
-    print("Creating github release")
-    requests.post(
-        f"{GITHUB_API_ENDPOINT}/releases",
-        auth=(os.getenv("GITHUB_USERNAME", "la-mar"), os.getenv("GITHUB_ACCESS_KEY")),
-        json={
-            "tag_name": f"{PROJECT_VERSION}",
-            "target_commitish": "master",
-            "name": f"{PROJECT_VERSION}",
-            "body": changes,
-            "draft": False,
-            "prerelease": False,
-        },
-    )
-    # response.raise_for_status()
-    print("Success.")
+    # print("Creating github release")
+    # requests.post(
+    #     f"{GITHUB_API_ENDPOINT}/releases",
+    #     auth=(os.getenv("GITHUB_USERNAME", "la-mar"), os.getenv("GITHUB_ACCESS_KEY")),
+    #     json={
+    #         "tag_name": f"{PROJECT_VERSION}",
+    #         "target_commitish": "master",
+    #         "name": f"{PROJECT_VERSION}",
+    #         "body": changes,
+    #         "draft": False,
+    #         "prerelease": False,
+    #     },
+    # )
+    # # response.raise_for_status()
+    print("Commit successful")
 
 
 if __name__ == "__main__":

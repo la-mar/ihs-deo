@@ -19,6 +19,9 @@ prod:
 run-tests:
 	pytest --cov=ihs tests/
 
+release:
+	poetry run python scripts/release.py
+
 export-deps:
 	# Export dependencies from poetry to requirements.txt in the project root
 	poetry export -f requirements.txt > requirements.txt --without-hashes
