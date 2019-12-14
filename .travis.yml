@@ -83,6 +83,7 @@ deploy:
   # deploy to github releases on git tag
   - provider: releases
     skip_cleanup: true
+    token: $GITHUB_TOKEN
     target_commitish: master
     name: ihs
     tag_name: $TRAVIS_TAG
