@@ -86,7 +86,7 @@ build:
 	# initiate a build of the dockerfile specified in the DOCKERFILE environment variable
 	@echo "Building docker image: ${IMAGE_NAME}"
 	docker build  -f ${DOCKERFILE} ${CTX} -t ${IMAGE_NAME}
-	# docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:${ENV}
+	docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:dev
 	docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:${COMMIT_HASH}
 	docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:${DATE}
 
