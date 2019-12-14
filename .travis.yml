@@ -62,7 +62,7 @@ before_script:
 #   - poetry run pytest --doctest-modules --cov-report term-missing --cov-report html:htmlcov --cov=src/cltkv1 src/cltkv1/ tests
 
 script:
-  - pylint ihs --exit-zero --rcfile=.pylintrc
+  - pylint ihs --exit-zero
   - make run-tests
 
 after_script:
