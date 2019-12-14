@@ -1,10 +1,5 @@
 import pytest  # pylint: disable=unused-import
 
-from config import TestingConfig
-
-conf = TestingConfig()
-# endpoints = config.endpoints
-# functions = config.functions
 
 from collector.task import Task
 from celery.schedules import crontab
@@ -23,6 +18,3 @@ class TestTask:
         cron = dict(minute="*/1")
         t = Task("wells", "test_task", seconds=60, cron=cron)
         assert t.schedule == 60
-
-
-# tasks_from_app_config(conf)

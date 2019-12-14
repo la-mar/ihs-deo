@@ -19,6 +19,9 @@ prod:
 run-tests:
 	pytest --cov=ihs tests/
 
+coverage:
+	pytest --cov ihs --cov-report xml:cov.xml
+
 release:
 	poetry run python scripts/release.py
 

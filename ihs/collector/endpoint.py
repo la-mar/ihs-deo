@@ -74,6 +74,8 @@ class Endpoint(object):
         try:
             # try to import dotted model name. ex: api.models.MyModel
             model = locate(model_name)
+            if model is None:
+                raise ModuleNotFoundError
             logger.debug(f"Found model: {model_name}")
         except ModuleNotFoundError:
             logger.debug(
@@ -83,7 +85,7 @@ class Endpoint(object):
                 # try to import model from global namespace
                 model = globals()[model_name]
                 logger.debug(f"Model '{model_name}' found in global namespace")
-            except ModuleNotFoundError:
+            except (ModuleNotFoundError, KeyError):
                 raise ModuleNotFoundError(
                     f"No module named '{model_name}' found in project or global namespace"
                 )
@@ -128,14 +130,28 @@ class Endpoint(object):
 
         return loaded
 
+    @staticmethod
+    def from_dict(name: str, data: dict):
+        return Endpoint(name, **data)
 
-if __name__ == "__main__":
 
-    from config import get_active_config
+# if __name__ == "__main__":
 
-    conf = get_active_config()
-    endpoints = conf.endpoints
-    dict(endpoints.wells.tasks)
+#     from config import get_active_config
 
-    wells = Endpoint(name="wells", **endpoints.wells)
-    wells.tasks["sync"].options
+#     conf = get_active_config()
+#     endpoints = conf.endpoints
+
+#     wells = Endpoint(name="wells", **endpoints.well_horizontal)
+
+#     d = {
+#                 "endpoint_check": {
+#                     "seconds": 60,
+#                     "options": {
+#                         "query_path": "well_by_api.xml",
+#                         "matrix": {"sequoia": {"api": "42461409160000"}},
+#                     },
+#                 },
+#             }
+
+#     wells.add_tasks(d.items())

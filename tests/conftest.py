@@ -16,14 +16,42 @@ from config import TestingConfig
 # functions = config.functions
 
 
-@pytest.fixture()
-def app_config():
+@pytest.fixture
+def conf():
     yield TestingConfig()
 
 
-@pytest.fixture()
-def endpoints(app_config):
-    yield Endpoint.load_from_config(app_config)
+@pytest.fixture
+def endpoint():
+    yield Endpoint.from_dict(
+        "test",
+        {
+            "enabled": True,
+            "version": "v10",
+            "model": "api.models.WellHorizontal",
+            "exclude": [],
+            "normalize": False,
+            "options": {
+                "data_type": "Well",
+                "template": "EnerdeqML Well",
+                "criteria": {"hole_direction": "H"},
+            },
+            "tasks": {
+                "endpoint_check": {
+                    "seconds": 60,
+                    "options": {
+                        "query_path": "well_by_api.xml",
+                        "matrix": {"sequoia": {"api": "42461409160000"}},
+                    },
+                },
+            },
+        },
+    )
+
+
+@pytest.fixture
+def endpoints():
+    yield Endpoint.load_from_config(conf)
 
 
 # @pytest.fixture()
