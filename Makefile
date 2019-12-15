@@ -17,7 +17,7 @@ prod:
 	${eval export ENV=prod}
 
 run-tests:
-	pytest --cov=ihs tests/
+	pytest --cov=ihs tests/ --cov-report xml:./coverage/python/coverage.xml
 
 smoke-test:
 	docker run --entrypoint ihs driftwood/ihs:${COMMIT_HASH} test smoke-test
