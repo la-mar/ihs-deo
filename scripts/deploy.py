@@ -22,7 +22,6 @@ import datetime
 import json
 import os
 import subprocess
-from pprint import pprint
 from typing import List
 
 import boto3
