@@ -85,10 +85,11 @@ login:
 build:
 	# initiate a build of the dockerfile specified in the DOCKERFILE environment variable
 	@echo "Building docker image: ${IMAGE_NAME}"
-	docker build  -f ${DOCKERFILE} ${CTX} -t ${IMAGE_NAME}
-	docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:dev
-	docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:${COMMIT_HASH}
-	docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:${DATE}
+	docker build  -f ${DOCKERFILE} ${CTX} -t ${IMAGE_NAME}:dev
+	docker tag ${IMAGE_NAME}:dev ${IMAGE_NAME}:${COMMIT_HASH}
+
+	docker push ${IMAGE_NAME}:dev
+	docker push ${IMAGE_NAME}:${COMMIT_HASH}
 
 travis-deploy-docker-tags:
 	docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
@@ -102,8 +103,6 @@ travis-deploy-docker-dev:
 	docker push ${IMAGE_NAME}:dev
 	docker push ${IMAGE_NAME}:${COMMIT_HASH}
 	docker push ${IMAGE_NAME}:${DATE}
-
-push:
 
 
 push-ecr:

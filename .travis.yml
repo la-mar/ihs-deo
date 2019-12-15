@@ -27,6 +27,7 @@ notifications:
 cache:
   directories:
     - "$HOME/.cache/pip"
+    - docker_images
 
 services:
   - docker
@@ -49,6 +50,10 @@ before_install:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
+  - docker load -i docker_images/images.tar || true
+
+before_cache:
+  - docker save -o docker_images/images.tar $(docker images -a -q)
 
 install:
   - poetry install -v
@@ -71,7 +76,7 @@ jobs:
     - stage: build image
       script: make build
     - stage: smoke test
-      script: make smoke-test
+      script: docker run --entrypoint ihs driftwood/ihs test smoke-test
     - stage: deploy
       script: skip
       deploy:
