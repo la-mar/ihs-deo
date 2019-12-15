@@ -1,7 +1,6 @@
 version: 2.1
 
 jobs:
-
   # Building and testing the project
   # Useful when a PR is open, for example
   build-and-test:
@@ -58,15 +57,12 @@ jobs:
 
   # This is the definition of another job, the one we use to publish the package to PyPI
   deployment:
-
     # Same environment
     docker:
-        - image: circleci/python:3.7
-      steps:
-
-        # Gets the code
-        - checkout
-
+      - image: circleci/python:3.7
+    steps:
+      # Gets the code
+      - checkout
         # Use `poetry publish` to Publish the package using username and password from CircleCI environment variables
         # Which can be configured inside CircleCI's interface
         # - run:
@@ -99,7 +95,7 @@ workflows:
           requires:
             - build-and-test
           filters:
-              tags:
-                only: /v[0-9]+(\.[0-9]+)*/
-              branches:
-                ignore: /.*/
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
+            branches:
+              ignore: /.*/
