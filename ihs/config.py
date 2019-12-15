@@ -316,6 +316,9 @@ class DevelopmentConfig(BaseConfig):
 class TestingConfig(BaseConfig):
     """Testing configuration"""
 
+
+    # LOG_LEVEL=10
+
     CONFIG_BASEPATH = "./config"
     COLLECTOR_CONFIG_PATH = abs_path(CONFIG_BASEPATH, "collector.yaml")
     COLLECTOR_CONFIG = load_config(COLLECTOR_CONFIG_PATH)

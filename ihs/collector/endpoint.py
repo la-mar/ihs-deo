@@ -56,7 +56,7 @@ class Endpoint(object):
         self.add_tasks((tasks or {}).items())
 
     def __repr__(self):
-        return f"{self.version}/{self.name}"
+        return f"Endpoint: {self.version}/{self.name}"
 
     def __iter__(self):
         attrs = [x for x in dir(self) if not x.startswith("_")]
@@ -89,8 +89,6 @@ class Endpoint(object):
                 raise ModuleNotFoundError(
                     f"No module named '{model_name}' found in project or global namespace"
                 )
-        except Exception as e:
-            raise Exception(f"Unable to locate module {model_name} -- {e}")
 
         return model
 
@@ -114,7 +112,7 @@ class Endpoint(object):
         try:
             endpoints = app_config.endpoints  # type: ignore
         except AttributeError:
-            logger.debug("config object has no attribute 'endpoints'")
+            raise AttributeError("Config object has no attribute 'endpoints'")
 
         loaded: Dict[str, Endpoint] = {}
         for ep in endpoints.items():
@@ -143,6 +141,11 @@ class Endpoint(object):
 #     endpoints = conf.endpoints
 
 #     wells = Endpoint(name="wells", **endpoints.well_horizontal)
+
+#         class Conf:
+#             endpoints = {None: None}
+
+#     Endpoint.load_from_config(Conf())
 
 #     d = {
 #                 "endpoint_check": {

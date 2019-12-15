@@ -1,6 +1,6 @@
 SERVICE_NAME:=ihs
 ENV:=prod
-COMMIT_HASH    := $$(git log -1 --pretty=%h)
+COMMIT_HASH    ?= $$(git log -1 --pretty=%h)
 DATE := $$(date +"%Y-%m-%d")
 CTX:=.
 AWS_ACCOUNT_ID:=$$(aws-vault exec prod -- aws sts get-caller-identity | jq .Account -r)
@@ -90,7 +90,7 @@ build: login
 	@echo "Building docker image: ${IMAGE_NAME}"
 	docker build  -f ${DOCKERFILE} ${CTX} -t ${IMAGE_NAME}
 	docker tag ${IMAGE_NAME} ${IMAGE_NAME}:${COMMIT_HASH}
-	docker push ${IMAGE_NAME}:${COMMIT_HASH}
+	docker push ${IMAGE_NAME}:(${TRAVIS_TAG} || ${COMMIT_HASH})
 
 travis-deploy-docker-tags: login
 	docker push ${IMAGE_NAME}:latest
