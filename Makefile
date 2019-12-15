@@ -4,7 +4,7 @@ COMMIT_HASH    := $$(git log -1 --pretty=%h)
 DATE := $$(date +"%Y-%m-%d")
 CTX:=.
 AWS_ACCOUNT_ID:=$$(aws-vault exec prod -- aws sts get-caller-identity | jq .Account -r)
-# IMAGE_NAME:=driftwood/ihs
+IMAGE_NAME:=driftwood/ihs
 DOCKERFILE:=Dockerfile
 
 dev:
@@ -75,31 +75,33 @@ kubectl-proxy:
 	kubectl proxy --port=8080
 
 
-login:
+login-ecr:
 	# Authenticate to ECR
 	${eval export ENV_UPPER=$(shell echo ${ENV} | tr '[:lower:]' '[:upper:]')}
 	@eval echo ${ENV_UPPER}
 	@echo account: ${AWS_ACCOUNT_ID}
 	@eval $$(aws-vault exec ${ENV} -- aws ecr get-login --no-include-email)
 
-build:
+login:
+	docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
+
+build: login
 	# initiate a build of the dockerfile specified in the DOCKERFILE environment variable
 	@echo "Building docker image: ${IMAGE_NAME}"
-	docker build  -f ${DOCKERFILE} ${CTX} -t ${IMAGE_NAME}:dev
-	docker tag ${IMAGE_NAME}:dev ${IMAGE_NAME}:${COMMIT_HASH}
+	docker build  -f ${DOCKERFILE} ${CTX} -t ${IMAGE_NAME}
+	docker tag ${IMAGE_NAME} ${IMAGE_NAME}:dev
+	docker tag ${IMAGE_NAME} ${IMAGE_NAME}:${COMMIT_HASH}
 
 	docker push ${IMAGE_NAME}:dev
 	docker push ${IMAGE_NAME}:${COMMIT_HASH}
 
-travis-deploy-docker-tags:
-	docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
+travis-deploy-docker-tags: login
 	docker push ${IMAGE_NAME}:latest
 	docker push ${IMAGE_NAME}:${COMMIT_HASH}
 	docker push ${IMAGE_NAME}:${DATE}
 	docker push ${IMAGE_NAME}:${TRAVIS_TAG}
 
-travis-deploy-docker-dev:
-	docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
+travis-deploy-docker-dev: login
 	docker push ${IMAGE_NAME}:dev
 	docker push ${IMAGE_NAME}:${COMMIT_HASH}
 	docker push ${IMAGE_NAME}:${DATE}

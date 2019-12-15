@@ -6,6 +6,10 @@
 
 [![Build Status](https://travis-ci.com/la-mar/ihs-deo.svg?branch=master)](https://travis-ci.com/la-mar/ihs-deo)
 
+<a href="https://codecov.io/gh/la-mar/ihs-deo">
+  <img src="https://codecov.io/gh/la-mar/ihs-deo/branch/master/graph/badge.svg" />
+</a>
+
 # Todo
 
 - Unit Testing
