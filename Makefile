@@ -23,7 +23,7 @@ smoke-test:
 	docker run --entrypoint ihs driftwood/ihs:${COMMIT_HASH} test smoke-test
 
 coverage:
-	pytest --cov ihs --cov-report xml:cov.xml
+	pytest --cov ihs --cov-report html:./coverage/coverage.html --log-level DEBUG
 
 release:
 	poetry run python scripts/release.py
@@ -89,6 +89,7 @@ build: login
 	# initiate a build of the dockerfile specified in the DOCKERFILE environment variable
 	@echo "Building docker image: ${IMAGE_NAME}"
 	docker build  -f ${DOCKERFILE} ${CTX} -t ${IMAGE_NAME}
+	docker tag ${IMAGE_NAME} ${IMAGE_NAME}:${COMMIT_HASH}
 	docker push ${IMAGE_NAME}:${COMMIT_HASH}
 
 travis-deploy-docker-tags: login
