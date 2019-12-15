@@ -64,19 +64,21 @@ install:
 
 # script:
 #   - poetry run pytest --doctest-modules --cov-report term-missing --cov-report html:htmlcov --cov=src/cltkv1 src/cltkv1/ tests
+# script: skip
 
 jobs:
   include:
-    - stage: lint
-      script: pylint ihs --exit-zero $PYLINT_ARGS
-    - stage: unit tests
-      script: make run-tests
-    # - stage: integration tests
-    #   script: make integration-tests
+    # - stage: lint and unit test
+    #   script: pylint ihs --exit-zero $PYLINT_ARGS
+    #   script: make run-tests
+    # # - stage: unit tests
+    # #   script: make run-tests
+    # # - stage: integration tests
+    # #   script: make integration-tests
     - stage: build image
       script: make build
     - stage: smoke test
-      script: docker run --entrypoint ihs driftwood/ihs test smoke-test
+      script: make smoke-test
     - stage: deploy
       script: skip
       deploy:

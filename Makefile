@@ -20,7 +20,7 @@ run-tests:
 	pytest --cov=ihs tests/
 
 smoke-test:
-	docker run --entrypoint ihs driftwood/ihs test smoke-test
+	docker run --entrypoint ihs driftwood/ihs:${COMMIT_HASH} test smoke-test
 
 coverage:
 	pytest --cov ihs --cov-report xml:cov.xml
