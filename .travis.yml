@@ -50,10 +50,10 @@ before_install:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
-  - docker load -i docker_images/images.tar || true
+  # - docker load -i docker_images/images.tar || true
 
-before_cache:
-  - docker save -o docker_images/images.tar $(docker images -a -q)
+# before_cache:
+#   - docker save -o docker_images/images.tar $(docker images -a -q)
 
 install:
   - poetry install -v

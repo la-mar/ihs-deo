@@ -3,11 +3,11 @@ version: 2.1
 jobs:
   # Building and testing the project
   # Useful when a PR is open, for example
-  build-and-test:
+  test-and-build:
     docker:
       - image: circleci/python:3.7
 
-    # The steps for our build-and-test
+    # The steps for our test-and-build
     steps:
       # Get the code
       - checkout
@@ -74,16 +74,16 @@ jobs:
 workflows:
   version: 2.1
 
-  # The build-and-test we will run EVERYTIME a piece of code changes
-  build-and-test-workflow:
+  # The test-and-build we will run EVERYTIME a piece of code changes
+  test-and-build-workflow:
     jobs:
-      - build-and-test
+      - test-and-build
 
   # The deployment workflow publishes the package
   deployment-workflow:
     jobs:
       # Runs build and test, but now just on Git tags (created from a GitHub release)
-      - build-and-test:
+      - test-and-build:
           filters:
             tags:
               only: /v[0-9]+(\.[0-9]+)*/
@@ -93,7 +93,7 @@ workflows:
       # Runs the deployment job, just with the tags as well
       - deployment:
           requires:
-            - build-and-test
+            - test-and-build
           filters:
             tags:
               only: /v[0-9]+(\.[0-9]+)*/
