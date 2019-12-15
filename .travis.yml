@@ -76,27 +76,27 @@ jobs:
     # # - stage: integration tests
     # #   script: make integration-tests
     - stage: build image
-      script: make build
+      script: COMMIT_HASH=$TRAVIS_COMMIT && make build
     - stage: smoke test
       script: make smoke-test
     - stage: deploy
       script: skip
       deploy:
         # deploy to github releases on git tag
-        - provider: releases
-          skip_cleanup: true
-          token: $GITHUB_TOKEN
-          target_commitish: master
-          name: ihs
-          tag_name: $TRAVIS_TAG
-          on:
-            tags: true
+        # - provider: releases
+        #   skip_cleanup: true
+        #   token: $GITHUB_TOKEN
+        #   target_commitish: master
+        #   name: ihs
+        #   tag_name: $TRAVIS_TAG
+        #   on:
+        #     tags: true
         # push docker image on git tag
-        - provider: script
-          script: make travis-deploy-docker-tags
-          on:
-            branch: master
-            tags: true
+        # - provider: script
+        #   script: make travis-deploy-docker-tags
+        #   on:
+        #     branch: master
+        #     tags: true
         # push dev docker image
         - provider: script
           script: make travis-deploy-docker-dev
