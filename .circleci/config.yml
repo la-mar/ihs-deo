@@ -65,10 +65,10 @@ jobs:
       - docker/check
       - docker/build:
           image: driftwood/ihs
-          tag: ${CIRCLE_SHA1}
+          tag: ${COMMIT_HASH}
       - docker/push:
           image: driftwood/ihs
-          tag: ${CIRCLE_SHA1}, dev
+          tag: "${COMMIT_HASH},dev"
 
   # publish-image:
   #   executor: docker/docker
