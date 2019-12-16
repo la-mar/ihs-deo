@@ -34,7 +34,7 @@ jobs:
 
       - run:
           name: lint
-          command: pylint ihs --exit-zero
+          command: poetry run pylint ihs --exit-zero
 
       - run:
           name: CodeClimate before-build

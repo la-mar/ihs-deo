@@ -25,6 +25,9 @@ smoke-test:
 coverage:
 	pytest --cov ihs --cov-report html:./coverage/coverage.html --log-level DEBUG
 
+view-cov:
+	open -a "Google Chrome" ./coverage/coverage.html/index.html
+
 release:
 	poetry run python scripts/release.py
 
