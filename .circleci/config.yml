@@ -64,7 +64,7 @@ jobs:
           file: ./coverage/python/coverage.xml
 
   build-image:
-    executor: docker/docker
+    executor: docker/machine
     steps:
       - setup_remote_docker
       - checkout
@@ -77,7 +77,7 @@ jobs:
             echo "Digest is: $(</tmp/digest.txt)"
 
   publish-image:
-    executor: docker/docker
+    executor: docker/machine
     steps:
       - setup_remote_docker
       - checkout
