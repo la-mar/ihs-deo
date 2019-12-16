@@ -63,14 +63,10 @@ jobs:
       - docker/check
       - docker/build:
           image: driftwood/ihs
-          tag: $CIRCLE_SHA1
+          tag: ${CIRCLE_SHA1}
       - docker/push:
-          digest-path: /tmp/digest.txt
           image: driftwood/ihs
-          tag: $CIRCLE_SHA1, dev
-      - run:
-          command: |
-            echo "Digest is: $(</tmp/digest.txt)"
+          tag: "${CIRCLE_SHA1}, dev"
 
   publish-image:
     executor: docker/docker
@@ -80,10 +76,7 @@ jobs:
       - docker/check
       - docker/publish:
           image: driftwood/ihs
-          tag: latest, ${CIRCLE_TAG}
-      - run:
-          command: |
-            echo "Digest is: $(</tmp/digest.txt)"
+          tag: "latest, ${CIRCLE_TAG}"
 
   publish-github-release:
     docker:
