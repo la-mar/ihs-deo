@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  codecov: codecov/codecov@1.0.2
+
 jobs:
   # Building and testing the project
   # Useful when a PR is open, for example
@@ -34,7 +37,7 @@ jobs:
 
       - run:
           name: lint
-          command: poetry run pylint ihs --exit-zero
+          command: poetry run pylint ihs --exit-zero --rcfile=.pylintrc
 
       - run:
           name: CodeClimate before-build
@@ -54,6 +57,9 @@ jobs:
             ./cc-test-reporter sum-coverage coverage/codeclimate.*.json
             # Attempt to submit the coverage report, but don't fail the build if this fails (`|| true`)
             ./cc-test-reporter upload-coverage || true
+
+      - codecov/upload:
+          file: ./coverage/python/coverage.xml
 
   # This is the definition of another job, the one we use to publish the package to PyPI
   deployment:

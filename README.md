@@ -4,7 +4,7 @@
 
 <a href="https://codeclimate.com/github/la-mar/ihs-deo/test_coverage"><img src="https://api.codeclimate.com/v1/badges/4e312abd1b377f0a38b0/test_coverage" /></a>
 
-[![Build Status](https://travis-ci.com/la-mar/ihs-deo.svg?branch=master)](https://travis-ci.com/la-mar/ihs-deo)
+[![CircleCI](https://circleci.com/gh/la-mar/ihs-deo.svg?style=svg)](https://circleci.com/gh/la-mar/ihs-deo)
 
 <a href="https://codecov.io/gh/la-mar/ihs-deo">
   <img src="https://codecov.io/gh/la-mar/ihs-deo/branch/master/graph/badge.svg" />
