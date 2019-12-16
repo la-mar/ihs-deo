@@ -69,7 +69,7 @@ jobs:
     steps:
       - run:
           command: |
-            echo 'COMMIT_HASH=${COMMIT_HASH}'
+            echo COMMIT_HASH=${COMMIT_HASH}
       - setup_remote_docker
       - checkout
       - docker/check
