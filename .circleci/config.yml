@@ -72,7 +72,7 @@ jobs:
       - docker/check
       - docker/build:
           image: driftwood/ihs
-          tag:
+          tag: $(echo ${CIRCLE_SHA1} | cut -c -7),dev
       - docker/push:
           image: driftwood/ihs
           tag: $(echo ${CIRCLE_SHA1} | cut -c -7),dev
