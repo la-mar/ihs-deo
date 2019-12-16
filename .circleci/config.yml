@@ -1,5 +1,12 @@
 version: 2.1
 
+defaults:
+  filters: &on_tags_only
+    tags:
+      only: /^\d+\.\d+\.\d+$/
+    branches:
+      ignore: /.*/
+
 orbs:
   codecov: codecov/codecov@1.0.2
   docker: circleci/docker@0.5.19
@@ -60,6 +67,8 @@ jobs:
     environment:
       - COMMIT_HASH: $(echo ${CIRCLE_SHA1} | cut -c -7)
     steps:
+      - run:
+        command: echo COMMIT_HASH=${COMMIT_HASH}
       - setup_remote_docker
       - checkout
       - docker/check
@@ -130,10 +139,7 @@ workflows:
           requires:
             - run-tests
           filters:
-            tags:
-              only: /^\d+\.\d+\.\d+$/
-            branches:
-              ignore: /.*/
+            <<: *on_tags_only
       - docker/publish:
           image: driftwood/ihs
           tag: latest, ${CIRCLE_TAG}
@@ -141,7 +147,4 @@ workflows:
             - run-tests
             - build-image
           filters:
-            tags:
-              only: /^\d+\.\d+\.\d+$/
-            branches:
-              ignore: /.*/
+            <<: *on_tags_only
