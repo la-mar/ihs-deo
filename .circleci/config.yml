@@ -130,6 +130,7 @@ workflows:
   deployment-workflow:
     jobs:
       - publish-github-release:
+          - run-tests
           requires:
             - run-tests
           filters:
@@ -140,6 +141,8 @@ workflows:
 
       # Runs the deployment job, just with the tags as well
       - publish-image:
+          - run-tests
+          - build-image
           requires:
             - run-tests
             - build-image
