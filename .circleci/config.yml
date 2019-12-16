@@ -64,18 +64,18 @@ jobs:
 
   build-image:
     executor: docker/docker
-    environment:
-      - COMMIT_HASH: $(echo ${CIRCLE_SHA1} | cut -c -7)
+    # environment:
+    #   - COMMIT_HASH: $(echo ${CIRCLE_SHA1} | cut -c -7)
     steps:
       - run:
           command: |
-            echo COMMIT_HASH=${COMMIT_HASH}
+            echo ${CIRCLE_SHA1} | cut -c -7
       - setup_remote_docker
       - checkout
       - docker/check
       - docker/build:
           image: driftwood/ihs
-          tag: ${COMMIT_HASH}
+          tag: $(echo ${CIRCLE_SHA1} | cut -c -7)
       - docker/push:
           image: driftwood/ihs
           tag: "${COMMIT_HASH},dev"
