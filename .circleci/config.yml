@@ -67,6 +67,9 @@ jobs:
     environment:
       - COMMIT_HASH: $(echo ${CIRCLE_SHA1} | cut -c -7)
     steps:
+      - run:
+          command: |
+            echo 'COMMIT_HASH=${COMMIT_HASH}'
       - setup_remote_docker
       - checkout
       - docker/check
