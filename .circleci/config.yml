@@ -63,6 +63,9 @@ jobs:
       - codecov/upload:
           file: ./coverage/python/coverage.xml
 
+      - store_test_results:
+          path: ./coverage/python/coverage.xml
+
   build-image:
     executor: docker/docker
     steps:
