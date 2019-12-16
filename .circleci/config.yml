@@ -57,6 +57,8 @@ jobs:
 
   build-image:
     executor: docker/docker
+    environment:
+      - COMMIT_HASH: $(echo ${CIRCLE_SHA1} | cut -c -7)
     steps:
       - setup_remote_docker
       - checkout
@@ -66,17 +68,17 @@ jobs:
           tag: ${CIRCLE_SHA1}
       - docker/push:
           image: driftwood/ihs
-          tag: "${CIRCLE_SHA1}, dev"
+          tag: ${CIRCLE_SHA1}, dev
 
-  publish-image:
-    executor: docker/docker
-    steps:
-      - setup_remote_docker
-      - checkout
-      - docker/check
-      - docker/publish:
-          image: driftwood/ihs
-          tag: "latest, ${CIRCLE_TAG}"
+  # publish-image:
+  #   executor: docker/docker
+  #   steps:
+  #     - setup_remote_docker
+  #     - checkout
+  #     - docker/check
+  #     - docker/publish:
+  #         image: driftwood/ihs
+  #         tag: latest
 
   publish-github-release:
     docker:
