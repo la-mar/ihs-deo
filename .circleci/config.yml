@@ -63,11 +63,11 @@ jobs:
       - docker/check
       - docker/build:
           image: driftwood/ihs
-          tag: ${CIRCLE_SHA1}, dev
+          tag: $CIRCLE_SHA1
       - docker/push:
           digest-path: /tmp/digest.txt
           image: driftwood/ihs
-          tag: ${CIRCLE_SHA1}, dev
+          tag: $CIRCLE_SHA1, dev
       - run:
           command: |
             echo "Digest is: $(</tmp/digest.txt)"
