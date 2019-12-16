@@ -97,7 +97,6 @@ jobs:
             VERSION=${CIRCLE_TAG}
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} .
 
-  # This is the definition of another job, the one we use to publish the package to PyPI
   deployment:
     # Same environment
     docker:
