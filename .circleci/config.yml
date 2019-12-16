@@ -69,16 +69,13 @@ jobs:
     steps:
       - run:
           command: |
-            echo ${CIRCLE_SHA1} | cut -c -7
+            echo "export COMMIT_HASH=$(echo ${CIRCLE_SHA1} | cut -c -7)" >> $BASH_ENV
       - setup_remote_docker
       - checkout
       - docker/check
-      - docker/build:
-          image: driftwood/ihs
-          tag: $(echo ${CIRCLE_SHA1} | cut -c -7)
       - docker/push:
           image: driftwood/ihs
-          tag: "${COMMIT_HASH},dev"
+          tag: $COMMIT_HASH,dev
 
   # publish-image:
   #   executor: docker/docker
