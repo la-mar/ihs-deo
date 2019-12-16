@@ -64,12 +64,16 @@ jobs:
           file: ./coverage/python/coverage.xml
 
   build-image:
-    executor: docker/machine
+    executor: docker/docker
     steps:
       - setup_remote_docker
       - checkout
       - docker/check
-      - docker/publish:
+      - docker/build:
+          image: driftwood/ihs
+          tag: ${CIRCLE_SHA1}, dev
+      - docker/push:
+          digest-path: /tmp/digest.txt
           image: driftwood/ihs
           tag: ${CIRCLE_SHA1}, dev
       - run:
@@ -77,7 +81,7 @@ jobs:
             echo "Digest is: $(</tmp/digest.txt)"
 
   publish-image:
-    executor: docker/machine
+    executor: docker/docker
     steps:
       - setup_remote_docker
       - checkout
@@ -121,13 +125,13 @@ workflows:
   version: 2.1
 
   # The run-tests we will run EVERYTIME a piece of code changes
-  test-and-build-workflow:
+  test-and-build:
     jobs:
       - run-tests
       - build-image
 
   # The deployment workflow publishes the package
-  deployment-workflow:
+  deployment:
     jobs:
       - run-tests
       - build-image
@@ -139,9 +143,9 @@ workflows:
               only: /^\d+\.\d+\.\d+$/
             branches:
               ignore: /.*/
-
-      # Runs the deployment job, just with the tags as well
-      - publish-image:
+      - docker/publish:
+          image: driftwood/ihs
+          tag: latest, ${CIRCLE_TAG}
           requires:
             - run-tests
             - build-image
