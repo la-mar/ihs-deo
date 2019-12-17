@@ -210,11 +210,13 @@ resource "aws_cloudwatch_metric_alarm" "sqs_usage_high" {
 
 resource "aws_cloudwatch_metric_alarm" "sqs_usage_low" {
   alarm_name                = "${var.cluster_name}/${var.service_name}/sqs-usage-low"
-  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  comparison_operator       = "LessThanOrEqualToThreshold"
   evaluation_periods        = "2"
   threshold                 = "1000"
   alarm_description         = "Report the aggregate total of messages across two SQS queues"
   insufficient_data_actions = []
+  alarm_actions             = [aws_appautoscaling_policy.sqs_policy_scale_in.arn]
+
 
   metric_query {
     id          = "e1"
@@ -234,7 +236,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs_usage_low" {
       unit        = "Count"
 
       dimensions = {
-        QueueName = var.queue1
+        SQS = var.queue1
       }
     }
   }
@@ -250,7 +252,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs_usage_low" {
       unit        = "Count"
 
       dimensions = {
-        QueueName = var.queue2
+        SQS = var.queue2
       }
     }
   }
