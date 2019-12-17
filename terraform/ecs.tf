@@ -58,13 +58,13 @@ resource "aws_ecs_service" "ihs_web" {
   }
 }
 
-module "web_autoscaler" {
-  source       = "./service_target_tracking"
-  cluster_name = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
-  service_name = aws_ecs_service.ihs_web.name
-  min_capacity = 2 # change to 1 after service discovery testing
-  max_capacity = 4
-}
+# module "web_autoscaler" {
+#   source       = "./service_target_tracking"
+#   cluster_name = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
+#   service_name = aws_ecs_service.ihs_web.name
+#   min_capacity = 2 # change to 1 after service discovery testing
+#   max_capacity = 4
+# }
 
 resource "aws_ecs_service" "ihs_worker_default" {
   name            = "ihs-worker-default"
@@ -148,13 +148,13 @@ resource "aws_ecs_service" "ihs_worker_deleter" {
   }
 }
 
-module "deleter_autoscaler" {
-  source       = "./service_target_tracking"
-  cluster_name = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
-  service_name = aws_ecs_service.ihs_worker_deleter.name
-  min_capacity = 1
-  max_capacity = 5
-}
+# module "deleter_autoscaler" {
+#   source       = "./service_target_tracking"
+#   cluster_name = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
+#   service_name = aws_ecs_service.ihs_worker_deleter.name
+#   min_capacity = 1
+#   max_capacity = 5
+# }
 
 resource "aws_ecs_service" "ihs_worker_submitter" {
   name            = "ihs-worker-submitter"
@@ -181,13 +181,13 @@ resource "aws_ecs_service" "ihs_worker_submitter" {
   }
 }
 
-module "submitter_autoscaler" {
-  source       = "./service_target_tracking"
-  cluster_name = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
-  service_name = aws_ecs_service.ihs_worker_submitter.name
-  min_capacity = 1
-  max_capacity = 5
-}
+# module "submitter_autoscaler" {
+#   source       = "./service_target_tracking"
+#   cluster_name = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
+#   service_name = aws_ecs_service.ihs_worker_submitter.name
+#   min_capacity = 1
+#   max_capacity = 5
+# }
 
 resource "aws_ecs_service" "ihs_cron" {
   name            = "ihs-cron"

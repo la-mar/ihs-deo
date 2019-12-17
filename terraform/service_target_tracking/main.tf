@@ -236,7 +236,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs_usage_low" {
       unit        = "Count"
 
       dimensions = {
-        SQS = var.queue1
+        QueueName = var.queue1
       }
     }
   }
@@ -252,7 +252,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs_usage_low" {
       unit        = "Count"
 
       dimensions = {
-        SQS = var.queue2
+        QueueName = var.queue2
       }
     }
   }
