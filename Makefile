@@ -93,44 +93,18 @@ build: login
 	@echo "Building docker image: ${IMAGE_NAME}"
 	docker build  -f ${DOCKERFILE} ${CTX} -t ${IMAGE_NAME}
 	docker tag ${IMAGE_NAME} ${IMAGE_NAME}:${COMMIT_HASH}
-	docker push ${IMAGE_NAME}:(${TRAVIS_TAG} || ${COMMIT_HASH})
-
-travis-deploy-docker-tags: login
-	docker push ${IMAGE_NAME}:latest
 	docker push ${IMAGE_NAME}:${COMMIT_HASH}
-	docker push ${IMAGE_NAME}:${DATE}
-	docker push ${IMAGE_NAME}:${TRAVIS_TAG}
 
-travis-deploy-docker-dev: login build
-	docker tag ${IMAGE_NAME} ${IMAGE_NAME}:dev
-	docker push ${IMAGE_NAME}:dev
-	# docker push ${IMAGE_NAME}:${COMMIT_HASH}
-	# docker push ${IMAGE_NAME}:${DATE}
+cc-expand:
+	# show expanded configuration
+	circleci config process .circleci/config.yml
 
+cc-process:
+	circleci config process .circleci/config.yml > process.yml
 
-push-ecr:
-	${eval export ECR=$(shell echo ${AWS_ACCOUNT_ID}).dkr.ecr.us-east-1.amazonaws.com}
-	# @echo ${ECR}
-	${eval LATEST=${IMAGE_NAME}:latest}
-	${eval ECR_LATEST=${ECR}/${LATEST}}
-	${eval ECR_ENV=${ECR}/${IMAGE_NAME}:$${ENV}}
-	${eval ECR_HASH=${ECR}/${IMAGE_NAME}:$${COMMIT_HASH}}
-	${eval ECR_DATE=${ECR}/${IMAGE_NAME}:$${DATE}}
-
-	docker tag ${LATEST} ${ECR_LATEST}
-	docker tag ${LATEST} ${ECR_ENV}
-	docker tag ${LATEST} ${ECR_HASH}
-	docker tag ${LATEST} ${ECR_DATE}
-
-	docker push ${ECR_LATEST}
-	docker push ${ECR_ENV}
-	docker push ${ECR_HASH}
-	docker push ${ECR_DATE}
-
-
-create-ihs-repo:
-	# Create ECR repo where repository-name = COMPOSE_PROJECT_NAME
-	aws ecr create-repository --repository-name ${COMPOSE_PROJECT_NAME} --tags Key=domain,Value=technology Key=service_name,Value=${SERVICE_NAME} --profile ${ENV}
+cc-run-local:
+	JOBNAME?=build-image
+	circleci local execute -c process.yml --job build-image -e DOCKER_LOGIN=${DOCKER_LOGIN} -e DOCKER_PASSWORD=${DOCKER_PASSWORD}
 
 all:
 	# Rebuild the services docker image and push it to the remote repository
@@ -144,15 +118,15 @@ deploy: ssm-update
 
 redeploy-cron:
 	# Force a new deployment for the cron service through the aws cli
-	aws ecs update-service --cluster ${ECS_CLUSTER}-prod --service ihs-cron --force-new-deployment --profile prod
+	aws ecs update-service --cluster ${ECS_CLUSTER} --service ihs-cron --force-new-deployment --profile ${ENV}
 
 redeploy-worker:
 	# Force a new deployment for the worker service through the aws cli
-	aws ecs update-service --cluster ${ECS_CLUSTER}-prod --service ihs-worker --force-new-deployment --profile prod
+	aws ecs update-service --cluster ${ECS_CLUSTER} --service ihs-worker --force-new-deployment --profile ${ENV}
 
 redeploy-web:
 	# Force a new deployment for the web service through the aws cli
-	aws ecs update-service --cluster ${ECS_CLUSTER}-prod --service ihs-web --force-new-deployment --profile prod
+	aws ecs update-service --cluster ${ECS_CLUSTER} --service ihs-web --force-new-deployment --profile ${ENV}
 
 ssm-export:
 	# Export all SSM parameters associated with this service to json
