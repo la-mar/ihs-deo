@@ -1,19 +1,25 @@
 # ihs-deo
 
-<a href="https://codeclimate.com/github/la-mar/ihs-deo/maintainability"><img src="https://api.codeclimate.com/v1/badges/4e312abd1b377f0a38b0/maintainability" /></a>
-
-<a href="https://codeclimate.com/github/la-mar/ihs-deo/test_coverage"><img src="https://api.codeclimate.com/v1/badges/4e312abd1b377f0a38b0/test_coverage" /></a>
-
-[![CircleCI](https://circleci.com/gh/la-mar/ihs-deo.svg?style=svg)](https://circleci.com/gh/la-mar/ihs-deo)
-
-<a href="https://codecov.io/gh/la-mar/ihs-deo">
-  <img src="https://codecov.io/gh/la-mar/ihs-deo/branch/master/graph/badge.svg" />
-</a>
+<div style="text-align:center;">
+  <table >
+    <tr>
+      <a href="https://codeclimate.com/github/la-mar/ihs-deo/maintainability"><img src="https://api.codeclimate.com/v1/badges/4e312abd1b377f0a38b0/maintainability" /></a>
+      <a href="https://codeclimate.com/github/la-mar/ihs-deo/test_coverage"><img src="https://api.codeclimate.com/v1/badges/4e312abd1b377f0a38b0/test_coverage" /></a>
+      <a href="https://codecov.io/gh/la-mar/ihs-deo">
+        <img src="https://codecov.io/gh/la-mar/ihs-deo/branch/master/graph/badge.svg" />
+      </a>
+      <a href="(https://circleci.com/gh/la-mar/ihs-deo">
+        <img src="https://circleci.com/gh/la-mar/ihs-deo.svg?style=svg" />
+      </a>
+    </tr>
+  </table>
+</div>
 
 # Todo
 
 - Unit Testing
-- Convert environment variables to SSM Parameters
+- Documentation
+- <s>Convert environment variables to SSM Parameters</s>
 
 - <s>Retry download => baked into queues</s>
 - Process changes and deletes (nightly)
@@ -39,4 +45,15 @@
 - production_horizontal
 - production_vertical
 
-![refarch](/doc/refarch.png)
+# Usage
+
+- Launch a worker container:
+
+  ```bash
+  docker run ihs ihs run worker
+  ```
+
+- Bypass Chamber when launching container:
+  ```bash
+  docker run --entrypoint=ihs ihs
+  ```
