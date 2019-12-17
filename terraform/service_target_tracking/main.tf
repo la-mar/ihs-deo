@@ -40,18 +40,6 @@ variable "metric_name" {
   default     = "CPUUtilization"
 }
 
-# variable "cluster_policy" {
-#   description = "Toggle the creation of the appscaling policy using cluster metrics"
-#   type        = bool
-#   default     = true
-# }
-
-# variable "sqs_policy" {
-#   description = "Toggle the creation of the appscaling policy using sqs metrics"
-#   type        = bool
-#   default     = false
-# }
-
 variable "queue1" {
   description = "Name of queue for Cloudwatch Metric"
   type        = string
@@ -72,38 +60,6 @@ resource "aws_appautoscaling_target" "ecs_target" {
   service_namespace  = "ecs"
 }
 
-# resource "aws_appautoscaling_policy" "cluster_policy" {
-#   count              = var.cluster_policy ? 1 : 0
-#   name               = "${aws_appautoscaling_target.ecs_target.resource_id}/target-scaling"
-#   policy_type        = "TargetTrackingScaling"
-#   resource_id        = aws_appautoscaling_target.ecs_target.resource_id
-#   scalable_dimension = aws_appautoscaling_target.ecs_target.scalable_dimension
-#   service_namespace  = aws_appautoscaling_target.ecs_target.service_namespace
-
-#   target_tracking_scaling_policy_configuration {
-#     customized_metric_specification {
-#       namespace   = "AWS/ECS"
-#       metric_name = var.metric_name
-#       statistic   = "Average"
-#       unit        = "Percent"
-
-#       dimensions {
-#         name  = "ClusterName"
-#         value = var.cluster_name
-#       }
-
-#       dimensions {
-#         name  = "ServiceName"
-#         value = var.service_name
-#       }
-#     }
-
-#     target_value       = var.target_value
-#     scale_in_cooldown  = var.scale_in_cooldown
-#     scale_out_cooldown = var.scale_out_cooldown
-#   }
-# }
-
 resource "aws_appautoscaling_policy" "sqs_policy_scale_out" {
   # count              = var.sqs_policy ? 1 : 0
   name = "${aws_appautoscaling_target.ecs_target.resource_id}/target-scaling"
@@ -112,11 +68,6 @@ resource "aws_appautoscaling_policy" "sqs_policy_scale_out" {
   scalable_dimension = aws_appautoscaling_target.ecs_target.scalable_dimension
   service_namespace  = aws_appautoscaling_target.ecs_target.service_namespace
 
-  # target_tracking_scaling_policy_configuration {
-  #   target_value       = var.target_value
-  #   scale_in_cooldown  = var.scale_in_cooldown
-  #   scale_out_cooldown = var.scale_out_cooldown
-  # }
   step_scaling_policy_configuration {
     adjustment_type         = "ChangeInCapacity"
     cooldown                = var.scale_out_cooldown
@@ -139,11 +90,6 @@ resource "aws_appautoscaling_policy" "sqs_policy_scale_in" {
   scalable_dimension = aws_appautoscaling_target.ecs_target.scalable_dimension
   service_namespace  = aws_appautoscaling_target.ecs_target.service_namespace
 
-  # target_tracking_scaling_policy_configuration {
-  #   target_value       = var.target_value
-  #   scale_in_cooldown  = var.scale_in_cooldown
-  #   scale_out_cooldown = var.scale_out_cooldown
-  # }
   step_scaling_policy_configuration {
     adjustment_type         = "ChangeInCapacity"
     cooldown                = var.scale_in_cooldown
