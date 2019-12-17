@@ -113,11 +113,15 @@ resource "aws_ecs_service" "ihs_worker_collector" {
 }
 
 module "collector_autoscaler" {
-  source       = "./service_target_tracking"
-  cluster_name = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
-  service_name = aws_ecs_service.ihs_worker_collector.name
-  min_capacity = 1
-  max_capacity = 5
+  source         = "./service_target_tracking"
+  cluster_name   = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
+  service_name   = aws_ecs_service.ihs_worker_collector.name
+  min_capacity   = 1
+  max_capacity   = 5
+  sqs_policy     = true
+  cluster_policy = false
+  queue1         = "ihs-collections-h"
+  queue2         = "ihs-collections-v"
 }
 
 

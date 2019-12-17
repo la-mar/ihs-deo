@@ -38,28 +38,34 @@ variable "scale_out_cooldown" {
   default     = "300"
 }
 
-variable "metric_namespace" {
-  description = "App autoscaling custom metric namespace"
-  type        = string
-  default     = "AWS/ECS"
-}
-
 variable "metric_name" {
   description = "App autoscaling custom metric name"
   type        = string
   default     = "CPUUtilization"
 }
 
-variable "metric_statistic" {
-  description = "App autoscaling custom metric statistic"
-  type        = string
-  default     = "Average"
+variable "cluster_policy" {
+  description = "Toggle the creation of the appscaling policy using cluster metrics"
+  type        = bool
+  default     = true
 }
 
-variable "metric_unit" {
-  description = "App autoscaling custom metric unit"
+variable "sqs_policy" {
+  description = "Toggle the creation of the appscaling policy using sqs metrics"
+  type        = bool
+  default     = false
+}
+
+variable "queue1" {
+  description = "Name of queue for Cloudwatch Metric"
   type        = string
-  default     = "Percent"
+  default     = ""
+}
+
+variable "queue2" {
+  description = "Name of queue for Cloudwatch Metric"
+  type        = string
+  default     = ""
 }
 
 resource "aws_appautoscaling_target" "ecs_target" {
@@ -70,7 +76,8 @@ resource "aws_appautoscaling_target" "ecs_target" {
   service_namespace  = "ecs"
 }
 
-resource "aws_appautoscaling_policy" "ecs_service" {
+resource "aws_appautoscaling_policy" "cluster_policy" {
+  count              = var.cluster_policy ? 1 : 0
   name               = "${aws_appautoscaling_target.ecs_target.resource_id}/target-scaling"
   policy_type        = "TargetTrackingScaling"
   resource_id        = aws_appautoscaling_target.ecs_target.resource_id
@@ -79,10 +86,10 @@ resource "aws_appautoscaling_policy" "ecs_service" {
 
   target_tracking_scaling_policy_configuration {
     customized_metric_specification {
-      namespace   = var.metric_namespace
+      namespace   = "AWS/ECS"
       metric_name = var.metric_name
-      statistic   = var.metric_statistic
-      unit        = var.metric_unit
+      statistic   = "Average"
+      unit        = "Percent"
 
       dimensions {
         name  = "ClusterName"
@@ -92,6 +99,38 @@ resource "aws_appautoscaling_policy" "ecs_service" {
       dimensions {
         name  = "ServiceName"
         value = var.service_name
+      }
+    }
+
+    target_value       = var.target_value
+    scale_in_cooldown  = var.scale_in_cooldown
+    scale_out_cooldown = var.scale_out_cooldown
+  }
+}
+
+resource "aws_appautoscaling_policy" "sqs_policy" {
+  count              = var.sqs_policy ? 1 : 0
+  name               = "${aws_appautoscaling_target.ecs_target.resource_id}/target-scaling"
+  policy_type        = "TargetTrackingScaling"
+  resource_id        = aws_appautoscaling_target.ecs_target.resource_id
+  scalable_dimension = aws_appautoscaling_target.ecs_target.scalable_dimension
+  service_namespace  = aws_appautoscaling_target.ecs_target.service_namespace
+
+  target_tracking_scaling_policy_configuration {
+    customized_metric_specification {
+      namespace   = "AWS/SQS"
+      metric_name = "ApproximateNumberOfMessagesVisible"
+      statistic   = "Sum"
+      unit        = "Count"
+
+      dimensions {
+        name  = "QueueName"
+        value = var.queue1
+      }
+
+      dimensions {
+        name  = "QueueName"
+        value = var.queue2
       }
     }
 
