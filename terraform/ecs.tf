@@ -32,7 +32,11 @@ resource "aws_ecs_service" "ihs_web" {
   cluster         = data.terraform_remote_state.ecs_cluster.outputs.cluster_arn
   task_definition = data.aws_ecs_task_definition.ihs_web.family
 
-  scheduling_strategy     = "REPLICA"
+  scheduling_strategy = "REPLICA"
+  ordered_placement_strategy {
+    type  = "spread"
+    field = "instanceId"
+  }
   desired_count           = 2
   enable_ecs_managed_tags = true
   propagate_tags          = "TASK_DEFINITION"
@@ -88,7 +92,11 @@ resource "aws_ecs_service" "ihs_worker_collector" {
   cluster         = data.terraform_remote_state.ecs_cluster.outputs.cluster_arn
   task_definition = data.aws_ecs_task_definition.ihs_worker_collector.family
 
-  scheduling_strategy     = "REPLICA"
+  scheduling_strategy = "REPLICA"
+  ordered_placement_strategy {
+    type  = "spread"
+    field = "instanceId"
+  }
   desired_count           = 2
   enable_ecs_managed_tags = true
   propagate_tags          = "TASK_DEFINITION"
@@ -118,7 +126,11 @@ resource "aws_ecs_service" "ihs_worker_deleter" {
   cluster         = data.terraform_remote_state.ecs_cluster.outputs.cluster_arn
   task_definition = data.aws_ecs_task_definition.ihs_worker_deleter.family
 
-  scheduling_strategy     = "REPLICA"
+  scheduling_strategy = "REPLICA"
+  ordered_placement_strategy {
+    type  = "spread"
+    field = "instanceId"
+  }
   desired_count           = 2
   enable_ecs_managed_tags = true
   propagate_tags          = "TASK_DEFINITION"
@@ -147,7 +159,11 @@ resource "aws_ecs_service" "ihs_worker_submitter" {
   cluster         = data.terraform_remote_state.ecs_cluster.outputs.cluster_arn
   task_definition = data.aws_ecs_task_definition.ihs_worker_submitter.family
 
-  scheduling_strategy     = "REPLICA"
+  scheduling_strategy = "REPLICA"
+  ordered_placement_strategy {
+    type  = "spread"
+    field = "instanceId"
+  }
   desired_count           = 2
   enable_ecs_managed_tags = true
   propagate_tags          = "TASK_DEFINITION"
