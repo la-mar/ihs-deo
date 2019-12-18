@@ -74,7 +74,7 @@ resource "aws_appautoscaling_target" "ecs_target" {
 
 resource "aws_appautoscaling_policy" "sqs_policy_scale_out" {
   # count              = var.sqs_policy ? 1 : 0
-  name = "${aws_appautoscaling_target.ecs_target.resource_id}/target-scaling"
+  name = "${aws_appautoscaling_target.ecs_target.resource_id}/app-autoscale-out"
   # policy_type        = "TargetTrackingScaling"
   resource_id        = aws_appautoscaling_target.ecs_target.resource_id
   scalable_dimension = aws_appautoscaling_target.ecs_target.scalable_dimension
@@ -96,7 +96,7 @@ resource "aws_appautoscaling_policy" "sqs_policy_scale_out" {
 
 resource "aws_appautoscaling_policy" "sqs_policy_scale_in" {
   # count              = var.sqs_policy ? 1 : 0
-  name = "${aws_appautoscaling_target.ecs_target.resource_id}/target-scaling"
+  name = "${aws_appautoscaling_target.ecs_target.resource_id}/app-autoscale-in"
   # policy_type        = "TargetTrackingScaling"
   resource_id        = aws_appautoscaling_target.ecs_target.resource_id
   scalable_dimension = aws_appautoscaling_target.ecs_target.scalable_dimension
