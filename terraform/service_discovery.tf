@@ -18,7 +18,7 @@ resource "aws_service_discovery_service" "web" {
 
     dns_records {
       ttl  = 30
-      type = "SRV"
+      type = "A"
     }
 
     routing_policy = "WEIGHTED"

@@ -25,6 +25,38 @@ data "aws_ecs_task_definition" "ihs_cron" {
   task_definition = "ihs-cron"
 }
 
+resource "aws_security_group" "ihs_web" {
+  description = "Balancer for ${local.full_service_name}"
+
+  vpc_id = data.terraform_remote_state.vpc.outputs.vpc_id
+  name   = "${var.service_name}-web-sg"
+  tags   = local.tags
+
+  # ingress {
+  #   description = "HTTPS"
+  #   protocol    = "tcp"
+  #   from_port   = 443
+  #   to_port     = 443
+  #   cidr_blocks = ["0.0.0.0/0"]
+  # }
+
+  ingress {
+    description = "All TCP Traffic"
+    protocol    = "tcp"
+    from_port   = 9090
+    to_port     = 9090
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    description = "All Traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
 
 ### ECS Services ###
 resource "aws_ecs_service" "ihs_web" {
@@ -51,10 +83,16 @@ resource "aws_ecs_service" "ihs_web" {
     ]
   }
 
+  network_configuration {
+    subnets          = data.terraform_remote_state.vpc.outputs.private_subnets
+    security_groups  = [aws_security_group.ihs_web.id]
+    assign_public_ip = false
+  }
+
   service_registries {
     registry_arn   = aws_service_discovery_service.web.arn
     container_name = "ihs-web"
-    container_port = 8000
+    container_port = 9090
   }
 }
 
