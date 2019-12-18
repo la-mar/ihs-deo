@@ -92,7 +92,7 @@ resource "aws_ecs_service" "ihs_web" {
   service_registries {
     registry_arn   = aws_service_discovery_service.web.arn
     container_name = "ihs-web"
-    container_port = 9090
+    # container_port = 9090
   }
 }
 
