@@ -22,6 +22,18 @@ variable "target_value" {
   default     = "10000"
 }
 
+variable "scale_in_threshold" {
+  description = "App autoscaling target values"
+  type        = number
+  default     = 1000
+}
+
+variable "scale_out_threshold" {
+  description = "App autoscaling target values"
+  type        = number
+  default     = 10000
+}
+
 variable "scale_in_cooldown" {
   description = "App autoscaling scale in cooldown (seconds)"
   type        = string
@@ -108,7 +120,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs_usage_high" {
   alarm_name                = "${var.cluster_name}/${var.service_name}/sqs-usage-high"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   evaluation_periods        = "2"
-  threshold                 = "10000"
+  threshold                 = var.scale_out_threshold
   alarm_description         = "Report the aggregate total of messages across two SQS queues"
   insufficient_data_actions = []
   alarm_actions             = [aws_appautoscaling_policy.sqs_policy_scale_out.arn]
@@ -158,7 +170,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs_usage_low" {
   alarm_name                = "${var.cluster_name}/${var.service_name}/sqs-usage-low"
   comparison_operator       = "LessThanOrEqualToThreshold"
   evaluation_periods        = "2"
-  threshold                 = "1000"
+  threshold                 = var.scale_in_threshold
   alarm_description         = "Report the aggregate total of messages across two SQS queues"
   insufficient_data_actions = []
   alarm_actions             = [aws_appautoscaling_policy.sqs_policy_scale_in.arn]
