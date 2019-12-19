@@ -105,23 +105,26 @@ def get_task_definition(
             "containerDefinitions": [
                 {
                     "name": "ihs-web",
-                    "command": ["ihs", "run", "web", "-b 0.0.0.0:8000"],
+                    "command": [
+                        "ihs",
+                        "run",
+                        "web",
+                        "-b 0.0.0.0:9090",
+                        "--statsd-host=localhost:8125",
+                    ],
                     "memoryReservation": 128,
                     "cpu": 256,
                     "image": image,
                     "essential": True,
                     "environment": transform_envs(envs),
                     "portMappings": [
-                        {
-                            "containerPort": 8000,
-                            "protocol": "tcp",
-                        },  # dynamically allocates host port
+                        {"hostPort": 9090, "containerPort": 9090, "protocol": "tcp"}
                     ],
                 },
             ],
             "executionRoleArn": "ecsTaskExecutionRole",
             "family": f"{service_name}",
-            "networkMode": "bridge",
+            "networkMode": "awsvpc",
             "taskRoleArn": task_iam_role_arn,
             "tags": tags,
             # "cpu": "256",  # from 128 CPU units (0.125 vCPUs) and 10240 CPU units (10 vCPUs)
