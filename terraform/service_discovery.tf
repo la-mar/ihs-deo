@@ -21,7 +21,7 @@ resource "aws_service_discovery_service" "web" {
       type = "A"
     }
 
-    routing_policy = "WEIGHTED"
+    routing_policy = "MULTIVALUE"
   }
 
   health_check_custom_config {
