@@ -32,14 +32,6 @@ resource "aws_security_group" "ihs_web" {
   name   = "${var.service_name}-web-sg"
   tags   = local.tags
 
-  # ingress {
-  #   description = "HTTPS"
-  #   protocol    = "tcp"
-  #   from_port   = 443
-  #   to_port     = 443
-  #   cidr_blocks = ["0.0.0.0/0"]
-  # }
-
   ingress {
     description = "All TCP Traffic"
     protocol    = "tcp"
@@ -92,17 +84,11 @@ resource "aws_ecs_service" "ihs_web" {
   service_registries {
     registry_arn   = aws_service_discovery_service.web.arn
     container_name = "ihs-web"
-    # container_port = 9090
+
   }
 }
 
-# module "web_autoscaler" {
-#   source       = "./service_target_tracking"
-#   cluster_name = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
-#   service_name = aws_ecs_service.ihs_web.name
-#   min_capacity = 2 # change to 1 after service discovery testing
-#   max_capacity = 4
-# }
+# TODO:Add cpu util auto scaler
 
 resource "aws_ecs_service" "ihs_worker_default" {
   name            = "ihs-worker-default"
@@ -151,13 +137,15 @@ resource "aws_ecs_service" "ihs_worker_collector" {
 }
 
 module "collector_autoscaler" {
-  source       = "./service_target_tracking"
-  cluster_name = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
-  service_name = aws_ecs_service.ihs_worker_collector.name
-  min_capacity = 1
-  max_capacity = 5
-  queue1       = "ihs-collections-h"
-  queue2       = "ihs-collections-v"
+  source              = "./service_target_tracking"
+  cluster_name        = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
+  service_name        = aws_ecs_service.ihs_worker_collector.name
+  min_capacity        = 1
+  max_capacity        = 5
+  queue1              = "ihs-collections-h"
+  queue2              = "ihs-collections-v"
+  scale_in_threshold  = 1000
+  scale_out_threshold = 4000
 }
 
 
@@ -187,13 +175,15 @@ resource "aws_ecs_service" "ihs_worker_deleter" {
 }
 
 module "deleter_autoscaler" {
-  source       = "./service_target_tracking"
-  cluster_name = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
-  service_name = aws_ecs_service.ihs_worker_deleter.name
-  min_capacity = 1
-  max_capacity = 5
-  queue1       = "ihs-deletions-h"
-  queue2       = "ihs-deletions-v"
+  source              = "./service_target_tracking"
+  cluster_name        = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
+  service_name        = aws_ecs_service.ihs_worker_deleter.name
+  min_capacity        = 1
+  max_capacity        = 5
+  queue1              = "ihs-deletions-h"
+  queue2              = "ihs-deletions-v"
+  scale_in_threshold  = 200
+  scale_out_threshold = 1000
 }
 
 resource "aws_ecs_service" "ihs_worker_submitter" {
