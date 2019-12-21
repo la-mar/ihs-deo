@@ -12,19 +12,19 @@ x-defaults: &defaults
     - AWS_SECRET_ACCESS_KEY
     - AWS_SESSION_TOKEN
     - AWS_SECURITY_TOKEN
+  env_file: .env
 
 services:
   web:
     <<: *defaults
-    # user: celeryuser
-    command: ihs run web
-    # command: pwd
+    entrypoint: ihs
+    command: run web
     ports:
       - "5000:5000"
-  worker:
-    <<: *defaults
-    command: ihs run worker -Q ihs-default,ihs-submissions-h,ihs-collections-h,ihs-deletions-h,ihs-submissions-v,ihs-collections-v,ihs-deletions-v --loglevel DEBUG
-    # entrypoint:
-  cron:
-    <<: *defaults
-    command: ihs run cron --loglevel=DEBUG
+  # worker:
+  #   <<: *defaults
+  #   command: ihs run worker -Q ihs-default,ihs-submissions-h,ihs-collections-h,ihs-deletions-h,ihs-submissions-v,ihs-collections-v,ihs-deletions-v --loglevel DEBUG
+  #   # entrypoint:
+  # cron:
+  #   <<: *defaults
+  #   command: ihs run cron --loglevel=DEBUG

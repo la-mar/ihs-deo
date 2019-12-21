@@ -7,14 +7,8 @@ AWS_ACCOUNT_ID:=$$(aws-vault exec prod -- aws sts get-caller-identity | jq .Acco
 IMAGE_NAME:=driftwood/ihs
 DOCKERFILE:=Dockerfile
 
-dev:
-	${eval export ENV=dev}
-
-stage:
-	${eval export ENV=stage}
-
-prod:
-	${eval export ENV=prod}
+run-web:
+	aws-vault exec ${ENV} -- docker run -e AWS_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_SESSION_TOKEN -e AWS_SECURITY_TOKEN -p 8000:5000 driftwood/ihs ihs run web
 
 run-tests:
 	pytest --cov=ihs tests/ --cov-report xml:./coverage/python/coverage.xml
@@ -150,7 +144,7 @@ view-credentials:
 
 compose:
 	# run docker-compose using aws-vault session credentials
-	aws-vault exec prod -- docker-compose up
+	aws-vault exec ${ENV} -- docker-compose up
 
 add-to-secret-scanner:
 	git secrets --install
