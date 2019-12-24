@@ -309,7 +309,7 @@ data "aws_iam_policy_document" "task_policy" {
 resource "aws_iam_policy" "task_policy" {
   name        = "${var.service_name}-task-policy"
   path        = "/"
-  description = "Allow ${var.service_name} tasks running in ECS to interface with SQS queues"
+  description = "${var.service_name} task policy"
 
   policy = data.aws_iam_policy_document.task_policy.json
 }

@@ -366,6 +366,4 @@ for service, prev_rev_num, rev_num in results:
         taskDefinition=f"{service}:{rev_num}",
     )
     print(f"{service:>20}: updated service on cluster {CLUSTER_NAME}")
-
-
 print("\n\n")

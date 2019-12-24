@@ -100,9 +100,7 @@ cc-run-local:
 	JOBNAME?=build-image
 	circleci local execute -c process.yml --job build-image -e DOCKER_LOGIN=${DOCKER_LOGIN} -e DOCKER_PASSWORD=${DOCKER_PASSWORD}
 
-all:
-	# Rebuild the services docker image and push it to the remote repository
-	make ihs-deo build login push
+all: build login push
 
 deploy: ssm-update
 	# Update SSM parameters from local dotenv and deploy a new version of the service to ECS
