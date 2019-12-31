@@ -25,6 +25,7 @@ class DataResource(Resource):
 
     @no_type_check
     def get_records(self, **kwargs) -> List[Dict]:
+        """ Search each model in self.models for results fitting the given criteria. Once results are found in a model, no subsequent models are searched. Models are searched in order as specified in self.models."""
         for model in self.models:
             result = model.get(**kwargs)
             if result:
