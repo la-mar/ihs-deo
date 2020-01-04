@@ -45,10 +45,12 @@ def create_app(script_info=None):
 
 def configure_blueprints(app):
     # avoids circular import
+    import api.resources.base as root
     import api.resources.well as well
     import api.resources.production as production
 
     # register blueprints
+    app.register_blueprint(root.blueprint)
     app.register_blueprint(well.blueprint)
     app.register_blueprint(production.blueprint)
 

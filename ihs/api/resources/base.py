@@ -1,7 +1,8 @@
 from typing import Dict, Tuple
 import logging
 
-from flask_restful import Resource, request
+from flask import Blueprint
+from flask_restful import Resource, request, Api
 from flask_mongoengine import Document as Model
 from marshmallow import Schema
 
@@ -13,6 +14,11 @@ logger = logging.getLogger(__name__)
 class TestResource(Resource):
     def get(self) -> Tuple[Dict, int]:  # type: ignore
         return request.args, 200
+
+
+class HealthCheck(Resource):
+    def get(self) -> Tuple[str, int]:  # type: ignore
+        return "ok", 200
 
 
 class DataResource(Resource):
@@ -46,3 +52,9 @@ class IDListResource(IDResource):
             return self._get(name__in=str(areas).split(",")), 200
         else:
             return {"status": "missing_argument"}, 400
+
+
+blueprint = Blueprint("root", __name__)
+api = Api(blueprint)
+
+api.add_resource(HealthCheck, "/health")
