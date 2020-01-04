@@ -6,15 +6,16 @@ from marshmallow import Schema, fields, pre_dump
 
 from api.schema.validators import length_is_14, length_is_10
 from api.schema import ProductionBaseSchema
+from api.schema.base import BaseSchema
 
 
-class WellCountSchema(Schema):
+class WellCountSchema(BaseSchema):
     active_producing = fields.Int()
     active_total = fields.Int()
     total = fields.Int()
 
 
-class ProductionDateSchema(Schema):
+class ProductionDateSchema(BaseSchema):
     class Meta:
         ordered = True
 
@@ -33,7 +34,7 @@ class ProductionDateSchema(Schema):
         return data
 
 
-class ProductionStatusSchema(Schema):
+class ProductionStatusSchema(BaseSchema):
     class Meta:
         ordered = True
 
@@ -50,7 +51,7 @@ class ProductionStatusSchema(Schema):
         return data
 
 
-class ProductionGathererSchema(Schema):
+class ProductionGathererSchema(BaseSchema):
     class Meta:
         ordered = True
 
@@ -103,7 +104,7 @@ class ProductionHeaderSchema(ProductionBaseSchema):
         return output
 
 
-class ProductionMonthlyRecordSchema(Schema):
+class ProductionMonthlyRecordSchema(BaseSchema):
     class Meta:
         ordered = True
 

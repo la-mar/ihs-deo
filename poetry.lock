@@ -19,6 +19,45 @@ version = "8.0.0"
 
 [[package]]
 category = "main"
+description = "A pluggable API specification generator. Currently supports the OpenAPI Specification (f.k.a. the Swagger specification)."
+name = "apispec"
+optional = false
+python-versions = ">=3.5"
+version = "3.2.0"
+
+[package.dependencies]
+[package.dependencies.PyYAML]
+optional = true
+version = ">=3.10"
+
+[package.extras]
+dev = ["PyYAML (>=3.10)", "prance (>=0.11)", "marshmallow (>=2.19.2)", "pytest", "mock", "flake8 (3.7.9)", "flake8-bugbear (19.8.0)", "pre-commit (>=1.20,<2.0)", "tox"]
+docs = ["marshmallow (>=2.19.2)", "pyyaml (5.2)", "sphinx (2.3.0)", "sphinx-issues (1.2.0)", "sphinx-rtd-theme (0.4.3)"]
+lint = ["flake8 (3.7.9)", "flake8-bugbear (19.8.0)", "pre-commit (>=1.20,<2.0)"]
+tests = ["PyYAML (>=3.10)", "prance (>=0.11)", "marshmallow (>=2.19.2)", "pytest", "mock"]
+validation = ["prance (>=0.11)"]
+yaml = ["PyYAML (>=3.10)"]
+
+[[package]]
+category = "main"
+description = "Web framework plugins for apispec."
+name = "apispec-webframeworks"
+optional = false
+python-versions = ">=3.6"
+version = "0.5.2"
+
+[package.dependencies]
+[package.dependencies.apispec]
+extras = ["yaml"]
+version = ">=2.0.0"
+
+[package.extras]
+dev = ["pytest", "mock", "Flask (1.1.1)", "tornado", "bottle (0.12.17)", "flake8 (3.7.9)", "flake8-bugbear (19.8.0)", "pre-commit (>=1.18,<2.0)", "tox"]
+lint = ["flake8 (3.7.9)", "flake8-bugbear (19.8.0)", "pre-commit (>=1.18,<2.0)"]
+tests = ["pytest", "mock", "Flask (1.1.1)", "tornado", "bottle (0.12.17)"]
+
+[[package]]
+category = "main"
 description = "A small Python module for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
 name = "appdirs"
 optional = false
@@ -1400,7 +1439,7 @@ lint = []
 pytest = []
 
 [metadata]
-content-hash = "528d988cb2882328cdf6299d6ca62c1d221616d8ff7f335ab601f2bd6bc0449d"
+content-hash = "606dfaa093413c9bf30bd8fa6625c2f3b840773b5433e244e5a0fd77bfc25131"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -1411,6 +1450,14 @@ amqp = [
 aniso8601 = [
     {file = "aniso8601-8.0.0-py2.py3-none-any.whl", hash = "sha256:c033f63d028b9a58e3ab0c2c7d0532ab4bfa7452bfc788fbfe3ddabd327b181a"},
     {file = "aniso8601-8.0.0.tar.gz", hash = "sha256:529dcb1f5f26ee0df6c0a1ee84b7b27197c3c50fc3a6321d66c544689237d072"},
+]
+apispec = [
+    {file = "apispec-3.2.0-py2.py3-none-any.whl", hash = "sha256:f2ecb3a6534cfb42cf69b5c1222d2c0e695aab5ec3d7edde31b7354670948f05"},
+    {file = "apispec-3.2.0.tar.gz", hash = "sha256:c1625ae910f699c9adb21928693a3245b9faab6843f1b1c94ab2d505549cd78a"},
+]
+apispec-webframeworks = [
+    {file = "apispec-webframeworks-0.5.2.tar.gz", hash = "sha256:0db35b267914b3f8c562aca0261957dbcb4176f255eacc22520277010818dcf3"},
+    {file = "apispec_webframeworks-0.5.2-py2.py3-none-any.whl", hash = "sha256:482c563abbcc2a261439476cb3f1a7c7284cc997c322c574d48c111643e9c04e"},
 ]
 appdirs = [
     {file = "appdirs-1.4.3-py2.py3-none-any.whl", hash = "sha256:d8b24664561d0d34ddfaec54636d502d7cea6e29c3eaf68f3df6180863e2166e"},

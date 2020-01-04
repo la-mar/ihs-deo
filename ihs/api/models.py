@@ -1,90 +1,87 @@
-from typing import no_type_check, List, Dict
-from collections import OrderedDict
-import functools
 import datetime
 import logging
-import mongoengine as me
 
 from api.mixin import BaseMixin, WellMixin, ProductionMixin
+from ihs import db
 
 
 loggger = logging.getLogger(__name__)
 
 
-class WellMasterHorizontal(me.Document, BaseMixin):
+class WellMasterHorizontal(db.Document, BaseMixin):
     meta = {"collection": "well_master_horizontal", "ordering": ["-last_update_at"]}
-    name = me.StringField(primary_key=True)
-    ids = me.ListField()
-    count = me.IntField()
-    last_update_at = me.DateTimeField(default=datetime.datetime.now)
-    ihs_last_update_date = me.DateTimeField()
+    name = db.StringField(primary_key=True)
+    ids = db.ListField()
+    count = db.IntField()
+    last_update_at = db.DateTimeField(default=datetime.datetime.now)
+    ihs_last_update_date = db.DateTimeField()
 
 
-class WellMasterVertical(me.Document, BaseMixin):
+class WellMasterVertical(db.Document, BaseMixin):
     meta = {"collection": "well_master_vertical", "ordering": ["-last_update_at"]}
-    name = me.StringField(primary_key=True)
-    ids = me.ListField()
-    count = me.IntField()
-    last_update_at = me.DateTimeField(default=datetime.datetime.now)
-    ihs_last_update_date = me.DateTimeField()
+    name = db.StringField(primary_key=True)
+    ids = db.ListField()
+    count = db.IntField()
+    last_update_at = db.DateTimeField(default=datetime.datetime.now)
+    ihs_last_update_date = db.DateTimeField()
 
 
-class ProductionMasterHorizontal(me.Document, BaseMixin):
+class ProductionMasterHorizontal(db.Document, BaseMixin):
     meta = {
         "collection": "production_master_horizontal",
         "ordering": ["-last_update_at"],
     }
-    name = me.StringField(primary_key=True)
-    ids = me.ListField()
-    count = me.IntField()
-    last_update_at = me.DateTimeField(default=datetime.datetime.now)
-    ihs_last_update_date = me.DateTimeField()
+    name = db.StringField(primary_key=True)
+    ids = db.ListField()
+    count = db.IntField()
+    last_update_at = db.DateTimeField(default=datetime.datetime.now)
+    ihs_last_update_date = db.DateTimeField()
 
 
-class ProductionMasterVertical(me.Document, BaseMixin):
+class ProductionMasterVertical(db.Document, BaseMixin):
     meta = {
         "collection": "production_master_vertical",
         "ordering": ["-last_update_at"],
     }
-    name = me.StringField(primary_key=True)
-    ids = me.ListField()
-    count = me.IntField()
-    last_update_at = me.DateTimeField(default=datetime.datetime.now)
-    ihs_last_update_date = me.DateTimeField()
+    name = db.StringField(primary_key=True)
+    ids = db.ListField()
+    count = db.IntField()
+    last_update_at = db.DateTimeField(default=datetime.datetime.now)
+    ihs_last_update_date = db.DateTimeField()
 
 
-class WellHorizontal(me.DynamicDocument, WellMixin):
+class WellHorizontal(db.DynamicDocument, WellMixin):
     meta = {"collection": "well_horizontal", "ordering": ["-last_update_at"]}
-    identification = me.StringField(primary_key=True)
-    api14 = me.StringField(unique=True)
-    api10 = me.StringField()
-    last_update_at = me.DateTimeField(default=datetime.datetime.now)
-    ihs_last_update_date = me.DateTimeField()
+    identification = db.StringField(primary_key=True)
+    api14 = db.StringField(unique=True)
+    api10 = db.StringField()
+    last_update_at = db.DateTimeField(default=datetime.datetime.now)
+    ihs_last_update_date = db.DateTimeField()
 
 
-class WellVertical(me.DynamicDocument, WellMixin):
+class WellVertical(db.DynamicDocument, WellMixin):
     meta = {"collection": "well_vertical", "ordering": ["-last_update_at"]}
-    identification = me.StringField(primary_key=True)
-    api14 = me.StringField(unique=True)
-    api10 = me.StringField()
-    last_update_at = me.DateTimeField(default=datetime.datetime.now)
-    ihs_last_update_date = me.DateTimeField()
+    identification = db.StringField(primary_key=True)
+    api14 = db.StringField(unique=True)
+    api10 = db.StringField()
+    last_update_at = db.DateTimeField(default=datetime.datetime.now)
+    ihs_last_update_date = db.DateTimeField()
 
 
-class ProductionHorizontal(me.DynamicDocument, ProductionMixin):
+class ProductionHorizontal(db.DynamicDocument, ProductionMixin):
     meta = {"collection": "production_horizontal", "ordering": ["-last_update_at"]}
-    identification = me.StringField(primary_key=True)
-    api10 = me.StringField()
-    last_update_at = me.DateTimeField(default=datetime.datetime.now)
-    ihs_last_update_date = me.DateTimeField()
+    identification = db.StringField(primary_key=True)
+    api10 = db.StringField()
+    last_update_at = db.DateTimeField(default=datetime.datetime.now)
+    ihs_last_update_date = db.DateTimeField()
 
 
-class ProductionVertical(me.DynamicDocument, ProductionMixin):
+class ProductionVertical(db.DynamicDocument, ProductionMixin):
     meta = {"collection": "production_vertical", "ordering": ["-last_update_at"]}
-    identification = me.StringField(primary_key=True)
-    api10 = me.StringField()
-    last_update_at = me.DateTimeField(default=datetime.datetime.now)
-    ihs_last_update_date = me.DateTimeField()
+    identification = db.StringField(primary_key=True)
+    api10 = db.StringField()
+    last_update_at = db.DateTimeField(default=datetime.datetime.now)
+    ihs_last_update_date = db.DateTimeField()
 
 
 if __name__ == "__main__":
@@ -103,3 +100,8 @@ if __name__ == "__main__":
     x = model.get(api14=api14)[0]
     dir(x)
     x.production_header
+
+    x = model.get(paginate=True, ihs_last_update_date__gte="2020-01-01")
+
+    dir(model.objects)
+

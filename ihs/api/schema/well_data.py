@@ -5,23 +5,24 @@ from marshmallow import Schema, fields, pre_dump
 
 from util import query_dict
 from api.schema import WellBaseSchema, IPTestSchema
+from api.schema.base import BaseSchema
 
 
-class WellLocationSchema(Schema):
+class WellLocationSchema(BaseSchema):
     class Meta:
         ordered = True
 
-    lon = fields.Float()
-    lat = fields.Float()
+    lon = fields.Float(allow_none=True)
+    lat = fields.Float(allow_none=True)
     crs = fields.Str()
     block = fields.Str()
-    section = fields.Int()
-    abstract = fields.Int()
+    section = fields.Str()
+    abstract = fields.Str()
     survey = fields.Str()
     metes_bounds = fields.Str()
 
 
-class WellElevationSchema(Schema):
+class WellElevationSchema(BaseSchema):
     class Meta:
         ordered = True
 
@@ -33,7 +34,7 @@ class WellElevationSchema(Schema):
     kb_code = fields.Str()
 
 
-class FracParmSchema(Schema):
+class FracParmSchema(BaseSchema):
     class Meta:
         ordered = True
 
@@ -53,7 +54,7 @@ class FracParmSchema(Schema):
     proppant_total_uom = fields.Str()
 
 
-class WellStatusSchema(Schema):
+class WellStatusSchema(BaseSchema):
     class Meta:
         ordered = True
 
@@ -63,7 +64,7 @@ class WellStatusSchema(Schema):
     activity_code = fields.Str()
 
 
-class WellDateSchema(Schema):
+class WellDateSchema(BaseSchema):
     class Meta:
         ordered = True
 
@@ -162,7 +163,7 @@ class WellFullSchema(WellHeaderSchema):
     class Meta:
         ordered = True
 
-    shl = fields.Nested(WellLocationSchema)
+    shl = fields.Nested(WellLocationSchema,)
     bhl = fields.Nested(WellLocationSchema)
     pbhl = fields.Nested(WellLocationSchema)
     ip = fields.Nested(IPTestSchema, many=True)
@@ -215,5 +216,7 @@ if __name__ == "__main__":
     api14 = "42461409160000"
     m = model.objects.get(api14=api14)
     sch = WellFullSchema()
-    sch.dump(m)
+
+    # x = sch.dump(m)  # TODO: Incorporate schema validation to endpoints
+    # sch.validate(x)
 

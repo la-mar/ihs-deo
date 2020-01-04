@@ -52,7 +52,13 @@ class WellMixin(BaseMixin):
             "pbhl": ["proposed bottom hole", "pbhl"],
         }
 
-        for loc in self.location:
+        location = (
+            self.location
+            if issubclass(self.location.__class__, list)
+            else [self.location]
+        )
+
+        for loc in location:
             get = functools.partial(query_dict, data=loc)
             type_name = loc.get("type_name", "").lower()
             type_code = loc.get("type_code", "").lower()
@@ -63,7 +69,7 @@ class WellMixin(BaseMixin):
                     lon, lat, crs = projector.transform(
                         x=get("geographic.longitude"),
                         y=get("geographic.latitude"),
-                        crs=datum.lower(),
+                        crs=datum.lower() if datum else datum,
                     )
                     locs[loc_name] = {
                         "lon": lon,

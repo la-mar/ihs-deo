@@ -1,8 +1,13 @@
 # pylint: disable=unused-argument
-from marshmallow import Schema, fields, pre_dump
+from marshmallow import Schema, fields, pre_dump, ValidationError
+import logging
+
+from api.schema.base import BaseSchema
+
+logger = logging.getLogger(__name__)
 
 
-class IPTestSchema(Schema):
+class IPTestSchema(BaseSchema):
     class Meta:
         ordered = True
 
@@ -53,8 +58,11 @@ if __name__ == "__main__":
     app.app_context().push()
     conf = get_active_config()
     model = WellHorizontal
-    api14 = "42461409160000"
+    api14 = "42461412090000"
     m = model.objects.get(api14=api14)
     sch = IPTestSchema()
-    sch.dump(m.ip_tests, many=True)
+
+    data = m.ip_tests
+    # data[0]["test_number"] = "U138"
+    sch.dump(data, many=True)
 

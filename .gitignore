@@ -126,3 +126,4 @@ doc/.DS_Store
 .env.production
 cov.xml
 process.yml
+doc/.DS_Store

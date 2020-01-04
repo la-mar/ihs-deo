@@ -1,5 +1,6 @@
 import pyproj
-import functools
+from pyproj import CRS, Transformer
+
 
 EPSG_MAP = {
     "nad27:texas central": 32039,
@@ -25,19 +26,33 @@ class CoordinateTransformer:
         return EPSG_MAP.get(str(name).lower())
 
     def transform(self, x: float, y: float, crs: str):
+        if all([x is not None, y is not None, crs is not None]):
+            src = CRS.from_epsg(self.lookup_epsg(crs))
+            dest = CRS.from_epsg(self.lookup_epsg(self.crs))
+            transformer = Transformer.from_crs(src, dest, always_xy=True)
+            return (*transformer.transform(x, y), self.crs)
 
-        source_proj = pyproj.Proj(init=f"epsg:{self.lookup_epsg(crs)}")
-        dest_proj = pyproj.Proj(init=f"epsg:{self.lookup_epsg(self.crs)}")
-        return (*pyproj.transform(source_proj, dest_proj, x, y), self.crs)
+        else:
+            return x, y, crs
 
 
 if __name__ == "__main__":
-    ct = CoordinateTransformer("wgs84")
 
+    ct = CoordinateTransformer("wgs84")
     lon, lat = [-101.9179619, 31.2029678]
     crs = "NAD27"
-    ct.transform(lon, lat, crs)
+    result = ct.transform(lon, lat, crs)
+    result = (round(result[0], 7), round(result[1], 7), "wgs84")
+    expected = (-101.9183695, 31.2031166, "wgs84")
+
+    print("nad27s -> wgs84")
+    print(result)
+    print(result == expected)
 
     x, y = [1504599.4, 562258.6]
     crs = "NAD27SP"
     ct.transform(x, y, crs)
+
+    print("nad27sp -> wgs84")
+    print(result)
+    print(result == expected)

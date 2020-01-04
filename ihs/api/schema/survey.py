@@ -1,9 +1,10 @@
 from marshmallow import Schema, fields, pre_dump
 
 from api.schema import WellBaseSchema
+from api.schema.base import BaseSchema
 
 
-class SurveyPointSchema(Schema):
+class SurveyPointSchema(BaseSchema):
     md = fields.Int()
     md_uom = fields.Str()
     tvd = fields.Int()

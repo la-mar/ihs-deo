@@ -32,6 +32,8 @@ class BaseMixin:
 
         try:
             # pylint: disable=no-member
+            if kwargs.pop("paginate", False):
+                return cls.objects.paginate(**kwargs)
             return cls.objects(**kwargs)
         except me.errors.DoesNotExist:
             return None

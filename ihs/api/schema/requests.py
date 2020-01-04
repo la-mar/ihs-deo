@@ -2,8 +2,10 @@ from collections import OrderedDict
 import functools
 from marshmallow import Schema, fields
 
+from api.schema.base import BaseSchema
 
-class WellRequestSchema(Schema):
+
+class WellRequestSchema(BaseSchema):
 
     area_name = fields.Str()
     api14 = fields.List(fields.Str())

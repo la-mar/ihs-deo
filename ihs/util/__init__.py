@@ -87,6 +87,8 @@ def load_json(path: str):
 def query_dict(path: str, data: dict, sep: str = "."):
     elements = path.split(sep)
     for e in elements:
+        if issubclass(type(data), list) and len(data) > 0:
+            data = data[-1]  # TODO: this needs to be smarter
         if not issubclass(type(data), dict):
             raise ValueError(f"{data} ({type(data)}) is not a subclass of dict")
         data = data.get(e, {})

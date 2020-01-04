@@ -2,8 +2,10 @@ from collections import OrderedDict
 import functools
 from marshmallow import Schema, fields
 
+from api.schema.base import BaseSchema
 
-class IDListSchema(Schema):
+
+class IDListSchema(BaseSchema):
 
     name = fields.Str()
     ids = fields.List(fields.Str())

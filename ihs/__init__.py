@@ -6,9 +6,8 @@ from flask_mongoengine import MongoEngine
 from flask_debugtoolbar import DebugToolbarExtension
 from celery import Celery
 
-from api.well import well_blueprint
-from api.production import production_blueprint
 
+from api.apispec import APISpecExt
 from config import APP_SETTINGS, project, get_active_config
 import loggers
 import sentry
@@ -22,6 +21,7 @@ conf = get_active_config()
 db = MongoEngine()
 toolbar = DebugToolbarExtension()
 celery = Celery()
+apispec = APISpecExt()
 
 
 def create_app(script_info=None):
@@ -40,9 +40,8 @@ def create_app(script_info=None):
     toolbar.init_app(app)
     celery.config_from_object(app.config)
 
-    # register blueprints
-    app.register_blueprint(well_blueprint)
-    app.register_blueprint(production_blueprint)
+    configure_apispec(app)
+    configure_blueprints(app)
 
     # shell context for flask cli
     @app.shell_context_processor
@@ -50,4 +49,34 @@ def create_app(script_info=None):
         return {"app": app, "db": db, "celery": celery}
 
     return app
+
+
+def configure_apispec(app):
+    """Configure APISpec for swagger support
+    """
+    apispec.init_app(app, security=[{"jwt": []}])
+    apispec.spec.components.security_scheme(
+        "jwt", {"type": "http", "scheme": "bearer", "bearerFormat": "JWT",}
+    )
+    apispec.spec.components.schema(
+        "PaginatedResult",
+        {
+            "properties": {
+                "total": {"type": "integer"},
+                "pages": {"type": "integer"},
+                "next": {"type": "string"},
+                "prev": {"type": "string"},
+            }
+        },
+    )
+
+
+def configure_blueprints(app):
+    # avoids circular import
+    import api.resources.well as well
+    import api.resources.production as production
+
+    # register blueprints
+    app.register_blueprint(well.blueprint)
+    app.register_blueprint(production.blueprint)
 
