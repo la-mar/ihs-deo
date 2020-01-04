@@ -103,5 +103,3 @@ if __name__ == "__main__":
 
     x = model.get(paginate=True, ihs_last_update_date__gte="2020-01-01")
 
-    dir(model.objects)
-
