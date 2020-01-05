@@ -88,6 +88,7 @@ workflows:
       - build-image:
           context: global
       - docker/publish:
+          context: global
           image: driftwood/ihs
           tag: latest, ${CIRCLE_TAG}
           requires:
@@ -100,6 +101,9 @@ workflows:
               only: master
       - github/release:
           context: global
+          requires:
+            - run-tests
+            - build-image
           tag: ${CIRCLE_TAG}
           title: Release ${CIRCLE_TAG}
           filters:
