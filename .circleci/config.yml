@@ -47,22 +47,10 @@ jobs:
       - docker/check
       - docker/build:
           image: driftwood/ihs
-          tag: $(echo ${CIRCLE_SHA1} | cut -c -7),dev
+          tag: $(echo ${CIRCLE_SHA1} | cut -c -7),dev,latest
       - docker/push:
           image: driftwood/ihs
-          tag: $(echo ${CIRCLE_SHA1} | cut -c -7),dev
-
-  publish-github-release:
-    docker:
-      - image: cibuilds/github:0.10
-    steps:
-      - attach_workspace:
-          at: .
-      - run:
-          name: "Publish Release on GitHub"
-          command: |
-            VERSION=${CIRCLE_TAG}
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} .
+          tag: $(echo ${CIRCLE_SHA1} | cut -c -7),dev,latest
 
   deployment:
     # Same environment
@@ -87,10 +75,12 @@ workflows:
           context: global
       - build-image:
           context: global
+          requires:
+            - run-tests
       - docker/publish:
           context: global
           image: driftwood/ihs
-          tag: latest, ${CIRCLE_TAG}
+          tag: ${CIRCLE_TAG}
           requires:
             - run-tests
             - build-image
