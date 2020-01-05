@@ -1,9 +1,12 @@
+import logging
 import json
 import urllib.parse
 from typing import Callable, Union, Tuple
 
 from util.stringprocessor import StringProcessor
 from util.jsontools import DateTimeEncoder
+
+logger = logging.getLogger(__name__)
 
 
 def apply_transformation(
@@ -90,7 +93,9 @@ def query_dict(path: str, data: dict, sep: str = "."):
         if issubclass(type(data), list) and len(data) > 0:
             data = data[-1]  # TODO: this needs to be smarter
         if not issubclass(type(data), dict):
-            raise ValueError(f"{data} ({type(data)}) is not a subclass of dict")
+            logger.debug(f"{data} ({type(data)}) is not a subclass of dict")
+            data = {}
+            # raise ValueError(f"{data} ({type(data)}) is not a subclass of dict")
         data = data.get(e, {})
     return data if data != {} else None
 

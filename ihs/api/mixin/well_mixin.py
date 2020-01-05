@@ -134,8 +134,7 @@ class WellMixin(BaseMixin):
             data = self["tests"].get("ip_pt")
 
         if issubclass(data.__class__, dict):
-            data = [data]
-
+            data = [data]  # type: ignore
 
         for test in data:
             get = functools.partial(query_dict, data=test)

@@ -88,6 +88,7 @@ if __name__ == "__main__":
     from ihs import create_app
     from config import get_active_config
     from api.helpers import paginate
+    import api.schema as schemas
 
     app = create_app()
     app.app_context().push()
@@ -95,6 +96,7 @@ if __name__ == "__main__":
 
     model = WellHorizontal
     api14 = "42461409160000"
+    api14s = ["42461409160000", "42461009720100"]
     # m = model.objects.get(api14=api14)  # pylint: disable=no-member
 
     # # vertical = "42383362060000"``
@@ -102,5 +104,15 @@ if __name__ == "__main__":
     # dir(x)
     # x.production_header
 
-    # model.get(api14__in=api14.split(","))
-    model.get(api14=api14)
+    api14 = "42173793552016"
+    m = model.get(api14=api14)[0]
+    # m = model.get(api14__in=api14s, paginate=True, page=1, per_page=25)
+    # m = model.get(
+    #     ihs_last_update_date__gte="2019-12-01", paginate=True, page=1, per_page=25
+    # )
+
+    dir(m)
+
+    s = schemas.WellHeaderSchema(many=True)
+    s.dump(m.items)
+

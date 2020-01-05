@@ -150,10 +150,10 @@ class WellHeaderSchema(WellBaseSchema):
         output["area_rights_value"] = get("areas.rights.value")
         output["area_rights_uom"] = get("areas.rights.uom")
 
-        output["statuses"] = data.well_statuses
-        output["elevations"] = data.well_elevations
-        output["frac"] = data.frac
-        output["dates"] = data.well_dates
+        output["statuses"] = data.well_statuses or {}
+        output["elevations"] = data.well_elevations or {}
+        output["frac"] = data.frac or {}
+        output["dates"] = data.well_dates or {}
         output["data_source"] = "IHS"
 
         return output

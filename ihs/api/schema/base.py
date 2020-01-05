@@ -12,6 +12,7 @@ class BaseSchema(Schema):
             return e.valid_data
         except ValueError as ve:
             logger.error(f"{ve} args={args}, kwargs={kwargs}")
+            raise ve
 
     @post_dump
     def nan_to_none(self, data, *args, **kwargs):
