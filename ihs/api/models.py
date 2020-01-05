@@ -87,19 +87,20 @@ class ProductionVertical(db.DynamicDocument, ProductionMixin):
 if __name__ == "__main__":
     from ihs import create_app
     from config import get_active_config
+    from api.helpers import paginate
 
     app = create_app()
     app.app_context().push()
     conf = get_active_config()
 
-    model = ProductionHorizontal
+    model = WellHorizontal
     api14 = "42461409160000"
-    m = model.objects.get(api14=api14)  # pylint: disable=no-member
+    # m = model.objects.get(api14=api14)  # pylint: disable=no-member
 
-    # vertical = "42383362060000"
-    x = model.get(api14=api14)[0]
-    dir(x)
-    x.production_header
+    # # vertical = "42383362060000"``
+    # x = model.get(api14=api14)[0]
+    # dir(x)
+    # x.production_header
 
-    x = model.get(paginate=True, ihs_last_update_date__gte="2020-01-01")
-
+    # model.get(api14__in=api14.split(","))
+    model.get(api14=api14)

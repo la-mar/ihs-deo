@@ -19,22 +19,12 @@
 
 - Unit Testing
 - Documentation
-- <s>Convert environment variables to SSM Parameters</s>
-
-- <s>Retry download => baked into queues</s>
 - Process changes and deletes (nightly)
-- <s>Delete files in IHS exports if full => TODO </s>
-- <s>query the well header for a specific api => implemented via the HTTP API</s>
-- <s>query all production for a specific api => implemented via the HTTP API</s>
 - query production in a date range for a specific api => TODO
 - hash the json record and compare to existing hashs => NEEDS VALIDATION
-- <s>Persist to mongodb
-  1. hash incomming json record
-  2. look for existing records with the same hash
-  3. if hash is found, disrgard the update
-  4. if hash is NOT found, perform the update, saving the hash value with the record</s>
 - Distribute counties to update across the week instead of all at once
--
+- Add example using Redis w/docker-compose
+- Add Dockerfile without chamber to builds
 
 ### MongoDB Collections
 

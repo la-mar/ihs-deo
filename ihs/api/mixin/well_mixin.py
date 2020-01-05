@@ -1,11 +1,13 @@
 """ Mixin for MongoEngine backed well records """
-
+import logging
 from typing import List, Dict, Union, Any
 import functools
 from api.mixin import BaseMixin
 from util import query_dict, gal_to_bbl
 from util.geo import CoordinateTransformer
 from config import get_active_config
+
+logger = logging.getLogger(__name__)
 
 conf = get_active_config()
 
@@ -132,9 +134,10 @@ class WellMixin(BaseMixin):
             data = self["tests"].get("ip_pt")
 
         if issubclass(data.__class__, dict):
-            tests = [data]
+            data = [data]
 
-        for test in tests:
+
+        for test in data:
             get = functools.partial(query_dict, data=test)
             out = {}
             out["type_code"] = get("type_code")

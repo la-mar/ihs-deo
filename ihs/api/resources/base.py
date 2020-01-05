@@ -26,10 +26,12 @@ class DataResource(Resource):
     schema: Schema = None  # type: ignore
 
     def _get(self, **kwargs) -> Dict:
+        logger.debug(f"{kwargs}")
         if kwargs.pop("paginate", False):
             result = paginate(self.model, self.schema, **kwargs)
         else:
             result = self.model.get(**kwargs)
+            logger.debug(f"found {len(result)} record(s)")
             result = {"data": self.schema.dump(result)}
 
         response_object = {"status": "success", **result}

@@ -76,7 +76,7 @@ class HorizontalWellFrac(WellResource):
 class HorizontalWellFracList(WellListResource):
     """ Completion data for a list of wells """
 
-    model = WellMasterHorizontal
+    model = WellHorizontal
     schema = schemas.WellFrac(many=True)
 
 
@@ -92,3 +92,17 @@ class HorizontalWellIDList(IDListResource):
 
     model = WellMasterHorizontal
     schema = schemas.IDListSchema(many=True)
+
+
+if __name__ == "__main__":
+    from ihs import create_app
+    from config import get_active_config
+    from api.helpers import paginate
+
+    app = create_app()
+    app.app_context().push()
+    conf = get_active_config()
+
+    api14 = "42461409160000"
+    api14s = ["42461409160000", "42461009720100"]
+    r = HorizontalWell().get(api14=api14)

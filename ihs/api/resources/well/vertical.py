@@ -76,7 +76,7 @@ class VerticalWellFrac(WellResource):
 class VerticalWellFracList(WellListResource):
     """ Completion data for a list of wells """
 
-    model = WellMasterVertical
+    model = WellVertical
     schema = schemas.WellFrac(many=True)
 
 
@@ -88,45 +88,6 @@ class VerticalWellIDs(IDResource):
 
 
 class VerticalWellIDList(IDListResource):
-    """Creation and get_all
-
-    ---
-    get:
-      tags:
-        - api
-      responses:
-        200:
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '#/components/schemas/PaginatedResult'
-                  - type: object
-                    properties:
-                      results:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/UserSchema'
-    post:
-      tags:
-        - api
-      requestBody:
-        content:
-          application/json:
-            schema:
-              UserSchema
-      responses:
-        201:
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  msg:
-                    type: string
-                    example: user created
-                  user: UserSchema
-    """
 
     model = WellMasterVertical
     schema = schemas.IDListSchema(many=True)

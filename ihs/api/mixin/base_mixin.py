@@ -1,10 +1,13 @@
 """ Basic mixin for MongoEngine backed data models """
 
 from typing import Dict, List, Union, no_type_check
+import logging
 
 import mongoengine as me
 
 from util.deco import classproperty
+
+logger = logging.getLogger(__name__)
 
 
 class BaseMixin:
@@ -34,6 +37,7 @@ class BaseMixin:
             # pylint: disable=no-member
             if kwargs.pop("paginate", False):
                 return cls.objects.paginate(**kwargs)
+            logger.debug(f"{kwargs}")
             return cls.objects(**kwargs)
         except me.errors.DoesNotExist:
             return None

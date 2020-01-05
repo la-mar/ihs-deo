@@ -17,9 +17,9 @@ class WellListResource(WellResource):
     def get(self) -> Tuple[Dict, int]:  # type: ignore
         api14 = request.args.get("api14")
         since = request.args.get("since")
-        logger.debug(since)
+
         if api14:
-            return self._get(api14__in=str(api14).split(",")), 200
+            return self._get(api14__in=api14.split(",")), 200
         elif since:
             return (
                 self._get(paginate=True, ihs_last_update_date__gte=since),
@@ -27,3 +27,4 @@ class WellListResource(WellResource):
             )
         else:
             return {"status": "missing_argument"}, 400
+
