@@ -109,7 +109,7 @@ def publish():
     #     return
     # changes = match.group(1).strip()
     # print(f"Changes:\n{changes}")
-    changes = ""
+    # changes = ""
 
     print("Creating tag")
     subprocess.run(

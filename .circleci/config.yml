@@ -1,12 +1,5 @@
 version: 2.1
 
-defaults:
-  filters: &on_tags_only
-    tags:
-      only: /^\d+\.\d+\.\d+$/
-    branches:
-      ignore: /.*/
-
 orbs:
   codecov: codecov/codecov@1.0.2
   docker: circleci/docker@0.5.19
@@ -36,25 +29,8 @@ jobs:
           command: poetry run pylint ihs --exit-zero --rcfile=.pylintrc
 
       - run:
-          name: CodeClimate before-build
-          command: |
-            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-            chmod +x ./cc-test-reporter
-            ./cc-test-reporter before-build
-
-      - run:
           name: Run python tests
           command: poetry run pytest --cov=ihs tests/ --cov-report xml:./coverage/python/coverage.xml
-
-      - run:
-          name: CodeClimate combine and upload coverage
-          command: |
-            # Format the various coverage reports
-            ./cc-test-reporter format-coverage -t coverage.py -o coverage/codeclimate.python.json coverage/python/coverage.xml
-            # Combine the test coverage reports
-            ./cc-test-reporter sum-coverage coverage/codeclimate.*.json
-            # Attempt to submit the coverage report, but don't fail the build if this fails (`|| true`)
-            ./cc-test-reporter upload-coverage || true
 
       - codecov/upload:
           file: ./coverage/python/coverage.xml
@@ -101,19 +77,9 @@ jobs:
         #     command: |
         #       poetry publish --build --username "${PYPI_USERNAME}" --password "${PYPI_PASSWORD}" --no-interaction
 
-# In the workflows section, we specify when we want to run the jobs defined
 workflows:
   version: 2.1
 
-  # The run-tests we will run EVERYTIME a piece of code changes
-  test-and-build:
-    jobs:
-      - run-tests:
-          context: global
-      - build-image:
-          context: global
-
-  # The deployment workflow publishes the package
   deployment:
     jobs:
       - run-tests:
@@ -125,7 +91,10 @@ workflows:
           requires:
             - run-tests
           filters:
-            <<: *on_tags_only
+            tags:
+              only: /^\d+\.\d+\.\d+$/
+            branches:
+              only: master
       - docker/publish:
           image: driftwood/ihs
           tag: latest, ${CIRCLE_TAG}
@@ -133,4 +102,7 @@ workflows:
             - run-tests
             - build-image
           filters:
-            <<: *on_tags_only
+            tags:
+              only: /^\d+\.\d+\.\d+$/
+            branches:
+              only: master
