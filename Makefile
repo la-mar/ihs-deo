@@ -1,11 +1,12 @@
-SERVICE_NAME:=ihs
-ENV:=prod
-COMMIT_HASH    ?= $$(git log -1 --pretty=%h)
+SERVICE_NAME := ihs
+ENV ?= prod
+COMMIT_HASH := $$(git log -1 --pretty=%h)
 DATE := $$(date +"%Y-%m-%d")
-CTX:=.
-AWS_ACCOUNT_ID:=$$(aws-vault exec prod -- aws sts get-caller-identity | jq .Account -r)
-IMAGE_NAME:=driftwood/ihs
-DOCKERFILE:=Dockerfile
+CTX?=.
+AWS_ACCOUNT_ID ?= $$(aws-vault exec prod -- aws sts get-caller-identity | jq .Account -r)
+IMAGE_NAME ?= driftwood/ihs
+DOCKERFILE ?= Dockerfile
+APP_VERSION ?= $$(grep -o '\([0-9]\+.[0-9]\+.[0-9]\+\)' pyproject.toml | head -n1)
 
 run-web:
 	aws-vault exec ${ENV} -- docker run -e AWS_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_SESSION_TOKEN -e AWS_SECURITY_TOKEN -p 8000:5000 driftwood/ihs ihs run web
@@ -87,7 +88,17 @@ build: login
 	@echo "Building docker image: ${IMAGE_NAME}"
 	docker build  -f ${DOCKERFILE} ${CTX} -t ${IMAGE_NAME}
 	docker tag ${IMAGE_NAME} ${IMAGE_NAME}:${COMMIT_HASH}
+
+
+push:
+	docker push ${IMAGE_NAME}:dev
 	docker push ${IMAGE_NAME}:${COMMIT_HASH}
+
+push-version:
+	# docker push ${IMAGE_NAME}:latest
+	@echo pushing: ${IMAGE_NAME}:${APP_VERSION}
+	docker push ${IMAGE_NAME}:${APP_VERSION}
+
 
 cc-expand:
 	# show expanded configuration
@@ -102,7 +113,7 @@ cc-run-local:
 
 all: build login push
 
-deploy: ssm-update
+deploy:
 	# Update SSM parameters from local dotenv and deploy a new version of the service to ECS
 	${eval AWS_ACCOUNT_ID=$(shell echo ${AWS_ACCOUNT_ID})}
 	@echo ${AWS_ACCOUNT_ID}
