@@ -192,5 +192,6 @@ cli.add_command(run_cli)
 cli.add_command(test_cli)
 cli.add_command(delete_cli)
 
+
 if __name__ == "__main__":
     cli()
