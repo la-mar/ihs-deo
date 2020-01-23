@@ -10,9 +10,14 @@ Project to automate data sourcing and validation from IHS Energy's Energy Web Se
       <a href="(https://circleci.com/gh/la-mar/ihs-deo">
         <img src="https://circleci.com/gh/la-mar/ihs-deo.svg?style=svg" />
       </a>
+            <a href="https://hub.docker.com/r/driftwood/ihs">
+        <img src="https://img.shields.io/docker/pulls/driftwood/ihs.svg" />
+      </a>
     </tr>
   </table>
 </div>
+
+
 
 Features include:
 - customizable download schedules
@@ -21,6 +26,7 @@ Features include:
 - Save data to a MongoDB backend
 - Built in REST API to interact data stored in MongoDB and/or download directly from IHS 
 
+Available on <a href="https://hub.docker.com/r/driftwood/ihs">DockerHub</a>!
 
 
 # Todo
@@ -50,7 +56,7 @@ Features include:
 - Launch a worker container:
 
   ```bash
-  docker run ihs ihs run worker
+  docker run driftwood/ihs ihs run worker
   ```
 
 - Bypass Chamber when launching container:
