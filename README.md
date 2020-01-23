@@ -61,5 +61,5 @@ Available on <a href="https://hub.docker.com/r/driftwood/ihs">DockerHub</a>!
 
 - Bypass Chamber when launching container:
   ```bash
-  docker run --entrypoint=ihs ihs
+  docker run --entrypoint=ihs driftwood/ihs
   ```
