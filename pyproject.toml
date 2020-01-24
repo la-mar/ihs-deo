@@ -38,7 +38,8 @@ setproctitle = "^1.1.10"
 apispec = {version = "^3.2.0", extras = ["yaml"]}
 apispec-webframeworks = "^0.5.2"
 dnspython = "^1.16.0"
-tomlkit = "*"
+tomlkit = "^0.5.8"
+
 
 [tool.poetry.dev-dependencies]
 black = { version = "*", allow-prereleases = true }
