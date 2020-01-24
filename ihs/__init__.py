@@ -24,7 +24,7 @@ def create_app(script_info=None):
     app.config.from_object(APP_SETTINGS)
     app.config["MONGODB_SETTINGS"] = {
         "db": conf.DATABASE_NAME,
-        "host": conf.database_uri(),
+        "host": conf.database_uri() if not conf.DATABASE_URI else conf.DATABASE_URI,
         "connect": False,  # prevents prefork connection
     }
 
@@ -54,3 +54,9 @@ def configure_blueprints(app):
     app.register_blueprint(well.blueprint)
     app.register_blueprint(production.blueprint)
 
+
+if __name__ == "__main__":
+    app = create_app()
+    app.app_context().push()
+
+    db

@@ -180,6 +180,7 @@ class BaseConfig:
     DATABASE_PORT = os.getenv("DATABASE_PORT", 27017)
     DATABASE_NAME = os.getenv("DATABASE_NAME", "default")
     DATABASE_AUTHENTICATION_SOURCE = "admin"
+    DATABASE_URI = os.getenv("DATABASE_URI", None)
     # DATABASE_UUID_REPRESENTATION = "standard"
     # DATABASE_CONNECT = os.getenv("DATABASE_CONNECT", False)
 
