@@ -46,20 +46,19 @@ SERVICE_NAME: str = os.getenv("SERVICE_NAME")  # type: ignore
 IMAGE_TAG: str = os.getenv("IMAGE_TAG")  # type: ignore
 IMAGE_NAME: str = f"{os.getenv('IMAGE_NAME')}{':' if IMAGE_TAG else ''}{IMAGE_TAG or ''}"
 
-CLUSTER_NAME = os.getenv("ECS_CLUSTER")  # type: ignore
 TASK_IAM_ROLE = f"arn:aws:iam::{AWS_ACCOUNT_ID}:role/ihs-task-role"
 
-if not any([ENV, AWS_ACCOUNT_ID, SERVICE_NAME, IMAGE_NAME, CLUSTER_NAME]):
+if not all([ENV, AWS_ACCOUNT_ID, SERVICE_NAME, IMAGE_NAME]):
     raise ValueError("One or more environment variables are missing")
 
 
-SERVICES: List[str] = [
-    "ihs-web",
-    "ihs-worker-collector",
-    "ihs-worker-deleter",
-    "ihs-worker-submitter",
-    "ihs-worker-default",
-    "ihs-cron",
+SERVICES = [
+    {"cluster": "ecs-web-cluster", "service": "ihs-web"},
+    {"cluster": "ecs-collector-cluster", "service": "ihs-worker-collector"},
+    {"cluster": "ecs-collector-cluster", "service": "ihs-worker-deleter"},
+    {"cluster": "ecs-collector-cluster", "service": "ihs-worker-submitter"},
+    {"cluster": "ecs-collector-cluster", "service": "ihs-worker-default"},
+    {"cluster": "ecs-collector-cluster", "service": "ihs-cron"},
 ]
 
 IMAGES = [
@@ -80,8 +79,7 @@ PUSH = False
 print("\n\n" + "-" * 30)
 print(f"ENV: {ENV}")
 print(f"AWS_ACCOUNT_ID: {AWS_ACCOUNT_ID}")
-print(f"CLUSTER_NAME: {CLUSTER_NAME}")
-print(f"SERVICES: {SERVICES}")
+# print(f"SERVICES: {SERVICES}")
 print("-" * 30 + "\n\n")
 
 
@@ -110,10 +108,10 @@ def get_task_definition(
                         "run",
                         "web",
                         "-b 0.0.0.0:80",
-                        "--statsd-host=localhost:8125",
+                        # "--statsd-host=localhost:8125",
                     ],
-                    "memoryReservation": 128,
-                    "cpu": 256,
+                    "memoryReservation": 512,
+                    "cpu": 512,
                     "image": image,
                     "essential": True,
                     "environment": transform_envs(envs),
@@ -339,7 +337,9 @@ client = AWSClient()
 results = []
 
 
-for service in SERVICES:
+for item in SERVICES:
+    cluster = item["cluster"]
+    service = item["service"]
     s = f"{service:>20}:"
     prev_rev_num = client.get_latest_revision(service)
     cdef = get_task_definition(
@@ -355,15 +355,15 @@ for service in SERVICES:
 
     rev_num = client.get_latest_revision(service)
     s += "\t" + f"updated revision: {prev_rev_num} -> {rev_num}"
-    results.append((service, prev_rev_num, rev_num))
+    results.append((cluster, service, prev_rev_num, rev_num))
     print(s)
 
-for service, prev_rev_num, rev_num in results:
+for cluster, service, prev_rev_num, rev_num in results:
     response = client.ecs.update_service(
-        cluster=CLUSTER_NAME,
+        cluster=cluster,
         service=service,
         forceNewDeployment=True,
         taskDefinition=f"{service}:{rev_num}",
     )
-    print(f"{service:>20}: updated service on cluster {CLUSTER_NAME}")
+    print(f"{service:>20}: updated service on cluster {cluster}")
 print("\n\n")
