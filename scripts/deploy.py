@@ -109,7 +109,7 @@ def get_task_definition(
                         "ihs",
                         "run",
                         "web",
-                        "-b 0.0.0.0:9090",
+                        "-b 0.0.0.0:80",
                         "--statsd-host=localhost:8125",
                     ],
                     "memoryReservation": 128,
@@ -118,7 +118,7 @@ def get_task_definition(
                     "essential": True,
                     "environment": transform_envs(envs),
                     "portMappings": [
-                        {"hostPort": 9090, "containerPort": 9090, "protocol": "tcp"}
+                        {"hostPort": 80, "containerPort": 80, "protocol": "tcp"}
                     ],
                 },
             ],
