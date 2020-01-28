@@ -53,7 +53,7 @@ resource "aws_security_group" "ihs_web" {
 ### ECS Services ###
 resource "aws_ecs_service" "ihs_web" {
   name            = "ihs-web"
-  cluster         = data.terraform_remote_state.ecs_cluster.outputs.cluster_arn
+  cluster         = data.terraform_remote_state.web_cluster.outputs.cluster_arn
   task_definition = data.aws_ecs_task_definition.ihs_web.family
 
   scheduling_strategy = "REPLICA"
