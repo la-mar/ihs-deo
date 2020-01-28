@@ -35,8 +35,8 @@ resource "aws_security_group" "ihs_web" {
   ingress {
     description = "All TCP Traffic"
     protocol    = "tcp"
-    from_port   = 9090
-    to_port     = 9090
+    from_port   = var,service_port
+    to_port     = var,service_port
     cidr_blocks = ["0.0.0.0/0"]
   }
 

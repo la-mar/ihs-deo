@@ -42,3 +42,7 @@ variable "dd_api_key" {
   description = "Datadog API Key"
   default     = ""
 }
+
+variable "service_port" {
+  description = "Web service port"
+}
