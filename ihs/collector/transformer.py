@@ -6,9 +6,15 @@ from collections import OrderedDict
 import functools
 from typing import Callable, Dict, List, Union  # pylint: disable=unused-import
 
-from util import query_dict
+from util import query_dict, ensure_list
+from config import get_active_config
 
 logger = logging.getLogger(__name__)
+from util.geo import CoordinateTransformer
+
+conf = get_active_config()
+
+projector = CoordinateTransformer(conf.DEFAULT_PROJECTION)
 
 
 class Transformer:
@@ -124,9 +130,51 @@ class WellboreTransformer(Transformer):
         return data
 
     @classmethod
+    def project_well_locations(cls, data: OrderedDict) -> OrderedDict:
+        """ Assemble and return the available well locations, usually SHL, PBHL, and ABHL """
+        locs = {}
+        loc_type_map = {
+            "shl": ["surface", "shl"],
+            "bhl": ["actual bottom hole", "abhl"],
+            "pbhl": ["proposed bottom hole", "pbhl"],
+        }
+
+        location = data.get("location", [])
+
+        if not issubclass(type(location), list):
+            location = [location]
+
+        for loc in location:
+            get = functools.partial(query_dict, data=loc)
+            type_name = loc.get("type_name", "").lower()
+            type_code = loc.get("type_code", "").lower()
+            datum = get("geographic.datum.code")
+
+            for loc_name, loc_aliases in loc_type_map.items():
+                if type_name in loc_aliases or type_code in loc_aliases:
+                    lon, lat, crs = projector.transform(
+                        x=get("geographic.longitude"),
+                        y=get("geographic.latitude"),
+                        crs=datum.lower() if datum else datum,
+                    )
+                    locs[loc_name] = {
+                        "lon": lon,
+                        "lat": lat,
+                        "crs": crs,
+                        "block": get("texas.block.number"),
+                        "section": get("texas.section.number"),
+                        "abstract": get("texas.abstract"),
+                        "survey": get("texas.survey"),
+                        "metes_bounds": get("texas.footage.concatenated"),
+                    }
+        data["location_wgs84"] = locs
+        return data
+
+    @classmethod
     def transform(cls, data: OrderedDict) -> OrderedDict:
         data = super().transform(data)
         data = cls.copy_content_to_root(data)
+        data = cls.project_well_locations(data)
         return data
 
 
@@ -159,7 +207,7 @@ if __name__ == "__main__":
     endpoints = Endpoint.load_from_config(conf)
 
     endpoint_name = "well_horizontal"
-    task_name = "sequoia"
+    task_name = "endpoint_check"
     job_config = [
         x for x in run_endpoint_task(endpoint_name, task_name) if x is not None
     ][0]
@@ -169,7 +217,42 @@ if __name__ == "__main__":
 
     parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
     document = parser.parse(xml)
-    transformed = WellboreTransformer.extract_from_collection(document)
+    transformed = WellboreTransformer.transform(document)
+
+    # list(data.keys())
+    # data["location_wgs84"]
+
+    def get_active_survey(data: OrderedDict) -> OrderedDict:
+        active_survey = OrderedDict()
+        number = 0
+        for s in ensure_list(data.get("surveys", {})):
+            get = functools.partial(query_dict, data=s)
+            n = get("borehole.header.number")
+            if n > number:
+                active_survey = get("borehole")
+                number = n
+        return active_survey
+
+    #
+    data = transformed[0]
+
+    active_survey = get_active_survey(data)
+    list(active_survey.keys())
+    points = active_survey.get("point", [])
+
+    get = functools.partial(query_dict, data=data)
+    lon = get("location_wgs84.shl.lon")
+    lat = get("location_wgs84.shl.lat")
+    crs = get("location_wgs84.shl.crs")
+
+    lat
+
+    # TODO: start here
+    # TODO: calculate survey points from x, y footages
+    # TODO: use TOWGS84 to transform survey coordinates to wgs84
+
+    # t["surveys"]["borehole"]
+
     # to_json(transformed, "test/data/production_sequoia.json")
 
     # collector = Collector(endpoints[job.endpoint].model)  # pylint: disable=no-member

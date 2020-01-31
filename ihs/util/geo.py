@@ -10,6 +10,17 @@ EPSG_MAP = {
 }
 
 
+class Singleton:
+    def __init__(self, klass):
+        self.klass = klass
+        self.instance = None
+
+    def __call__(self, *args, **kwds):
+        if self.instance == None:
+            self.instance = self.klass(*args, **kwds)
+        return self.instance
+
+
 class CoordinateTransformer:
     """ Normalizes arbirary coordinates from their native datum/CRS to the destination
         coordination reference system """
@@ -36,9 +47,20 @@ class CoordinateTransformer:
             return x, y, crs
 
 
+@Singleton
+class ToWGS84(CoordinateTransformer):
+    def __init__(self):
+        super().__init__("wgs84")
+
+    def __call__(self, x: float, y: float, crs: str):
+        return self.transform(x, y, crs)
+
+
 if __name__ == "__main__":
 
     ct = CoordinateTransformer("wgs84")
+    to_wgs84 = ToWGS84()
+
     lon, lat = [-101.9179619, 31.2029678]
     crs = "NAD27"
     result = ct.transform(lon, lat, crs)
@@ -51,8 +73,20 @@ if __name__ == "__main__":
 
     x, y = [1504599.4, 562258.6]
     crs = "NAD27SP"
-    ct.transform(x, y, crs)
+    lon, lat, new_crs = ct.transform(x, y, crs)
 
-    print("nad27sp -> wgs84")
-    print(result)
-    print(result == expected)
+    from shapely.geometry import Point
+    import shapely.geometry
+    import geopandas
+    from util import to_json
+
+    x, y = [1511936, 564718.4]
+    crs = "NAD27SP"
+    lon, lat, new_crs = to_wgs84(x, y, crs)
+
+    pt = shapely.geometry.Point(lon, lat)
+
+    js = geopandas.GeoSeries([pt]).to_json()
+    with open("tests/data/test_point.geojson", "w") as f:
+        f.write(js)
+

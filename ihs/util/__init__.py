@@ -1,12 +1,18 @@
 import logging
 import json
 import urllib.parse
-from typing import Callable, Union, Tuple
+from typing import Callable, Union, Tuple, Any, List
 
 from util.stringprocessor import StringProcessor
 from util.jsontools import DateTimeEncoder
 
 logger = logging.getLogger(__name__)
+
+
+def ensure_list(value: Any) -> List[Any]:
+    if not issubclass(type(value), list):
+        return [value]
+    return value
 
 
 def apply_transformation(
