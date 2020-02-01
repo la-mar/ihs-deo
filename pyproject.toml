@@ -39,6 +39,7 @@ apispec = {version = "^3.2.0", extras = ["yaml"]}
 apispec-webframeworks = "^0.5.2"
 dnspython = "^1.16.0"
 tomlkit = "^0.5.8"
+shapely = "^1.7.0"
 
 
 [tool.poetry.dev-dependencies]
@@ -57,7 +58,6 @@ redis = "^3.3.11"
 codecov = "^2.0.15"
 coverage = {version = "^5.0", extras = ["toml"]}
 six = "^1.14.0"
-shapely = "^1.7.0"
 geopandas = "^0.6.2"
 
 [tool.poetry.scripts]
