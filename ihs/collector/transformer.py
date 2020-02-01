@@ -6,11 +6,14 @@ from collections import OrderedDict
 import functools
 from typing import Callable, Dict, List, Union  # pylint: disable=unused-import
 
+import shapely.geometry as geometry
+
+
 from util import query_dict, ensure_list, make_hash
 from config import get_active_config
 
 logger = logging.getLogger(__name__)
-from util.geo import CoordinateTransformer
+from util.geo import CoordinateTransformer, to_wgs84, to_nad27, to_nad27sp
 from flask_mongoengine import Document as Model
 
 conf = get_active_config()
@@ -373,10 +376,6 @@ if __name__ == "__main__":
     from collector import XMLParser, Endpoint, Collector
     from collector.tasks import run_endpoint_task, get_job_results, submit_job, collect
     from util import to_json, load_json
-    from time import sleep
-    from util.geo import to_wgs84, to_nad27, to_nad27sp
-    import shapely.geometry as geometry
-    import geopandas
     from time import sleep
     from api.models import WellHorizontal
 
