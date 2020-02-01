@@ -48,41 +48,42 @@ class WellMixin(BaseMixin):
     def well_locations(self) -> Dict[str, Dict[str, Union[Any]]]:
         """ Assemble and return the available well locations, usually SHL, PBHL, and ABHL """
         locs = {}
-        loc_type_map = {
-            "shl": ["surface", "shl"],
-            "bhl": ["actual bottom hole", "abhl"],
-            "pbhl": ["proposed bottom hole", "pbhl"],
-        }
+        # loc_type_map = {
+        #     "shl": ["surface", "shl"],
+        #     "bhl": ["actual bottom hole", "abhl"],
+        #     "pbhl": ["proposed bottom hole", "pbhl"],
+        # }
 
-        location = (
-            self.location
-            if issubclass(self.location.__class__, list)
-            else [self.location]
-        )
+        # location = (
+        #     self.location
+        #     if issubclass(self.location.__class__, list)
+        #     else [self.location]
+        # )
+        if hasattr(self, "geoms"):
+            locs = {k: v for k, v in self.geoms.items() if k in ["shl", "bhl", "pbhl"]}
+        # for loc in location:
+        #     get = functools.partial(query_dict, data=loc)
+        #     type_name = loc.get("type_name", "").lower()
+        #     type_code = loc.get("type_code", "").lower()
+        #     datum = get("geographic.datum.code")
 
-        for loc in location:
-            get = functools.partial(query_dict, data=loc)
-            type_name = loc.get("type_name", "").lower()
-            type_code = loc.get("type_code", "").lower()
-            datum = get("geographic.datum.code")
-
-            for loc_name, loc_aliases in loc_type_map.items():
-                if type_name in loc_aliases or type_code in loc_aliases:
-                    lon, lat, crs = projector.transform(
-                        x=get("geographic.longitude"),
-                        y=get("geographic.latitude"),
-                        crs=datum.lower() if datum else datum,
-                    )
-                    locs[loc_name] = {
-                        "lon": lon,
-                        "lat": lat,
-                        "crs": crs,
-                        "block": get("texas.block.number"),
-                        "section": get("texas.section.number"),
-                        "abstract": get("texas.abstract"),
-                        "survey": get("texas.survey"),
-                        "metes_bounds": get("texas.footage.concatenated"),
-                    }
+        #     for loc_name, loc_aliases in loc_type_map.items():
+        #         if type_name in loc_aliases or type_code in loc_aliases:
+        #             lon, lat, crs = projector.transform(
+        #                 x=get("geographic.longitude"),
+        #                 y=get("geographic.latitude"),
+        #                 crs=datum.lower() if datum else datum,
+        #             )
+        #             locs[loc_name] = {
+        #                 "lon": lon,
+        #                 "lat": lat,
+        #                 "crs": crs,
+        #                 "block": get("texas.block.number"),
+        #                 "section": get("texas.section.number"),
+        #                 "abstract": get("texas.abstract"),
+        #                 "survey": get("texas.survey"),
+        #                 "metes_bounds": get("texas.footage.concatenated"),
+        #             }
         return locs
 
     @property
@@ -110,17 +111,19 @@ class WellMixin(BaseMixin):
         header["survey_base"] = get("header.depths.base.value")
         header["survey_base_uom"] = get("header.depths.base.uom")
 
-        for point in get("point"):
-            pt = {}
-            pt["md"] = query_dict("depths.measured.value", point)
-            pt["md_uom"] = query_dict("depths.measured.uom", point)
-            pt["tvd"] = query_dict("depths.true_vertical.value", point)
-            pt["tvd_uom"] = query_dict("depths.true_vertical.uom", point)
-            pt["lon"] = shl_lon or 0 + query_dict("delta.longitude", point) or 0
-            pt["lat"] = shl_lat or 0 + query_dict("delta.latitude", point) or 0
-            points.append(pt)
+        # for point in get("point"):
+        #     pt = {}
+        #     pt["md"] = query_dict("depths.measured.value", point)
+        #     pt["md_uom"] = query_dict("depths.measured.uom", point)
+        #     pt["tvd"] = query_dict("depths.true_vertical.value", point)
+        #     pt["tvd_uom"] = query_dict("depths.true_vertical.uom", point)
+        #     pt["lon"] = shl_lon or 0 + query_dict("delta.longitude", point) or 0
+        #     pt["lat"] = shl_lat or 0 + query_dict("delta.latitude", point) or 0
+        #     points.append(pt)
 
-        header["points"] = points
+        if hasattr(self, "geoms"):
+            header["survey_line"] = self.geoms.get("survey_line")
+            header["survey_points"] = self.geoms.get("survey_points")
 
         return header
 

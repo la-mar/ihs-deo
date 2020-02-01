@@ -166,14 +166,19 @@ class WellFullSchema(WellHeaderSchema):
     shl = fields.Nested(WellLocationSchema,)
     bhl = fields.Nested(WellLocationSchema)
     pbhl = fields.Nested(WellLocationSchema)
+    survey_line = fields.Dict()
     ip = fields.Nested(IPTestSchema, many=True)
 
     @pre_dump
     def transform(self, data, **kwargs) -> Dict:
 
         output = super().transform(data)
-        output.update(data.well_locations)
         output["ip"] = data.ip_tests
+        output.update(data.well_locations)
+
+        if hasattr(data, "geoms"):
+            output["survey_line"] = data.geoms.get("survey_line")
+
         return output
 
 
@@ -217,6 +222,4 @@ if __name__ == "__main__":
     m = model.objects.get(api14=api14)
     sch = WellFullSchema()
 
-    # x = sch.dump(m)  # TODO: Incorporate schema validation to endpoints
-    # sch.validate(x)
-
+    sch.dump(m)["survey_line"]

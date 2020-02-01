@@ -2,11 +2,17 @@ import logging
 import json
 import urllib.parse
 from typing import Callable, Union, Tuple, Any, List
+import hashlib
+from collections import OrderedDict
 
 from util.stringprocessor import StringProcessor
 from util.jsontools import DateTimeEncoder
 
 logger = logging.getLogger(__name__)
+
+
+def make_hash(data: Union[List, OrderedDict]) -> str:
+    return hashlib.md5(str(data).encode()).hexdigest()
 
 
 def ensure_list(value: Any) -> List[Any]:
@@ -93,16 +99,27 @@ def load_json(path: str):
         return json.load(f)
 
 
+# def query_dict(path: str, data: dict, sep: str = "."):
+#     elements = path.split(sep)
+#     for e in elements:
+#         if issubclass(type(data), list) and len(data) > 0:
+#             data = data[-1]  # TODO: this needs to be smarter
+#         if not issubclass(type(data), dict):
+#             logger.debug(f"{data} ({type(data)}) is not a subclass of dict")
+#             data = {}
+#             # raise ValueError(f"{data} ({type(data)}) is not a subclass of dict")
+#         data = data.get(e, {})
+#     return data if data != {} else None
+
+
 def query_dict(path: str, data: dict, sep: str = "."):
     elements = path.split(sep)
     for e in elements:
         if issubclass(type(data), list) and len(data) > 0:
-            data = data[-1]  # TODO: this needs to be smarter
-        if not issubclass(type(data), dict):
-            logger.debug(f"{data} ({type(data)}) is not a subclass of dict")
-            data = {}
-            # raise ValueError(f"{data} ({type(data)}) is not a subclass of dict")
-        data = data.get(e, {})
+            data = data[int(e)]  # TODO: this needs to be smarter
+        elif issubclass(type(data), dict):
+            data = data.get(e, {})
+
     return data if data != {} else None
 
 

@@ -6,11 +6,8 @@ from api.schema.base import BaseSchema
 
 class SurveyPointSchema(BaseSchema):
     md = fields.Int()
-    md_uom = fields.Str()
     tvd = fields.Int()
-    tvd_uom = fields.Str()
-    lon = fields.Float()
-    lat = fields.Float()
+    geom = fields.Dict()
 
 
 class SurveySchema(WellBaseSchema):
@@ -24,7 +21,8 @@ class SurveySchema(WellBaseSchema):
     survey_top_uom = fields.Str()
     survey_base = fields.Int()
     survey_base_uom = fields.Str()
-    points = fields.Nested(SurveyPointSchema(many=True))
+    survey_line = fields.Dict()
+    survey_points = fields.Nested(SurveyPointSchema(many=True))
     data_source = fields.Str()
 
     @pre_dump

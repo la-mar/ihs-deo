@@ -56,6 +56,28 @@ class ToWGS84(CoordinateTransformer):
         return self.transform(x, y, crs)
 
 
+@Singleton
+class ToNAD27(CoordinateTransformer):
+    def __init__(self):
+        super().__init__("nad27")
+
+    def __call__(self, x: float, y: float, crs: str):
+        return self.transform(x, y, crs)
+
+
+@Singleton
+class ToNAD27SP(CoordinateTransformer):
+    def __init__(self):
+        super().__init__("nad27sp")
+
+    def __call__(self, x: float, y: float, crs: str):
+        return self.transform(x, y, crs)
+
+
+to_wgs84 = ToWGS84()
+to_nad27 = ToNAD27()
+to_nad27sp = ToNAD27SP()
+
 if __name__ == "__main__":
 
     ct = CoordinateTransformer("wgs84")
@@ -87,6 +109,8 @@ if __name__ == "__main__":
     pt = shapely.geometry.Point(lon, lat)
 
     js = geopandas.GeoSeries([pt]).to_json()
-    with open("tests/data/test_point.geojson", "w") as f:
-        f.write(js)
+    # with open("tests/data/test_point.geojson", "w") as f:
+    #     f.write(js)
 
+    lon, lat = [-101.9179619, 31.2029678]
+    to_nad27sp(lon, lat, "NAD27")

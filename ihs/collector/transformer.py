@@ -6,11 +6,12 @@ from collections import OrderedDict
 import functools
 from typing import Callable, Dict, List, Union  # pylint: disable=unused-import
 
-from util import query_dict, ensure_list
+from util import query_dict, ensure_list, make_hash
 from config import get_active_config
 
 logger = logging.getLogger(__name__)
 from util.geo import CoordinateTransformer
+from flask_mongoengine import Document as Model
 
 conf = get_active_config()
 
@@ -25,8 +26,8 @@ class Transformer:
     @classmethod
     def add_document_hash(cls, data: OrderedDict) -> OrderedDict:
         data = cls.remove_variants(data)
-        data["md5"] = hashlib.md5(str(data).encode()).hexdigest()
-        data.move_to_end("md5", last=False)
+        hashes = {"document": make_hash(data)}
+        data["hashes"] = hashes
         return data
 
     @classmethod
@@ -43,14 +44,17 @@ class Transformer:
             elif len(_id) == 10:
                 data["api10"] = _id
 
-        data.move_to_end("api10", last=False)
-        data.move_to_end("api14", last=False)
+            else:
+                data["api14"] = None
+                data["api10"] = None
+            data.move_to_end("api10", last=False)
+            data.move_to_end("api14", last=False)
 
         return data
 
     @classmethod
     def extract_identifier(cls, data: OrderedDict) -> str:
-        return str(cls.extract_metadata(data).get("identification", ""))
+        return str(cls.extract_metadata(data).pop("identification", ""))
 
     @classmethod
     def extract_last_updated_date(cls, data: OrderedDict) -> OrderedDict:
@@ -90,7 +94,7 @@ class Transformer:
         return data
 
     @classmethod
-    def transform(cls, data: OrderedDict) -> OrderedDict:
+    def transform(cls, data: OrderedDict, model: Model) -> OrderedDict:
         data = data or OrderedDict()
         data = cls.copy_metadata_to_root(data)
         data = cls.copy_last_update_to_root(data)
@@ -99,7 +103,9 @@ class Transformer:
         return data
 
     @classmethod
-    def extract_from_collection(cls, document: OrderedDict) -> List[OrderedDict]:
+    def extract_from_collection(
+        cls, document: OrderedDict, model: Model
+    ) -> List[OrderedDict]:
         collection = document.get(cls.collection_key, document)
         data = collection.get(cls.entity_key, collection)
         if not isinstance(data, list):
@@ -107,9 +113,11 @@ class Transformer:
 
         transformed: List[OrderedDict] = []
         for record in data:
-            transformed.append(cls.transform(record))
+            transformed.append(cls.transform(record, model))
 
-        logger.info(f"Extracted {len(transformed)} record from document")
+        logger.info(
+            f"Extracted {len(transformed)} {cls.entity_key} from {cls.collection_key}"
+        )
         return transformed
 
 
@@ -130,9 +138,19 @@ class WellboreTransformer(Transformer):
         return data
 
     @classmethod
-    def project_well_locations(cls, data: OrderedDict) -> OrderedDict:
+    def copy_operator_to_root(cls, data: OrderedDict) -> OrderedDict:
+        data = data or OrderedDict()
+        get = functools.partial(query_dict, data=data.get("header", {}))
+
+        data["operator_name"] = get("operators.current.name")
+        data["operator_alternate"] = get("operators.current.alternate")
+
+        return data
+
+    @classmethod
+    def _project_well_locations(cls, data: OrderedDict) -> OrderedDict:
         """ Assemble and return the available well locations, usually SHL, PBHL, and ABHL """
-        locs = {}
+        locs = OrderedDict()
         loc_type_map = {
             "shl": ["surface", "shl"],
             "bhl": ["actual bottom hole", "abhl"],
@@ -158,23 +176,182 @@ class WellboreTransformer(Transformer):
                         crs=datum.lower() if datum else datum,
                     )
                     locs[loc_name] = {
-                        "lon": lon,
-                        "lat": lat,
-                        "crs": crs,
+                        "geom": geometry.mapping(geometry.Point(lon, lat)),
                         "block": get("texas.block.number"),
                         "section": get("texas.section.number"),
                         "abstract": get("texas.abstract"),
                         "survey": get("texas.survey"),
                         "metes_bounds": get("texas.footage.concatenated"),
                     }
-        data["location_wgs84"] = locs
+
+        return locs
+
+    @classmethod
+    def create_geometries(cls, data: OrderedDict, existing: Model) -> OrderedDict:
+        locs = OrderedDict()  # type: ignore
+        new_location_hash = data.get("hashes", {}).get("location")
+        existing_location_hash = existing.hashes.get("location")
+        if new_location_hash != existing_location_hash:
+            logger.info(f"{data.get('api14')}: creating new locations")
+            locs.update(cls._project_well_locations(data))
+        else:
+            locs["shl"] = existing.geoms.get("shl")
+            locs["bhl"] = existing.geoms.get("bhl")
+            locs["pbhl"] = existing.geoms.get("pbhl")
+
+        if data.get("surveys") is not None:
+            new_survey_hash = data.get("hashes", {}).get("survey")
+            existing_survey_hash = existing.hashes.get("survey")
+            if new_survey_hash != existing_survey_hash:
+                logger.info(f"{data.get('api14')}: creating new survey")
+                locs.update(cls._build_survey(data))
+            else:
+                if hasattr(existing, "geoms"):
+                    locs["survey_points"] = existing.geoms.get("survey_points")
+                    locs["survey_line"] = existing.geoms.get("survey_line")
+
+        data["geoms"] = locs
         return data
 
     @classmethod
-    def transform(cls, data: OrderedDict) -> OrderedDict:
-        data = super().transform(data)
+    def get_active_survey(cls, data: OrderedDict) -> Union[OrderedDict, None]:
+        """Return the most recent survey (survey with the highest 'number')"""
+        active_survey = None
+        number = 0
+        for s in ensure_list(data.get("surveys", {})):
+            get = functools.partial(query_dict, data=s)
+            n = get("borehole.header.number") or -1
+            if n > number:
+                active_survey = get("borehole")
+                number = n
+        return active_survey
+
+    @classmethod
+    def _project_survey_points(
+        cls, shlx: float, shly: float, points: List[Dict]
+    ) -> List[Dict]:
+        """ build a deviational survey based on the given parameters, projected to wgs84 """
+        converted_points = []
+        for idx, point in enumerate(points):
+            get = functools.partial(query_dict, data=point)
+            ns = get("north_south_coordinate")
+            ew = get("east_west_coordinate")
+            md = get("depths.measured.value")
+            tvd = get("depths.true_vertical.value")
+
+            # XPATH
+            ew_value = ew.get("value")
+            new_x = None
+            if ew_value and shlx:
+                if ew.get("direction_code", "").lower() == "w":
+                    new_x = shlx - float(ew_value)
+                else:
+                    new_x = shlx + float(ew_value)
+
+            # YPATH
+            ns_value = ns.get("value")
+            new_y = None
+            if ns_value and shly:
+                if ns.get("direction_code", "").lower() == "s":
+                    new_y = shly - float(ns_value)
+                else:
+                    new_y = shly + float(ns_value)
+
+            if new_x and new_y:
+                # TODO: incorporate dynamic datum/projection
+                lon, lat, crs = to_wgs84(x=new_x, y=new_y, crs="nad27sp")
+
+                converted_points.append(
+                    {
+                        "xy": (lon, lat),
+                        "geom": geometry.mapping(geometry.Point(lon, lat)),
+                        "md": md,
+                        "tvd": tvd,
+                    }
+                )
+                logger.debug(f"Transformed survey point {idx+1}/{len(points)}")
+
+            else:
+                logger.debug(
+                    f"Failed transforming survey point: shlx={shlx}, shly={shly}, ew_value={ew_value}, ns_value={ns_value}, new_x={new_x}, new_y={new_y}"
+                )
+
+        return converted_points
+
+    @classmethod
+    def _build_survey(cls, data: OrderedDict) -> OrderedDict:
+        """ Return the well's survey and survey points projected to wgs84 """
+
+        get = functools.partial(query_dict, data=data)
+        active_survey = cls.get_active_survey(data)
+
+        shllon = get("location.0.geographic.longitude")
+        shllat = get("location.0.geographic.latitude")
+        shlcrs = get("location.0.geographic.datum.code")
+
+        x, y, new_crs = to_nad27sp(shllon, shllat, shlcrs)
+
+        survey_line = None
+        survey_points = []
+        result = OrderedDict()
+        if active_survey and len(active_survey.keys()) > 0:
+            points = active_survey.get("point", None)
+
+            if points and len(points) > 0:
+                survey_points = cls._project_survey_points(x, y, points)
+                result["survey_points"] = survey_points
+
+            if survey_points and len(survey_points) > 0:
+                try:
+                    xys = [pt.pop("xy") for pt in survey_points]
+                    result["survey_line"] = geometry.mapping(geometry.LineString(xys))
+
+                except Exception as e:
+                    logger.warning(f"Failed building survey line: {e.args[0]}")
+
+        return result
+
+    @classmethod
+    def add_survey_hash(cls, data: OrderedDict) -> OrderedDict:
+        data_for_hash = data.get("surveys")
+
+        if data_for_hash is not None:
+            data["hashes"]["survey"] = make_hash(data_for_hash)
+
+        return data
+
+    @classmethod
+    def add_location_hash(cls, data: OrderedDict) -> OrderedDict:
+        data_for_hash = data.get("location")
+
+        if data_for_hash is not None:
+            data["hashes"]["location"] = make_hash(data_for_hash)
+
+        return data
+
+    @classmethod
+    def copy_header_to_root(cls, data: OrderedDict) -> OrderedDict:
+        get = functools.partial(query_dict, data=data.get("header", {}))
+
+        data["well_name"] = f'{get("designation.name")} {get("number")}'
+        data["hole_direction"] = get("drilling.hole_direction.designation.code")
+
+        return data
+
+    @classmethod
+    def transform(cls, data: OrderedDict, model: Model) -> OrderedDict:
+        id = query_dict("metadata.identification", data=data)
+        existing = model.objects(_id=str(id)).first() or model()
+        if not hasattr(existing, "hashes"):
+            existing.hashes = {}
+
+        data = super().transform(data, model)
+        data = cls.copy_header_to_root(data)
         data = cls.copy_content_to_root(data)
-        data = cls.project_well_locations(data)
+        data = cls.copy_operator_to_root(data)
+        data = cls.add_survey_hash(data)
+        data = cls.add_location_hash(data)
+        data = cls.create_geometries(data, existing)
         return data
 
 
@@ -195,8 +372,13 @@ if __name__ == "__main__":
     from config import get_active_config
     from collector import XMLParser, Endpoint, Collector
     from collector.tasks import run_endpoint_task, get_job_results, submit_job, collect
-    from util import to_json
+    from util import to_json, load_json
     from time import sleep
+    from util.geo import to_wgs84, to_nad27, to_nad27sp
+    import shapely.geometry as geometry
+    import geopandas
+    from time import sleep
+    from api.models import WellHorizontal
 
     app = create_app()
     app.app_context().push()
@@ -206,54 +388,24 @@ if __name__ == "__main__":
     conf = get_active_config()
     endpoints = Endpoint.load_from_config(conf)
 
-    endpoint_name = "well_horizontal"
+    endpoint_name = "well_vertical"
+    # endpoint_name = "production_horizontal"
     task_name = "endpoint_check"
+    model = endpoints[endpoint_name].model
     job_config = [
         x for x in run_endpoint_task(endpoint_name, task_name) if x is not None
     ][0]
 
     job = submit_job(**job_config)
+    sleep(3)
     xml = get_job_results(job)
 
     parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
     document = parser.parse(xml)
-    transformed = WellboreTransformer.transform(document)
+    # data = document["well_set"]["wellbore"][0]
+    # data_collection = ProductionTransformer.extract_from_collection(document, model)
+    data_collection = WellboreTransformer.extract_from_collection(document, model)
+    # data = data_collection[0]
 
-    # list(data.keys())
-    # data["location_wgs84"]
-
-    def get_active_survey(data: OrderedDict) -> OrderedDict:
-        active_survey = OrderedDict()
-        number = 0
-        for s in ensure_list(data.get("surveys", {})):
-            get = functools.partial(query_dict, data=s)
-            n = get("borehole.header.number")
-            if n > number:
-                active_survey = get("borehole")
-                number = n
-        return active_survey
-
-    #
-    data = transformed[0]
-
-    active_survey = get_active_survey(data)
-    list(active_survey.keys())
-    points = active_survey.get("point", [])
-
-    get = functools.partial(query_dict, data=data)
-    lon = get("location_wgs84.shl.lon")
-    lat = get("location_wgs84.shl.lat")
-    crs = get("location_wgs84.shl.crs")
-
-    lat
-
-    # TODO: start here
-    # TODO: calculate survey points from x, y footages
-    # TODO: use TOWGS84 to transform survey coordinates to wgs84
-
-    # t["surveys"]["borehole"]
-
-    # to_json(transformed, "test/data/production_sequoia.json")
-
-    # collector = Collector(endpoints[job.endpoint].model)  # pylint: disable=no-member
-    # collector.save(transformed)
+    collector = Collector(endpoints[endpoint_name].model)
+    collector.save(data_collection, replace=True)

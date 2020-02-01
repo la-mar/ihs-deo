@@ -48,7 +48,7 @@ def run_endpoint_task(
                 **opts,  # duplicate job options here to they travel with the job throughout its lifecycle
             },
         )
-        metrics.post("task.job.created", 1, tags=job_config.get("metadata"))
+        # metrics.post("task.job.created", 1, tags=job_config.get("metadata"))
         yield job_config
 
 
@@ -85,11 +85,12 @@ def collect_data(job: ExportJob, xml: bytes):
     if xml:
         parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
         document = parser.parse(xml)
-        collector = Collector(endpoints[job.endpoint].model)
+        model = endpoints[job.endpoint].model
+        collector = Collector(model)
         if job.data_type == ExportDataTypes.WELL.value:
-            data = WellboreTransformer.extract_from_collection(document)
+            data = WellboreTransformer.extract_from_collection(document, model=model)
         elif job.data_type == ExportDataTypes.PRODUCTION.value:
-            data = ProductionTransformer.extract_from_collection(document)
+            data = ProductionTransformer.extract_from_collection(document, model=model)
         collector.save(data)
 
 

@@ -129,7 +129,7 @@ class Builder(SoapRequestor):
         try:
             result = self.service.DeleteExport(job)
             logger.info("Deleted job: %s", job)
-            metrics.post("job.delete.success", 1, tags=tags)
+            # metrics.post("job.delete.success", 1, tags=tags)
         except Exception as e:
             logger.info("Encountered error when deleting job %s -- %s", job, e)
             metrics.post("job.delete.error", 1, tags=tags)
@@ -163,7 +163,7 @@ class ExportBuilder(Builder):
 
         try:
             job_id = self.build(export_param.params, export_param.target)
-            metrics.post("job.submitted.success", 1, tags=metadata)
+            # metrics.post("job.submitted.success", 1, tags=metadata)
             return ExportJob(
                 job_id=job_id, **{**(metadata or {}), **dict(export_param)}
             )

@@ -15,18 +15,29 @@ class Collector(object):
         self.model = model
         self.model_name = model.__name__
 
-    def save(self, documents: List[OrderedDict]):
+    def save(self, documents: List[OrderedDict], replace: bool = True):
         succeeded = 0
         failed = []
         if not isinstance(documents, list):
             documents = [documents]  # type: ignore
-        for doc in documents:
-            try:
-                self.model(**doc).save()
-                succeeded += 1
-            except Exception as e:
-                logger.debug("Failed saving document to %s", self.model)
-                failed.append(e)
+
+        try:
+            if replace:
+                succeeded = self.model.replace(documents)
+            else:
+                succeeded = self.model.persist(documents)
+            # succeeded += 1
+        except Exception as e:
+            logger.debug("Failed saving document to %s", self.model)
+            failed.append(e)
+        # for doc in documents:
+        #     try:
+        #         self.model(**doc).save()
+        #         self.model(**doc).save()
+        #         succeeded += 1
+        #     except Exception as e:
+        #         logger.warning("Failed saving document to %s", self.model)
+        #         failed.append(e)
 
         if len(failed) > 0:
             logger.error(
@@ -36,9 +47,9 @@ class Collector(object):
                 failed,
                 extra={"faiure_messages": failed},
             )
-
-        metrics.post(f"persistance.failed.{self.model_name}", len(failed))
-        metrics.post(f"persistance.success.{self.model_name}", succeeded)
+        return succeeded
+        # metrics.post(f"persistance.failed.{self.model_name}", len(failed))
+        # metrics.post(f"persistance.success.{self.model_name}", succeeded)
 
 
 if __name__ == "__main__":
