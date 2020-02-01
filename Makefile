@@ -90,9 +90,10 @@ build: login
 	docker tag ${IMAGE_NAME} ${IMAGE_NAME}:${COMMIT_HASH}
 
 
-push:
+push: login
 	docker push ${IMAGE_NAME}:dev
 	docker push ${IMAGE_NAME}:${COMMIT_HASH}
+	docker push ${IMAGE_NAME}:latest
 
 push-version:
 	# docker push ${IMAGE_NAME}:latest
