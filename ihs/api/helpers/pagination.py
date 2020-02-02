@@ -18,18 +18,29 @@ DEFAULT_PAGE_NUMBER = 1
 # for the entire collection. Not sure how to fix.
 def paginate(model, schema, **kwargs):
     page = int(request.args.get("page", DEFAULT_PAGE_NUMBER))
-    per_page = int(request.args.get("page_size", DEFAULT_PAGE_SIZE))
-    page_obj = model.get(paginate=True, page=page, per_page=per_page, **kwargs)
-    next = url_for(
-        request.endpoint,
-        page=page_obj.next_num if page_obj.has_next else page_obj.page,
-        per_page=per_page,
-        **request.view_args,
+    page_size = int(request.args.get("page_size", DEFAULT_PAGE_SIZE))
+    page_obj = model.get(paginate=True, page=page, per_page=page_size, **kwargs)
+    other_request_kwargs = {
+        k: v
+        for k, v in request.args.items()
+        if k not in ["page", "per_page", "page_size"]
+    }
+    next = (
+        url_for(
+            request.endpoint,
+            **other_request_kwargs,
+            page=page_obj.next_num if page_obj.has_next else page_obj.page,
+            page_size=page_size,
+            **request.view_args,
+        )
+        if page < page_obj.pages
+        else None
     )
     prev = url_for(
         request.endpoint,
+        **other_request_kwargs,
         page=page_obj.prev_num if page_obj.has_prev else page_obj.page,
-        per_page=per_page,
+        page_size=page_size,
         **request.view_args,
     )
 
