@@ -83,7 +83,7 @@ class BaseMixin:
         try:
             if kwargs.pop("paginate", False):
                 result = cls.objects.paginate(**kwargs)
-                logger.error(f"Paginated Result: result={result}")
+                # logger.error(f"Paginated Result: result={result}")
             else:
                 result = cls.objects(**kwargs)
 
