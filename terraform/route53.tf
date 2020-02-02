@@ -5,15 +5,15 @@ data "aws_route53_zone" "db" {
 }
 
 # Zone record mapping RDS to private DNS name
-resource "aws_route53_record" "db" {
-  zone_id = data.aws_route53_zone.db.zone_id
-  name    = "mongo.${var.service_name}"
-  type    = "CNAME"
-  ttl     = 3000
+# resource "aws_route53_record" "db" {
+#   zone_id = data.aws_route53_zone.db.zone_id
+#   name    = "mongo.${var.service_name}"
+#   type    = "CNAME"
+#   ttl     = 3000
 
-  records = [
-    aws_instance.mongodb.private_dns
-  ]
-}
+#   records = [
+#     aws_instance.mongodb.private_dns
+#   ]
+# }
 
 
