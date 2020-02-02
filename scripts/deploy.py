@@ -79,7 +79,7 @@ PUSH = False
 print("\n\n" + "-" * 30)
 print(f"ENV: {ENV}")
 print(f"AWS_ACCOUNT_ID: {AWS_ACCOUNT_ID}")
-# print(f"SERVICES: {SERVICES}")
+print(f"IMAGE_NAME: {IMAGE_NAME}")
 print("-" * 30 + "\n\n")
 
 
