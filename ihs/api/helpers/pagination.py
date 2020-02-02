@@ -29,12 +29,16 @@ def paginate(model, schema, **kwargs):
         if page < page_obj.pages
         else None
     )
-    prev = url_for(
-        request.endpoint,
-        **other_request_kwargs,
-        page=page_obj.prev_num if page_obj.has_prev else page_obj.page,
-        page_size=page_size,
-        **request.view_args,
+    prev = (
+        url_for(
+            request.endpoint,
+            **other_request_kwargs,
+            page=page_obj.prev_num if page_obj.has_prev else page_obj.page,
+            page_size=page_size,
+            **request.view_args,
+        )
+        if page > 1
+        else None
     )
 
     return {
