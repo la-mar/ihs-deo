@@ -141,7 +141,7 @@ module "collector_autoscaler" {
   cluster_name        = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
   service_name        = aws_ecs_service.ihs_worker_collector.name
   min_capacity        = 1
-  max_capacity        = 10
+  max_capacity        = 15
   queue1              = "ihs-collections-h"
   queue2              = "ihs-collections-v"
   scale_in_threshold  = 1000
@@ -179,7 +179,7 @@ module "deleter_autoscaler" {
   cluster_name        = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
   service_name        = aws_ecs_service.ihs_worker_deleter.name
   min_capacity        = 1
-  max_capacity        = 5
+  max_capacity        = 10
   queue1              = "ihs-deletions-h"
   queue2              = "ihs-deletions-v"
   scale_in_threshold  = 200
