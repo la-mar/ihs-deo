@@ -9,13 +9,6 @@ DEFAULT_PAGE_SIZE = 50
 DEFAULT_PAGE_NUMBER = 1
 
 
-# FIXME: This works, in that it returns paged results, but it is confusing from
-# the client side. For example, making a request for 100 entities will return
-# a response with the correct page size, but the value in "pages" is not scoped
-# to the request. In the example above, instead of returning "pages=2" to indicate
-# two pages encapsulate the entire response of 100 entities and page_size=50, it
-# returns something like "pages=426", which is probably the number of pages
-# for the entire collection. Not sure how to fix.
 def paginate(model, schema, **kwargs):
     page = int(request.args.get("page", DEFAULT_PAGE_NUMBER))
     page_size = int(request.args.get("page_size", DEFAULT_PAGE_SIZE))
