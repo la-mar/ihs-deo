@@ -2,6 +2,7 @@ from typing import Dict, Tuple
 import logging
 
 from flask_restful import request
+from flask import Response
 from api.resources.base import DataResource
 
 
@@ -25,6 +26,16 @@ class WellListResource(WellResource):
                 self._get(paginate=True, ihs_last_update_date__gte=since),
                 200,
             )
+            return self._get(paginate=True, ihs_last_update_date__gte=since)
+            # resp = Response(result, status=200,)
+            # return resp
         else:
             return {"status": "missing_argument"}, 400
 
+    def post(self) -> Tuple[Dict, int]:
+        api14 = request.args.get("api14")
+
+        if api14:
+            return self._get(paginate=True, api14__in=api14.split(","))
+        else:
+            return {"status": "missing_argument"}, 400

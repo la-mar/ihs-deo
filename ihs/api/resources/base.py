@@ -34,12 +34,7 @@ class DataResource(Resource):
             logger.debug(f"found {len(result)} record(s)")
             result = {"data": self.schema.dump(result)}
 
-        response_object = {"status": "success", **result}
-
-        if not response_object.get("data"):
-            response_object["status"] = "not_found"
-
-        return response_object
+        return result
 
 
 class IDResource(DataResource):

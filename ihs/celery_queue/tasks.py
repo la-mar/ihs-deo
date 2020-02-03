@@ -81,6 +81,7 @@ def cleanup_remote_exports():
 def sync_endpoint(endpoint_name: str, task_name: str, **kwargs) -> ExportJob:
     for job_config in collector.tasks.run_endpoint_task(endpoint_name, task_name):
         if job_config:
+            logger.debug(f"Running task {endpoint_name}.{task_name}")
             submit_job.apply_async(
                 (job_config.get("metadata").get("hole_direction"),), job_config
             )
@@ -122,5 +123,4 @@ def delete_job(self, route_key: str, job: Union[dict, ExportJob]):
 
 
 def process_changes_and_deletes():  # TODO: implement
-
     pass
