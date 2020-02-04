@@ -103,19 +103,23 @@ def paginate(model, schema, **kwargs):
         "Link": ",".join([x for x in links if x is not None]),
         "X-Total-Count": page_obj.total,
     }
-    data = schema.dump(page_obj.items)
-    response_body = {
-        "total": page_obj.total,
-        "pages": page_obj.pages,
-        "next": next,
-        "prev": prev,
-        "data": schema.dump(page_obj.items),
-    }
+    data = {"data": schema.dump(page_obj.items)}
+    # response_body = {
+    #     "total": page_obj.total,
+    #     "pages": page_obj.pages,
+    #     "next": next,
+    #     "prev": prev,
+    #     "data": schema.dump(page_obj.items),
+    # }
     # data = schema.dump(page_obj.items)
     # response_body = PaginatedResponse(
     #     response=data, per_page=page_size, current_page=page, total=page_obj.total
     # )
     # logger.debug(response_body)
+    if data.get("data"):
+        data["status"] = "success"
+    else:
+        data["status"] = "not_found"
     resp = jsonify(data)
     for k, v in headers.items():
         resp.headers[k] = v

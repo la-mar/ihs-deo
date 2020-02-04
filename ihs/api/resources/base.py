@@ -33,6 +33,10 @@ class DataResource(Resource):
             result = self.model.get(**kwargs)
             logger.debug(f"found {len(result)} record(s)")
             result = {"data": self.schema.dump(result)}
+            result = {"status": "success", **result}
+
+            if not result.get("data"):
+                result["status"] = "not_found"
 
         return result
 
