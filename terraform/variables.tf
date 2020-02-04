@@ -46,3 +46,32 @@ variable "service_name" {
 variable "service_port" {
   description = "Web service port"
 }
+
+variable "collector_min_capacity" {
+  description = "collector service minimum number of autoscaled containers"
+  default     = 1
+}
+
+variable "collector_max_capacity" {
+  description = "collector service minimum number of autoscaled containers"
+}
+
+variable "deleter_min_capacity" {
+  description = "deleter service minimum number of autoscaled containers"
+  default     = 1
+
+}
+
+variable "deleter_max_capacity" {
+  description = "deleter service minimum number of autoscaled containers"
+}
+
+variable "submitter_min_capacity" {
+  description = "submitter service minimum number of autoscaled containers"
+  default     = 1
+
+}
+
+variable "submitter_max_capacity" {
+  description = "submitter service minimum number of autoscaled containers"
+}
