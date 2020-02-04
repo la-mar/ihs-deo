@@ -26,7 +26,7 @@ data "aws_ecs_task_definition" "ihs_cron" {
 }
 
 resource "aws_security_group" "ihs_web" {
-  description = "Balancer for ${local.full_service_name}"
+  description = "Security group for ${local.full_service_name}"
 
   vpc_id = data.terraform_remote_state.vpc.outputs.vpc_id
   name   = "${var.service_name}-web-sg"

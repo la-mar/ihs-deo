@@ -3,7 +3,7 @@
 
 resource "aws_service_discovery_private_dns_namespace" "ihs_namespace" {
   name        = var.service_name
-  description = "IHS data service namespace"
+  description = "${var.service_name} data service namespace"
   vpc         = data.terraform_remote_state.vpc.outputs.vpc_id
 }
 
