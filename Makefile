@@ -32,7 +32,7 @@ export-deps:
 
 redis-start:
 	# start a local redis container
-	docker run -d --name redis -p 6379:6379 redis
+	docker run -d --rm --name redis -p 6379:6379 redis
 
 init-db:
 	# shortcut to initialize the database
@@ -56,6 +56,9 @@ celery-worker:
 	chamberprod exec ihs datadog -- ihs run worker -Q ihs-default,ihs-submissions-h,ihs-collections-h,ihs-deletions-h,ihs-submissions-v,ihs-collections-v,ihs-deletions-v --loglevel DEBUG
 	# Alternatively:
 	# celery -E -A ihs.celery_queue.worker:celery worker --loglevel=INFO --purge
+
+profile-submitter:
+	mprof aws-vault exec prod -- ihs run worker -Q ihs-submissions-h,ihs-submissions-v --loglevel DEBUG
 
 celery-beat:
 	# Launch a cron process
@@ -88,6 +91,7 @@ build:
 	docker build  -f Dockerfile . -t ${IMAGE_NAME}
 	docker tag ${IMAGE_NAME} ${IMAGE_NAME}:${COMMIT_HASH}
 	docker tag ${IMAGE_NAME} ${IMAGE_NAME}:${APP_VERSION}
+	docker tag ${IMAGE_NAME} ${IMAGE_NAME}:dev
 	docker tag ${IMAGE_NAME} ${IMAGE_NAME}:latest
 
 
@@ -96,6 +100,7 @@ build-with-chamber:
 	docker build  -f Dockerfile.chamber . -t ${IMAGE_NAME}
 	docker tag ${IMAGE_NAME} ${IMAGE_NAME}:chamber-${COMMIT_HASH}
 	docker tag ${IMAGE_NAME} ${IMAGE_NAME}:chamber-${APP_VERSION}
+	docker tag ${IMAGE_NAME} ${IMAGE_NAME}:chamber-dev
 	docker tag ${IMAGE_NAME} ${IMAGE_NAME}:chamber-latest
 
 build-all: build-with-chamber build
@@ -127,7 +132,7 @@ cc-run-local:
 	JOBNAME?=build-image
 	circleci local execute -c process.yml --job build-image -e DOCKER_LOGIN=${DOCKER_LOGIN} -e DOCKER_PASSWORD=${DOCKER_PASSWORD}
 
-all: build login push
+all: build-all push-all
 
 deploy:
 	# Update SSM parameters from local dotenv and deploy a new version of the service to ECS

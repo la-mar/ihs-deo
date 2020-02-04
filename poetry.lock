@@ -853,6 +853,17 @@ python-versions = "*"
 version = "0.6.1"
 
 [[package]]
+category = "dev"
+description = "A module for monitoring memory usage of a python program"
+name = "memory-profiler"
+optional = false
+python-versions = "*"
+version = "0.57.0"
+
+[package.dependencies]
+psutil = "*"
+
+[[package]]
 category = "main"
 description = "MongoEngine is a Python Object-Document Mapper for working with MongoDB."
 name = "mongoengine"
@@ -1546,7 +1557,7 @@ lint = []
 pytest = []
 
 [metadata]
-content-hash = "1b2134a2392393da48218f36405699ee8507bac78df7899655ec65c8b6aa349f"
+content-hash = "146d88300f0a02d0dd71836113830c3d1f88b9358f38ff0d99be2edfc067e533"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -1965,6 +1976,9 @@ matplotlib = [
 mccabe = [
     {file = "mccabe-0.6.1-py2.py3-none-any.whl", hash = "sha256:ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42"},
     {file = "mccabe-0.6.1.tar.gz", hash = "sha256:dd8d182285a0fe56bace7f45b5e7d1a6ebcbf524e8f3bd87eb0f125271b8831f"},
+]
+memory-profiler = [
+    {file = "memory_profiler-0.57.0.tar.gz", hash = "sha256:23b196f91ea9ac9996e30bfab1e82fecc30a4a1d24870e81d1e81625f786a2c3"},
 ]
 mongoengine = [
     {file = "mongoengine-0.18.2-py2-none-any.whl", hash = "sha256:9301ca84ada9377a200a50541f9be7d5308081bf2112049d00e1dd163f80b940"},
