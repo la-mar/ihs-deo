@@ -30,14 +30,6 @@ class Collector(object):
         except Exception as e:
             logger.debug("Failed saving document to %s", self.model)
             failed.append(e)
-        # for doc in documents:
-        #     try:
-        #         self.model(**doc).save()
-        #         self.model(**doc).save()
-        #         succeeded += 1
-        #     except Exception as e:
-        #         logger.warning("Failed saving document to %s", self.model)
-        #         failed.append(e)
 
         if len(failed) > 0:
             logger.error(

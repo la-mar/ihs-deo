@@ -39,9 +39,8 @@ def post_heartbeat():
 @celery.task
 def post_remote_export_capacity():
     """ Send remote export capacity to metrics backend"""
-    # logger.warning("post_remote_export_capacity")
     calcs = collector.tasks.calc_remote_export_capacity()
-    logger.info("Posting metrics", extra=calcs)
+    logger.debug("Posting metrics", extra=calcs)
     for key, value in calcs.items():
         metrics.post(key, value, metric_type="gauge")
 
@@ -57,7 +56,7 @@ def cleanup_remote_exports():
     threshold = total * 0.33  # bytes
 
     if used >= threshold:
-        logger.info(
+        logger.warning(
             f"Initiating remote purge: threshold={threshold}, capacity.used={used}, capacity.available={available}, capacity.total={total}"
         )
         collector.tasks.purge_remote_exports()

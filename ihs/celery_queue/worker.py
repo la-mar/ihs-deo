@@ -49,7 +49,7 @@ def setup_periodic_tasks(sender, **kwargs):  # pylint: disable=unused-argument
         for task_name, task in endpoint.tasks.items():
             if task.enabled:
                 name = f"{endpoint_name}:{task_name}"
-                logger.warning("Registering periodic task: %s", name)
+                logger.debug("Registering periodic task: %s", name)
                 sender.add_periodic_task(
                     task.schedule,
                     celery_queue.tasks.sync_endpoint.s(endpoint_name, task_name),
@@ -58,19 +58,19 @@ def setup_periodic_tasks(sender, **kwargs):  # pylint: disable=unused-argument
             else:
                 logger.warning("Task %s is DISABLED -- skipping", name)
 
-    logger.warning("Registering periodic task: %s", "heartbeat")
+    logger.debug("Registering periodic task: %s", "heartbeat")
     sender.add_periodic_task(
         30, celery_queue.tasks.post_heartbeat, name="heartbeat",
     )
 
-    logger.warning("Registering periodic task: %s", "calc_remote_export_capacity")
+    logger.debug("Registering periodic task: %s", "calc_remote_export_capacity")
     sender.add_periodic_task(
         60,  # 1 minute
         celery_queue.tasks.post_remote_export_capacity,
         name="calc_remote_export_capacity",
     )
 
-    logger.warning("Registering periodic task: %s", "cleanup_remote_exports")
+    logger.debug("Registering periodic task: %s", "cleanup_remote_exports")
     sender.add_periodic_task(
         crontab(0, 18),  # daily at 6pm, ~3 hours before nightly jobs start
         celery_queue.tasks.cleanup_remote_exports,

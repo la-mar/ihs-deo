@@ -101,7 +101,7 @@ class ExportParameter:
             try:
                 return util.load_xml(path).format(**kwargs)
             except FileNotFoundError as fe:
-                logger.warning("Failed to load xml file %s -- %s", path, fe)
+                logger.error("Failed to load xml file %s -- %s", path, fe)
                 raise
         else:
             return None
