@@ -173,19 +173,24 @@ class WellboreTransformer(Transformer):
 
             for loc_name, loc_aliases in loc_type_map.items():
                 if type_name in loc_aliases or type_code in loc_aliases:
-                    lon, lat, crs = projector.transform(
-                        x=get("geographic.longitude"),
-                        y=get("geographic.latitude"),
-                        crs=datum.lower() if datum else datum,
-                    )
-                    locs[loc_name] = {
-                        "geom": geometry.mapping(geometry.Point(lon, lat)),
-                        "block": get("texas.block.number"),
-                        "section": get("texas.section.number"),
-                        "abstract": get("texas.abstract"),
-                        "survey": get("texas.survey"),
-                        "metes_bounds": get("texas.footage.concatenated"),
-                    }
+                    result = {}
+                    try:
+                        lon, lat, crs = projector.transform(
+                            x=get("geographic.longitude"),
+                            y=get("geographic.latitude"),
+                            crs=datum.lower() if datum else datum,
+                        )
+                        result["geom"] = geometry.mapping(geometry.Point(lon, lat))
+                    except TypeError as te:
+                        logger.debug("Failed transforming well location")
+
+                    result["block"] = get("texas.block.number")
+                    result["section"] = get("texas.section.number")
+                    result["abstract"] = get("texas.abstract")
+                    result["survey"] = get("texas.survey")
+                    result["metes_bounds"] = get("texas.footage.concatenated")
+
+                    locs[loc_name] = result
 
         return locs
 
@@ -195,7 +200,7 @@ class WellboreTransformer(Transformer):
         new_location_hash = data.get("hashes", {}).get("location")
         existing_location_hash = existing.hashes.get("location")
         if new_location_hash != existing_location_hash:
-            logger.info(f"{data.get('api14')}: creating new locations")
+            logger.warning(f"{data.get('api14')}: creating new locations")
             locs.update(cls._project_well_locations(data))
         else:
             locs["shl"] = existing.geoms.get("shl")
@@ -206,7 +211,7 @@ class WellboreTransformer(Transformer):
             new_survey_hash = data.get("hashes", {}).get("survey")
             existing_survey_hash = existing.hashes.get("survey")
             if new_survey_hash != existing_survey_hash:
-                logger.info(f"{data.get('api14')}: creating new survey")
+                logger.warning(f"{data.get('api14')}: creating new survey")
                 locs.update(cls._build_survey(data))
             else:
                 if hasattr(existing, "geoms"):
