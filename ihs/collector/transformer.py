@@ -392,7 +392,7 @@ if __name__ == "__main__":
     conf = get_active_config()
     endpoints = Endpoint.load_from_config(conf)
 
-    endpoint_name = "well_vertical"
+    endpoint_name = "production_vertical"
     # endpoint_name = "production_horizontal"
     task_name = "endpoint_check"
     model = endpoints[endpoint_name].model
@@ -407,8 +407,8 @@ if __name__ == "__main__":
     parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
     document = parser.parse(xml)
     # data = document["well_set"]["wellbore"][0]
-    # data_collection = ProductionTransformer.extract_from_collection(document, model)
-    data_collection = WellboreTransformer.extract_from_collection(document, model)
+    data_collection = ProductionTransformer.extract_from_collection(document, model)
+    # data_collection = WellboreTransformer.extract_from_collection(document, model)
     # data = data_collection[0]
 
     collector = Collector(endpoints[endpoint_name].model)

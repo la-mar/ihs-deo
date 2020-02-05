@@ -121,6 +121,8 @@ push-version:
 	docker push ${IMAGE_NAME}:${APP_VERSION}
 	docker push ${IMAGE_NAME}:chamber-${APP_VERSION}
 
+all: build-all push-all
+
 cc-expand:
 	# show expanded configuration
 	circleci config process .circleci/config.yml
@@ -131,8 +133,6 @@ cc-process:
 cc-run-local:
 	JOBNAME?=build-image
 	circleci local execute -c process.yml --job build-image -e DOCKER_LOGIN=${DOCKER_LOGIN} -e DOCKER_PASSWORD=${DOCKER_PASSWORD}
-
-all: build-all push-all
 
 deploy:
 	# Update SSM parameters from local dotenv and deploy a new version of the service to ECS

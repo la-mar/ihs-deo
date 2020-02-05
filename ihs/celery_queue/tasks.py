@@ -13,6 +13,8 @@ logger = get_task_logger(__name__)
 conf = get_active_config()
 endpoints = Endpoint.load_from_config(conf)
 
+RETRY_BASE_DELAY = 15
+
 
 @celery.task
 def log(message):
@@ -90,35 +92,47 @@ def sync_endpoint(endpoint_name: str, task_name: str, **kwargs) -> ExportJob:
 def submit_job(self, route_key: str, job_options: dict, metadata: dict = None):
     try:
         job = collector.tasks.submit_job(job_options, metadata or {})
-        logger.info(f"Submitted job: {job}")
+        logger.debug(f"submitted job: {job}")
         if job:
             collect_job_result.apply_async((route_key,), {"job": job.to_dict()})
     except Exception as exc:
-        raise self.retry(exc=exc, countdown=2 ** self.request.retries)
+        logger.error(
+            f"failed to submit job {job} (attempt: {self.request.retries}) -- {exc}",
+            extra={"attempt": self.request.retries},
+        )
+        raise self.retry(exc=exc, countdown=RETRY_BASE_DELAY ** self.request.retries)
 
 
 @celery.task(bind=True, max_retries=0, ignore_result=True)
 def collect_job_result(self, route_key: str, job: Union[dict, ExportJob]):
     if not isinstance(job, ExportJob):
         job = ExportJob(**job)
-    logger.info(f"Collecting job: {job}")
+    logger.debug(f"collecting job: {job}")
     try:
         collector.tasks.collect(job)
         delete_job.apply_async((route_key,), {"job": job.to_dict()})
 
     except Exception as exc:
-        raise self.retry(exc=exc, countdown=2 ** self.request.retries)
+        logger.error(
+            f"failed to collect job {job} (attempt: {self.request.retries}) -- {exc}",
+            extra={"attempt": self.request.retries},
+        )
+        raise self.retry(exc=exc, countdown=RETRY_BASE_DELAY ** self.request.retries)
 
 
 @celery.task(bind=True, max_retries=0, ignore_result=True)
 def delete_job(self, route_key: str, job: Union[dict, ExportJob]):
     if not isinstance(job, ExportJob):
         job = ExportJob(**job)
-    logger.info(f"Collecting job: {job}")
+    logger.debug(f"deleting job: {job}")
     try:
         return collector.tasks.delete_job(job)
     except Exception as exc:
-        raise self.retry(exc=exc, countdown=2 ** self.request.retries)
+        logger.error(
+            f"failed to delete job {job} (attempt: {self.request.retries}) -- {exc}",
+            extra={"attempt": self.request.retries},
+        )
+        raise self.retry(exc=exc, countdown=RETRY_BASE_DELAY ** self.request.retries)
 
 
 def process_changes_and_deletes():  # TODO: implement

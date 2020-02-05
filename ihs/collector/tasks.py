@@ -91,7 +91,7 @@ def collect_data(job: ExportJob, xml: bytes):
             data = WellboreTransformer.extract_from_collection(document, model=model)
         elif job.data_type == ExportDataTypes.PRODUCTION.value:
             data = ProductionTransformer.extract_from_collection(document, model=model)
-        collector.save(data)
+        collector.save(data, replace=True)
 
 
 def collect_identities(job: ExportJob, data: bytes) -> IdentityList:
