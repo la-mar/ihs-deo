@@ -1,12 +1,12 @@
-import logging
-import json
-import urllib.parse
-from typing import Callable, Union, Tuple, Any, List
 import hashlib
+import json
+import logging
+import urllib.parse
 from collections import OrderedDict
+from typing import Any, Callable, List, Tuple, Union
 
-from util.stringprocessor import StringProcessor
 from util.jsontools import DateTimeEncoder
+from util.stringprocessor import StringProcessor
 
 logger = logging.getLogger(__name__)
 

@@ -1,11 +1,12 @@
 from __future__ import annotations
-from typing import Union, Dict, List, Any
-from datetime import datetime, timedelta
+
+import logging
 import os
 import tempfile
-from contextlib import contextmanager
-import logging
 from collections import Counter
+from contextlib import contextmanager
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Union
 
 import yaml
 
@@ -61,4 +62,3 @@ class Yammler(dict):
         else:
             _file.close()
             os.rename(_file.name, _fspath)
-

@@ -1,12 +1,13 @@
-from collector.yammler import Yammler
-from config import get_active_config
-from typing import Dict, List, Union, no_type_check
+import functools
 import logging
 import os
-import util
 import pprint
+from typing import Dict, List, Union, no_type_check
+
+import util
+from collector.yammler import Yammler
+from config import get_active_config
 from util import query_dict
-import functools
 
 conf = get_active_config()
 logger = logging.getLogger(__name__)
@@ -89,4 +90,3 @@ if __name__ == "__main__":
     d = builder.get_criteria("well_master_horizontal")
     final = builder.finalize_criteria_xml(d)
     pp.pprint(final)
-

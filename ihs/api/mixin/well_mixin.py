@@ -1,11 +1,12 @@
 """ Mixin for MongoEngine backed well records """
-import logging
-from typing import List, Dict, Union, Any
 import functools
+import logging
+from typing import Any, Dict, List, Union
+
 from api.mixin import BaseMixin
-from util import query_dict, gal_to_bbl
-from util.geo import CoordinateTransformer
 from config import get_active_config
+from util import gal_to_bbl, query_dict
+from util.geo import CoordinateTransformer
 
 logger = logging.getLogger(__name__)
 

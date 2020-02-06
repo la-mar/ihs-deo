@@ -1,13 +1,14 @@
 """ Mixin for MongoEngine backed production records """
 
+import functools
 from collections import OrderedDict
 from datetime import datetime
-from typing import List, Dict, Union, Any
-import functools
+from typing import Any, Dict, List, Union
+
 from api.mixin import BaseMixin
-from util import query_dict, gal_to_bbl
-from util.geo import CoordinateTransformer
 from config import get_active_config
+from util import gal_to_bbl, query_dict
+from util.geo import CoordinateTransformer
 
 conf = get_active_config()
 

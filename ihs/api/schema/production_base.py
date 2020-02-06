@@ -1,14 +1,15 @@
 # pylint: disable=unused-argument
 
-from typing import Dict
 import functools
 from datetime import timezone
+from typing import Dict
 
 from marshmallow import Schema, fields, pre_dump
 
-from util import query_dict
-from api.schema.validators import length_is_14, length_is_10
 from api.schema.base import BaseSchema
+from api.schema.validators import length_is_10, length_is_14
+from util import query_dict
+
 
 class ProductionBaseSchema(BaseSchema):
     class Meta:

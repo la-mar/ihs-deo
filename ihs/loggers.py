@@ -2,21 +2,19 @@
 
 """ Logger definitions """
 
-import numbers
-from typing import Any, Mapping, Union
 import logging
 import logging.config
+import numbers
 import os
 import sys
 from logging import LogRecord
+from typing import Any, Mapping, Union
 
 import json_log_formatter
 import logutils.colorize
 
-
 from config import get_active_config
 from util.jsontools import ObjectEncoder
-
 
 conf = get_active_config()
 

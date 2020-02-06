@@ -1,10 +1,10 @@
-from typing import Dict, Tuple
 import logging
+from typing import Dict, Tuple
 
-from flask_restful import request
 from flask import Response
-from api.resources.base import DataResource
+from flask_restful import request
 
+from api.resources.base import DataResource
 
 logger = logging.getLogger(__name__)
 

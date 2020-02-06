@@ -1,9 +1,8 @@
 import datetime
 import logging
 
-from api.mixin import BaseMixin, WellMixin, ProductionMixin
+from api.mixin import BaseMixin, ProductionMixin, WellMixin
 from ihs import db
-
 
 loggger = logging.getLogger(__name__)
 
@@ -115,4 +114,3 @@ if __name__ == "__main__":
 
     s = schemas.WellHeaderSchema(many=True)
     s.dump(m.items)
-

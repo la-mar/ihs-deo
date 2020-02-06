@@ -1,13 +1,13 @@
 from __future__ import annotations
-from typing import Dict
+
 import logging
 from datetime import date, datetime
+from typing import Dict, List, Tuple, Union
 
-from typing import Union, List, Tuple
-from collector.soap_requestor import SoapRequestor
-from collector.export_parameter import ExportParameter
-from config import get_active_config
 import metrics
+from collector.export_parameter import ExportParameter
+from collector.soap_requestor import SoapRequestor
+from config import get_active_config
 
 conf = get_active_config()
 

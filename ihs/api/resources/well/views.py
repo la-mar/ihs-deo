@@ -1,7 +1,6 @@
 from flask import Blueprint
 from flask_restful import Api
 
-
 import api.resources.well.horizontal as h
 import api.resources.well.vertical as v
 

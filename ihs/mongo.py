@@ -1,6 +1,7 @@
 from mongoengine import connect
-from ihs.config import get_active_config
+
 from ihs import create_app, db
+from ihs.config import get_active_config
 
 conf = get_active_config()
 app = create_app()

@@ -1,12 +1,11 @@
-from typing import Dict
 from datetime import timezone
+from typing import Dict
 
 from marshmallow import Schema, fields, pre_dump
 
-
-from api.schema.validators import length_is_14, length_is_10
 from api.schema import ProductionBaseSchema
 from api.schema.base import BaseSchema
+from api.schema.validators import length_is_10, length_is_14
 
 
 class WellCountSchema(BaseSchema):
@@ -189,4 +188,3 @@ if __name__ == "__main__":
     m = model.objects.get(api14=api14)
     sch = ProductionFullSchema()
     sch.dump(m)
-

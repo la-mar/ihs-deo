@@ -1,6 +1,6 @@
-from typing import Callable
 import time
 from functools import wraps
+from typing import Callable
 
 
 def retry(ExceptionToCheck, tries=4, delay=30, backoff=2, logger=None):
@@ -55,4 +55,3 @@ def retry(ExceptionToCheck, tries=4, delay=30, backoff=2, logger=None):
         return f_retry  # true decorator
 
     return deco_retry
-

@@ -1,11 +1,11 @@
-from typing import Dict
 import functools
+from typing import Dict
 
 from marshmallow import Schema, fields, pre_dump
 
-from util import query_dict
-from api.schema import WellBaseSchema, IPTestSchema
+from api.schema import IPTestSchema, WellBaseSchema
 from api.schema.base import BaseSchema
+from util import query_dict
 
 
 class WellLocationSchema(BaseSchema):

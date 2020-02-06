@@ -1,10 +1,11 @@
 from __future__ import annotations
+
 import functools
 import logging
 import re
 from datetime import datetime
 from pydoc import locate
-from typing import Any, Callable, List, Union, Dict
+from typing import Any, Callable, Dict, List, Union
 
 import util
 from config import get_active_config

@@ -1,10 +1,9 @@
 import logging
 
 import api.schema as schemas
-from api.models import ProductionMasterHorizontal, ProductionHorizontal
-
-from api.resources.base import IDResource, IDListResource
-from api.resources.production.base import ProductionResource, ProductionListResource
+from api.models import ProductionHorizontal, ProductionMasterHorizontal
+from api.resources.base import IDListResource, IDResource
+from api.resources.production.base import ProductionListResource, ProductionResource
 
 logger = logging.getLogger(__name__)
 

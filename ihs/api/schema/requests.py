@@ -1,5 +1,6 @@
-from collections import OrderedDict
 import functools
+from collections import OrderedDict
+
 from marshmallow import Schema, fields
 
 from api.schema.base import BaseSchema

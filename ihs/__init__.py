@@ -1,9 +1,9 @@
 from flask import Flask
 
-from ext import db, toolbar, celery
-from config import APP_SETTINGS, get_active_config
 import loggers
 import sentry
+from config import APP_SETTINGS, get_active_config
+from ext import celery, db, toolbar
 
 loggers.config()
 sentry.load()

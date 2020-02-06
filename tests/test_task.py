@@ -1,8 +1,7 @@
 import pytest  # pylint: disable=unused-import
-
+from celery.schedules import crontab
 
 from collector.task import Task
-from celery.schedules import crontab
 
 
 class TestTask:

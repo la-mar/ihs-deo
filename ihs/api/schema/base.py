@@ -1,5 +1,6 @@
-from marshmallow import Schema, ValidationError, post_dump
 import logging
+
+from marshmallow import Schema, ValidationError, post_dump
 
 logger = logging.getLogger(__name__)
 

@@ -6,8 +6,8 @@ from celery import Celery
 from celery.schedules import crontab
 from celery.signals import after_setup_logger  # after_setup_task_logger
 
-import loggers
 import celery_queue.tasks
+import loggers
 from collector import Endpoint
 from config import get_active_config
 from ihs import create_app

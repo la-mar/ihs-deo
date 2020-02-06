@@ -1,1 +1,1 @@
-from api.resources.production.views import blueprint, api
+from api.resources.production.views import api, blueprint

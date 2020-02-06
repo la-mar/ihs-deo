@@ -45,4 +45,3 @@ if __name__ == "__main__":
     m = model.objects.get(api14=api14)
     wh = SurveySchema()
     wh.dump(m)
-

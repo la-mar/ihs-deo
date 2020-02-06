@@ -1,8 +1,7 @@
 """ Basic mixin for MongoEngine backed data models """
 
-from typing import Dict, List, Union, no_type_check
 import logging
-
+from typing import Dict, List, Union, no_type_check
 
 import mongoengine as me
 
@@ -127,4 +126,3 @@ class BaseMixin:
             ct += 1
 
         return ct
-

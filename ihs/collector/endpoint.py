@@ -1,11 +1,12 @@
 from __future__ import annotations
-from typing import Dict, List, Union, Any, Tuple, ItemsView, TypeVar, Generic
+
 import logging
 from pydoc import locate
+from typing import Any, Dict, Generic, ItemsView, List, Tuple, TypeVar, Union
 
 from attrdict import AttrDict
-from api.models import *
 
+from api.models import *
 from collector.task import Task
 
 logger = logging.getLogger(__name__)

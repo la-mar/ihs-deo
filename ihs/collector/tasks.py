@@ -5,11 +5,11 @@ from typing import Dict, Generator, Union
 
 import metrics
 from api.models import *  # noqa
-from collector import (  # noqa
+from collector import ExportJob  # noqa
+from collector import (
     Collector,
     Endpoint,
     ExportBuilder,
-    ExportJob,
     ExportParameter,
     ExportRetriever,
     ProductionList,

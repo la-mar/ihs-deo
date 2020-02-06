@@ -3,9 +3,8 @@ import logging
 
 import api.schema as schemas
 from api.models import WellMasterVertical, WellVertical
-
-from api.resources.base import IDResource, IDListResource
-from api.resources.well.base import WellResource, WellListResource
+from api.resources.base import IDListResource, IDResource
+from api.resources.well.base import WellListResource, WellResource
 
 logger = logging.getLogger(__name__)
 

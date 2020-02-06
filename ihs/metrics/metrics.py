@@ -1,6 +1,5 @@
-from typing import List, Tuple, Union, Dict
 import logging
-
+from typing import Dict, List, Tuple, Union
 
 from config import get_active_config, project
 

@@ -1,8 +1,11 @@
 from __future__ import annotations
-from typing import Union, List, Dict
-from celery.schedules import crontab
-from api.models import *
+
 from pydoc import locate
+from typing import Dict, List, Union
+
+from celery.schedules import crontab
+
+from api.models import *
 
 
 class OptionMatrix:
@@ -163,4 +166,3 @@ if __name__ == "__main__":
     print(to)
     OptionMatrix(**task_def.options)
     task_def
-

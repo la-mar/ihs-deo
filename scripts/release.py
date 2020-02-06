@@ -5,8 +5,8 @@ import subprocess
 from datetime import datetime
 from pathlib import Path
 
-import tomlkit
 import requests
+import tomlkit
 
 SRC_FOLDER = "ihs"
 PROJECT_ROOT = Path(".").resolve()
@@ -146,4 +146,3 @@ def publish():
 if __name__ == "__main__":
     set_version()
     publish()
-

@@ -1,11 +1,10 @@
-from typing import Union
 import logging
 import os
-
+from typing import Union
 from uuid import uuid4
-from config import get_active_config
-import util
 
+import util
+from config import get_active_config
 
 logger = logging.getLogger(__name__)
 conf = get_active_config()

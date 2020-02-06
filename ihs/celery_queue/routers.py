@@ -1,5 +1,5 @@
 """ Custom routing functions for Celery """
-from config import HoleDirection, project, get_active_config
+from config import HoleDirection, get_active_config, project
 
 conf = get_active_config()
 

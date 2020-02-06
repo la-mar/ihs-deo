@@ -1,14 +1,15 @@
 from __future__ import annotations
-from typing import Dict, Union, Generator
+
 import logging
 from datetime import datetime, timedelta
+from typing import Dict, Generator, Union
 
 import requests
 
 import util
-from config import get_active_config
-from collector.request import Request
 from collector.endpoint import Endpoint
+from collector.request import Request
+from config import get_active_config
 
 logger = logging.getLogger(__name__)
 conf = get_active_config()

@@ -1,9 +1,9 @@
-from typing import Dict, Tuple
 import logging
+from typing import Dict, Tuple
 
 from flask import Blueprint
-from flask_restful import Resource, request, Api
 from flask_mongoengine import Document as Model
+from flask_restful import Api, Resource, request
 from marshmallow import Schema
 
 from api.helpers import paginate

@@ -1,11 +1,12 @@
 from __future__ import annotations
-from typing import Callable, Dict, List, Union  # pylint: disable=unused-import
-from collections import OrderedDict
+
 import logging
+from collections import OrderedDict
+from typing import Callable, Dict, List, Union  # pylint: disable=unused-import
 
 import xmltodict
-import util
 
+import util
 from collector.parser import Parser
 
 sp = util.StringProcessor()

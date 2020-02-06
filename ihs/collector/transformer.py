@@ -1,20 +1,19 @@
 from __future__ import annotations
 
+import functools
 import hashlib
 import logging
 from collections import OrderedDict
-import functools
 from typing import Callable, Dict, List, Union  # pylint: disable=unused-import
 
 import shapely.geometry as geometry
+from flask_mongoengine import Document as Model
 
-
-from util import query_dict, ensure_list, make_hash
 from config import get_active_config
+from util import ensure_list, make_hash, query_dict
+from util.geo import CoordinateTransformer, to_nad27, to_nad27sp, to_wgs84
 
 logger = logging.getLogger(__name__)
-from util.geo import CoordinateTransformer, to_wgs84, to_nad27, to_nad27sp
-from flask_mongoengine import Document as Model
 
 conf = get_active_config()
 

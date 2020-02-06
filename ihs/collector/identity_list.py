@@ -1,15 +1,14 @@
-from typing import Union, Any, List
 import logging
+from typing import Any, List, Union
 
-from config import HoleDirection
 from api.models import (
-    WellMasterHorizontal,
-    WellMasterVertical,
     ProductionMasterHorizontal,
     ProductionMasterVertical,
+    WellMasterHorizontal,
+    WellMasterVertical,
 )
-
 from collector.collector import Collector
+from config import HoleDirection
 
 logger = logging.getLogger(__name__)
 

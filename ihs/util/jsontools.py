@@ -1,8 +1,8 @@
 # pylint: disable=arguments-differ, method-hidden
 
-from typing import Any
 import json
-from datetime import datetime, date, timedelta
+from datetime import date, datetime, timedelta
+from typing import Any
 
 
 class DateTimeEncoder(json.JSONEncoder):

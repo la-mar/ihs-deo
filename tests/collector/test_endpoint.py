@@ -1,6 +1,5 @@
-import pytest  # pylint: disable=unused-import
-
 import mongoengine as me
+import pytest  # pylint: disable=unused-import
 
 from collector.endpoint import Endpoint
 
@@ -58,4 +57,3 @@ class TestEndpoint:
     def test_locate_model_not_found(self, endpoint):
         with pytest.raises(ModuleNotFoundError):
             endpoint.locate_model("not_a_real_model")
-
