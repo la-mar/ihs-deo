@@ -313,12 +313,10 @@ class ExportRetriever:
         return False
 
     def get(self, auto_delete: bool = True) -> Union[str, None]:
+        result = None
 
         try:
             result = self.client.service.RetrieveExport(self.job.job_id)
-            if auto_delete:
-                self.client.delete_job(self.job)
-            return result
         except Exception as e:
             msg = f"Failed retrieving export {self.job} -- {e}"
             # Suppress errors from empty exports
@@ -327,7 +325,10 @@ class ExportRetriever:
             else:
                 logger.warning(msg, exc_info=True)
 
-        return None
+        if result is not None and auto_delete:
+            self.client.delete_job(self.job)
+
+        return result
 
 
 if __name__ == "__main__":
