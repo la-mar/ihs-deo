@@ -48,7 +48,7 @@ data "aws_iam_policy_document" "allow_ecs_task_access_to_sqs" {
 
 resource "aws_sqs_queue" "default" {
   name                       = "${var.service_name}-default"
-  delay_seconds              = 30       # hide message for 30 seconds before making available to consumers
+  delay_seconds              = 0        # hide message for x number of seconds before making available to consumers
   message_retention_seconds  = 3600 * 4 # 4 hours
   receive_wait_time_seconds  = 0
   visibility_timeout_seconds = 600 # 10 min
@@ -63,13 +63,12 @@ resource "aws_sqs_queue_policy" "default" {
 
 resource "aws_sqs_queue" "collections_h" {
   name                       = "${var.service_name}-collections-h"
-  delay_seconds              = 30        # hide message for 30 seconds before making available to consumers
+  delay_seconds              = 120       # hide message for x number of seconds before making available to consumers
   message_retention_seconds  = 3600 * 48 # 48 hours
   receive_wait_time_seconds  = 0
   visibility_timeout_seconds = 600 # 10 min
   tags                       = merge(local.tags, { class = local.hz })
 }
-
 
 resource "aws_sqs_queue" "submissions_h" {
   name                       = "${var.service_name}-submissions-h"
@@ -80,8 +79,6 @@ resource "aws_sqs_queue" "submissions_h" {
   tags                       = merge(local.tags, { class = local.hz })
 }
 
-
-
 resource "aws_sqs_queue" "deletions_h" {
   name                       = "${var.service_name}-deletions-h"
   delay_seconds              = 0
@@ -91,11 +88,9 @@ resource "aws_sqs_queue" "deletions_h" {
   tags                       = merge(local.tags, { class = local.hz })
 }
 
-
-
 resource "aws_sqs_queue" "collections_v" {
   name                       = "${var.service_name}-collections-v"
-  delay_seconds              = 30         # hide message for 30 seconds before making available to consumers
+  delay_seconds              = 120        # hide message for x number of seconds before making available to consumers
   message_retention_seconds  = 3600 * 144 # 6 days
   receive_wait_time_seconds  = 0
   visibility_timeout_seconds = 600 # 10 min
