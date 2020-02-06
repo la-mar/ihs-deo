@@ -46,7 +46,6 @@ redis = "^3.4.1"
 [tool.poetry.dev-dependencies]
 black = { version = "*", allow-prereleases = true }
 mypy = "*"
-pylint = "*"
 ipython = "*"
 matplotlib = "*"
 pytest = "*"
@@ -61,6 +60,7 @@ coverage = {version = "^5.0", extras = ["toml"]}
 six = "^1.14.0"
 geopandas = "^0.6.2"
 memory_profiler = "^0.57.0"
+flake8 = "^3.7.9"
 
 [tool.poetry.scripts]
 ihs = "ihs.manage:main"
