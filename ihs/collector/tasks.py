@@ -129,9 +129,9 @@ def calc_remote_export_capacity() -> Dict[str, Union[float, int]]:
                  capacity_used: space used in KB,
                  njobs: number of existing completed jobs
     """
-    mean_doc_size_bytes = 90000
-    inflation_pct = 0.25
-    doc_size_bytes = mean_doc_size_bytes + (0.25 * mean_doc_size_bytes)
+    mean_doc_size_bytes = 90000  # average single entity document size
+    inflation_pct = 0.25  # over estimate the used capacity by this percentage
+    doc_size_bytes = mean_doc_size_bytes + (inflation_pct * mean_doc_size_bytes)
     remote_capacity_bytes = 1000000000  # 1 GB
     eb = ExportBuilder(None)
     njobs = len(eb.list_completed_jobs())
