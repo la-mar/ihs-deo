@@ -323,7 +323,7 @@ class ExportRetriever:
             if "No ids to export" in e.args[0]:
                 logger.debug(msg)
             else:
-                logger.warning(msg, exc_info=True)
+                logger.warning(msg, exc_info=True, stack_info=True)
 
         if result is not None and auto_delete:
             self.client.delete_job(self.job)
@@ -332,12 +332,10 @@ class ExportRetriever:
 
 
 if __name__ == "__main__":
-    # pylint: disable-all
 
     from config import get_active_config
-    from attrdict import AttrDict
     from ihs.config import get_active_config
-    from ihs import create_app, db
+    from ihs import create_app
     from collector import Endpoint
     from util import to_json
     from collector import XMLParser
@@ -361,4 +359,3 @@ if __name__ == "__main__":
     results = cde.get_all()
 
     to_json(results, "test/data/changes_and_deletes_example.json")
-
