@@ -1,13 +1,7 @@
-# pylint: disable=unused-argument
-import os
-
 from flask import Flask
-from flask_mongoengine import MongoEngine
-from flask_debugtoolbar import DebugToolbarExtension
-from celery import Celery
 
 from ext import db, toolbar, celery
-from config import APP_SETTINGS, project, get_active_config, version
+from config import APP_SETTINGS, get_active_config
 import loggers
 import sentry
 
@@ -37,7 +31,7 @@ def create_app(script_info=None):
 
     # shell context for flask cli
     @app.shell_context_processor
-    def ctx():  # pylint: disable=unused-variable
+    def ctx():
         return {"app": app, "db": db, "celery": celery}
 
     return app

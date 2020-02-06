@@ -1,26 +1,26 @@
 from __future__ import annotations
-from typing import Union, Generator, Dict
+
 import logging
+from typing import Dict, Generator, Union
 
-
-from ihs import create_app
+import metrics
 from api.models import *  # noqa
 from collector import (  # noqa
-    XMLParser,
+    Collector,
     Endpoint,
-    ExportParameter,
     ExportBuilder,
     ExportJob,
+    ExportParameter,
     ExportRetriever,
-    WellboreTransformer,
-    ProductionTransformer,
-    WellList,
     ProductionList,
+    ProductionTransformer,
+    WellboreTransformer,
+    WellList,
+    XMLParser,
 )
 from collector.identity_list import IdentityList
-from collector import Endpoint, Collector
-from config import get_active_config, IdentityTemplates, ExportDataTypes
-import metrics
+from config import ExportDataTypes, IdentityTemplates, get_active_config
+from ihs import create_app
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +45,8 @@ def run_endpoint_task(
                 "task": task_name,
                 "url": conf.API_BASE_URL,
                 "hole_direction": opts.get("criteria", {}).get("hole_direction"),
-                **opts,  # duplicate job options here to they travel with the job throughout its lifecycle
+                **opts,  # duplicate job options here to they travel with the job
+                # throughout its lifecycle
             },
         )
         # metrics.post("task.job.created", 1, tags=job_config.get("metadata"))
@@ -144,9 +145,6 @@ def calc_remote_export_capacity() -> Dict[str, Union[float, int]]:
 
 
 if __name__ == "__main__":
-    # pylint: disable-all
-
-    from ihs import create_app
 
     logging.basicConfig(level=10)
     app = create_app()

@@ -1,13 +1,9 @@
 """ Source: https://github.com/karec/cookiecutter-flask-restful """
 
-from typing import Union, Mapping, Dict
 import logging
-from requests import Request
 from urllib.parse import urljoin
-from flask import Response, request, url_for
-from flask import jsonify
 
-# from flask_restful import ResponseBase
+from flask import jsonify, request, url_for
 
 logger = logging.getLogger(__name__)
 
@@ -150,4 +146,3 @@ if __name__ == "__main__":
     # p.response, p.headers
     # p
     # urljoin(request.url_root, "/well/h?api14=42461409160000&page=2&page_size=5")
-
