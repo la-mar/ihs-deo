@@ -107,13 +107,13 @@ def collect_identities(job: ExportJob, data: bytes) -> IdentityList:
     return interface
 
 
-def delete_job(job: ExportJob) -> bool:
-    endpoint = endpoints[job.endpoint]
-    requestor = ExportBuilder(endpoint)
-    result = False
-    if requestor.job_exists(job):
-        result = requestor.delete_job(job)
-    return result
+# def delete_job(job: ExportJob) -> bool:
+#     endpoint = endpoints[job.endpoint]
+#     requestor = ExportBuilder(endpoint)
+#     result = False
+#     if requestor.job_exists(job):
+#         result = requestor.delete_job(job)
+#     return result
 
 
 def purge_remote_exports() -> bool:

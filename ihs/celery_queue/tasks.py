@@ -120,19 +120,19 @@ def collect_job_result(self, route_key: str, job: Union[dict, ExportJob]):
         raise self.retry(exc=exc, countdown=RETRY_BASE_DELAY ** self.request.retries)
 
 
-@celery.task(bind=True, max_retries=0, ignore_result=True)
-def delete_job(self, route_key: str, job: Union[dict, ExportJob]):
-    if not isinstance(job, ExportJob):
-        job = ExportJob(**job)
-    logger.debug(f"deleting job: {job}")
-    try:
-        return collector.tasks.delete_job(job)
-    except Exception as exc:
-        logger.error(
-            f"failed to delete job {job} (attempt: {self.request.retries}) -- {exc}",
-            extra={"attempt": self.request.retries},
-        )
-        raise self.retry(exc=exc, countdown=RETRY_BASE_DELAY ** self.request.retries)
+# @celery.task(bind=True, max_retries=0, ignore_result=True)
+# def delete_job(self, route_key: str, job: Union[dict, ExportJob]):
+#     if not isinstance(job, ExportJob):
+#         job = ExportJob(**job)
+#     logger.debug(f"deleting job: {job}")
+#     try:
+#         return collector.tasks.delete_job(job)
+#     except Exception as exc:
+#         logger.error(
+#             f"failed to delete job {job} (attempt: {self.request.retries}) -- {exc}",
+#             extra={"attempt": self.request.retries},
+#         )
+#         raise self.retry(exc=exc, countdown=RETRY_BASE_DELAY ** self.request.retries)
 
 
 def process_changes_and_deletes():  # TODO: implement

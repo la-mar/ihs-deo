@@ -118,23 +118,23 @@ class Builder(SoapRequestor):
 
         return self.service.GetExportTemplates(self.domain or domain, data_type)
 
-    def delete_job(self, job: Union[ExportJob, str]) -> bool:
+    # def delete_job(self, job: Union[ExportJob, str]) -> bool:
 
-        result = False
-        tags: Dict = {}
-        if isinstance(job, ExportJob):
-            tags = job.limited_dict()
-            job = job.job_id
+    #     result = False
+    #     tags: Dict = {}
+    #     if isinstance(job, ExportJob):
+    #         tags = job.limited_dict()
+    #         job = job.job_id
 
-        try:
-            result = self.service.DeleteExport(job)
-            logger.info("Deleted job: %s", job)
-            # metrics.post("job.delete.success", 1, tags=tags)
-        except Exception as e:
-            logger.info("Encountered error when deleting job %s -- %s", job, e)
-            metrics.post("job.delete.error", 1, tags=tags)
+    #     try:
+    #         result = self.service.DeleteExport(job)
+    #         logger.info("Deleted job: %s", job)
+    #         # metrics.post("job.delete.success", 1, tags=tags)
+    #     except Exception as e:
+    #         logger.info("Encountered error when deleting job %s -- %s", job, e)
+    #         metrics.post("job.delete.error", 1, tags=tags)
 
-        return result
+    #     return result
 
     def job_exists(self, job: Union[ExportJob, str]) -> bool:
         if isinstance(job, ExportJob):
