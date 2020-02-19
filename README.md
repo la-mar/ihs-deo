@@ -1,5 +1,6 @@
 # ihs-deo
-Project to automate data sourcing and validation from IHS Energy's Energy Web Services. 
+
+Project to automate data sourcing and validation from IHS Energy's Energy Web Services.
 
 <div style="text-align:center;">
   <table >
@@ -17,20 +18,19 @@ Project to automate data sourcing and validation from IHS Energy's Energy Web Se
   </table>
 </div>
 
-
-
 Features include:
+
 - customizable download schedules
 - configurable well/production sets per job
 - flexible and extensible parsers for common data types
 - Save data to a MongoDB backend
-- Built in REST API to interact data stored in MongoDB and/or download directly from IHS 
+- Built in REST API to interact data stored in MongoDB and/or download directly from IHS
 
 Available on <a href="https://hub.docker.com/r/driftwood/ihs">DockerHub</a>!
 
-
 # Todo
 
+- Add API endpoints for CLI
 - Unit Testing
 - Documentation
 - Process changes and deletes (nightly)

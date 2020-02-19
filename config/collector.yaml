@@ -1,22 +1,28 @@
 every_minute: &every_minute
   seconds: 60
 
-nightly: &nightly # <<: *every_minute
+nightly: &nightly
   cron:
     minute: 0
     hour: 3
 
-hourly: &hourly # <<: *every_minute
+weekly_hz: &weekly_hz
+  cron:
+    minute: 0
+    hour: 3
+    day_of_week: 0
+
+hourly: &hourly
   cron:
     minute: 30
     hour: "*/1"
 
-every_6_hours: &every_6_hours # <<: *every_minute
+every_6_hours: &every_6_hours
   cron:
     minute: 0
     hour: "*/6"
 
-weekly: &weekly # <<: *every_minute
+weekly: &weekly
   cron:
     minute: 0
     hour: 16
@@ -331,12 +337,12 @@ endpoints:
       template: Well ID List
       criteria:
         hole_direction: H
-        operator: 278107
+        # operator: 278107
     tasks:
       sync:
         cron:
           minute: 0
-          hour: "*/12"
+          hour: 2
         options:
           query_path: well_horizontal_by_county.xml
           matrix:
@@ -358,7 +364,7 @@ endpoints:
       sync:
         cron:
           minute: 0
-          hour: "*/12"
+          hour: 2
         options:
           query_path: well_vertical_by_county.xml
           matrix:
@@ -381,7 +387,7 @@ endpoints:
         # seconds: 60
         cron:
           minute: 0
-          hour: "*/2"
+          hour: 2
         options:
           query_path: production_horizontal_by_county.xml
           matrix:
@@ -405,7 +411,7 @@ endpoints:
       sync:
         cron:
           minute: 0
-          hour: "*/2"
+          hour: 2
         options:
           query_path: production_vertical_by_county.xml
           matrix:
@@ -424,7 +430,9 @@ endpoints:
         hole_direction: H
     tasks:
       sync:
-        <<: *nightly
+        # <<: *weekly_hz
+        cron:
+
         options:
           query_path: well_by_api.xml
           matrix:
@@ -433,11 +441,11 @@ endpoints:
       driftwood:
         cron:
           minute: 0
-          hour: "*/2"
+          hour: 2
         options:
           query_path: well_horizontal_driftwood_all.xml
       endpoint_check:
-        seconds: 60
+        seconds: 900
         options:
           query_path: well_by_api.xml
           matrix:
@@ -466,11 +474,11 @@ endpoints:
       driftwood:
         cron:
           minute: 0
-          hour: "*/2"
+          hour: 2
         options:
           query_path: well_vertical_driftwood_all.xml
       endpoint_check:
-        seconds: 60
+        seconds: 900
         options:
           query_path: well_by_api.xml
           matrix:
@@ -492,7 +500,7 @@ endpoints:
         hole_direction: H
     tasks:
       sync:
-        <<: *nightly
+        <<: *weekly_hz
         options:
           query_path: production_by_entity.xml
           matrix:
@@ -501,12 +509,12 @@ endpoints:
       driftwood:
         cron:
           minute: 0
-          hour: "*/2"
+          hour: 2
         options:
           query_path: well_horizontal_driftwood_all.xml
       endpoint_check:
         enabled: true
-        seconds: 60
+        seconds: 900
         options:
           query_path: production_by_api.xml
           matrix:
@@ -544,12 +552,14 @@ endpoints:
             using: api.models.ProductionMasterVertical.ids
             label: producing_entity
       driftwood:
-        seconds: 300
+        cron:
+          minute: 0
+          hour: 2
         options:
           query_path: well_vertical_driftwood_all.xml
       endpoint_check:
         enabled: true
-        seconds: 60
+        seconds: 900
         options:
           query_path: production_by_api.xml
           matrix:

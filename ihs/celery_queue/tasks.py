@@ -88,13 +88,15 @@ def sync_endpoint(endpoint_name: str, task_name: str, **kwargs) -> ExportJob:
             )
 
 
-@celery.task(bind=True, max_retries=0, ignore_result=True)
+@celery.task(bind=True, rate_limit="50/s", max_retries=0, ignore_result=True)
 def submit_job(self, route_key: str, job_options: dict, metadata: dict = None):
     try:
         job = collector.tasks.submit_job(job_options, metadata or {})
         logger.debug(f"submitted job: {job}")
         if job:
-            collect_job_result.apply_async((route_key,), {"job": job.to_dict()})
+            collect_job_result.apply_async(
+                (route_key,), {"job": job.to_dict()}, countdown=300
+            )
     except Exception as exc:
         logger.error(
             f"failed to submit job {job} (attempt: {self.request.retries}) -- {exc}",
@@ -103,14 +105,13 @@ def submit_job(self, route_key: str, job_options: dict, metadata: dict = None):
         raise self.retry(exc=exc, countdown=RETRY_BASE_DELAY ** self.request.retries)
 
 
-@celery.task(bind=True, max_retries=0, ignore_result=True)
+@celery.task(bind=True, rate_limit="50/s", max_retries=0, ignore_result=True)
 def collect_job_result(self, route_key: str, job: Union[dict, ExportJob]):
     if not isinstance(job, ExportJob):
         job = ExportJob(**job)
     logger.debug(f"collecting job: {job}")
     try:
         collector.tasks.collect(job)
-        delete_job.apply_async((route_key,), {"job": job.to_dict()})
 
     except Exception as exc:
         logger.error(

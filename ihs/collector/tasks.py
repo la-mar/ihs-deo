@@ -78,7 +78,7 @@ def get_job_results(job: Union[ExportJob, dict]) -> bytes:
     if not isinstance(job, ExportJob):
         job = ExportJob(**job)
     retr = ExportRetriever(job, base_url=job.url, endpoint=endpoints[job.endpoint])
-    data = retr.get()
+    data = retr.get(auto_delete=True)
     return data
 
 
