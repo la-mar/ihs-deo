@@ -14,6 +14,8 @@ logger = logging.getLogger(__name__)
 
 criteria_hole_direction = "criteria_hole_direction.xml"  # move to config
 criteria_operator = "criteria_operator.xml"  # move to config
+criteria_production_api = "production_by_api.xml"
+criteria_production_condition = "production_condition.xml"
 # mappings for yaml
 data_type_map = "options.data_type"  # move to config
 criteria_map = "options.criteria"  # move to config
@@ -21,30 +23,45 @@ query_basepath = conf.QUERY_PATH
 
 
 class XmlSchemaBuilder:
-    def get_criteria(self, endpoint_name: str = None) -> Union[dict, None]:
+    def get_criteria(
+        self, api_numbers: list, endpoint_name: str = None
+    ) -> Union[dict, None]:
         criterias = {}
         endpoints = conf.endpoints
+        iterator = 0
         if any(endpoints):
             try:
                 record = endpoints[endpoint_name]
                 get = functools.partial(query_dict, data=record)
                 data_type = get(data_type_map)
-                criteria = get(criteria_map)
-                print(len(criteria.items()))
+                criteria = get(criteria_map) or {}
+
+                if any(api_numbers):
+                    criterias[iterator] = self.build_api_query(api_numbers, data_type)
+                    iterator += 1
+
                 for k, v in criteria.items():
                     if k == "hole_direction":
-                        query = self.load_query(
-                            criteria_hole_direction, data_type=data_type, value=v
+                        query = (
+                            self.load_query(
+                                criteria_hole_direction, data_type=data_type, value=v
+                            )
+                            or ""
                         )
-                        criterias[endpoint_name] = query
+                        criterias[iterator] = query
+                        iterator += 1
                     if k == "operator":
-                        query = self.load_query(
-                            criteria_operator,
-                            data_type=data_type,
-                            value=v,
-                            name="DRIFTWOOD ENERGY OPERATING LLC",  # not sure yet where to dynamically get this. Add new item in yaml?
+                        query = (
+                            self.load_query(
+                                criteria_operator,
+                                data_type=data_type,
+                                value=v,
+                                name="DRIFTWOOD ENERGY OPERATING LLC",  # not sure yet where to dynamically get this. Add new item in yaml?
+                            )
+                            or ""
                         )
-                        criterias[endpoint_name] = query
+                        criterias[iterator] = query
+                        iterator += 1
             except Exception as e:
                 logger.error(
                     "Encountered error when building criteria xml for endpoint %s -- %s",
@@ -57,6 +74,23 @@ class XmlSchemaBuilder:
             return None
 
         return criterias
+
+    def build_api_query(self, api_numbers: list, data_type: str) -> str:
+        condition_query = ""
+        query = ""
+        for v in api_numbers:
+            condition_query += (
+                self.load_query(criteria_production_condition, api=v) or ""
+            )
+        query = (
+            self.load_query(
+                criteria_production_api,
+                data_type=data_type,
+                conditions=condition_query,
+            )
+            or ""
+        )
+        return query
 
     def finalize_criteria_xml(self, criterias: dict) -> str:
         st_builder = "<criterias>\n"
@@ -84,9 +118,9 @@ class XmlSchemaBuilder:
 
 
 if __name__ == "__main__":
-
+    api_numbers = ["12345", "54321"]
     pp = pprint.PrettyPrinter(indent=3)
     builder = XmlSchemaBuilder()
-    d = builder.get_criteria("well_master_horizontal")
+    d = builder.get_criteria(api_numbers, "well_master_horizontal")
     final = builder.finalize_criteria_xml(d)
-    pp.pprint(final)
+
