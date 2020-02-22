@@ -11,7 +11,7 @@ from api.models import *
 class OptionMatrix:
     def __init__(self, matrix: dict = None, **kwargs):
         # self.matrix = matrix if isinstance(matrix, list) else [matrix or {}]
-        self.matrix = matrix or {}
+        self.matrix = {k: v for k, v in (matrix or {}).items()}
         self.kwargs = kwargs
         self.using = self.matrix.pop("using", None)
         self.label = self.matrix.pop("label", "id")
@@ -158,11 +158,13 @@ if __name__ == "__main__":
 
     conf = get_active_config()
     endpoints = conf.endpoints
-    tasks = endpoints.production_horizontal.tasks
+    tasks = endpoints.well_horizontal.tasks
 
-    task_def = tasks.welllist
-    task = Task("production_horizontal", "welllist", **task_def)
+    # tasks
+    task_def = tasks.sync
+    task = Task("well_horizontal", "sync", **task_def)
     to = task.options
-    print(to)
-    OptionMatrix(**task_def.options)
-    task_def
+    # print(to)
+    opts = OptionMatrix(**task_def.options)
+
+    list(task.options)[0:5]
