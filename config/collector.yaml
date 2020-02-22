@@ -430,9 +430,7 @@ endpoints:
         hole_direction: H
     tasks:
       sync:
-        # <<: *weekly_hz
-        cron:
-
+        <<: *weekly_hz
         options:
           query_path: well_by_api.xml
           matrix:
