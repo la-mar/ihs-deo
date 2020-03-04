@@ -32,4 +32,11 @@ class ProductionListResource(ProductionResource):
             return self._get(identification__in=str(identifier).split(",")), 200
         else:
             pass
-            #! TODO: raise value error
+
+    def post(self) -> Tuple[Dict, int]:
+        api14 = request.args.get("api14")
+
+        if api14:
+            return self._get(paginate=True, api14__in=api14.split(","))
+        else:
+            return {"status": "missing_argument"}, 400
