@@ -50,7 +50,11 @@ class BaseMixin:
                 result = cls.objects.paginate(**kwargs)
                 # logger.error(f"Paginated Result: result={result}")
             else:
-                result = cls.objects(**kwargs)
+                only = kwargs.pop("only", None)
+                if only:
+                    result = cls.objects(**kwargs).only(*only)
+                else:
+                    result = cls.objects(**kwargs)
 
             return result
         except me.errors.DoesNotExist:

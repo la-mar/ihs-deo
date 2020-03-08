@@ -30,6 +30,7 @@ class DataResource(Resource):
         if kwargs.pop("paginate", False):
             result = paginate(self.model, self.schema, **kwargs)
         else:
+            # only = kwargs.get("only", None)
             result = self.model.get(**kwargs)
             logger.debug(f"found {len(result)} record(s)")
             result = {"data": self.schema.dump(result)}
