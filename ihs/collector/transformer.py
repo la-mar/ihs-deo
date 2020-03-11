@@ -137,6 +137,7 @@ class WellboreTransformer(Transformer):
         data["completion_count"] = get("engineering.completion")
         data["perforation_count"] = get("engineering.perforation")
         data["survey_count"] = get("surveys.borehole")
+
         return data
 
     @classmethod
@@ -342,7 +343,7 @@ class WellboreTransformer(Transformer):
 
         data["well_name"] = f'{get("designation.name")} {get("number")}'
         data["hole_direction"] = get("drilling.hole_direction.designation.code")
-
+        data["status"] = get("statuses.current.name")
         return data
 
     @classmethod
@@ -371,6 +372,36 @@ class ProductionTransformer(Transformer):
     def extract_identifier(cls, data: OrderedDict) -> str:
         return str(query_dict("wellbore.metadata.identification", data))
 
+    @classmethod
+    def copy_header_to_root(cls, data: OrderedDict) -> OrderedDict:
+        get = functools.partial(query_dict, data=data.get("header", {}))
+
+        data["status"] = get("statuses.current.name")
+        return data
+
+    @classmethod
+    def copy_identifier_to_root(cls, data: OrderedDict) -> OrderedDict:
+        """ Moves a well's identification number (api) to the top level of
+            the dictionary."""
+        data = super().copy_identifier_to_root(data)
+        _id = data.get("identification")
+        print(f"_id = {_id}")
+        if _id is not None:
+            data["entity"] = _id
+            data["entity12"] = _id[:12]
+            data.move_to_end("entity", last=False)
+            data.move_to_end("entity12", last=False)
+
+        return data
+
+    @classmethod
+    def transform(cls, data: OrderedDict, model: Model) -> OrderedDict:
+
+        data = super().transform(data, model)
+        data = cls.copy_header_to_root(data)
+
+        return data
+
 
 if __name__ == "__main__":
 
@@ -391,8 +422,9 @@ if __name__ == "__main__":
     conf = get_active_config()
     endpoints = Endpoint.load_from_config(conf)
 
-    endpoint_name = "production_vertical"
-    # endpoint_name = "production_horizontal"
+    # endpoint_name = "production_vertical"
+    endpoint_name = "production_horizontal"
+    # endpoint_name = "well_horizontal"
     task_name = "endpoint_check"
     model = endpoints[endpoint_name].model
     job_config = [
@@ -409,6 +441,20 @@ if __name__ == "__main__":
     data_collection = ProductionTransformer.extract_from_collection(document, model)
     # data_collection = WellboreTransformer.extract_from_collection(document, model)
     # data = data_collection[0]
-
+    data_collection[0]["entity12"]
+    data_collection[0].keys()
+    document["production_set"]["producing_entity"]["identification"]  # .keys()
     collector = Collector(endpoints[endpoint_name].model)
     collector.save(data_collection, replace=True)
+
+    # results = model.objects(api14="42461409160000").first()
+    # [x["api14"] for x in results]
+
+    for idx, obj in enumerate(model.objects(entity12__exists=False)):
+        obj["entity"] = obj.id
+        obj["entity12"] = obj.id[:12]
+        obj.save()
+        print(f"updated {obj.entity12} (count={idx})")
+
+    # missing_status = model.objects(entity12__exists=False)[0]
+    # missing_status.id

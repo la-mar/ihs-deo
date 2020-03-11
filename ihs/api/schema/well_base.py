@@ -17,6 +17,8 @@ class WellBaseSchema(BaseSchema):
 
     api14 = fields.Str(required=True, validate=length_is_14)
     api10 = fields.Str(validate=length_is_10)
+    status = fields.Str()
+    provider = fields.Str(default="IHS", required=True)
     last_update_at = fields.AwareDateTime(default_timezone=timezone.utc)
     well_name = fields.Str()
     # well_number = fields.Str()
@@ -35,6 +37,7 @@ class WellBaseSchema(BaseSchema):
         output["api14"] = data["api14"]
         output["api10"] = data["api10"]
         output["last_update_at"] = data["last_update_at"]
+        output["status"] = data["status"]
         output["well_name"] = get("well_name")
         # output["well_number"] = get("number")
         # output["hole_direction"] = get("drilling.hole_direction.designation.code")

@@ -111,7 +111,6 @@ class WellHeaderSchema(WellBaseSchema):
     area_rights_value = fields.Int()
     area_rights_uom = fields.Str()
     frac = fields.Nested(FracParmSchema)
-    data_source = fields.Str()
 
     # Clean up data
     @pre_dump
@@ -154,7 +153,6 @@ class WellHeaderSchema(WellBaseSchema):
         output["elevations"] = data.well_elevations or {}
         output["frac"] = data.frac or {}
         output["dates"] = data.well_dates or {}
-        output["data_source"] = "IHS"
 
         return output
 

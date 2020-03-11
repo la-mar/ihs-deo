@@ -16,7 +16,11 @@ class ProductionBaseSchema(BaseSchema):
         ordered = True
 
     api10 = fields.Str(required=True, validate=length_is_10)
+    api14 = fields.Str(required=True)
     entity = fields.Str(required=True)
+    entity12 = fields.Str(required=True)
+    status = fields.Str()
+    provider = fields.Str(default="IHS", required=True)
     last_update_at = fields.AwareDateTime(default_timezone=timezone.utc)
     hole_direction = fields.Str()
 

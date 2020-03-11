@@ -46,6 +46,31 @@ def apply_transformation(
     return new
 
 
+def to_bool(value):
+    valid = {
+        "true": True,
+        "t": True,
+        "1": True,
+        "yes": True,
+        "no": False,
+        "false": False,
+        "f": False,
+        "0": False,
+    }
+
+    if isinstance(value, bool):
+        return value
+
+    if not isinstance(value, str):
+        raise ValueError("invalid literal for boolean. Not a string.")
+
+    lower_value = value.lower()
+    if lower_value in valid:
+        return valid[lower_value]
+    else:
+        raise ValueError('invalid literal for boolean: "%s"' % value)
+
+
 def from_file(filename: str) -> str:
     xml = None
     with open(filename, "r") as f:

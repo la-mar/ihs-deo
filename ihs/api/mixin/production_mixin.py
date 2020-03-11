@@ -1,5 +1,5 @@
 """ Mixin for MongoEngine backed production records """
-
+import logging
 import functools
 from collections import OrderedDict
 from datetime import datetime
@@ -7,8 +7,10 @@ from typing import Any, Dict, List, Union
 
 from api.mixin import BaseMixin
 from config import get_active_config
-from util import gal_to_bbl, query_dict
+from util import gal_to_bbl, query_dict, ensure_list
 from util.geo import CoordinateTransformer
+
+logger = logging.getLogger(__name__)
 
 conf = get_active_config()
 
@@ -82,7 +84,10 @@ class ProductionMixin(BaseMixin):
         get = functools.partial(query_dict, data=data)
 
         output["api10"] = self.api10
+        output["api14"] = self.api14
         output["entity"] = self.identification
+        output["entity12"] = str(self.identification)[:12]
+        output["status"] = self.status
         output["last_update_at"] = self.last_update_at
         output["name"] = get("designation.name")
         output["hole_direction"] = query_dict("header.designation.code", wellbore)
@@ -102,6 +107,10 @@ class ProductionMixin(BaseMixin):
         output["perf_upper_uom"] = get("depths.perforation_uppermost.uom")
         output["perf_lower"] = get("depths.perforation_lowermost.value")
         output["perf_lower_uom"] = get("depths.perforation_lowermost.uom")
+        if output["perf_upper"] and output["perf_lower"]:
+            output["perfll"] = output["perf_lower"] - output["perf_upper"]
+        else:
+            output["perfll"] = None
         output["well_counts"] = get("wells")
 
         output["dates"] = self.dates
@@ -118,38 +127,44 @@ class ProductionMixin(BaseMixin):
         if hasattr(self, "production"):
             years = self.production.get("year")
 
-        for year in years:
-            yr = year.get("number")
+        if years:
+            logger.debug(f"{[x.get('number') for x in years]}")
+            for year in years:
+                yr = year.get("number")
+                logger.debug(
+                    f"{self.production_header.get('api14')} -- processing prod year {yr}"
+                )
 
-            for month in year.get("month", {}):
-                out = {}
-                get = functools.partial(query_dict, data=month)
+                for month in ensure_list(year.get("month", {})):
 
-                mo = month.get("number", None)
-                last_day = month.get("last_day", None)
+                    out = {}
+                    get = functools.partial(query_dict, data=month)
 
-                out["year"] = yr
-                out["month"] = mo
-                out["last_day"] = last_day
-                out["first_date"] = datetime(year=yr, month=mo, day=1)
-                out["last_date"] = datetime(year=yr, month=mo, day=last_day)
-                out["liquid"] = get("total_liquid.value")
-                out["liquid_uom"] = get("total_liquid.uom")
-                out["oil"] = get("oil.value")
-                out["oil_uom"] = get("oil.uom")
-                out["gas"] = get("total_gas.value")
-                out["gas_uom"] = get("total_gas.uom")
-                out["casinghead_gas"] = get("casinghead_gas.value")
-                out["casinghead_gas_uom"] = get("casinghead_gas.uom")
-                out["water"] = get("water.value")
-                out["water_uom"] = get("water.uom")
-                out["gor"] = get("ratios.gas_oil.value")
-                out["gor_uom"] = get("ratios.gas_oil.uom")
-                out["water_cut"] = get("ratios.water_cut")
-                out["well_count"] = get("wells.total")
-                out["oil_well_count"] = get("wells.oil")
+                    mo = month.get("number", None)
+                    last_day = month.get("last_day", None)
 
-                output.append(out)
+                    out["year"] = yr
+                    out["month"] = mo
+                    out["last_day"] = last_day
+                    out["first_date"] = datetime(year=yr, month=mo, day=1)
+                    out["last_date"] = datetime(year=yr, month=mo, day=last_day)
+                    out["liquid"] = get("total_liquid.value")
+                    out["liquid_uom"] = get("total_liquid.uom")
+                    # out["oil"] = get("oil.value")
+                    # out["oil_uom"] = get("oil.uom")
+                    out["gas"] = get("total_gas.value")
+                    out["gas_uom"] = get("total_gas.uom")
+                    out["casinghead_gas"] = get("casinghead_gas.value")
+                    out["casinghead_gas_uom"] = get("casinghead_gas.uom")
+                    out["water"] = get("water.value")
+                    out["water_uom"] = get("water.uom")
+                    out["gor"] = get("ratios.gas_oil.value")
+                    out["gor_uom"] = get("ratios.gas_oil.uom")
+                    out["water_cut"] = get("ratios.water_cut")
+                    out["well_count"] = get("wells.total")
+                    out["oil_well_count"] = get("wells.oil")
+
+                    output.append(out)
 
         return output
 
