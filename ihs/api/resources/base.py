@@ -53,7 +53,7 @@ class IDListResource(IDResource):
         if areas:
             return self._get(name__in=str(areas).split(",")), 200
         else:
-            return {"status": "missing_argument"}, 400
+            return self._get(), 200
 
 
 blueprint = Blueprint("root", __name__)
