@@ -50,10 +50,16 @@ class IDResource(DataResource):
 class IDListResource(IDResource):
     def get(self) -> Tuple[Dict, int]:  # type: ignore
         areas = request.args.get("areas")
+        exclude = request.args.get("exclude")
+        # only = request.args.get("only")
+
+        if exclude:
+            exclude = str(exclude).split(",")
+
         if areas:
-            return self._get(name__in=str(areas).split(",")), 200
+            return self._get(name__in=str(areas).split(","), exclude=exclude), 200
         else:
-            return self._get(), 200
+            return self._get(exclude=exclude), 200
 
 
 blueprint = Blueprint("root", __name__)

@@ -51,8 +51,11 @@ class BaseMixin:
                 # logger.error(f"Paginated Result: result={result}")
             else:
                 only = kwargs.pop("only", None)
+                exclude = kwargs.pop("exclude", None)
                 if only:
                     result = cls.objects(**kwargs).only(*only)
+                elif exclude:
+                    result = cls.objects(**kwargs).exclude(*exclude)
                 else:
                     result = cls.objects(**kwargs)
 

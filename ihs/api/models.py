@@ -93,24 +93,24 @@ if __name__ == "__main__":
     app.app_context().push()
     conf = get_active_config()
 
-    model = WellHorizontal
-    api14 = "42461409160000"
-    api14s = ["42461409160000", "42461009720100"]
+    model = ProductionMasterHorizontal
+    # api14 = "42461409160000"
+    # api14s = ["42461409160000", "42461009720100"]
     # m = model.objects.get(api14=api14)  # pylint: disable=no-member
 
     # # vertical = "42383362060000"``
     # x = model.get(api14=api14)[0]
     # dir(x)
     # x.production_header
-
-    api14 = "42173793552016"
-    m = model.get(api14=api14)[0]
+    m = model.get()
+    objs = model.objects.only()
+    [obj.id for obj in objs]
     # m = model.get(api14__in=api14s, paginate=True, page=1, per_page=25)
     # m = model.get(
     #     ihs_last_update_date__gte="2019-12-01", paginate=True, page=1, per_page=25
     # )
 
-    dir(m)
+    # dir(m)
 
-    s = schemas.WellHeaderSchema(many=True)
-    s.dump(m.items)
+    # s = schemas.WellHeaderSchema(many=True)
+    # s.dump(m.items)

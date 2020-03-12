@@ -1,7 +1,7 @@
 import functools
 from collections import OrderedDict
 
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, post_dump
 
 from api.schema.base import BaseSchema
 
@@ -12,6 +12,14 @@ class IDListSchema(BaseSchema):
     ids = fields.List(fields.Str())
     count = fields.Int()
     last_update_at = fields.DateTime()
+
+    @post_dump
+    def clear_none(self, data, many):
+        result = {}
+        for k, v in data.items():
+            if v:
+                result[k] = v
+        return result
 
 
 if __name__ == "__main__":
