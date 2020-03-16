@@ -30,79 +30,29 @@ class ProductionListResource(ProductionResource):
         entity = request.args.get("entity")
         entity12 = request.args.get("entity12")
         identifier = request.args.get("id")
-        # related = util.to_bool(request.args.get("related", True))
         status = request.args.get("status")
-        # logger.info(
-        #     f"production get: id={api10 or ''}{identifier or ''} related={related} status={status}"  # noqa
-        # )
-        # logger.debug(
-        #     {
-        #         "api10": api10,
-        #         "identifier": identifier,
-        #         "related": related,
-        #         "status": status,
-        #     }
-        # )
 
         kwargs: Dict[str, Any] = {}
 
         if status:
             kwargs["status"] = status
-            logger.debug(f"production get: {kwargs}")  # noqa
 
         if identifier:
             kwargs["_id"] = identifier
-            logger.debug(f"production get: {kwargs}")  # noqa
-
-        # if related:
-        #     kwargs["related"] = related
-        #     logger.debug(f"production get: {kwargs}")  # noqa
 
         if api10:
             kwargs["api10"] = api10
-            logger.debug(f"production get: {kwargs}")  # noqa
 
         if api14:
             kwargs["api14"] = api14
-            logger.debug(f"production get: {kwargs}")  # noqa
 
         if entity12:
             kwargs["entity12"] = entity12
-            logger.debug(f"production get: {kwargs}")  # noqa
 
         if entity:
             kwargs["entity"] = entity
-            logger.debug(f"production get: {kwargs}")  # noqa
 
-            # if api10:
-            #     api10s = str(api10).split(",")
-            #     logger.debug(f"selecting api10s: {api10s}")
-
-            #     result = self.model.get(api10__in=api10s, only=["_id"])
-            #     identifier = [x.id for x in result]
-            #     logger.debug(identifier)
-
-            #     # FIXME: Use entity12 instead of regex scan
-            # if identifier:
-            #     ids = (
-            #         str(identifier).split(",")
-            #         if isinstance(identifier, str)
-            #         else identifier
-            #     )
-            #     first_12_only = []
-            #     for x in ids:
-            #         if len(x) > 12:
-            #             x = x[:12]
-            #         first_12_only.append(x)
-            #         # first_12_only.append(re.compile(x + ".*", re.IGNORECASE))
-            #     if related:
-            #         logger.debug(f"selecting related: {first_12_only}")
-            #         kwargs["entity12__in"] = first_12_only
-            #     else:
-            #         logger.debug(f"selecting ids: {ids}")
-            #         kwargs["identification__in"] = ids
-
-        logger.warning(f"production get: {kwargs}")  # noqa
+        logger.debug(f"production get: {kwargs}")  # noqa
 
         return self._get(**kwargs), 200
 
