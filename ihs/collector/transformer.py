@@ -369,6 +369,15 @@ class ProductionTransformer(Transformer):
     entity_key = "producing_entity"
 
     @classmethod
+    def add_production_hash(cls, data: OrderedDict) -> OrderedDict:
+        data_for_hash = [data.get("wellbore"), data.get("production")]
+
+        if data_for_hash is not None:
+            data["hashes"]["production"] = make_hash(data_for_hash)
+
+        return data
+
+    @classmethod
     def extract_identifier(cls, data: OrderedDict) -> str:
         return str(query_dict("wellbore.metadata.identification", data))
 
@@ -398,7 +407,10 @@ class ProductionTransformer(Transformer):
     def transform(cls, data: OrderedDict, model: Model) -> OrderedDict:
 
         data = super().transform(data, model)
+        query_dict("metadata", data).pop("date_creation", None)
+        query_dict("wellbore.metadata", data).pop("date_creation", None)
         data = cls.copy_header_to_root(data)
+        data = cls.add_production_hash(data)
 
         return data
 
@@ -441,20 +453,26 @@ if __name__ == "__main__":
     data_collection = ProductionTransformer.extract_from_collection(document, model)
     # data_collection = WellboreTransformer.extract_from_collection(document, model)
     # data = data_collection[0]
-    data_collection[0]["entity12"]
-    data_collection[0].keys()
-    document["production_set"]["producing_entity"]["identification"]  # .keys()
+    # data_collection[0]["entity12"]
+    # data_collection[0].keys()
+    document["production_set"]["producing_entity"]["hashes"]
     collector = Collector(endpoints[endpoint_name].model)
     collector.save(data_collection, replace=True)
 
-    # results = model.objects(api14="42461409160000").first()
+    obj = model.objects(api14="42461409160000").first()
     # [x["api14"] for x in results]
 
-    for idx, obj in enumerate(model.objects(entity12__exists=False)):
-        obj["entity"] = obj.id
-        obj["entity12"] = obj.id[:12]
-        obj.save()
-        print(f"updated {obj.entity12} (count={idx})")
+    for idx, obj in enumerate(model.objects):
+        try:
+            data_for_hash = [obj.wellbore, obj.production]
+
+            if data_for_hash is not None:
+                obj["hashes"]["production"] = make_hash(data_for_hash)
+            obj.save()
+            print(f"updated {obj.api14} (count={idx})")
+
+        except (KeyError, AttributeError):
+            print(f"failed {obj.api14} (count={idx})")
 
     # missing_status = model.objects(entity12__exists=False)[0]
     # missing_status.id
