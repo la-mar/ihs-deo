@@ -20,6 +20,46 @@ class WellLocationSchema(BaseSchema):
     abstract = fields.Str()
     survey = fields.Str()
     metes_bounds = fields.Str()
+    geom = fields.Dict()
+
+
+class SurveyPointSchema(BaseSchema):
+    md = fields.Int()
+    tvd = fields.Int()
+    geom = fields.Dict()
+
+
+class SurveySchema(BaseSchema):
+    class Meta:
+        ordered = True
+
+    survey_type = fields.Str()
+    survey_method = fields.Str()
+    survey_end_date = fields.Date()
+    survey_top = fields.Int()
+    survey_top_uom = fields.Str()
+    survey_base = fields.Int()
+    survey_base_uom = fields.Str()
+    line = fields.Dict()
+    points = fields.Nested(SurveyPointSchema(many=True))
+    data_source = fields.Str()
+
+    # @pre_dump
+    # def transform(self, data, **kwargs):
+    #     output = super().transform(data)
+    #     return {**output, **data.active_survey}
+
+
+class GeomsSchema(WellBaseSchema):
+    shl = fields.Nested(WellLocationSchema)
+    bhl = fields.Nested(WellLocationSchema)
+    pbhl = fields.Nested(WellLocationSchema)
+    survey = fields.Nested(SurveySchema)
+
+    @pre_dump
+    def transform(self, data, **kwargs):
+        output = super().transform(data)
+        return {**output, **data.geoms, "survey": data.active_survey}
 
 
 class WellElevationSchema(BaseSchema):
@@ -161,21 +201,22 @@ class WellFullSchema(WellHeaderSchema):
     class Meta:
         ordered = True
 
-    shl = fields.Nested(WellLocationSchema,)
-    bhl = fields.Nested(WellLocationSchema)
-    pbhl = fields.Nested(WellLocationSchema)
-    survey_line = fields.Dict()
+    # shl = fields.Nested(WellLocationSchema)
+    # bhl = fields.Nested(WellLocationSchema)
+    # pbhl = fields.Nested(WellLocationSchema)
+    # geoms = fields.Nested(GeomsSchema)
     ip = fields.Nested(IPTestSchema, many=True)
 
     @pre_dump
     def transform(self, data, **kwargs) -> Dict:
 
         output = super().transform(data)
+        # print(data)
         output["ip"] = data.ip_tests
-        output.update(data.well_locations)
+        # output.update(data.geoms)
 
-        if hasattr(data, "geoms"):
-            output["survey_line"] = data.geoms.get("survey_line")
+        # if hasattr(data, "geoms"):
+        #     output["survey_line"] = data.geoms.get("survey_line")
 
         return output
 

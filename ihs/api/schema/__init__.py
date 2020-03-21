@@ -8,10 +8,10 @@ from api.schema.production_data import (
     ProductionMonthlySchema,
 )
 from api.schema.well_base import WellBaseSchema
-from api.schema.survey import SurveySchema
 from api.schema.well_data import (
     WellFrac,
     WellFullSchema,
     WellHeaderSchema,
     WellIPTestSchema,
+    GeomsSchema,
 )

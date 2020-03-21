@@ -49,7 +49,7 @@ class WellMixin(BaseMixin):
     @property
     def well_locations(self) -> Dict[str, Dict[str, Union[Any]]]:
         """ Assemble and return the available well locations, usually SHL, PBHL, and ABHL """
-        locs = {}
+        geoms = {}
         # loc_type_map = {
         #     "shl": ["surface", "shl"],
         #     "bhl": ["actual bottom hole", "abhl"],
@@ -62,7 +62,8 @@ class WellMixin(BaseMixin):
         #     else [self.location]
         # )
         if hasattr(self, "geoms"):
-            locs = {k: v for k, v in self.geoms.items() if k in ["shl", "bhl", "pbhl"]}
+            geoms = self.geoms
+            # locs = {k: v for k, v in self.geoms.items() if k in ["shl", "bhl", "pbhl"]}
         # for loc in location:
         #     get = functools.partial(query_dict, data=loc)
         #     type_name = loc.get("type_name", "").lower()
@@ -86,7 +87,7 @@ class WellMixin(BaseMixin):
         #                 "survey": get("texas.survey"),
         #                 "metes_bounds": get("texas.footage.concatenated"),
         #             }
-        return locs
+        return geoms
 
     @property
     def active_survey(self) -> Dict[str, Any]:
@@ -124,8 +125,8 @@ class WellMixin(BaseMixin):
         #     points.append(pt)
 
         if hasattr(self, "geoms"):
-            header["survey_line"] = self.geoms.get("survey_line")
-            header["survey_points"] = self.geoms.get("survey_points")
+            header["line"] = self.geoms.get("survey_line")
+            header["points"] = self.geoms.get("survey_points")
 
         return header
 

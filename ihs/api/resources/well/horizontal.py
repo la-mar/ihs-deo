@@ -51,18 +51,18 @@ class HorizontalWellIPTestList(WellListResource):
     schema = schemas.WellIPTestSchema(many=True)
 
 
-class HorizontalWellSurvey(WellResource):
-    """ Active survey of a well """
+class HorizontalWellGeoms(WellResource):
+    """ Geometries of a well """
 
     model = WellHorizontal
-    schema = schemas.SurveySchema(many=True)
+    schema = schemas.GeomsSchema(many=True)
 
 
-class HorizontalWellSurveyList(WellListResource):
-    """ Active survey for a list of wells """
+class HorizontalWellGeomsList(WellListResource):
+    """ Geometries for a list of wells """
 
     model = WellHorizontal
-    schema = schemas.SurveySchema(many=True)
+    schema = schemas.GeomsSchema(many=True)
 
 
 class HorizontalWellFrac(WellResource):

@@ -51,18 +51,18 @@ class VerticalWellIPTestList(WellListResource):
     schema = schemas.WellIPTestSchema(many=True)
 
 
-class VerticalWellSurvey(WellResource):
-    """ Active survey of a well """
+class VerticalWellGeoms(WellResource):
+    """ Geometries of a well """
 
     model = WellVertical
-    schema = schemas.SurveySchema(many=True)
+    schema = schemas.GeomsSchema(many=True)
 
 
-class VerticalWellSurveyList(WellListResource):
-    """ Active survey for a list of wells """
+class VerticalWellGeomsList(WellListResource):
+    """ Geometries for a list of wells """
 
     model = WellVertical
-    schema = schemas.SurveySchema(many=True)
+    schema = schemas.GeomsSchema(many=True)
 
 
 class VerticalWellFrac(WellResource):
