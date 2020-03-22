@@ -16,78 +16,99 @@ projector = CoordinateTransformer(conf.DEFAULT_PROJECTION)
 
 
 class WellMixin(BaseMixin):
-    @property
-    def well_header(self):
-        """ Assemble and return the well's header information """
+    # @property
+    # def well_header(self):
+    #     """ Assemble and return the well's header information """
 
-        output = {}
+    #     output = {}
 
-        if hasattr(self, "header"):
-            data = self.header
+    #     if hasattr(self, "header"):
+    #         data = self.header
 
-        get = functools.partial(query_dict, data=data)
+    #     get = functools.partial(query_dict, data=data)
 
-        output["api14"] = self.api14
-        output["api10"] = self.api10
-        output["last_update_at"] = self.last_update_at
-        output["status"] = self.status
+    #     output["api14"] = self.api14
+    #     output["api10"] = self.api10
+    #     output["last_update_at"] = self.last_update_at
+    #     output["status"] = self.status
 
-        output["well_name"] = get("designation.name")
-        output["well_number"] = get("number")
-        output["products"] = get("products.objective.code")
-        output["hole_direction"] = get("drilling.hole_direction.designation.code")
-        output["county_name"] = get("geopolitical.county.name")
-        output["county_code"] = get("geopolitical.county.code")
-        output["state_name"] = get("geopolitical.province_state.name")
-        output["state_code"] = get("geopolitical.province_state.code")
-        output["region_name"] = get("geopolitical.region.name")
-        output["operator_name"] = get("operators.current.name")
-        output["operator_alias"] = get("operators.current.alternate")
+    #     output["well_name"] = get("designation.name")
+    #     output["well_number"] = get("number")
+    #     output["products"] = get("products.objective.code")
+    #     output["hole_direction"] = get("drilling.hole_direction.designation.code")
+    #     output["county_name"] = get("geopolitical.county.name")
+    #     output["county_code"] = get("geopolitical.county.code")
+    #     output["state_name"] = get("geopolitical.province_state.name")
+    #     output["state_code"] = get("geopolitical.province_state.code")
+    #     output["region_name"] = get("geopolitical.region.name")
+    #     output["operator_name"] = get("operators.current.name")
+    #     output["operator_alias"] = get("operators.current.alternate")
 
-        return output
+    #     output["product_primary"] = get("products.objective.code")
 
-    @property
-    def well_locations(self) -> Dict[str, Dict[str, Union[Any]]]:
-        """ Assemble and return the available well locations, usually SHL, PBHL, and ABHL """
-        geoms = {}
-        # loc_type_map = {
-        #     "shl": ["surface", "shl"],
-        #     "bhl": ["actual bottom hole", "abhl"],
-        #     "pbhl": ["proposed bottom hole", "pbhl"],
-        # }
+    #     output["perf_upper"] = query_dict(
+    #         "engineering.completion.header.depths.top.value", data=data
+    #     )
+    #     output["perf_upper_uom"] = query_dict(
+    #         "engineering.completion.header.depths.top.uom", data=data
+    #     )
 
-        # location = (
-        #     self.location
-        #     if issubclass(self.location.__class__, list)
-        #     else [self.location]
-        # )
-        if hasattr(self, "geoms"):
-            geoms = self.geoms
-            # locs = {k: v for k, v in self.geoms.items() if k in ["shl", "bhl", "pbhl"]}
-        # for loc in location:
-        #     get = functools.partial(query_dict, data=loc)
-        #     type_name = loc.get("type_name", "").lower()
-        #     type_code = loc.get("type_code", "").lower()
-        #     datum = get("geographic.datum.code")
+    #     output["perf_lower"] = query_dict(
+    #         "engineering.completion.header.depths.base.value", data=data
+    #     )
+    #     output["perf_lower_uom"] = query_dict(
+    #         "engineering.completion.header.depths.base.uom", data=data
+    #     )
 
-        #     for loc_name, loc_aliases in loc_type_map.items():
-        #         if type_name in loc_aliases or type_code in loc_aliases:
-        #             lon, lat, crs = projector.transform(
-        #                 x=get("geographic.longitude"),
-        #                 y=get("geographic.latitude"),
-        #                 crs=datum.lower() if datum else datum,
-        #             )
-        #             locs[loc_name] = {
-        #                 "lon": lon,
-        #                 "lat": lat,
-        #                 "crs": crs,
-        #                 "block": get("texas.block.number"),
-        #                 "section": get("texas.section.number"),
-        #                 "abstract": get("texas.abstract"),
-        #                 "survey": get("texas.survey"),
-        #                 "metes_bounds": get("texas.footage.concatenated"),
-        #             }
-        return geoms
+    #     if output["perf_upper"] and output["perf_lower"]:
+    #         output["perfll"] = output["perf_lower"] - output["perf_upper"]
+    #     else:
+    #         output["perfll"] = None
+
+    #     return output
+
+    # @property
+    # def well_locations(self) -> Dict[str, Dict[str, Union[Any]]]:
+    #     """ Assemble and return the available well locations, usually SHL, PBHL, and ABHL """
+    #     geoms = {}
+    #     # loc_type_map = {
+    #     #     "shl": ["surface", "shl"],
+    #     #     "bhl": ["actual bottom hole", "abhl"],
+    #     #     "pbhl": ["proposed bottom hole", "pbhl"],
+    #     # }
+
+    #     # location = (
+    #     #     self.location
+    #     #     if issubclass(self.location.__class__, list)
+    #     #     else [self.location]
+    #     # )
+    #     if hasattr(self, "geoms"):
+    #         geoms = self.geoms
+    #         # locs = {k: v for k, v in self.geoms.items() if k in ["shl", "bhl", "pbhl"]}
+    #     # for loc in location:
+    #     #     get = functools.partial(query_dict, data=loc)
+    #     #     type_name = loc.get("type_name", "").lower()
+    #     #     type_code = loc.get("type_code", "").lower()
+    #     #     datum = get("geographic.datum.code")
+
+    #     #     for loc_name, loc_aliases in loc_type_map.items():
+    #     #         if type_name in loc_aliases or type_code in loc_aliases:
+    #     #             lon, lat, crs = projector.transform(
+    #     #                 x=get("geographic.longitude"),
+    #     #                 y=get("geographic.latitude"),
+    #     #                 crs=datum.lower() if datum else datum,
+    #     #             )
+    #     #             locs[loc_name] = {
+    #     #                 "lon": lon,
+    #     #                 "lat": lat,
+    #     #                 "crs": crs,
+    #     #                 "block": get("texas.block.number"),
+    #     #                 "section": get("texas.section.number"),
+    #     #                 "abstract": get("texas.abstract"),
+    #     #                 "survey": get("texas.survey"),
+    #     #                 "metes_bounds": get("texas.footage.concatenated"),
+    #     #             }
+    #     return geoms
 
     @property
     def active_survey(self) -> Dict[str, Any]:
@@ -95,12 +116,12 @@ class WellMixin(BaseMixin):
             WGS84 (4326). The active survey is usually the most current survey
             that is reported for the wellbore. """
 
-        shl_lat = query_dict("shl.lat", self.well_locations)
-        shl_lon = query_dict("shl.lon", self.well_locations)
+        # shl_lat = query_dict("shl.lat", self.geoms)
+        # shl_lon = query_dict("shl.lon", self.geoms)
 
         data: Dict[str, dict] = {}
         header = {}
-        points = []
+        # points = []
         if hasattr(self, "surveys"):
             data = self["surveys"].get("borehole")
 

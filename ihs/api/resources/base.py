@@ -1,10 +1,11 @@
 import logging
 from typing import Dict, Tuple
 
-from flask import Blueprint
+from flask import Blueprint, url_for
 from flask_mongoengine import Document as Model
 from flask_restful import Api, Resource, request
 from marshmallow import Schema
+
 
 from api.helpers import paginate
 
@@ -19,6 +20,22 @@ class TestResource(Resource):
 class HealthCheck(Resource):
     def get(self) -> Tuple[str, int]:  # type: ignore
         return "ok", 200
+
+
+# class SiteMap(Resource):
+#     def has_no_empty_params(self, rule):
+#         defaults = rule.defaults if rule.defaults is not None else ()
+#         arguments = rule.arguments if rule.arguments is not None else ()
+#         return len(defaults) >= len(arguments)
+
+#     def get(self):
+#         links = []
+#         for rule in app.url_map.iter_rules():
+#             # Filter out rules we can't navigate to in a browser
+#             # and rules that require parameters
+#             if "GET" in rule.methods and self.has_no_empty_params(rule):
+#                 url = url_for(rule.endpoint, **(rule.defaults or {}))
+#                 links.append((url, rule.endpoint))
 
 
 class DataResource(Resource):
@@ -66,3 +83,4 @@ blueprint = Blueprint("root", __name__)
 api = Api(blueprint)
 
 api.add_resource(HealthCheck, "/health")
+# api.add_resource(SiteMap, "/routes")

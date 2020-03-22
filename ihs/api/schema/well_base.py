@@ -39,6 +39,8 @@ class WellBaseSchema(BaseSchema):
         output["last_update_at"] = data["last_update_at"]
         output["status"] = data["status"]
         output["well_name"] = get("well_name")
+        output["hole_direction"] = get("hole_direction")
+        # output["well_name"] = get("well_name")
         # output["well_number"] = get("number")
         # output["hole_direction"] = get("drilling.hole_direction.designation.code")
 

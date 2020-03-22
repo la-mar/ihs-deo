@@ -151,13 +151,22 @@ class WellHeaderSchema(WellBaseSchema):
     area_rights_value = fields.Int()
     area_rights_uom = fields.Str()
     frac = fields.Nested(FracParmSchema)
+    product_primary = fields.Str()
+    perf_upper = fields.Int()
+    perf_upper_uom = fields.Str()
+    perf_lower = fields.Int()
+    perf_lower_uom = fields.Str()
+    perfll = fields.Int()
 
     # Clean up data
     @pre_dump
     def transform(self, data, **kwargs) -> Dict:
         header: Dict = {}
+        engineering: Dict = {}
         if hasattr(data, "header"):
             header = data["header"]
+        if hasattr(data, "engineering"):
+            engineering = data["engineering"]
 
         get = functools.partial(query_dict, data=header)
 
@@ -188,6 +197,27 @@ class WellHeaderSchema(WellBaseSchema):
         output["plugback_depth_uom"] = get("depths.plugback.uom")
         output["area_rights_value"] = get("areas.rights.value")
         output["area_rights_uom"] = get("areas.rights.uom")
+
+        output["product_primary"] = get("products.objective.code")
+
+        output["perf_upper"] = query_dict(
+            "completion.header.depths.top.value", data=engineering
+        )
+        output["perf_upper_uom"] = query_dict(
+            "completion.header.depths.top.uom", data=engineering
+        )
+
+        output["perf_lower"] = query_dict(
+            "completion.header.depths.base.value", data=engineering
+        )
+        output["perf_lower_uom"] = query_dict(
+            "completion.header.depths.base.uom", data=engineering
+        )
+
+        if output["perf_upper"] and output["perf_lower"]:
+            output["perfll"] = output["perf_lower"] - output["perf_upper"]
+        else:
+            output["perfll"] = None
 
         output["statuses"] = data.well_statuses or {}
         output["elevations"] = data.well_elevations or {}
