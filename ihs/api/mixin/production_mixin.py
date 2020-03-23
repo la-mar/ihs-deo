@@ -130,7 +130,7 @@ class ProductionMixin(BaseMixin):
         if hasattr(self, "production"):
             years = self.production.get("year")
 
-        if years is not None:
+        if years:
             logger.debug(f"years: {[x.get('number') for x in ensure_list(years)]}")
             for year in ensure_list(years):
                 yr = year.get("number")
@@ -149,8 +149,10 @@ class ProductionMixin(BaseMixin):
                     out["year"] = yr
                     out["month"] = mo
                     out["last_day"] = last_day
+
                     out["first_date"] = datetime(year=yr, month=mo, day=1)
                     out["last_date"] = datetime(year=yr, month=mo, day=last_day)
+
                     out["liquid"] = get("total_liquid.value")
                     out["liquid_uom"] = get("total_liquid.uom")
                     # out["oil"] = get("oil.value")
