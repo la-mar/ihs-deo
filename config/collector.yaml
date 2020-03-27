@@ -498,7 +498,7 @@ endpoints:
         hole_direction: H
     tasks:
       sync:
-        <<: *nightly
+        <<: *weekly_hz
         options:
           query_path: production_by_entity.xml
           matrix:

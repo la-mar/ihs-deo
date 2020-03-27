@@ -63,3 +63,10 @@ Available on <a href="https://hub.docker.com/r/driftwood/ihs">DockerHub</a>!
   ```bash
   docker run --entrypoint=ihs driftwood/ihs
   ```
+
+# Issues
+
+- Export capacity gets too full and propagates errors on collection
+  - potential solutions:
+    - stricter rate limits on submission tasks
+    - group exports into larger chunks rather than per well

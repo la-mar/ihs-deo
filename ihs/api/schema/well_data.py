@@ -26,6 +26,7 @@ class WellLocationSchema(BaseSchema):
 class SurveyPointSchema(BaseSchema):
     md = fields.Int()
     tvd = fields.Int()
+    dip = fields.Float()
     geom = fields.Dict()
 
 

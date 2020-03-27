@@ -246,6 +246,7 @@ class WellboreTransformer(Transformer):
             ew = get("east_west_coordinate")
             md = get("depths.measured.value")
             tvd = get("depths.true_vertical.value")
+            dip = get("deviation.value")
 
             # XPATH
             ew_value = ew.get("value")
@@ -275,13 +276,14 @@ class WellboreTransformer(Transformer):
                         "geom": geometry.mapping(geometry.Point(lon, lat)),
                         "md": md,
                         "tvd": tvd,
+                        "dip": dip,
                     }
                 )
                 logger.debug(f"Transformed survey point {idx+1}/{len(points)}")
 
             else:
                 logger.debug(
-                    f"Failed transforming survey point: shlx={shlx}, shly={shly}, ew_value={ew_value}, ns_value={ns_value}, new_x={new_x}, new_y={new_y}"
+                    f"Failed transforming survey point: shlx={shlx}, shly={shly}, ew_value={ew_value}, ns_value={ns_value}, new_x={new_x}, new_y={new_y}"  # noqa
                 )
 
         return converted_points
@@ -394,7 +396,6 @@ class ProductionTransformer(Transformer):
             the dictionary."""
         data = super().copy_identifier_to_root(data)
         _id = data.get("identification")
-        print(f"_id = {_id}")
         if _id is not None:
             data["entity"] = _id
             data["entity12"] = _id[:12]
@@ -433,11 +434,17 @@ if __name__ == "__main__":
 
     conf = get_active_config()
     endpoints = Endpoint.load_from_config(conf)
+    task_name, endpoint_name, transformer = (
+        "endpoint_check",
+        "well_horizontal",
+        WellboreTransformer,
+    )
+    # endpoint_name, transoformer = "production_horizontal", ProductionTransformer
 
     # endpoint_name = "production_vertical"
-    endpoint_name = "production_horizontal"
+    # endpoint_name = "production_horizontal"
     # endpoint_name = "well_horizontal"
-    task_name = "endpoint_check"
+    # task_name = "endpoint_check"
     model = endpoints[endpoint_name].model
     job_config = [
         x for x in run_endpoint_task(endpoint_name, task_name) if x is not None
@@ -450,29 +457,33 @@ if __name__ == "__main__":
     parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
     document = parser.parse(xml)
     # data = document["well_set"]["wellbore"][0]
-    data_collection = ProductionTransformer.extract_from_collection(document, model)
-    # data_collection = WellboreTransformer.extract_from_collection(document, model)
+    # data_collection = ProductionTransformer.extract_from_collection(document, model)
+    data_collection = transformer.extract_from_collection(document, model)
     # data = data_collection[0]
     # data_collection[0]["entity12"]
     # data_collection[0].keys()
-    document["production_set"]["producing_entity"]["hashes"]
+    # document["production_set"]["producing_entity"]["hashes"]
     collector = Collector(endpoints[endpoint_name].model)
     collector.save(data_collection, replace=True)
-
     obj = model.objects(api14="42461409160000").first()
     # [x["api14"] for x in results]
 
-    for idx, obj in enumerate(model.objects):
-        try:
-            data_for_hash = [obj.wellbore, obj.production]
+    # model.objects.update(unset__hashes__survey=1) # delete a key from all documents
 
-            if data_for_hash is not None:
-                obj["hashes"]["production"] = make_hash(data_for_hash)
-            obj.save()
-            print(f"updated {obj.api14} (count={idx})")
+    # for idx, obj in enumerate(model.objects):
+    #     obj["hashes"]["survey"]
 
-        except (KeyError, AttributeError):
-            print(f"failed {obj.api14} (count={idx})")
+    # for idx, obj in enumerate(model.objects):
+    #     try:
+    #         data_for_hash = [obj.wellbore, obj.production]
+
+    #         if data_for_hash is not None:
+    #             obj["hashes"]["production"] = make_hash(data_for_hash)
+    #         obj.save()
+    #         print(f"updated {obj.api14} (count={idx})")
+
+    #     except (KeyError, AttributeError):
+    #         print(f"failed {obj.api14} (count={idx})")
 
     # missing_status = model.objects(entity12__exists=False)[0]
     # missing_status.id

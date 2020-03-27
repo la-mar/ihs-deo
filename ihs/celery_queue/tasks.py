@@ -49,8 +49,8 @@ def post_remote_export_capacity():
 
 @celery.task
 def cleanup_remote_exports():
-    """ Periodically checks the available export capacity on the IHS servers, purging completed exports if the
-        used capacity >= ~1/3 of total export capacity. """
+    """ Periodically checks the available export capacity on the IHS servers, purging
+        completed exports if the used capacity >= ~1/3 of total export capacity. """
     calcs = collector.tasks.calc_remote_export_capacity()
     used = calcs.get("remote.capacity.used", 0)
     available = calcs.get("remote.capacity.available", 0)
@@ -59,7 +59,7 @@ def cleanup_remote_exports():
 
     if used >= threshold:
         logger.warning(
-            f"Initiating remote purge: threshold={threshold}, capacity.used={used}, capacity.available={available}, capacity.total={total}"
+            f"Initiating remote purge: threshold={threshold}, capacity.used={used}, capacity.available={available}, capacity.total={total}"  # noqa
         )
         collector.tasks.purge_remote_exports()
 
@@ -71,13 +71,12 @@ def cleanup_remote_exports():
 
         metrics.post_event(
             title="IHS Remote Export Purge",
-            text=f"Completed Export Purge: (before) threshold={threshold}, capacity.used={used}, capacity.available={available}, capacity.total={total}"
+            text=f"Completed Export Purge: (before) threshold={threshold}, capacity.used={used}, capacity.available={available}, capacity.total={total}"  # noqa
             + "\n"
-            + f"(after) threshold={threshold_after}, capacity.used={used_after}, capacity.available={available_after}, capacity.total={total_after}",
+            + f"(after) threshold={threshold_after}, capacity.used={used_after}, capacity.available={available_after}, capacity.total={total_after}",  # noqa
         )
 
 
-# pylint: disable=unused-argument
 @celery.task(rate_limit="10/s", ignore_result=True)
 def sync_endpoint(endpoint_name: str, task_name: str, **kwargs) -> ExportJob:
     for job_config in collector.tasks.run_endpoint_task(endpoint_name, task_name):
@@ -88,14 +87,14 @@ def sync_endpoint(endpoint_name: str, task_name: str, **kwargs) -> ExportJob:
             )
 
 
-@celery.task(bind=True, rate_limit="50/s", max_retries=0, ignore_result=True)
+@celery.task(bind=True, rate_limit="10/s", max_retries=0, ignore_result=True)
 def submit_job(self, route_key: str, job_options: dict, metadata: dict = None):
     try:
         job = collector.tasks.submit_job(job_options, metadata or {})
         logger.debug(f"submitted job: {job}")
         if job:
             collect_job_result.apply_async(
-                (route_key,), {"job": job.to_dict()}, countdown=300
+                (route_key,), {"job": job.to_dict()}, countdown=60
             )
     except Exception as exc:
         logger.error(
@@ -105,7 +104,7 @@ def submit_job(self, route_key: str, job_options: dict, metadata: dict = None):
         raise self.retry(exc=exc, countdown=RETRY_BASE_DELAY ** self.request.retries)
 
 
-@celery.task(bind=True, rate_limit="50/s", max_retries=0, ignore_result=True)
+@celery.task(bind=True, rate_limit="100/s", max_retries=0, ignore_result=True)
 def collect_job_result(self, route_key: str, job: Union[dict, ExportJob]):
     if not isinstance(job, ExportJob):
         job = ExportJob(**job)
