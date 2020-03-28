@@ -29,15 +29,7 @@ class ExportJob:
         return {"job_id": self.job_id, **self._kwargs}
 
     def limited_dict(
-        self,
-        limit_keys: list = [
-            "endpoint",
-            "task",
-            "hole_direction",
-            "data_type",
-            "template",
-            "api",
-        ],
+        self, limit_keys: list = ["endpoint", "task", "hole_direction", "data_type"],
     ):
         job_dict = {}
         for key, value in self.to_dict().items():
@@ -163,7 +155,6 @@ class ExportBuilder(Builder):
 
         try:
             job_id = self.build(export_param.params, export_param.target)
-            # metrics.post("job.submitted.success", 1, tags=metadata)
             return ExportJob(
                 job_id=job_id, **{**(metadata or {}), **dict(export_param)}
             )
@@ -179,7 +170,15 @@ class ExportBuilder(Builder):
                         k: v for k, v in (metadata or {}).items() if k not in ["name"]
                     },
                 )
-                metrics.post("job.submitted.error", 1, tags=metadata)
+                if metadata:
+                    tags = {
+                        k: v
+                        for k, v in metadata.items()
+                        if k in ["endpoint", "task", "hole_direction", "data_type"]
+                    }
+                else:
+                    tags = {}
+                metrics.post("job.submitted.error", 1, tags=tags)
 
         return None
 

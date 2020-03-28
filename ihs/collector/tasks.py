@@ -49,7 +49,6 @@ def run_endpoint_task(
                 # throughout its lifecycle
             },
         )
-        # metrics.post("task.job.created", 1, tags=job_config.get("metadata"))
         yield job_config
 
 
@@ -149,54 +148,17 @@ if __name__ == "__main__":
     logging.basicConfig(level=10)
     app = create_app()
     app.app_context().push()
+    calc_remote_export_capacity()
+    purge_remote_exports()
 
     # x = list(run_endpoint_task(endpoint_name, task_name))[0]
 
-    endpoint_name = "production_horizontal"
-    task_name = "driftwood"
-    results = [x for x in run_endpoint_task(endpoint_name, task_name) if x is not None]
-    opts = results[0]
-    opts.get("job_options")
-    job = submit_job(**opts)
-    job.to_dict()
-    result = get_job_results(job)
-    collect_data(job, result)
-
-    endpoint_name = "well_horizontal"
-    task_name = "sequoia"
-    results = [x for x in run_endpoint_task(endpoint_name, task_name) if x is not None]
-    opts = results[0]
-    opts.get("job_options")
-    job = submit_job(**opts)
-    job.to_dict()
-    result = get_job_results(job)
-    collect_data(job, result)
-
-    endpoint_name = "production_master_horizontal"
-    task_name = "sync"
-    results = [x for x in run_endpoint_task(endpoint_name, task_name) if x is not None]
-    opts = results[0]
-    opts.get("job_options")
-    job = submit_job(**opts)
-    job.to_dict()
-    result = get_job_results(job)
-    collect_identities(job, result)
-
-    endpoint_name = "well_master_horizontal"
-    task_name = "sync"
-    results = [x for x in run_endpoint_task(endpoint_name, task_name) if x is not None]
-
-    opts = results[5]  # tx-bailey
-    job = submit_job(**opts)
-    if job:
-        get_job_results(job)
-
-    endpoint_name = "production_master_vertical"
-    task_name = "sync"
-    results = [x for x in run_endpoint_task(endpoint_name, task_name) if x is not None]
-    opts = results[0]
+    # endpoint_name = "production_horizontal"
+    # task_name = "driftwood"
+    # results = [x for x in run_endpoint_task(endpoint_name, task_name) if x is not None]
+    # opts = results[0]
     # opts.get("job_options")
-    job = submit_job(**opts)
-    job.to_dict()
-    result = get_job_results(job)
-    collect_identities(job, result)
+    # job = submit_job(**opts)
+    # job.to_dict()
+    # result = get_job_results(job)
+    # collect_data(job, result)
