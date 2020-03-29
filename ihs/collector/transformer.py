@@ -175,14 +175,19 @@ class WellboreTransformer(Transformer):
                 if type_name in loc_aliases or type_code in loc_aliases:
                     result = {}
                     try:
-                        lon, lat, crs = projector.transform(
+                        lon, lat, crs = to_wgs84(
                             x=get("geographic.longitude"),
                             y=get("geographic.latitude"),
                             crs=datum.lower() if datum else datum,
                         )
+                        # lon, lat, crs = projector.transform(
+                        #     x=get("geographic.longitude"),
+                        #     y=get("geographic.latitude"),
+                        #     crs=datum.lower() if datum else datum,
+                        # )
                         result["geom"] = geometry.mapping(geometry.Point(lon, lat))
                     except TypeError as te:
-                        logger.debug("Failed transforming well location")
+                        logger.debug(f"Failed transforming well location -- {te}")
 
                     result["block"] = get("texas.block.number")
                     result["section"] = get("texas.section.number")
