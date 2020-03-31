@@ -50,12 +50,12 @@ def post_remote_export_capacity():
 @celery.task
 def cleanup_remote_exports():
     """ Periodically checks the available export capacity on the IHS servers, purging
-        completed exports if the used capacity >= ~1/3 of total export capacity. """
+        completed exports if the used capacity >= ~1/2 of total export capacity. """
     calcs = collector.tasks.calc_remote_export_capacity()
     used = calcs.get("remote.capacity.used", 0)
     available = calcs.get("remote.capacity.available", 0)
     total = calcs.get("remote.capacity.total", 0)
-    threshold = total * 0.33  # bytes
+    threshold = total * 0.5  # bytes
 
     if used >= threshold:
         logger.warning(
@@ -67,7 +67,7 @@ def cleanup_remote_exports():
         used_after = calcs_after.get("remote.capacity.used", 0)
         available_after = calcs_after.get("remote.capacity.available", 0)
         total_after = calcs_after.get("remote.capacity.total", 0)
-        threshold_after = total * 0.33  # bytes
+        threshold_after = total * 0.5  # bytes
 
         metrics.post_event(
             title="IHS Remote Export Purge",
