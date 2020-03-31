@@ -129,7 +129,9 @@ def calc_remote_export_capacity() -> Dict[str, Union[float, int]]:
                  capacity_used: space used in KB,
                  njobs: number of existing completed jobs
     """
-    mean_doc_size_bytes = 90000  # average single entity document size
+    mean_doc_size_bytes = (
+        90000 * conf.TASK_BATCH_SIZE
+    )  # average single entity document size
     inflation_pct = 0.25  # over estimate the used capacity by this percentage
     doc_size_bytes = mean_doc_size_bytes + (inflation_pct * mean_doc_size_bytes)
     remote_capacity_bytes = 1000000000  # 1 GB
@@ -145,20 +147,46 @@ def calc_remote_export_capacity() -> Dict[str, Union[float, int]]:
 
 if __name__ == "__main__":
 
+    from time import sleep
+
     logging.basicConfig(level=10)
     app = create_app()
     app.app_context().push()
-    calc_remote_export_capacity()
-    purge_remote_exports()
 
-    # x = list(run_endpoint_task(endpoint_name, task_name))[0]
+    endpoint_name = "well_horizontal"
+    task_name = "endpoint_check"
+    endpoint = endpoints[endpoint_name]
+    task = endpoint.tasks[task_name]
+    configs = []
+    for opts in task.options:
+        job_config = dict(
+            job_options=opts,
+            metadata={
+                "endpoint": endpoint_name,
+                "task": task_name,
+                "url": conf.API_BASE_URL,
+                "hole_direction": opts.get("criteria", {}).get("hole_direction"),
+                **opts,  # duplicate job options here to they travel with the job
+                # throughout its lifecycle
+            },
+        )
+        configs.append(job_config)
 
-    # endpoint_name = "production_horizontal"
-    # task_name = "driftwood"
-    # results = [x for x in run_endpoint_task(endpoint_name, task_name) if x is not None]
-    # opts = results[0]
-    # opts.get("job_options")
-    # job = submit_job(**opts)
-    # job.to_dict()
-    # result = get_job_results(job)
-    # collect_data(job, result)
+    job_options, metadata = configs[0].values()
+    ep = ExportParameter(**job_options)
+    print(ep.params["Query"])
+    requestor = ExportBuilder(endpoint)
+
+    job = submit_job(job_options=job_options, metadata=metadata)
+    job
+    sleep(3)
+
+    xml = get_job_results(job)
+    parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
+    document = parser.parse(xml)
+    model = endpoint.model
+    data = WellboreTransformer.extract_from_collection(document, model=model)
+    len(data)
+    [x["api14"] for x in data]
+    collector = Collector(model)
+    collector.save(data, replace=True)

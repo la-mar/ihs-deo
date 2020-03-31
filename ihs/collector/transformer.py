@@ -1,17 +1,16 @@
 from __future__ import annotations
 
 import functools
-import hashlib
 import logging
 from collections import OrderedDict
-from typing import Callable, Dict, List, Union  # pylint: disable=unused-import
+from typing import Dict, List, Union
 
 import shapely.geometry as geometry
 from flask_mongoengine import Document as Model
 
 from config import get_active_config
 from util import ensure_list, make_hash, query_dict
-from util.geo import CoordinateTransformer, to_nad27, to_nad27sp, to_wgs84
+from util.geo import CoordinateTransformer, to_nad27sp, to_wgs84
 
 logger = logging.getLogger(__name__)
 
@@ -441,8 +440,8 @@ if __name__ == "__main__":
     endpoints = Endpoint.load_from_config(conf)
     task_name, endpoint_name, transformer = (
         "endpoint_check",
-        "well_horizontal",
-        WellboreTransformer,
+        "production_horizontal",
+        ProductionTransformer,
     )
     # endpoint_name, transoformer = "production_horizontal", ProductionTransformer
 
@@ -470,7 +469,7 @@ if __name__ == "__main__":
     # document["production_set"]["producing_entity"]["hashes"]
     collector = Collector(endpoints[endpoint_name].model)
     collector.save(data_collection, replace=True)
-    obj = model.objects(api14="42461409160000").first()
+    # obj = model.objects(api14="42461409160000").first()
     # [x["api14"] for x in results]
 
     # model.objects.update(unset__hashes__survey=1) # delete a key from all documents

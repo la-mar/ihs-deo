@@ -7,11 +7,14 @@ from typing import Dict, List, Tuple, Union
 import metrics
 from collector.export_parameter import ExportParameter
 from collector.soap_requestor import SoapRequestor
+from collector.xmlparser import XMLParser
 from config import get_active_config
 
 conf = get_active_config()
 
 logger = logging.getLogger(__name__)
+
+parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
 
 
 class ExportJob:
@@ -50,11 +53,26 @@ class Builder(SoapRequestor):
     def service(self):
         return self.client.service
 
+    @property
+    def methods(self):
+        return [x for x in dir(self.client.bind()) if not x.startswith("__")]
+
+    @property
+    def entitlements(self):
+        xml: str = self.session.bind().GetEntitlements()
+        return parser.parse(xml)
+
     def connect(self) -> bool:
         """Initiate a connection to the soap service"""
         return self.service.Login(_soapheaders=self.soapheaders)
 
     def build(self, params: dict, target: dict) -> str:
+        if "Ids" in params.keys():
+            return self.service.BuildExport(params, target)
+        else:
+            return self.service.BuildExportFromQuery(params, target)
+
+    def build_from_query(self, params: dict, target: dict) -> str:
         return self.service.BuildExportFromQuery(params, target)
 
     def dtypes(self, domain: str = None) -> list:

@@ -4,17 +4,25 @@ from pydoc import locate
 from typing import Dict, List, Union
 
 from celery.schedules import crontab
+import util
 
-from api.models import *
+from api.models import *  # noqa
+from api.models import Model
+
+from config import get_active_config
+
+conf = get_active_config()
 
 
 class OptionMatrix:
+    batch_size: int = conf.TASK_BATCH_SIZE
+
     def __init__(self, matrix: dict = None, **kwargs):
-        # self.matrix = matrix if isinstance(matrix, list) else [matrix or {}]
         self.matrix = {k: v for k, v in (matrix or {}).items()}
         self.kwargs = kwargs
         self.using = self.matrix.pop("using", None)
-        self.label = self.matrix.pop("label", "id")
+        self.label = self.matrix.pop("label", "values")
+        self.batch_size = self.matrix.pop("batch_size", 10) or self.batch_size
 
     def __repr__(self):
         return str(self.to_list())
@@ -63,8 +71,13 @@ class OptionMatrix:
             values = values + document[field_name]
 
         matrix = {}
-        for v in values:
-            matrix[f"{self.label}-{v}"] = {self.label: v}
+        # total_count = len(values)
+        for idx, chunk in enumerate(util.chunks(values, self.batch_size)):
+            chunk_count = len(chunk)
+            subset_name = (
+                f"{self.label}[{chunk_count * idx}:{chunk_count * (idx+1)}]"  # noqa
+            )
+            matrix[subset_name] = {self.label: chunk}
 
         return matrix
 
@@ -119,7 +132,7 @@ class Task:
         status = "***DISABLED***" if not self.enabled else ""
         s = self.schedule
         sch = (
-            f"{s._orig_minute} {s._orig_hour} {s._orig_day_of_week} {s._orig_day_of_month} {s._orig_month_of_year}"
+            f"{s._orig_minute} {s._orig_hour} {s._orig_day_of_week} {s._orig_day_of_month} {s._orig_month_of_year}"  # noqa
             if self.seconds is None
             else f"({self.schedule} seconds)"
         )
@@ -131,7 +144,8 @@ class Task:
 
     @property
     def schedule(self) -> Union[crontab, int]:
-        """ The scheduling expression to be used for task creation. Prefers seconds over cron expressions. """
+        """ The scheduling expression to be used for task creation.
+         Prefers seconds over cron expressions. """
         return self.seconds or self.cron
 
     @staticmethod
@@ -151,6 +165,7 @@ if __name__ == "__main__":
     from attrdict import AttrDict
     from ihs.config import get_active_config
     from ihs import create_app, db
+    from collector.xml_query import XMLQuery
 
     conf = get_active_config()
     app = create_app()
@@ -161,10 +176,14 @@ if __name__ == "__main__":
     tasks = endpoints.well_horizontal.tasks
 
     # tasks
-    task_def = tasks.sync
-    task = Task("well_horizontal", "sync", **task_def)
+    task_def = tasks.endpoint_check
+    task = Task("well_horizontal", "endpoint_check", **task_def)
     to = task.options
     # print(to)
     opts = OptionMatrix(**task_def.options)
 
-    list(task.options)[0:5]
+    opt_set = list(task.options)[0]
+
+    q = XMLQuery(data_type="Well").add_filter(opt_set["api"])
+    print(q.to_xml())
+    print(q)

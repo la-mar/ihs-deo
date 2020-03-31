@@ -124,6 +124,13 @@ class ExportDataTypes(Enum):
     PRODUCTION = "Production Allocated"
 
 
+class NamedTemplates(Enum):
+    WELL_ID = "Well ID List"
+    PROD_ID = "Production ID List"
+    WELL = "EnerdeqML Well"
+    PROD = "EnerdeqML Production"
+
+
 class HoleDirection(Enum):
     H = "horizontal"
     V = "vertical"
@@ -221,6 +228,7 @@ class BaseConfig:
         "exportbuilder": abs_path(API_WSDL_DIR, "{version}/ExportBuilder.wsdl"),
     }
     API_DOMAIN = "US"
+    TASK_BATCH_SIZE = 50
 
     @property
     def show(self):
@@ -316,7 +324,6 @@ class DevelopmentConfig(BaseConfig):
 
 class TestingConfig(BaseConfig):
     """Testing configuration"""
-
 
     # LOG_LEVEL=10
 

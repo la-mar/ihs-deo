@@ -3,6 +3,7 @@ import logging
 
 from api.mixin import BaseMixin, ProductionMixin, WellMixin
 from ihs import db
+from mongoengine.document import Document as Model
 
 loggger = logging.getLogger(__name__)
 

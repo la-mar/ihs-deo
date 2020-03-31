@@ -22,6 +22,8 @@ services:
     <<: *defaults
     command: ihs run cron --loglevel=DEBUG
   redis:
+    container_name: ihs_redis
     image: redis
+    command: redis-server  --save "" --appendonly no --loglevel notice --bind 0.0.0.0
     ports:
       - 6379

@@ -10,19 +10,15 @@
                     <operator logic="or">
                         <condition logic="equals">
                             <attribute>code</attribute>
-                            <value_list>
-                                <value>{api}</value>
-                            </value_list>
+                            {value_list}
                         </condition>
                         <condition logic="equals">
                             <attribute>ic</attribute>
-                            <value_list>
-                                <value>{api}</value>
-                            </value_list>
+                            {value_list}
                         </condition>
                     </operator>
                 </group_actual>
-                <group_display>API/IC Number = {api}</group_display>
+                <group_display>Query bt API/IC</group_display>
             </value>
         </filter>
     </criteria>

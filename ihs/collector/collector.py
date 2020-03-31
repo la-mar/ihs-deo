@@ -90,21 +90,3 @@ if __name__ == "__main__":
 
     to_json(json.loads(existing.to_json()), "test/data/existing_example.json")
     to_json(new, "test/data/incomming_example.json")
-
-    #! Dont delete
-    # import pandas as pd
-
-    # dir(pd.io.json)
-
-    # prod_json = document["production_set"]["producing_entity"][0]["production"]["year"]
-
-    # df = pd.io.json.json_normalize(
-    #     prod_json,
-    #     record_path=["month"],
-    #     record_prefix="month.",
-    #     meta=["number"],
-    #     meta_prefix="year.",
-    #     # errors="ignore",
-    # )
-
-    # df.iloc[10].T

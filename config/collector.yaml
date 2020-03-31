@@ -26,7 +26,7 @@ weekly: &weekly
   cron:
     minute: 0
     hour: 16
-    day_of_week: 5
+    day_of_week: "mon,thu"
 
 default_aliases: &default_aliases
   created_at: ihs_created_at
@@ -342,7 +342,7 @@ endpoints:
       sync:
         cron:
           minute: 0
-          hour: 2
+          hour: 12
         options:
           query_path: well_horizontal_by_county.xml
           matrix:
@@ -364,7 +364,7 @@ endpoints:
       sync:
         cron:
           minute: 0
-          hour: 2
+          hour: 12
         options:
           query_path: well_vertical_by_county.xml
           matrix:
@@ -384,10 +384,9 @@ endpoints:
         hole_direction: H
     tasks:
       sync:
-        # seconds: 60
         cron:
           minute: 0
-          hour: 2
+          hour: 12
         options:
           query_path: production_horizontal_by_county.xml
           matrix:
@@ -411,7 +410,7 @@ endpoints:
       sync:
         cron:
           minute: 0
-          hour: 2
+          hour: 12
         options:
           query_path: production_vertical_by_county.xml
           matrix:
@@ -430,16 +429,20 @@ endpoints:
         hole_direction: H
     tasks:
       sync:
-        <<: *weekly_hz
+        seconds: 300
+        # cron:
+        #   minute: 0
+        #   hour: 3
+        #   day_of_week: "mon,wed"
         options:
           query_path: well_by_api.xml
           matrix:
             using: api.models.WellMasterHorizontal.ids
-            label: api
+            # batch_size: 50
       driftwood:
         cron:
           minute: 0
-          hour: 2
+          hour: 4
         options:
           query_path: well_horizontal_driftwood_all.xml
       endpoint_check:
@@ -447,8 +450,11 @@ endpoints:
         options:
           query_path: well_by_api.xml
           matrix:
-            sequoia:
-              api: "42461409160000"
+            check:
+              values:
+                - "42461409160000"
+                - "42383406370000"
+                - "42461412100000"
 
   well_vertical:
     enabled: true
@@ -463,12 +469,15 @@ endpoints:
         hole_direction: V
     tasks:
       sync:
-        <<: *weekly
+        cron:
+          minute: 0
+          hour: 3
+          day_of_week: "fri"
         options:
           query_path: well_by_api.xml
           matrix:
             using: api.models.WellMasterVertical.ids
-            label: api
+            # label: api
       driftwood:
         cron:
           minute: 0
@@ -480,8 +489,9 @@ endpoints:
         options:
           query_path: well_by_api.xml
           matrix:
-            sequoia:
-              api: "42383362060000"
+            check:
+              values:
+                - "42383362060000"
       # check_for_new:
       # TODO: Check for wells in master list that arent in database and download them
 
@@ -498,12 +508,15 @@ endpoints:
         hole_direction: H
     tasks:
       sync:
-        <<: *weekly_hz
+        cron:
+          minute: 0
+          hour: 3
+          day_of_week: "tue,thu"
         options:
           query_path: production_by_entity.xml
           matrix:
             using: api.models.ProductionMasterHorizontal.ids
-            label: producing_entity
+            # label: producing_entity
       driftwood:
         cron:
           minute: 0
@@ -516,19 +529,11 @@ endpoints:
         options:
           query_path: production_by_api.xml
           matrix:
-            sequoia:
-              api: "42461409160000"
-      # welllist:
-      #   seconds: 300
-      #   options:
-      #     query_path: production_by_api.xml
-      #     matrix:
-      #       api:
-      #         - 42461409160000
-      #         - 42461409160001
-      #         - 42461409160002
-      #         - 42461409160003
-      #         - 42461409160004
+            check:
+              values:
+                - "42461409160000"
+                - "42383406370000"
+                - "42461412100000"
 
   production_vertical:
     enabled: true
@@ -543,12 +548,15 @@ endpoints:
         hole_direction: V
     tasks:
       sync:
-        <<: *weekly
+        cron:
+          minute: 0
+          hour: 3
+          day_of_week: "sat"
         options:
           query_path: production_by_entity.xml
           matrix:
             using: api.models.ProductionMasterVertical.ids
-            label: producing_entity
+            # label: producing_entity
       driftwood:
         cron:
           minute: 0
@@ -561,5 +569,6 @@ endpoints:
         options:
           query_path: production_by_api.xml
           matrix:
-            sequoia:
-              api: "42383362060000"
+            check:
+              values:
+                - "42383362060000"

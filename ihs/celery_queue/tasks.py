@@ -79,15 +79,16 @@ def cleanup_remote_exports():
 
 @celery.task(rate_limit="10/s", ignore_result=True)
 def sync_endpoint(endpoint_name: str, task_name: str, **kwargs) -> ExportJob:
-    for job_config in collector.tasks.run_endpoint_task(endpoint_name, task_name):
+    configs = list(collector.tasks.run_endpoint_task(endpoint_name, task_name))
+    for idx, job_config in enumerate(configs):
         if job_config:
             logger.debug(f"Running task {endpoint_name}.{task_name}")
-            submit_job.apply_async(
-                (job_config.get("metadata").get("hole_direction"),), job_config
-            )
+            hole_dir = job_config.get("metadata").get("hole_direction")
+            countdown = 60 * (idx / count)
+            submit_job.apply_async((hole_dir,), job_config, countdown=countdown)
 
 
-@celery.task(bind=True, rate_limit="10/s", max_retries=0, ignore_result=True)
+@celery.task(bind=True, rate_limit="5/s", max_retries=0, ignore_result=True)
 def submit_job(self, route_key: str, job_options: dict, metadata: dict = None):
     try:
         job = collector.tasks.submit_job(job_options, metadata or {})
@@ -98,7 +99,7 @@ def submit_job(self, route_key: str, job_options: dict, metadata: dict = None):
             )
     except Exception as exc:
         logger.error(
-            f"failed to submit job {job} (attempt: {self.request.retries}) -- {exc}",
+            f"failed to submit job {job_options} (attempt: {self.request.retries}) -- {exc}",
             extra={"attempt": self.request.retries},
         )
         raise self.retry(exc=exc, countdown=RETRY_BASE_DELAY ** self.request.retries)
@@ -137,3 +138,12 @@ def collect_job_result(self, route_key: str, job: Union[dict, ExportJob]):
 
 def process_changes_and_deletes():  # TODO: implement
     pass
+
+
+if __name__ == "__main__":
+    idx = list(range(1, 700 + 1))
+    idx = [1, 10, 100, 300, 500, 600, 700]
+    count = len(idx)
+    count
+    [(x, (x / count) ** 2) for x in idx]
+    [(x, 60 * (x / count)) for x in idx]

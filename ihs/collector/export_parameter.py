@@ -1,17 +1,18 @@
 import logging
 import os
-from typing import Union
+from typing import Union, List
 from uuid import uuid4
 
 import util
 from config import get_active_config
+from collector.xml_query import XMLQuery
+import xmltodict
 
 logger = logging.getLogger(__name__)
 conf = get_active_config()
 
 
 class ExportParameter:
-    """ Next step move this to be config driven """
 
     domain = conf.API_DOMAIN
     query_basepath = conf.QUERY_PATH
@@ -25,19 +26,24 @@ class ExportParameter:
         query_path: str = None,
         overwrite: bool = True,
         domain: str = None,
+        values: List[str] = None,
         **kwargs,
     ):
 
         self._export_filename = uuid4()
         self.data_type = data_type
-        self.query = (
-            query or self.load_query(query_path, **kwargs, data_type=data_type) or None
+        self.values = values
+        self.query = self._set_query(
+            xml=query, filepath=query_path, values=values, **kwargs
         )
+        # self.query = (
+        #     query or self.load_query(query_path, **kwargs, data_type=data_type) or None
+        # )
         self.template = (
             template
             or self.load_query(template_path, **kwargs, data_type=data_type)
             or None
-        )
+        )  # TODO: use only Enum
         self.overwrite = overwrite
         self.domain = domain or self.domain
 
@@ -56,9 +62,38 @@ class ExportParameter:
             "data_type": self.data_type,
             "template": self.template,
             "query": self.query,
+            # "ids": self.values,
             "overwrite": self.overwrite,
             "export_filename": self.export_filename,
         }
+
+    def _set_query(
+        self, xml: str = None, filepath: str = None, values: List[str] = None, **kwargs
+    ) -> str:
+        query = None
+        if xml:
+            query = xml
+        elif filepath:
+            # inject dynamic value_list
+            value_list = xmltodict.unparse(
+                {"value_list": {"value": values}}, pretty=False, full_document=False
+            )
+            query = self.load_query(
+                filepath, **kwargs, data_type=self.data_type, value_list=value_list
+            )
+        elif values:
+            query = (
+                XMLQuery(data_type=self.data_type, domain=self.domain,).add_filter(
+                    values
+                )
+                # .to_xml()
+            )
+
+        if not query:
+            raise ValueError(
+                f"Unable to determine query from parameters: xml={xml} filepath={filepath} values={values}"  # noqa
+            )
+        return query
 
     @property
     def export_filename(self):
@@ -71,6 +106,7 @@ class ExportParameter:
             "DataType": self.data_type,
             "Template": self.template,
             "Query": self.query,
+            # "Ids": self.values,
         }
 
     @property
@@ -88,7 +124,8 @@ class ExportParameter:
 
     @template.setter
     def template(self, value: str):
-        """ template can be either the name of a template saved in IHS or an XML string of criteria """
+        """ template can be either the name of a template saved in IHS
+        or an XML string of criteria """
         self._template = value
 
     @classmethod
@@ -108,3 +145,40 @@ class ExportParameter:
     @property
     def target(self) -> dict:
         return {"Filename": self.export_filename, "Overwrite": self.overwrite}
+
+
+if __name__ == "__main__":
+
+    raw_query = """
+                <criterias>
+                    <criteria type="lists" ignored="False">
+                            <domain>US</domain>
+                            <datatype>Well</datatype>
+                            <listtype>API/IC Number</listtype>
+                            <filter logic="include">
+                                    <value id="0" ignored="false">
+                                            <keys>
+                                                    <key>42413001340100</key>
+                                                    <key>42413329660000</key>
+                                                    <key>42413005390100</key>
+                                            </keys>
+                                    </value>
+                            </filter>
+                    </criteria>
+            </criterias>
+            """
+
+    ep = ExportParameter("Well", query=raw_query)
+    print(ep.query)
+
+    ep = ExportParameter(
+        "Well", values=["42413001340100", "42413329660000", "42413005390100"]
+    )
+    print(ep.query)
+
+    ep = ExportParameter(
+        "Well",
+        query_path="well_by_api.xml",
+        values=["42413001340100", "42413329660000", "42413005390100"],
+    )
+    print(ep.query)

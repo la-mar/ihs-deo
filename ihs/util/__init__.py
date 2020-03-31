@@ -3,7 +3,8 @@ import json
 import logging
 import urllib.parse
 from collections import OrderedDict
-from typing import Any, Callable, List, Tuple, Union
+from typing import Any, Callable, List, Tuple, Union, Iterable, Generator
+import itertools
 
 from util.jsontools import DateTimeEncoder
 from util.stringprocessor import StringProcessor
@@ -153,3 +154,15 @@ def gal_to_bbl(value: float, uom: str) -> Tuple[float, str]:
         return value / 42, "BBL"
     else:
         return value, uom
+
+
+def chunks(iterable: Iterable, n: int = 1000, cls=list) -> Generator:
+    """ Process an infinitely nested interable in chunks of size n (default=1000) """
+    it = iter(iterable)
+    while True:
+        chunk_it = itertools.islice(it, n)
+        try:
+            first_el = next(chunk_it)
+        except StopIteration:
+            return
+        yield cls(itertools.chain((first_el,), chunk_it))
