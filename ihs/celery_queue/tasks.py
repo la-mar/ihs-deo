@@ -80,6 +80,7 @@ def cleanup_remote_exports():
 @celery.task(rate_limit="10/s", ignore_result=True)
 def sync_endpoint(endpoint_name: str, task_name: str, **kwargs) -> ExportJob:
     configs = list(collector.tasks.run_endpoint_task(endpoint_name, task_name))
+    count = len(configs)
     for idx, job_config in enumerate(configs):
         if job_config:
             logger.debug(f"Running task {endpoint_name}.{task_name}")
