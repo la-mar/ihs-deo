@@ -27,7 +27,7 @@ def create_celery(app):
     celery.conf.update(app.config)
     TaskBase = celery.Task
 
-    class ContextTask(TaskBase):
+    class ContextTask(TaskBase):  # noqa
         abstract = True
 
         def __call__(self, *args, **kwargs):
@@ -79,8 +79,16 @@ def setup_periodic_tasks(sender, **kwargs):  # pylint: disable=unused-argument
 
 
 @after_setup_logger.connect
-def setup_loggers(logger, *args, **kwargs):  # pylint: disable=unused-argument
-    loggers.config(logger=logger)
+def setup_loggers(logger, *args, **kwargs):
+    """ Configure loggers on worker/beat startup """
+    loggers.config(
+        logger=logger, level=conf.CELERY_LOG_LEVEL, formatter=conf.CELERY_LOG_FORMAT
+    )
+
+
+# @after_setup_logger.connect
+# def setup_loggers(logger, *args, **kwargs):  # pylint: disable=unused-argument
+#     loggers.config(logger=logger)
 
 
 if __name__ == "__main__":

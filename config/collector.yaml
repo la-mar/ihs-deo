@@ -429,11 +429,11 @@ endpoints:
         hole_direction: H
     tasks:
       sync:
-        seconds: 300
-        # cron:
-        #   minute: 0
-        #   hour: 3
-        #   day_of_week: "mon,wed"
+        # seconds: 300
+        cron:
+          minute: 0
+          hour: 3
+          day_of_week: "mon,wed"
         options:
           query_path: well_by_api.xml
           matrix:

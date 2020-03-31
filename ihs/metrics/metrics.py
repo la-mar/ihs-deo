@@ -41,21 +41,21 @@ def post(
 ):
     """ Send a metric through the Datadog http api.
 
-		Example:
-					api.Metric.post(
-						metric='my.series',
-						points=[
-							(now, 15),
-							(future_10s, 16)
-						],
-						metric_type="count",
-						tags=["tag1", "tag2"]
-					)
+        Example:
+                    api.Metric.post(
+                        metric='my.series',
+                        points=[
+                            (now, 15),
+                            (future_10s, 16)
+                        ],
+                        metric_type="count",
+                        tags=["tag1", "tag2"]
+                    )
 
-	Arguments:
-		name {str} -- metric name
-		points {Union[int, float, List[Tuple]]} -- metric value(s)
-	"""
+    Arguments:
+        name {str} -- metric name
+        points {Union[int, float, List[Tuple]]} -- metric value(s)
+    """
     try:
         name = f"{project}.{name}".lower()
         if datadog:
@@ -63,7 +63,7 @@ def post(
                 metric=name,
                 points=points,
                 type=str(metric_type).lower(),
-                tags=to_tags(conf.DEFAULT_TAGS) + to_tags(tags or []),
+                tags=to_tags(conf.DATADOG_DEFAULT_TAGS) + to_tags(tags or []),
             )
             if result.get("status") == "ok":
                 logger.debug(
@@ -105,18 +105,18 @@ def post_heartbeat():
 def to_tags(values: Union[Dict, List, str], sep: str = ",") -> List[str]:
     """ Coerce the passed values into a list of colon separated key-value pairs.
 
-		dict example:
-			{"tag1": "value1", "tag2": "value2", ...} -> ["tag1:value1", "tag2:value2", ...]
+        dict example:
+            {"tag1": "value1", "tag2": "value2", ...} -> ["tag1:value1", "tag2:value2", ...]
 
-		list example:
-			["tag1", "tag2", ...] -> ["tag1", "tag2", ...]
+        list example:
+            ["tag1", "tag2", ...] -> ["tag1", "tag2", ...]
 
-		str example (comma-delimited):
-			"tag1:value1, tag2:value2", ..." -> ["tag1:value1", "tag2:value2", ...]
+        str example (comma-delimited):
+            "tag1:value1, tag2:value2", ..." -> ["tag1:value1", "tag2:value2", ...]
 
-		str example (single):
-			"tag1:value1" -> ["tag1:value1"]
-	"""
+        str example (single):
+            "tag1:value1" -> ["tag1:value1"]
+    """
     result: List[str] = []
     if isinstance(values, dict):
         result = [

@@ -1,41 +1,49 @@
-# pylint: disable=protected-access
-
 """ Logger definitions """
 
 import logging
 import logging.config
-import numbers
 import os
-import sys
 from logging import LogRecord
-from typing import Any, Mapping, Union
+from typing import Any, Dict, Mapping, Optional, Union
 
 import json_log_formatter
 import logutils.colorize
 
 from config import get_active_config
-from util.jsontools import ObjectEncoder
+from util.jsontools import ObjectEncoder, to_string
 
 conf = get_active_config()
 
+LOG_LEVELS: Dict[str, int] = dict(logging._nameToLevel)
+LOG_LEVELS.update({str(k): k for k, v in logging._levelToName.items()})  # type: ignore
 
-LOG_LEVELS = dict(logging._nameToLevel)
-LOG_LEVELS.update(logging._levelToName)  # type: ignore
-LOG_LEVELS.update({str(k): v for k, v in logging._levelToName.items()})  # type: ignore
-LOG_LEVELS.setdefault("FATAL", logging.FATAL)
-LOG_LEVELS.setdefault(logging.FATAL, "FATAL")  # type: ignore
-
+# TODO: Move to external config file
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 logging.getLogger("boto3").setLevel(logging.WARNING)
+logging.getLogger("gino").setLevel(logging.WARNING)
+logging.getLogger("fiona").setLevel(logging.WARNING)
 logging.getLogger("botocore").setLevel(logging.CRITICAL)
-logging.getLogger("zeep").setLevel(logging.CRITICAL)
 
 
-def mlevel(level):
-    """Convert level name/int to log level. Borrowed from Celery, with <3"""
-    if level and not isinstance(level, numbers.Integral):
-        return LOG_LEVELS[level.upper()]
-    return level
+def mlevel(level: Union[int, str]) -> int:
+    """ Convert level name/int to log level integer. Borrowed from Celery, with <3 """
+    try:
+        if not level:
+            raise KeyError
+        return LOG_LEVELS[str(level).upper()]
+    except KeyError:
+        unique_set = set(
+            [str(x) for x in list(LOG_LEVELS.keys())]
+            + [str(x) for x in list(LOG_LEVELS.values())]
+        )
+        opts: str = ", ".join(sorted(list(unique_set)))
+        raise ValueError(f"Invalid log level: {level}. Available options: {opts}")
+
+
+def mlevelname(level: Union[int, str]) -> str:
+    """ Convert a level name/int to log level name """
+    level = mlevel(level)
+    return logging._levelToName[level]
 
 
 class ColorizingStreamHandler(logutils.colorize.ColorizingStreamHandler):
@@ -61,7 +69,7 @@ class ColorizingStreamHandler(logutils.colorize.ColorizingStreamHandler):
 
     # levels to (background, foreground, bold/intense)
     if os.name == "nt":
-        level_map = {
+        level_map = {  # nocover
             logging.DEBUG: (None, "blue", True),
             logging.INFO: (None, "white", False),
             logging.WARNING: (None, "yellow", True),
@@ -80,25 +88,23 @@ class ColorizingStreamHandler(logutils.colorize.ColorizingStreamHandler):
 
 
 class DatadogJSONFormatter(json_log_formatter.JSONFormatter):
-    """JSON log formatter that includes Datadog standard attributes. Source: https://github.com/dailymuse/muselog"""
+    """JSON log formatter that includes Datadog standard attributes.
+       Adapted from https://github.com/dailymuse/muselog"""
 
-    trace_enabled = False
-
-    def format(self, record: LogRecord):
+    def format(self, record: LogRecord) -> str:
         """Return the record in the format usable by Datadog."""
-        json_record = self.json_record(record.getMessage(), record)
-        mutated_record = self.mutate_json_record(json_record)
-        if mutated_record is None:
-            mutated_record = json_record
+        json_record: Dict = self.json_record(record.getMessage(), record)
+        mutated_record: Dict = self.mutate_json_record(json_record)
+        mutated_record = mutated_record if mutated_record is not None else json_record
         return self.to_json(mutated_record)
 
-    def to_json(self, record: Mapping[str, Any]):
+    def to_json(self, record: Mapping[str, Any]) -> str:
         """Convert record dict to a JSON string.
         Override this method to change the way dict is converted to JSON.
         """
         return self.json_lib.dumps(record, cls=ObjectEncoder)
 
-    def json_record(self, message: str, record: LogRecord):
+    def json_record(self, message: str, record: LogRecord) -> Dict:
         """Convert the record to JSON and inject Datadog attributes."""
         record_dict = dict(record.__dict__)
 
@@ -112,68 +118,11 @@ class DatadogJSONFormatter(json_log_formatter.JSONFormatter):
             "logger.thread_name": record.threadName,
         }
 
-        record_dict = {**additional, **conf.DEFAULT_TAGS, **record_dict}
-
-        # if "timestamp" not in record_dict:
-        #     # UNIX time in milliseconds
-        #     record_dict["timestamp"] = int(record.created * 1000)
-
-        # if "severity" not in record_dict:
-        #     record_dict["severity"] = record.levelname
-
-        # # Source Code
-        # if "logger.name" not in record_dict:
-        #     record_dict["logger.name"] = record.name
-        # if "logger.method_name" not in record_dict:
-        #     record_dict["logger.method_name"] = record.funcName
-        # if "logger.thread_name" not in record_dict:
-        #     record_dict["logger.thread_name"] = record.threadName
-
-        # NOTE: We do not inject 'host', 'source', or 'service', as we want
-        # Datadog agent and docker labels to handle that for the time being.
-        # This may change.
-
+        record_dict = {**additional, **conf.DATADOG_DEFAULT_TAGS, **record_dict}
         exc_info = record.exc_info
-        try:
-            if self.trace_enabled:
-                # get correlation ids from current tracer context
-                trace_id, span_id = [1, 2]  # helpers.get_correlation_ids()
-                record_dict["dd.trace_id"] = trace_id or 0
-                record_dict["dd.span_id"] = span_id or 0
-
-            if "context" in record_dict:
-                context_obj = dict()
-                context_value = record_dict.get("context")
-                if context_value:
-                    array = context_value.replace(" ", "").split(",")
-                else:
-                    array = []
-                for item in array:
-                    key, val = item.split("=")
-
-                    # del key from record before replacing with modified version
-                    # NOTE: This is hacky. Need to provide a general purpose
-                    # context-aware logger.
-                    if key in record_dict:
-                        del record_dict[key]
-
-                    key = f"ctx.{key}"
-                    context_obj[key] = int(val) if val.isdigit() else val
-                    record_dict.update(context_obj)
-
-                del record_dict["context"]
-        except Exception:
-            exc_info = sys.exc_info()
 
         # Handle exceptions, including those in our formatter
         if exc_info:
-            # QUESTION: If exc_info was set by us, do we alter the log level?
-            # Probably not, as a formatter should never be altering the record
-            # directly.
-            # I think that instead we should avoid code that can conveivably
-            # raise exceptions in our formatter. That is not possible until we update
-            # the context handling code and we can ensure helpers.get_correlation_ids()
-            # will not raise any exceptions.
             if "error.kind" not in record_dict:
                 record_dict["error.kind"] = exc_info[0].__name__  # type: ignore
             if "error.message" not in record_dict:
@@ -187,7 +136,7 @@ class DatadogJSONFormatter(json_log_formatter.JSONFormatter):
 def get_formatter(name: Union[str, None]) -> logging.Formatter:
     formatters = {
         "verbose": logging.Formatter(
-            fmt="[%(asctime)s - %(filename)s:%(lineno)s - %(funcName)s()] %(levelname)s - %(message)s",
+            fmt="[%(asctime)s - %(filename)s:%(lineno)s - %(funcName)s()] %(levelname)s - %(message)s",  # noqa
             datefmt="%Y-%m-%d %H:%M:%S",
         ),
         "funcname": logging.Formatter(
@@ -203,20 +152,52 @@ def get_formatter(name: Union[str, None]) -> logging.Formatter:
     return formatters[name or "funcname"]  # type: ignore
 
 
-def config(level: int = None, formatter: str = None, logger: logging.Logger = None):
+def loggers() -> Dict[str, logging.Logger]:
+    """ Get a mapping of all active loggers by name """
+    return dict(logging.root.manager.loggerDict)  # type: ignore
 
-    root_logger = logger or logging.getLogger()
-    root_logger.setLevel(mlevel(conf.LOG_LEVEL) or level or 20)
+
+def get_existing_logger_by_name(name: str) -> Optional[logging.Logger]:
+    if name in loggers().keys():
+        return logging.getLogger(name)
+    else:
+        active = sorted(loggers())
+        raise ValueError(
+            f"No active logger with name '{name}' -- Valid options are: {to_string(active)}"
+        )
+
+
+def config(
+    level: Union[int, str] = None,
+    formatter: str = None,
+    logger: Union[str, logging.Logger] = None,
+):
+
+    if isinstance(logger, str):
+        logger = get_existing_logger_by_name(logger)
+
+    if logger:
+        root_logger = logger
+        if level:
+            logger.setLevel(mlevel(level))
+
+    else:
+        root_logger = logging.getLogger()
+        root_logger.setLevel(mlevel(level or conf.LOG_LEVEL or 20))
+
     console_handler = ColorizingStreamHandler()
     console_handler.setFormatter(get_formatter(formatter or conf.LOG_FORMAT))
-    if root_logger.handlers:
+
+    while len(root_logger.handlers) > 0:
         root_logger.removeHandler(root_logger.handlers[0])
+
     root_logger.addHandler(console_handler)
+    root_logger.debug(f"configured loggers (level={root_logger.level})")
 
 
 if __name__ == "__main__":
 
-    config(formatter="json")
+    config(formatter="layman")
     logger = logging.getLogger()
     logger.debug("test-debug")
     logger.info("test-info")

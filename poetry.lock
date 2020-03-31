@@ -244,6 +244,20 @@ zstd = ["zstandard"]
 
 [[package]]
 category = "main"
+description = "A Celery Beat Scheduler using Redis for persistent storage"
+name = "celery-redbeat"
+optional = false
+python-versions = "*"
+version = "0.13.0"
+
+[package.dependencies]
+celery = "*"
+python-dateutil = "*"
+redis = "*"
+tenacity = "*"
+
+[[package]]
+category = "main"
 description = "Python package for providing Mozilla's CA Bundle."
 name = "certifi"
 optional = false
@@ -1380,6 +1394,20 @@ python-versions = "*"
 version = "2.1.0"
 
 [[package]]
+category = "main"
+description = "Retry code until it succeeds"
+name = "tenacity"
+optional = false
+python-versions = "*"
+version = "6.1.0"
+
+[package.dependencies]
+six = ">=1.9.0"
+
+[package.extras]
+doc = ["reno", "sphinx", "tornado (>=4.5)"]
+
+[[package]]
 category = "dev"
 description = "Python Library for Tom's Obvious, Minimal Language"
 name = "toml"
@@ -1548,7 +1576,7 @@ lint = []
 pytest = []
 
 [metadata]
-content-hash = "b4baae6f861e7264e4757a5b6b7606d7bb736f7f9990f148bac5b0c8e28b7f17"
+content-hash = "cf5bd0924ea67b0e00b3a129644bef68bf0673bc8007e0770c92668ab960fb08"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -1618,6 +1646,9 @@ cached-property = [
 celery = [
     {file = "celery-4.4.0-py2.py3-none-any.whl", hash = "sha256:7c544f37a84a5eadc44cab1aa8c9580dff94636bb81978cdf9bf8012d9ea7d8f"},
     {file = "celery-4.4.0.tar.gz", hash = "sha256:d3363bb5df72d74420986a435449f3c3979285941dff57d5d97ecba352a0e3e2"},
+]
+celery-redbeat = [
+    {file = "celery-redbeat-0.13.0.tar.gz", hash = "sha256:8ba060f5fffa96fc6dbb0e37a10506cada03333f34ba502b134cbbdb08891266"},
 ]
 certifi = [
     {file = "certifi-2019.11.28-py2.py3-none-any.whl", hash = "sha256:017c25db2a153ce562900032d5bc68e9f191e44e9a0f762f373977de9df1fbb3"},
@@ -2321,6 +2352,10 @@ six = [
 sortedcontainers = [
     {file = "sortedcontainers-2.1.0-py2.py3-none-any.whl", hash = "sha256:d9e96492dd51fae31e60837736b38fe42a187b5404c16606ff7ee7cd582d4c60"},
     {file = "sortedcontainers-2.1.0.tar.gz", hash = "sha256:974e9a32f56b17c1bac2aebd9dcf197f3eb9cd30553c5852a3187ad162e1a03a"},
+]
+tenacity = [
+    {file = "tenacity-6.1.0-py2.py3-none-any.whl", hash = "sha256:f7bcbf5bb53875cfc38f61f596a88b1c994af32420f120c4409542a683ad613b"},
+    {file = "tenacity-6.1.0.tar.gz", hash = "sha256:fb01d8ef2474eed422d8314a566c9e391cccb6e50cf4585022add6cb5cda66c8"},
 ]
 toml = [
     {file = "toml-0.10.0-py2.7.egg", hash = "sha256:f1db651f9657708513243e61e6cc67d101a39bad662eaa9b5546f789338e07a3"},

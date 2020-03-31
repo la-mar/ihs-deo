@@ -159,7 +159,7 @@ class BaseConfig:
     DATADOG_ENABLED = bool(os.getenv("DATADOG_ENABLED"))
     DATADOG_API_KEY = os.getenv("DATADOG_API_KEY", os.getenv("DD_API_KEY", None))
     DATADOG_APP_KEY = os.getenv("DATADOG_APP_KEY", os.getenv("DD_APP_KEY", None))
-    DEFAULT_TAGS = {
+    DATADOG_DEFAULT_TAGS = {
         "environment": ENVIRONMENT_MAP.get(FLASK_ENV, FLASK_ENV),
         "service_name": project,
         "service_version": version,
@@ -177,6 +177,8 @@ class BaseConfig:
     """ Logging """
     LOG_LEVEL = os.getenv("LOG_LEVEL", 20)
     LOG_FORMAT = os.getenv("LOG_FORMAT", "funcname")
+    CELERY_LOG_LEVEL = os.getenv("CELERY_LOG_LEVEL", LOG_LEVEL)
+    CELERY_LOG_FORMAT = os.getenv("CELERY_LOG_FORMAT", LOG_FORMAT)
 
     """ --------------- Database --------------- """
 
@@ -208,6 +210,11 @@ class BaseConfig:
     CELERY_DEFAULT_QUEUE = f"{project}-default"  # sqs queue name
     CELERY_ROUTES = ("celery_queue.routers.hole_direction_router",)
     CELERY_TASK_CREATE_MISSING_QUEUES = False
+
+    """ Celery Beat """
+    CELERYBEAT_SCHEDULER = "redbeat.RedBeatScheduler"
+    REDBEAT_REDIS_URL = os.getenv("IHS_CRON_URL")
+    REDBEAT_KEY_PREFIX = f"{project}:"
 
     """ API """
     API_CLIENT_TYPE = os.getenv("IHS_CLIENT_TYPE", "legacy")

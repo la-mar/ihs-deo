@@ -1,4 +1,4 @@
-# pylint: disable=arguments-differ, method-hidden
+from typing import Dict
 
 import json
 from datetime import date, datetime, timedelta
@@ -34,3 +34,8 @@ class ObjectEncoder(json.JSONEncoder):
                 "__name__": cls.__name__,
             }
             return result
+
+
+def to_string(data: Dict[Any, Any], pretty: bool = True) -> str:
+    indent = 4 if pretty else 0
+    return json.dumps(data, indent=indent, cls=ObjectEncoder)
