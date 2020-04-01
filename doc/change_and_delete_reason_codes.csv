@@ -1,0 +1,13 @@
+﻿reason_code,remark,action
+0,NOT CURRENTLY USED,None
+1,CCC - WELL WAS ENTERED UNDER INCORRECT API NUMBER,delete + add under new uwi
+2,"DEL - WELL IS DUPLICATED UNDER ANOTHER API
+NUMBER",delete + add under reference uwi
+3,DEL – NO SUCH WELL EXISTS,delete
+4,"DEL - WELL IS BEING READDED WITH NEW OR
+SAME API",delete
+5,CCC - API NUMBER CHANGE MADE BY REGULATORY AGENCY,delete + add under new uwi
+6,NOT CURRENTLY USED,None
+7,CCC - CONTROL CODE CHANGE SHOULD NOT GO TO WHCS,delete + add under new uwi
+8,CCC - CHANGE IC ON WELL UNDER API CONTROL (ADD),delete + add under new uwi
+9,CCC - CHANGE IC ON WELL UNDER IC CONTROL (ADD),delete + add under new uwi

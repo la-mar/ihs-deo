@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import logging
-from typing import Dict, Generator, Union
+from typing import Dict, Generator, Union, List
+from datetime import date, timedelta, datetime
 
 import metrics
 from api.models import *  # noqa
+from api.models import ChangeDeleteLog
 from collector import ExportJob  # noqa
 from collector import (
     Collector,
@@ -17,6 +19,7 @@ from collector import (
     WellboreTransformer,
     WellList,
     XMLParser,
+    CDExporter,
 )
 from collector.identity_list import IdentityList
 from config import ExportDataTypes, IdentityTemplates, get_active_config
@@ -143,6 +146,88 @@ def calc_remote_export_capacity() -> Dict[str, Union[float, int]]:
         "remote.capacity.total": remote_capacity_bytes,
         "remote.jobs": njobs,
     }
+
+
+def download_changes_and_deletes() -> int:
+    max_date = ChangeDeleteLog.max_date()
+    max_sequence = ChangeDeleteLog.max_sequence() or 0
+
+    today = datetime.now()
+
+    if max_date:
+        last_date = max_date - timedelta(days=1)
+    else:
+        last_date = date.today() - timedelta(days=30)
+
+    cde = CDExporter(from_date=last_date, to_date=today)
+
+    results = cde.get_all()
+    logger.info(f"Downloaded {len(results)} changes and deletes")
+
+    records: List[Dict] = []
+    for r in results:
+        new = {}
+        for k, v in r.items():
+            if v is not None:
+                if "uwi" in k:
+                    v = str(v)
+
+                if k == "reasoncode":
+                    k = "reason_code"
+                elif k == "activecode":
+                    k = "active_code"
+                elif k == "referenceuwi":
+                    k = "reference_uwi"
+                elif k == "newuwi":
+                    k = "new_uwi"
+
+                new[k] = v
+
+        if new.get("sequence", 0) > max_sequence:
+            new["processed"] = False
+
+            records.append(new)
+
+    logger.info(
+        f"Found {len(records)} changes and deletes (filtered {len(results) - len(records)})"
+    )
+    collector = Collector(ChangeDeleteLog)
+    return collector.save(records)
+
+
+# def process_changes_and_deletes():
+#     # reason_action_map = {
+#     #     "no_action": [0, 6],
+#     #     "update_to_new_uwi": [1, 5, 7, 8, 9],
+#     #     "update_to_ref_uwi": [2],
+#     #     "delete": [3, 4],
+#     # }
+#     reason_action_map = {
+#         0: "no_action",
+#         1: "update_to_new_uwi",
+#         2: "update_to_ref_uwi",
+#         3: "delete",
+#         4: "delete",
+#         5: "update_to_new_uwi",
+#         6: "no_action",
+#         7: "update_to_new_uwi",
+#         8: "update_to_new_uwi",
+#         9: "update_to_new_uwi",
+#     }
+
+#     objs = ChangeDeleteLog.objects(processed=False)
+
+#     obj = objs[len(objs) - 80]
+#     obj._data
+#     #! unfinished
+
+#     # for obj in objs:
+#     #     if obj.processed is False:
+#     #         action = reason_action_map[obj.reason_code]
+
+#     #         if action == "delete":
+#     #             document = WellHorizontal.objects(api14=obj.uwi).first()
+#     #             document = WellVertical.objects(api14=obj.uwi).first()
 
 
 if __name__ == "__main__":

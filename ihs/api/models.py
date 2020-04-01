@@ -1,11 +1,61 @@
 import datetime
 import logging
+from typing import Optional, List
 
 from api.mixin import BaseMixin, ProductionMixin, WellMixin
 from ihs import db
 from mongoengine.document import Document as Model
 
 loggger = logging.getLogger(__name__)
+
+__all__ = [
+    "ChangeDeleteLog",
+    "WellMasterHorizontal",
+    "WellMasterVertical",
+    "ProductionMasterHorizontal",
+    "ProductionMasterVertical",
+    "WellHorizontal",
+    "WellVertical",
+    "ProductionHorizontal",
+    "ProductionVertical",
+]
+
+
+class ChangeDeleteLog(db.Document, BaseMixin):
+    meta = {"collection": "change_delete_log", "ordering": ["processed_at"]}
+    sequence = db.LongField(primary_key=True)  # bigint
+    date = db.DateTimeField()
+    reason_code = db.IntField()
+    source = db.StringField()
+    uwi = db.StringField(null=True)
+    new_uwi = db.StringField(null=True)
+    reference_uwi = db.StringField(null=True)
+    remark = db.StringField(null=True)
+    active_code = db.StringField(null=True)
+    proprietary = db.StringField(null=True)
+    processed = db.BooleanField(default=False)
+    processed_at = db.DateTimeField(null=True)
+    last_update_at = db.DateTimeField(default=datetime.datetime.now)
+
+    @classmethod
+    def max_sequence(cls) -> Optional[int]:
+        result = cls.objects.order_by("-sequence").first()
+        if result:
+            return result.sequence
+        else:
+            return None
+
+    @classmethod
+    def max_date(cls) -> Optional[datetime.datetime]:
+        result = cls.objects.order_by("-date").first()
+        if result:
+            return result.date
+        else:
+            return None
+
+    @classmethod
+    def unprocessed(cls) -> List:
+        return cls.objects(processed=False)
 
 
 class WellMasterHorizontal(db.Document, BaseMixin):

@@ -77,6 +77,12 @@ def cleanup_remote_exports():
         )
 
 
+@celery.task
+def download_changes_and_deletes():
+    download_count: int = collector.tasks.download_changes_and_deletes()
+    metrics.post("changes_and_deletes.downloaded", download_count)
+
+
 @celery.task(rate_limit="10/s", ignore_result=True)
 def sync_endpoint(endpoint_name: str, task_name: str, **kwargs) -> ExportJob:
     configs = list(collector.tasks.run_endpoint_task(endpoint_name, task_name))

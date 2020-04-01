@@ -1,4 +1,4 @@
-from collector.builder import ExportBuilder, ExportJob, ExportRetriever
+from collector.builder import ExportBuilder, ExportJob, ExportRetriever, CDExporter
 from collector.collector import Collector
 from collector.endpoint import Endpoint
 from collector.export_parameter import ExportParameter

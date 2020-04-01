@@ -216,7 +216,7 @@ class CDExporter(QueryBuilder):
     _to_date: Union[str, None] = None
 
     def __init__(self, from_date: str, to_date: str, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(endpoint=None, *args, **kwargs)
         self.from_date = from_date
         self.to_date = to_date
 
@@ -245,7 +245,7 @@ class CDExporter(QueryBuilder):
         return value
 
     def get_changes_and_deletes(
-        self, page: int = None, domain: str = None, data_type: str = None,
+        self, page: int = None, domain: str = None, data_type: str = "Well",
     ) -> Tuple[Dict[str, int], str]:
         domain = domain or self.domain
         data_type = data_type or self.data_type
@@ -266,7 +266,8 @@ class CDExporter(QueryBuilder):
             "total_count": result.PagingDetails.TotalCount,  # number of records across all pages
         }
 
-        # "PagingDetails" and "Result" are proerties of the result object defined in the backing WSDL
+        # "PagingDetails" and "Result" are proerties of the result
+        # object defined in the backing WSDL
         return paging_details, result.Result  # type: ignore
 
     def get_all(self) -> List[Dict[str, Union[int, str]]]:
@@ -356,6 +357,8 @@ if __name__ == "__main__":
     from collector import Endpoint
     from util import to_json
     from collector import XMLParser
+    import pandas as pd
+    import numpy as np
 
     conf = get_active_config()
     app = create_app()
@@ -369,10 +372,43 @@ if __name__ == "__main__":
     endpoints = Endpoint.load_from_config(conf, load_disabled=True)
     endpoint = endpoints.get("well_master_horizontal")
 
-    # eb = ExportBuilder(conf.API_BASE_URL, endpoint)
-    # qb = QueryBuilder(conf.API_BASE_URL, endpoint)
-    cde = CDExporter("2018/10/13", "2019/11/04", endpoint=endpoint)
+    # cde = CDExporter("2018/10/13", "2019/11/04", endpoint=endpoint)
+    cde = CDExporter("2020/01/01", "2020/03/31", endpoint=endpoint)
     self = cde
     results = cde.get_all()
 
-    to_json(results, "test/data/changes_and_deletes_example.json")
+    # from collector import Collector
+
+    # records = []
+    # max_sequence = ChangeDeleteLog.max_sequence()
+    # for r in results:
+    #     new = {}
+    #     for k, v in r.items():
+    #         if v is not None:
+    #             if "uwi" in k:
+    #                 v = str(v)
+    #             new[k] = v
+    #     if new.get("sequence", 0) > max_sequence:
+    #         records.append(new)
+
+    # collector = Collector(ChangeDeleteLog)
+    # collector.save(records)
+
+    # reasons = pd.read_csv(
+    #     "/Users/friedrichb/repo/ihs-deo/doc/change_and_delete_reason_codes.csv"
+    # ).set_index("reason_code")
+
+    # reasons.reset_index().to_dict(orient="records")
+
+    # import pandas as pd
+
+    # df = pd.DataFrame(records)
+
+    # x = []
+    # for uwi in df.uwi.values:
+    #     obj = WellHorizontal.objects(api14=uwi).first()
+    #     if x:
+    #         x.append(obj)
+
+    # dt = datetime.datetime.now() - datetime.timedelta(days=3)
+    # WellHorizontal.objects(last_update_at__lte=dt)
