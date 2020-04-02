@@ -144,8 +144,8 @@ module "collector_autoscaler" {
   max_capacity        = var.collector_max_capacity
   queue1              = "ihs-collections-h"
   queue2              = "ihs-collections-v"
-  scale_in_threshold  = 1000
-  scale_out_threshold = 4000
+  scale_in_threshold  = var.collector_scale_in_threshold
+  scale_out_threshold = var.collector_scale_out_threshold
 }
 
 
@@ -182,8 +182,8 @@ module "deleter_autoscaler" {
   max_capacity        = var.deleter_max_capacity
   queue1              = "ihs-deletions-h"
   queue2              = "ihs-deletions-v"
-  scale_in_threshold  = 200
-  scale_out_threshold = 1000
+  scale_in_threshold  = var.deleter_scale_in_threshold
+  scale_out_threshold = var.deleter_scale_out_threshold
 }
 
 resource "aws_ecs_service" "ihs_worker_submitter" {

@@ -75,3 +75,23 @@ variable "submitter_min_capacity" {
 variable "submitter_max_capacity" {
   description = "submitter service minimum number of autoscaled containers"
 }
+
+variable "collector_scale_in_threshold" {
+  description = "collector service autoscale in threshold"
+  default     = 25
+}
+
+variable "collector_scale_out_threshold" {
+  description = "collector service autoscale out threshold"
+  default     = 150
+}
+
+variable "deleter_scale_in_threshold" {
+  description = "deleter service autoscale in threshold"
+  default     = 25
+}
+
+variable "deleter_scale_out_threshold" {
+  description = "deleter service autoscale out threshold"
+  default     = 150
+}
