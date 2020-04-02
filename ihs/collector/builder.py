@@ -340,8 +340,12 @@ class ExportRetriever:
             # Suppress errors from empty exports
             if "No ids to export" in e.args[0]:
                 logger.debug(msg)
+            elif "does not exist" in e.args[0]:
+                logger.warning(msg, exc_info=True, stack_info=True)
+                metrics.post("job.retrieve.error", 1, tags=["file_does_not_exist"])
             else:
                 logger.warning(msg, exc_info=True, stack_info=True)
+                metrics.post("job.retrieve.error", 1)
 
         if result is not None and auto_delete:
             self.client.delete_job(self.job)
