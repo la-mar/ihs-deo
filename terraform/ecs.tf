@@ -9,9 +9,9 @@ data "aws_ecs_task_definition" "ihs_worker_submitter" {
   task_definition = "ihs-worker-submitter"
 }
 
-data "aws_ecs_task_definition" "ihs_worker_deleter" {
-  task_definition = "ihs-worker-deleter"
-}
+# data "aws_ecs_task_definition" "ihs_worker_deleter" {
+#   task_definition = "ihs-worker-deleter"
+# }
 
 data "aws_ecs_task_definition" "ihs_worker_collector" {
   task_definition = "ihs-worker-collector"
@@ -149,42 +149,42 @@ module "collector_autoscaler" {
 }
 
 
-resource "aws_ecs_service" "ihs_worker_deleter" {
-  name            = "ihs-worker-deleter"
-  cluster         = data.terraform_remote_state.ecs_cluster.outputs.cluster_arn
-  task_definition = data.aws_ecs_task_definition.ihs_worker_deleter.family
+# resource "aws_ecs_service" "ihs_worker_deleter" {
+#   name            = "ihs-worker-deleter"
+#   cluster         = data.terraform_remote_state.ecs_cluster.outputs.cluster_arn
+#   task_definition = data.aws_ecs_task_definition.ihs_worker_deleter.family
 
-  scheduling_strategy = "REPLICA"
-  ordered_placement_strategy {
-    type  = "spread"
-    field = "instanceId"
-  }
-  desired_count           = 2
-  enable_ecs_managed_tags = true
-  propagate_tags          = "TASK_DEFINITION"
-  tags                    = local.tags
+#   scheduling_strategy = "REPLICA"
+#   ordered_placement_strategy {
+#     type  = "spread"
+#     field = "instanceId"
+#   }
+#   desired_count           = 2
+#   enable_ecs_managed_tags = true
+#   propagate_tags          = "TASK_DEFINITION"
+#   tags                    = local.tags
 
-  # allow external changes without Terraform plan difference
-  lifecycle {
-    create_before_destroy = true
-    ignore_changes = [
-      desired_count,
-      task_definition,
-    ]
-  }
-}
+#   # allow external changes without Terraform plan difference
+#   lifecycle {
+#     create_before_destroy = true
+#     ignore_changes = [
+#       desired_count,
+#       task_definition,
+#     ]
+#   }
+# }
 
-module "deleter_autoscaler" {
-  source              = "./service_target_tracking"
-  cluster_name        = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
-  service_name        = aws_ecs_service.ihs_worker_deleter.name
-  min_capacity        = var.deleter_min_capacity
-  max_capacity        = var.deleter_max_capacity
-  queue1              = "ihs-deletions-h"
-  queue2              = "ihs-deletions-v"
-  scale_in_threshold  = var.deleter_scale_in_threshold
-  scale_out_threshold = var.deleter_scale_out_threshold
-}
+# module "deleter_autoscaler" {
+#   source              = "./service_target_tracking"
+#   cluster_name        = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
+#   service_name        = aws_ecs_service.ihs_worker_deleter.name
+#   min_capacity        = var.deleter_min_capacity
+#   max_capacity        = var.deleter_max_capacity
+#   queue1              = "ihs-deletions-h"
+#   queue2              = "ihs-deletions-v"
+#   scale_in_threshold  = var.deleter_scale_in_threshold
+#   scale_out_threshold = var.deleter_scale_out_threshold
+# }
 
 resource "aws_ecs_service" "ihs_worker_submitter" {
   name            = "ihs-worker-submitter"
@@ -211,15 +211,15 @@ resource "aws_ecs_service" "ihs_worker_submitter" {
   }
 }
 
-module "submitter_autoscaler" {
-  source       = "./service_target_tracking"
-  cluster_name = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
-  service_name = aws_ecs_service.ihs_worker_submitter.name
-  min_capacity = var.submitter_min_capacity
-  max_capacity = var.submitter_max_capacity
-  queue1       = "ihs-submissions-h"
-  queue2       = "ihs-submissions-v"
-}
+# module "submitter_autoscaler" {
+#   source       = "./service_target_tracking"
+#   cluster_name = data.terraform_remote_state.ecs_cluster.outputs.cluster_name
+#   service_name = aws_ecs_service.ihs_worker_submitter.name
+#   min_capacity = var.submitter_min_capacity
+#   max_capacity = var.submitter_max_capacity
+#   queue1       = "ihs-submissions-h"
+#   queue2       = "ihs-submissions-v"
+# }
 
 resource "aws_ecs_service" "ihs_cron" {
   name            = "ihs-cron"

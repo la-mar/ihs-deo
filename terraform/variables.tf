@@ -56,25 +56,25 @@ variable "collector_max_capacity" {
   description = "collector service minimum number of autoscaled containers"
 }
 
-variable "deleter_min_capacity" {
-  description = "deleter service minimum number of autoscaled containers"
-  default     = 1
+# variable "deleter_min_capacity" {
+#   description = "deleter service minimum number of autoscaled containers"
+#   default     = 1
 
-}
+# }
 
-variable "deleter_max_capacity" {
-  description = "deleter service minimum number of autoscaled containers"
-}
+# variable "deleter_max_capacity" {
+#   description = "deleter service minimum number of autoscaled containers"
+# }
 
-variable "submitter_min_capacity" {
-  description = "submitter service minimum number of autoscaled containers"
-  default     = 1
+# variable "submitter_min_capacity" {
+#   description = "submitter service minimum number of autoscaled containers"
+#   default     = 1
 
-}
+# }
 
-variable "submitter_max_capacity" {
-  description = "submitter service minimum number of autoscaled containers"
-}
+# variable "submitter_max_capacity" {
+#   description = "submitter service minimum number of autoscaled containers"
+# }
 
 variable "collector_scale_in_threshold" {
   description = "collector service autoscale in threshold"
@@ -86,12 +86,12 @@ variable "collector_scale_out_threshold" {
   default     = 150
 }
 
-variable "deleter_scale_in_threshold" {
-  description = "deleter service autoscale in threshold"
-  default     = 25
-}
+# variable "deleter_scale_in_threshold" {
+#   description = "deleter service autoscale in threshold"
+#   default     = 25
+# }
 
-variable "deleter_scale_out_threshold" {
-  description = "deleter service autoscale out threshold"
-  default     = 150
-}
+# variable "deleter_scale_out_threshold" {
+#   description = "deleter service autoscale out threshold"
+#   default     = 150
+# }

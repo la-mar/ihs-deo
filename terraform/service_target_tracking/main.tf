@@ -87,7 +87,7 @@ resource "aws_appautoscaling_policy" "sqs_policy_scale_out" {
 
     step_adjustment {
       metric_interval_lower_bound = 0
-      scaling_adjustment          = 1.0
+      scaling_adjustment          = 2.0
     }
   }
   depends_on = [aws_appautoscaling_target.ecs_target]

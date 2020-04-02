@@ -55,7 +55,7 @@ if not all([ENV, AWS_ACCOUNT_ID, SERVICE_NAME, IMAGE_NAME]):
 SERVICES = [
     {"cluster": "ecs-web-cluster", "service": "ihs-web"},
     {"cluster": "ecs-collector-cluster", "service": "ihs-worker-collector"},
-    {"cluster": "ecs-collector-cluster", "service": "ihs-worker-deleter"},
+    # {"cluster": "ecs-collector-cluster", "service": "ihs-worker-deleter"},
     {"cluster": "ecs-collector-cluster", "service": "ihs-worker-submitter"},
     {"cluster": "ecs-collector-cluster", "service": "ihs-worker-default"},
     {"cluster": "ecs-collector-cluster", "service": "ihs-cron"},
@@ -185,35 +185,35 @@ def get_task_definition(
             "tags": tags,
             # "cpu": "256",  # from 128 CPU units (0.125 vCPUs) and 10240 CPU units (10 vCPUs)
         },
-        "ihs-worker-deleter": {
-            "containerDefinitions": [
-                {
-                    "name": "ihs-worker",
-                    "command": [
-                        "ihs",
-                        "run",
-                        "worker",
-                        "-c",
-                        "10",
-                        "-Q",
-                        "ihs-deletions-h,ihs-deletions-v",
-                        # "--loglevel",
-                        # "warn",
-                    ],
-                    "memoryReservation": 128,
-                    "cpu": 256,
-                    "image": image,
-                    "essential": True,
-                    "environment": transform_envs(envs),
-                },
-            ],
-            "executionRoleArn": "ecsTaskExecutionRole",
-            "family": f"{service_name}",
-            "networkMode": "bridge",
-            "taskRoleArn": task_iam_role_arn,
-            "tags": tags,
-            # "cpu": "256",  # from 128 CPU units (0.125 vCPUs) and 10240 CPU units (10 vCPUs)
-        },
+        # "ihs-worker-deleter": {
+        #     "containerDefinitions": [
+        #         {
+        #             "name": "ihs-worker",
+        #             "command": [
+        #                 "ihs",
+        #                 "run",
+        #                 "worker",
+        #                 "-c",
+        #                 "10",
+        #                 "-Q",
+        #                 "ihs-deletions-h,ihs-deletions-v",
+        #                 # "--loglevel",
+        #                 # "warn",
+        #             ],
+        #             "memoryReservation": 128,
+        #             "cpu": 256,
+        #             "image": image,
+        #             "essential": True,
+        #             "environment": transform_envs(envs),
+        #         },
+        #     ],
+        #     "executionRoleArn": "ecsTaskExecutionRole",
+        #     "family": f"{service_name}",
+        #     "networkMode": "bridge",
+        #     "taskRoleArn": task_iam_role_arn,
+        #     "tags": tags,
+        #     # "cpu": "256",  # from 128 CPU units (0.125 vCPUs) and 10240 CPU units (10 vCPUs)
+        # },
         "ihs-worker-default": {
             "containerDefinitions": [
                 {
