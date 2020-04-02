@@ -146,6 +146,7 @@ module "collector_autoscaler" {
   queue2              = "ihs-collections-v"
   scale_in_threshold  = var.collector_scale_in_threshold
   scale_out_threshold = var.collector_scale_out_threshold
+  scale_in_cooldown   = "600"
 }
 
 
