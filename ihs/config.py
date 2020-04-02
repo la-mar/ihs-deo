@@ -303,7 +303,7 @@ class BaseConfig:
         return f"{driver}://{username}{colon}{password}{at}{host}:{port}/{dbname}{auth_source}"
 
     def __repr__(self):
-        """ Print noteworthy configuration items """
+        """ Print configuration summary """
         hr = "-" * shutil.get_terminal_size().columns + "\n"
         tpl = "{name:>25} {value:<50}\n"
         string = ""
@@ -356,8 +356,8 @@ class CIConfig(BaseConfig):
 class ProductionConfig(BaseConfig):
     """Production configuration"""
 
-    CELERYD_PREFETCH_MULTIPLIER = 4
-    # CELERYD_PREFETCH_MULTIPLIER = 8
+    # CELERYD_PREFETCH_MULTIPLIER = 4
+    CELERYD_PREFETCH_MULTIPLIER = 8
     # CELERYD_CONCURRENCY = 12
     LOG_FORMAT = "json"
 

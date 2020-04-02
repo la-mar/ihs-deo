@@ -305,7 +305,6 @@ class WellboreTransformer(Transformer):
 
         x, y, new_crs = to_nad27sp(shllon, shllat, shlcrs)
 
-        survey_line = None
         survey_points = []
         result = OrderedDict()
         if active_survey and len(active_survey.keys()) > 0:
