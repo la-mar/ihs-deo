@@ -98,7 +98,7 @@ def sync_endpoint(endpoint_name: str, task_name: str, **kwargs) -> ExportJob:
             submit_job.apply_async((hole_dir,), job_config, countdown=countdown)
 
 
-@celery.task(bind=True, rate_limit="10/s", max_retries=0, ignore_result=True)
+@celery.task(bind=True, rate_limit="25/s", max_retries=0, ignore_result=True)
 def submit_job(self, route_key: str, job_options: dict, metadata: dict = None):
     if conf.SIMULATE_EXPENSIVE_TASKS:
         opts = {**job_options, **(metadata or {})}
@@ -125,7 +125,7 @@ def submit_job(self, route_key: str, job_options: dict, metadata: dict = None):
             )
 
 
-@celery.task(bind=True, rate_limit="100/s", max_retries=0, ignore_result=True)
+@celery.task(bind=True, rate_limit="1000/s", max_retries=0, ignore_result=True)
 def collect_job_result(self, route_key: str, job: Union[dict, ExportJob]):
     if not isinstance(job, ExportJob):
         job = ExportJob(**job)
