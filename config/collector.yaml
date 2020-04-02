@@ -430,7 +430,7 @@ endpoints:
     tasks:
       sync:
         cron:
-          minute: "*/15"
+          minute: "*/20"
           # hour: 1
           # day_of_week: "mon,wed"
         options:
@@ -471,12 +471,13 @@ endpoints:
       sync:
         cron:
           minute: 0
-          hour: 1
-          day_of_week: "fri"
+          hour: "*/1"
+          # day_of_week: "fri"
         options:
           query_path: well_by_api.xml
           matrix:
-            using: api.models.WellMasterVertical.ids
+            next_county: True
+            # using: api.models.WellMasterVertical.ids
             # label: api
       driftwood:
         cron:
@@ -509,13 +510,16 @@ endpoints:
     tasks:
       sync:
         cron:
-          minute: 0
-          hour: 1
-          day_of_week: "tue,thu"
+          minute: "*/10"
+        # cron:
+        #   minute: 0
+        #   hour: 1
+        #   day_of_week: "tue,thu"
         options:
           query_path: production_by_entity.xml
           matrix:
-            using: api.models.ProductionMasterHorizontal.ids
+            next_county: true
+            # using: api.models.ProductionMasterHorizontal.ids
             # label: producing_entity
       driftwood:
         cron:
@@ -550,12 +554,13 @@ endpoints:
       sync:
         cron:
           minute: 0
-          hour: 1
-          day_of_week: "sat"
+          hour: "*/2"
+          # day_of_week: "sat"
         options:
           query_path: production_by_entity.xml
           matrix:
-            using: api.models.ProductionMasterVertical.ids
+            next_county: true
+            # using: api.models.ProductionMasterVertical.ids
             # label: producing_entity
       driftwood:
         cron:
