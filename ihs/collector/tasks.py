@@ -132,15 +132,14 @@ def calc_remote_export_capacity(njobs: int = None) -> Dict[str, Union[float, int
                  capacity_used: space used in KB,
                  njobs: number of existing completed jobs
     """
-    mean_doc_size_bytes = (
-        40000 * conf.TASK_BATCH_SIZE
-    )  # average single entity document size
-    inflation_pct = 0.1  # over estimate the used capacity by this percentage
+    mean_doc_size_bytes: int = 18000 * int(conf.TASK_BATCH_SIZE)
+    inflation_pct = 0.1
     doc_size_bytes = mean_doc_size_bytes + (inflation_pct * mean_doc_size_bytes)
     remote_capacity_bytes = 1000000000  # 1 GB
     if not njobs:
         eb = ExportBuilder(None)
         njobs = len(eb.list_completed_jobs())
+
     return {
         "remote.capacity.used": njobs * doc_size_bytes,
         "remote.capacity.available": remote_capacity_bytes - (njobs * doc_size_bytes),
@@ -276,3 +275,5 @@ if __name__ == "__main__":
     [x["api14"] for x in data]
     collector = Collector(model)
     collector.save(data, replace=True)
+
+    calc_remote_export_capacity()["remote.capacity.used"] * 1e-6

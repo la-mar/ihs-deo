@@ -81,7 +81,7 @@ def ipython_embed():
 @run_cli.command(context_settings=dict(ignore_unknown_options=True))
 @click.argument("args", nargs=-1, type=click.UNPROCESSED)
 def web(args):
-    cmd = ["gunicorn", "wsgi",] + list(args)
+    cmd = ["gunicorn", "wsgi"] + list(args)
     subprocess.call(cmd)
 
 
@@ -129,6 +129,27 @@ def exports():
     from celery_queue.tasks import cleanup_remote_exports
 
     cleanup_remote_exports.run()
+
+
+# def schedules():
+#     import redis
+#     import redbeat
+
+#     client = redis.Redis.from_url(conf.REDBEAT_REDIS_URL)
+#     # client0 = redis.Redis(host="0.0.0.0", port=6379, db=0)
+#     # client.hash("ihs")
+#     dir(client)
+
+#     client.keys("*")
+#     client.type("ihs:heartbeat")
+#     client.hgetall("ihs:heartbeat")
+#     client.zrange("ihs::schedule", 0, -1)
+#     from celery_queue.worker import celery
+
+#     scheduler = redbeat.RedBeatScheduler(celery)
+#     scheduler.get_schedule()
+#     scheduler.schedule
+#     scheduler.schedule["heartbeat"]
 
 
 @test_cli.command()

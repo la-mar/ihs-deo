@@ -103,7 +103,7 @@ def submit_job(self, route_key: str, job_options: dict, metadata: dict = None):
     if conf.SIMULATE_EXPENSIVE_TASKS:
         opts = {**job_options, **(metadata or {})}
         job = ExportJob(job_id=uuid.uuid4().hex, **opts)
-        logger.info(f"(***SIMULATED***) submitted job: {job}")
+        logger.warning(f"(***SIMULATED***) submitted job: {job}")
         collect_job_result.apply_async((route_key,), {"job": job.to_dict()})
         return None
 
@@ -130,7 +130,7 @@ def collect_job_result(self, route_key: str, job: Union[dict, ExportJob]):
     if not isinstance(job, ExportJob):
         job = ExportJob(**job)
     if conf.SIMULATE_EXPENSIVE_TASKS:
-        logger.info(f"(***SIMULATED***) collected job: {job}")
+        logger.warning(f"(***SIMULATED***) collected job: {job}")
         return None
 
     else:
