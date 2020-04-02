@@ -23,6 +23,8 @@ logging.getLogger("boto3").setLevel(logging.WARNING)
 logging.getLogger("gino").setLevel(logging.WARNING)
 logging.getLogger("fiona").setLevel(logging.WARNING)
 logging.getLogger("botocore").setLevel(logging.CRITICAL)
+logging.getLogger("datadog").setLevel(logging.WARNING)
+logging.getLogger("datadog.api").setLevel(logging.WARNING)
 
 
 def mlevel(level: Union[int, str]) -> int:

@@ -32,7 +32,15 @@ class ExportJob:
         return {"job_id": self.job_id, **self._kwargs}
 
     def limited_dict(
-        self, limit_keys: list = ["endpoint", "task", "hole_direction", "data_type"],
+        self,
+        limit_keys: list = [
+            "endpoint",
+            "task",
+            "hole_direction",
+            "data_type",
+            "target_model",
+            "source_name",
+        ],
     ):
         job_dict = {}
         for key, value in self.to_dict().items():

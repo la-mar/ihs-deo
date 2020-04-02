@@ -60,7 +60,12 @@ class OptionMatrix:
         optset = []
         if len(self.matrix):
             for key, value in self.matrix.items():
-                v = {"name": key, **self.kwargs}
+                v = {
+                    "name": key,
+                    "source_name": self.source_name,
+                    "target_model": self.target_model.split(".")[-1],
+                    **self.kwargs,
+                }
                 if isinstance(value, dict):
                     v.update(**value)
                 else:

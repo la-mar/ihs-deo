@@ -90,10 +90,13 @@ def collect_data(job: ExportJob, xml: bytes):
         document = parser.parse(xml)
         model = endpoints[job.endpoint].model
         collector = Collector(model)
+        data: List[Dict] = []
         if job.data_type == ExportDataTypes.WELL.value:
             data = WellboreTransformer.extract_from_collection(document, model=model)
         elif job.data_type == ExportDataTypes.PRODUCTION.value:
             data = ProductionTransformer.extract_from_collection(document, model=model)
+
+        metrics.post("job.collection.success", len(data), tags=job.limited_dict())
         collector.save(data, replace=True)
 
 
@@ -124,7 +127,31 @@ def purge_remote_exports() -> bool:
     return True
 
 
-def calc_remote_export_capacity(njobs: int = None) -> Dict[str, Union[float, int]]:
+# def calc_remote_export_capacity(njobs: int = None) -> Dict[str, Union[float, int]]:
+#     """Calculate the amount of storage space currently consumed by job exports on IHS' servers.
+
+#     Returns:
+#         dict -- {
+#                  capacity_used: space used in KB,
+#                  njobs: number of existing completed jobs
+#     """
+#     mean_doc_size_bytes = 18000 * conf.TASK_BATCH_SIZE
+#     inflation_pct = 0.1
+#     doc_size_bytes = mean_doc_size_bytes + (inflation_pct * mean_doc_size_bytes)
+#     remote_capacity_bytes = 1000000000  # 1 GB
+#     if not njobs:
+#         eb = ExportBuilder(None)
+#         njobs = len(eb.list_completed_jobs())
+
+#     return {
+#         "remote.capacity.used": njobs * doc_size_bytes,
+#         "remote.capacity.available": remote_capacity_bytes - (njobs * doc_size_bytes),
+#         "remote.capacity.total": remote_capacity_bytes,
+#         "remote.jobs": njobs,
+#     }
+
+
+def calc_remote_export_capacity() -> Dict[str, Union[float, int]]:
     """Calculate the amount of storage space currently consumed by job exports on IHS' servers.
 
     Returns:
@@ -132,14 +159,14 @@ def calc_remote_export_capacity(njobs: int = None) -> Dict[str, Union[float, int
                  capacity_used: space used in KB,
                  njobs: number of existing completed jobs
     """
-    mean_doc_size_bytes: int = 18000 * int(conf.TASK_BATCH_SIZE)
-    inflation_pct = 0.1
+    mean_doc_size_bytes = (
+        18000 * conf.TASK_BATCH_SIZE
+    )  # average single entity document size
+    inflation_pct = 0.25  # over estimate the used capacity by this percentage
     doc_size_bytes = mean_doc_size_bytes + (inflation_pct * mean_doc_size_bytes)
     remote_capacity_bytes = 1000000000  # 1 GB
-    if not njobs:
-        eb = ExportBuilder(None)
-        njobs = len(eb.list_completed_jobs())
-
+    eb = ExportBuilder(None)
+    njobs = len(eb.list_completed_jobs())
     return {
         "remote.capacity.used": njobs * doc_size_bytes,
         "remote.capacity.available": remote_capacity_bytes - (njobs * doc_size_bytes),
@@ -239,7 +266,7 @@ if __name__ == "__main__":
     app.app_context().push()
 
     endpoint_name = "well_horizontal"
-    task_name = "endpoint_check"
+    task_name = "sync"
     endpoint = endpoints[endpoint_name]
     task = endpoint.tasks[task_name]
     configs = []
@@ -257,13 +284,14 @@ if __name__ == "__main__":
         )
         configs.append(job_config)
 
+    configs
     job_options, metadata = configs[0].values()
     ep = ExportParameter(**job_options)
     print(ep.params["Query"])
     requestor = ExportBuilder(endpoint)
 
     job = submit_job(job_options=job_options, metadata=metadata)
-    job
+    job.limited_dict()
     sleep(3)
 
     xml = get_job_results(job)
