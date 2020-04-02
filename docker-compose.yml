@@ -6,6 +6,7 @@ x-defaults: &defaults
   env_file: .env.compose
   volumes:
     - ./:/app
+    - ./tests/data/collector.yaml:/app/config/collector.yaml
   depends_on:
     - redis
 
@@ -15,12 +16,19 @@ services:
     command: ihs run web
     ports:
       - 5000
-  worker:
+  ihs_worker_1:
     <<: *defaults
-    command: ihs run worker -Q ihs-default,ihs-submissions-h,ihs-collections-h,ihs-deletions-h,ihs-submissions-v,ihs-collections-v,ihs-deletions-v --loglevel DEBUG
+    container_name: ihs_worker_1
+    user: celeryuser
+    command: ihs run worker -Q ihs-default,ihs-submissions-h,ihs-collections-h,ihs-deletions-h,ihs-submissions-v,ihs-collections-v,ihs-deletions-v
+  ihs_worker_2:
+    <<: *defaults
+    container_name: ihs_worker_2
+    user: celeryuser
+    command: ihs run worker -Q ihs-default,ihs-submissions-h,ihs-collections-h,ihs-deletions-h,ihs-submissions-v,ihs-collections-v,ihs-deletions-v
   cron:
     <<: *defaults
-    command: ihs run cron --loglevel=DEBUG
+    command: ihs run cron --pidfile=
   redis:
     container_name: ihs_redis
     image: redis

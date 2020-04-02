@@ -88,7 +88,7 @@ def web(args):
 @run_cli.command(context_settings=dict(ignore_unknown_options=True))
 @click.argument("celery_args", nargs=-1, type=click.UNPROCESSED)
 def worker(celery_args):
-    cmd = ["celery", "-E", "-A", "celery_queue.worker:celery", "worker",] + list(
+    cmd = ["celery", "-E", "-A", "celery_queue.worker:celery", "worker"] + list(
         celery_args
     )
     subprocess.call(cmd)
@@ -97,14 +97,14 @@ def worker(celery_args):
 @run_cli.command(context_settings=dict(ignore_unknown_options=True))
 @click.argument("celery_args", nargs=-1, type=click.UNPROCESSED)
 def cron(celery_args):
-    cmd = ["celery", "-A", "celery_queue.worker:celery", "beat",] + list(celery_args)
+    cmd = ["celery", "-A", "celery_queue.worker:celery", "beat"] + list(celery_args)
     subprocess.call(cmd)
 
 
 @run_cli.command(context_settings=dict(ignore_unknown_options=True))
 @click.argument("celery_args", nargs=-1, type=click.UNPROCESSED)
 def monitor(celery_args):
-    cmd = ["celery", "-A", "celery_queue.worker:celery", "flower",] + list(celery_args)
+    cmd = ["celery", "-A", "celery_queue.worker:celery", "flower"] + list(celery_args)
     subprocess.call(cmd)
 
 

@@ -124,7 +124,7 @@ def purge_remote_exports() -> bool:
     return True
 
 
-def calc_remote_export_capacity() -> Dict[str, Union[float, int]]:
+def calc_remote_export_capacity(njobs: int = None) -> Dict[str, Union[float, int]]:
     """Calculate the amount of storage space currently consumed by job exports on IHS' servers.
 
     Returns:
@@ -133,13 +133,14 @@ def calc_remote_export_capacity() -> Dict[str, Union[float, int]]:
                  njobs: number of existing completed jobs
     """
     mean_doc_size_bytes = (
-        90000 * conf.TASK_BATCH_SIZE
+        40000 * conf.TASK_BATCH_SIZE
     )  # average single entity document size
-    inflation_pct = 0.25  # over estimate the used capacity by this percentage
+    inflation_pct = 0.1  # over estimate the used capacity by this percentage
     doc_size_bytes = mean_doc_size_bytes + (inflation_pct * mean_doc_size_bytes)
     remote_capacity_bytes = 1000000000  # 1 GB
-    eb = ExportBuilder(None)
-    njobs = len(eb.list_completed_jobs())
+    if not njobs:
+        eb = ExportBuilder(None)
+        njobs = len(eb.list_completed_jobs())
     return {
         "remote.capacity.used": njobs * doc_size_bytes,
         "remote.capacity.available": remote_capacity_bytes - (njobs * doc_size_bytes),

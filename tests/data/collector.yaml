@@ -35,293 +35,12 @@ default_aliases: &default_aliases
 default_status: &default_status
   enabled: true
 
-# south-central-mb: &south_central_mb
-#   tx-upton:
-#     county_code: 461
-#     state_code: 42
-#   tx-reagan:
-#     county_code: 383
-#     state_code: 42
-#   tx-midland:
-#     county_code: 329
-#     state_code: 42
-#   tx-glasscock:
-#     county_code: 173
-#     state_code: 42
-#   tx-ector:
-#     county_code: 135
-#     state_code: 42
-#   tx-crane:
-#     county_code: 103
-#     state_code: 42
-
-# north-central-mb: &north_central_mb
-#   tx-andrews:
-#     county_code: "003"
-#     state_code: 42
-#   tx-martin:
-#     county_code: 317
-#     state_code: 42
-#   tx-howard:
-#     county_code: 227
-#     state_code: 42
-#   tx-gaines:
-#     county_code: 165
-#     state_code: 42
-#   tx-dawson:
-#     county_code: 115
-#     state_code: 42
-#   tx-borden:
-#     county_code: "033"
-#     state_code: 42
-
-# far-southeast-mb: &far_southeast_mb
-#   tx-crockett:
-#     county_code: 105
-#     state_code: 42
-#   tx-irion:
-#     county_code: 235
-#     state_code: 42
-#   tx-sterling:
-#     county_code: 431
-#     state_code: 42
-#   tx-tomgreen:
-#     county_code: 451
-#     state_code: 42
-
-# others-mb: &others_mb
-#   tx-bailey:
-#     county_code: "017"
-#     state_code: 42
-#   tx-crosby:
-#     county_code: 107
-#     state_code: 42
-#   tx-brown:
-#     county_code: "049"
-#     state_code: 42
-#   tx-cochran:
-#     county_code: "079"
-#     state_code: 42
-#   tx-coke:
-#     county_code: "081"
-#     state_code: 42
-#   tx-concho:
-#     county_code: "095"
-#     state_code: 42
-#   tx-cottle:
-#     county_code: 101
-#     state_code: 42
-#   tx-dickens:
-#     county_code: 125
-#     state_code: 42
-#   tx-garza:
-#     county_code: 169
-#     state_code: 42
-#   tx-floyd:
-#     county_code: 153
-#     state_code: 42
-#   tx-hale:
-#     county_code: 189
-#     state_code: 42
-#   tx-hockley:
-#     county_code: 219
-#     state_code: 42
-#   tx-taylor:
-#     county_code: 441
-#     state_code: 42
-#   tx-kent:
-#     county_code: 263
-#     state_code: 42
-#   tx-kimble:
-#     county_code: 267
-#     state_code: 42
-#   tx-king:
-#     county_code: 269
-#     state_code: 42
-#   tx-lamb:
-#     county_code: 279
-#     state_code: 42
-#   tx-lubbock:
-#     county_code: 303
-#     state_code: 42
-#   tx-lynn:
-#     county_code: 305
-#     state_code: 42
-#   tx-mcculloch:
-#     county_code: 307
-#     state_code: 42
-#   tx-menard:
-#     county_code: 327
-#     state_code: 42
-#   tx-mitchell:
-#     county_code: 335
-#     state_code: 42
-#   tx-motley:
-#     county_code: 345
-#     state_code: 42
-#   tx-runnels:
-#     county_code: 399
-#     state_code: 42
-#   tx-schleicher:
-#     county_code: 413
-#     state_code: 42
-#   tx-scurry:
-#     county_code: 415
-#     state_code: 42
-#   tx-stonewall:
-#     county_code: 433
-#     state_code: 42
-#   tx-sutton:
-#     county_code: 435
-#     state_code: 42
-#   tx-terry:
-#     county_code: 445
-#     state_code: 42
-#   tx-yoakum:
-#     county_code: 501
-#     state_code: 42
-
 counties: &counties
   tx-upton:
     county_code: 461
     state_code: 42
   tx-reagan:
     county_code: 383
-    state_code: 42
-  tx-midland:
-    county_code: 329
-    state_code: 42
-  tx-glasscock:
-    county_code: 173
-    state_code: 42
-  tx-ector:
-    county_code: 135
-    state_code: 42
-  tx-crane:
-    county_code: 103
-    state_code: 42
-
-  tx-andrews:
-    county_code: "003"
-    state_code: 42
-  tx-martin:
-    county_code: 317
-    state_code: 42
-  tx-howard:
-    county_code: 227
-    state_code: 42
-  tx-gaines:
-    county_code: 165
-    state_code: 42
-  tx-dawson:
-    county_code: 115
-    state_code: 42
-  tx-borden:
-    county_code: "033"
-    state_code: 42
-
-  tx-crockett:
-    county_code: 105
-    state_code: 42
-  tx-irion:
-    county_code: 235
-    state_code: 42
-  tx-sterling:
-    county_code: 431
-    state_code: 42
-  tx-tomgreen:
-    county_code: 451
-    state_code: 42
-
-  tx-bailey:
-    county_code: "017"
-    state_code: 42
-  tx-crosby:
-    county_code: 107
-    state_code: 42
-  tx-brown:
-    county_code: "049"
-    state_code: 42
-  tx-cochran:
-    county_code: "079"
-    state_code: 42
-  tx-coke:
-    county_code: "081"
-    state_code: 42
-  tx-concho:
-    county_code: "095"
-    state_code: 42
-  tx-cottle:
-    county_code: 101
-    state_code: 42
-  tx-dickens:
-    county_code: 125
-    state_code: 42
-  tx-garza:
-    county_code: 169
-    state_code: 42
-  tx-floyd:
-    county_code: 153
-    state_code: 42
-  tx-hale:
-    county_code: 189
-    state_code: 42
-  tx-hockley:
-    county_code: 219
-    state_code: 42
-  tx-taylor:
-    county_code: 441
-    state_code: 42
-  tx-kent:
-    county_code: 263
-    state_code: 42
-  tx-kimble:
-    county_code: 267
-    state_code: 42
-  tx-king:
-    county_code: 269
-    state_code: 42
-  tx-lamb:
-    county_code: 279
-    state_code: 42
-  tx-lubbock:
-    county_code: 303
-    state_code: 42
-  tx-lynn:
-    county_code: 305
-    state_code: 42
-  tx-mcculloch:
-    county_code: 307
-    state_code: 42
-  tx-menard:
-    county_code: 327
-    state_code: 42
-  tx-mitchell:
-    county_code: 335
-    state_code: 42
-  tx-motley:
-    county_code: 345
-    state_code: 42
-  tx-runnels:
-    county_code: 399
-    state_code: 42
-  tx-schleicher:
-    county_code: 413
-    state_code: 42
-  tx-scurry:
-    county_code: 415
-    state_code: 42
-  tx-stonewall:
-    county_code: 433
-    state_code: 42
-  tx-sutton:
-    county_code: 435
-    state_code: 42
-  tx-terry:
-    county_code: 445
-    state_code: 42
-  tx-yoakum:
-    county_code: 501
     state_code: 42
 
 endpoints:
@@ -429,22 +148,21 @@ endpoints:
         hole_direction: H
     tasks:
       sync:
+        # seconds: 300
         cron:
-          minute: "*/15"
-          # hour: 1
-          # day_of_week: "mon,wed"
+          minute: 0
+          hour: 3
+          day_of_week: "mon,wed"
         options:
           query_path: well_by_api.xml
           matrix:
             next_county: true
             # using: api.models.WellMasterHorizontal.ids
             # batch_size: 50
-      driftwood:
-        cron:
-          minute: 30
-          hour: 0
-        options:
-          query_path: well_horizontal_driftwood_all.xml
+      # driftwood:
+      #   seconds: 300
+      #   options:
+      #     query_path: well_horizontal_driftwood_all.xml
       endpoint_check:
         seconds: 900
         options:
@@ -453,8 +171,6 @@ endpoints:
             check:
               values:
                 - "42461409160000"
-                - "42383406370000"
-                - "42461412100000"
 
   well_vertical:
     enabled: true
@@ -471,7 +187,7 @@ endpoints:
       sync:
         cron:
           minute: 0
-          hour: 1
+          hour: 3
           day_of_week: "fri"
         options:
           query_path: well_by_api.xml
@@ -480,8 +196,8 @@ endpoints:
             # label: api
       driftwood:
         cron:
-          minute: 30
-          hour: 0
+          minute: 0
+          hour: 2
         options:
           query_path: well_vertical_driftwood_all.xml
       endpoint_check:
@@ -508,19 +224,21 @@ endpoints:
         hole_direction: H
     tasks:
       sync:
-        cron:
-          minute: 0
-          hour: 1
-          day_of_week: "tue,thu"
+        seconds: 300
+        # cron:
+        #   minute: 0
+        #   hour: 3
+        #   day_of_week: "tue,thu"
         options:
           query_path: production_by_entity.xml
           matrix:
-            using: api.models.ProductionMasterHorizontal.ids
+            next_county: true
+            # using: api.models.ProductionMasterHorizontal.ids
             # label: producing_entity
       driftwood:
         cron:
-          minute: 30
-          hour: 0
+          minute: 0
+          hour: 2
         options:
           query_path: well_horizontal_driftwood_all.xml
       endpoint_check:
@@ -550,7 +268,7 @@ endpoints:
       sync:
         cron:
           minute: 0
-          hour: 1
+          hour: 3
           day_of_week: "sat"
         options:
           query_path: production_by_entity.xml
@@ -559,8 +277,8 @@ endpoints:
             # label: producing_entity
       driftwood:
         cron:
-          minute: 30
-          hour: 0
+          minute: 0
+          hour: 2
         options:
           query_path: well_vertical_driftwood_all.xml
       endpoint_check:

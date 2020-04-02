@@ -1,4 +1,6 @@
 from typing import Union
+import math
+import uuid
 
 from celery.utils.log import get_task_logger
 
@@ -7,6 +9,7 @@ import metrics
 from collector import Endpoint, ExportJob
 from config import get_active_config
 from ihs import celery
+
 
 logger = get_task_logger(__name__)
 
@@ -86,46 +89,63 @@ def download_changes_and_deletes():
 @celery.task(rate_limit="10/s", ignore_result=True)
 def sync_endpoint(endpoint_name: str, task_name: str, **kwargs) -> ExportJob:
     configs = list(collector.tasks.run_endpoint_task(endpoint_name, task_name))
-    count = len(configs)
     for idx, job_config in enumerate(configs):
         if job_config:
-            logger.debug(f"Running task {endpoint_name}.{task_name}")
+            logger.info(f"Running task {endpoint_name}.{task_name}")
             hole_dir = job_config.get("metadata").get("hole_direction")
-            countdown = 60 * (idx / count)
+            # countdown = 60 * (idx / count)
+            countdown = math.log(idx + 1) * 30 + idx
             submit_job.apply_async((hole_dir,), job_config, countdown=countdown)
 
 
-@celery.task(bind=True, rate_limit="5/s", max_retries=0, ignore_result=True)
+@celery.task(bind=True, rate_limit="10/s", max_retries=0, ignore_result=True)
 def submit_job(self, route_key: str, job_options: dict, metadata: dict = None):
-    try:
-        job = collector.tasks.submit_job(job_options, metadata or {})
-        logger.debug(f"submitted job: {job}")
-        if job:
-            collect_job_result.apply_async(
-                (route_key,), {"job": job.to_dict()}, countdown=60
+    if conf.SIMULATE_EXPENSIVE_TASKS:
+        opts = {**job_options, **(metadata or {})}
+        job = ExportJob(job_id=uuid.uuid4().hex, **opts)
+        logger.info(f"(***SIMULATED***) submitted job: {job}")
+        collect_job_result.apply_async((route_key,), {"job": job.to_dict()})
+        return None
+
+    else:
+        try:
+            job = collector.tasks.submit_job(job_options, metadata or {})
+            logger.info(f"submitted job: {job}")
+            if job:
+                collect_job_result.apply_async(
+                    (route_key,), {"job": job.to_dict()}, countdown=120,
+                )
+        except Exception as exc:
+            logger.error(
+                f"failed to submit job {job_options} (attempt: {self.request.retries}) -- {exc}",
+                extra={"attempt": self.request.retries},
             )
-    except Exception as exc:
-        logger.error(
-            f"failed to submit job {job_options} (attempt: {self.request.retries}) -- {exc}",
-            extra={"attempt": self.request.retries},
-        )
-        raise self.retry(exc=exc, countdown=RETRY_BASE_DELAY ** self.request.retries)
+            raise self.retry(
+                exc=exc, countdown=RETRY_BASE_DELAY ** self.request.retries
+            )
 
 
 @celery.task(bind=True, rate_limit="100/s", max_retries=0, ignore_result=True)
 def collect_job_result(self, route_key: str, job: Union[dict, ExportJob]):
     if not isinstance(job, ExportJob):
         job = ExportJob(**job)
-    logger.debug(f"collecting job: {job}")
-    try:
-        collector.tasks.collect(job)
+    if conf.SIMULATE_EXPENSIVE_TASKS:
+        logger.info(f"(***SIMULATED***) collected job: {job}")
+        return None
 
-    except Exception as exc:
-        logger.error(
-            f"failed to collect job {job} (attempt: {self.request.retries}) -- {exc}",
-            extra={"attempt": self.request.retries},
-        )
-        raise self.retry(exc=exc, countdown=RETRY_BASE_DELAY ** self.request.retries)
+    else:
+        try:
+            logger.info(f"collecting job: {job}")
+            collector.tasks.collect(job)
+
+        except Exception as exc:
+            logger.error(
+                f"failed to collect job {job} (attempt: {self.request.retries}) -- {exc}",
+                extra={"attempt": self.request.retries},
+            )
+            raise self.retry(
+                exc=exc, countdown=RETRY_BASE_DELAY ** self.request.retries
+            )
 
 
 # @celery.task(bind=True, max_retries=0, ignore_result=True)
@@ -154,3 +174,18 @@ if __name__ == "__main__":
     count
     [(x, (x / count) ** 2) for x in idx]
     [(x, 60 * (x / count)) for x in idx]
+
+    import pandas as pd
+    import numpy as np
+
+    df = pd.DataFrame(data={"ct": range(0, 10000)})
+    df["log"] = df.ct.apply(np.log)
+    df["logx60"] = df.log.mul(60)
+    df["log+ctx60"] = df.log.mul(60).add(df.ct)
+    df["log+ctx30"] = df.log.mul(30).add(df.ct)
+    df = df.replace([-np.inf, np.inf], np.nan)
+    df.describe()
+    df["log+ctx30"].div(60).describe()
+    import math
+
+    math.log(10000)

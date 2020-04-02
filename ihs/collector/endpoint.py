@@ -8,6 +8,7 @@ from attrdict import AttrDict
 
 from api.models import *
 from collector.task import Task
+import yaml
 
 logger = logging.getLogger(__name__)
 
@@ -121,21 +122,51 @@ class Endpoint(object):
                 new = Endpoint(name=ep[0], **ep[1])
                 if new.enabled or load_disabled:
                     loaded[ep[0]] = new
-                    # print(f"Created endpoint ({ep[0]})")
-                # else:
-                #     print(f"Skipping endpoint ({ep[0]})")
             except Exception as e:
                 logger.error(f"Failed to create endpoint ({ep[0]}) -> {e}")
-
         return loaded
 
     @staticmethod
     def from_dict(name: str, data: dict):
         return Endpoint(name, **data)
 
+    @staticmethod
+    def from_yaml(path: str, load_disabled: bool = False, key: str = "endpoints"):
+        endpoints = {}
+        with open(path) as f:
+            endpoints = yaml.safe_load(f)
 
-# if __name__ == "__main__":
+        if key:
+            endpoints = endpoints[key]
 
+        loaded: Dict[str, Endpoint] = {}
+        for ep in endpoints.items():
+            try:
+                new = Endpoint(name=ep[0], **ep[1])
+                if new.enabled or load_disabled:
+                    loaded[ep[0]] = new
+            except Exception as e:
+                logger.error(f"Failed to create endpoint ({ep[0]}) -> {e}")
+        return loaded
+
+
+if __name__ == "__main__":
+    from ihs import create_app
+
+    app = create_app()
+    app.app_context().push()
+
+    path = "tests/data/collector.yaml"
+    load_disabled = False
+    endpoints = Endpoint.from_yaml(path)
+
+    list(endpoints.items())[0]
+    opts = list(endpoints["well_horizontal"].tasks["sync"].options)
+    opts[0]
+    from api.models import County
+
+    County.next_well_h()._data
+    County.objects.order_by("well_h_last_run").first()._data
 #     from config import get_active_config
 
 #     conf = get_active_config()

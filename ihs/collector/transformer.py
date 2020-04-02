@@ -437,7 +437,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=20)
 
     conf = get_active_config()
-    endpoints = Endpoint.load_from_config(conf)
+    endpoints = Endpoint.from_yaml("tests/data/collector.yaml")
     task_name, endpoint_name, transformer = (
         "endpoint_check",
         "production_horizontal",

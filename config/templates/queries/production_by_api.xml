@@ -10,9 +10,7 @@
                     <operator logic="and">
                         <condition logic="equals">
                             <attribute>code</attribute>
-                            <value_list>
                                 {value_list}
-                            </value_list>
                         </condition>
                     </operator>
                 </group_actual>

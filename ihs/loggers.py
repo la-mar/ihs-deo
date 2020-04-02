@@ -96,6 +96,7 @@ class DatadogJSONFormatter(json_log_formatter.JSONFormatter):
         json_record: Dict = self.json_record(record.getMessage(), record)
         mutated_record: Dict = self.mutate_json_record(json_record)
         mutated_record = mutated_record if mutated_record is not None else json_record
+
         return self.to_json(mutated_record)
 
     def to_json(self, record: Mapping[str, Any]) -> str:
@@ -131,6 +132,26 @@ class DatadogJSONFormatter(json_log_formatter.JSONFormatter):
                 record_dict["error.stack"] = self.formatException(exc_info)
 
         return record_dict
+
+
+class TaskFormatter(logging.Formatter):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        try:
+            from celery._state import get_current_task
+
+            self.get_current_task = get_current_task
+        except ImportError:
+            self.get_current_task = lambda: None
+
+    def format(self, record):
+        task = self.get_current_task()
+        if task and task.request:
+            record.__dict__.update(task_id=task.request.id, task_name=task.name)
+        else:
+            record.__dict__.setdefault("task_name", "")
+            record.__dict__.setdefault("task_id", "")
+        return super().format(record)
 
 
 def get_formatter(name: Union[str, None]) -> logging.Formatter:

@@ -182,3 +182,10 @@ if __name__ == "__main__":
         values=["42413001340100", "42413329660000", "42413005390100"],
     )
     print(ep.query)
+
+    ep = ExportParameter(
+        "Production",
+        query_path="production_by_api.xml",
+        values=["42413001340100", "42413329660000", "42413005390100"],
+    )
+    print(ep.query)

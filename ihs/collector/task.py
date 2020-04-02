@@ -1,28 +1,44 @@
 from __future__ import annotations
 
+import logging
 from pydoc import locate
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Optional
+from datetime import datetime, timedelta
+import pytz
 
 from celery.schedules import crontab
 import util
+from celery.utils.time import humanize_seconds
 
 from api.models import *  # noqa
-from api.models import Model
+from api.models import (
+    Model,
+    County,
+    WellMasterHorizontal,
+    WellMasterVertical,
+    ProductionMasterHorizontal,
+    ProductionMasterVertical,
+)
 
 from config import get_active_config
 
 conf = get_active_config()
 
+logger = logging.getLogger(__name__)
+
 
 class OptionMatrix:
     batch_size: int = conf.TASK_BATCH_SIZE
 
-    def __init__(self, matrix: dict = None, **kwargs):
-        self.matrix = {k: v for k, v in (matrix or {}).items()}
-        self.kwargs = kwargs
-        self.using = self.matrix.pop("using", None)
-        self.label = self.matrix.pop("label", "values")
-        self.batch_size = self.matrix.pop("batch_size", 10) or self.batch_size
+    def __init__(self, target_model: str, matrix: dict = None, **kwargs):
+        self.matrix: Dict = {k: v for k, v in (matrix or {}).items()}
+        self.kwargs: Dict = kwargs
+        self.using: Optional[str] = self.matrix.pop("using", None)
+        self.label: str = self.matrix.pop("label", "values")
+        self.use_next_county: bool = self.matrix.pop("next_county", None)
+        self.batch_size: int = self.matrix.pop("batch_size", 10) or self.batch_size
+        self.target_model: str = target_model
+        self.source_name: Optional[str] = None
 
     def __repr__(self):
         return str(self.to_list())
@@ -35,8 +51,11 @@ class OptionMatrix:
         """ Generate the option matrix from the instance's parameters """
 
     def _cross_apply(self) -> List[Dict]:
+
         if self.using:
             self.matrix = self._matrix_from_model()
+        elif self.use_next_county:
+            self.matrix = self._matrix_from_county()
 
         optset = []
         if len(self.matrix):
@@ -62,16 +81,61 @@ class OptionMatrix:
             model_ref {str} -- Model reference string of the form module.models.model.field.
                                Ex: api.models.WellMasterHorizontal.ids
         """
+        ids: List[str] = []
 
-        model_name, field_name = self.using.rsplit(".", maxsplit=1)
-        model = self.locate_model(model_name)
+        if self.using:
+            model_name, field_name = self.using.rsplit(".", maxsplit=1)
+            model = self.locate_model(model_name)
+            self.source_name = model_name
 
-        values: List[str] = []
-        for document in model.objects():
-            values = values + document[field_name]
+            for document in model.objects():
+                ids = ids + document[field_name]
+
+        return self._to_batches(values=ids)
+
+    def _matrix_from_county(self) -> Dict[str, Dict]:
+        target_model: str = self.target_model.split(".")[-1]
+        county_obj = None
+        ids = []
+        utcnow = pytz.utc.localize(datetime.utcnow())
+        if target_model == "WellHorizontal":
+            attr = "well_h_last_run"
+            model = WellMasterHorizontal
+        elif target_model == "WellVertical":
+            attr = "well_v_last_run"
+            model = WellMasterVertical
+
+        elif target_model == "ProductionHorizontal":
+            attr = "prod_h_last_run"
+            model = ProductionMasterHorizontal
+        elif target_model == "ProductionVertical":
+            attr = "prod_v_last_run"
+            model = ProductionMasterVertical
+
+        county_obj, attr, last_run, is_ready, cooldown = County.next_available(attr)
+        self.source_name = county_obj.name
+
+        if is_ready:
+            model_obj = model.objects(name=county_obj.name).first()
+            if model_obj:
+                ids = model_obj.ids
+            county_obj[attr] = utcnow
+            county_obj.save()
+        else:
+            last_run_seconds = (
+                utcnow - (utcnow - timedelta(hours=cooldown))
+            ).total_seconds()
+            logger.warning(
+                f"({target_model}) Skipping {self.source_name} next run in {humanize_seconds(last_run_seconds)}"  # noqa
+            )  # noqa
+
+        return self._to_batches(values=ids)
+
+    def _to_batches(self, values: List[str]) -> Dict[str, Dict]:
+        """ Chunk a list of values into smaller batches """
+        target_model: str = self.target_model.split(".")[-1]
 
         matrix = {}
-        # total_count = len(values)
         for idx, chunk in enumerate(util.chunks(values, self.batch_size)):
             chunk_count = len(chunk)
             subset_name = (
@@ -79,10 +143,12 @@ class OptionMatrix:
             )
             matrix[subset_name] = {self.label: chunk}
 
-        return matrix
+        if len(values):
+            logger.warning(
+                f"({target_model}) Compressed {len(values)} ids into {len(matrix)} option sets from {self.source_name}"  # noqa
+            )
 
-    def _matrix_from_ids(self) -> List[Dict]:
-        """ Generate a matrix from a delimited string or list of identifiers """
+        return matrix
 
     def locate_model(self, model_name: str) -> Model:  # type: ignore
         model: Model = None  # type: ignore
@@ -122,7 +188,7 @@ class Task:
         self.cron = self.parse_cron(cron or {})
         self.seconds = seconds
         self.mode = mode
-        self.options = OptionMatrix(**(options or {}))
+        self.options = OptionMatrix(target_model=model_name, **(options or {}))
         self.enabled = enabled
 
         if not any([self.cron, self.seconds]):
@@ -172,18 +238,21 @@ if __name__ == "__main__":
     app.app_context().push()
 
     conf = get_active_config()
-    endpoints = conf.endpoints
-    tasks = endpoints.well_horizontal.tasks
+    # endpoints = Endpoint.from_yaml("tests/data/collector.yaml")
+    # task = endpoints["production_horizontal"].tasks["endpoint_check"]
 
-    # tasks
-    task_def = tasks.endpoint_check
-    task = Task("well_horizontal", "endpoint_check", **task_def)
-    to = task.options
-    # print(to)
-    opts = OptionMatrix(**task_def.options)
+    # # tasks
+    # # task_def = tasks.endpoint_check
+    # # task = Task("production_horizontal", "endpoint_check", **task_def)
+    # to = task.options
+    # # print(to)
+    # # opts = OptionMatrix(**task.options[0])
 
-    opt_set = list(task.options)[0]
+    # opt_set = list(task.options)[0]
+    from datetime import datetime, timedelta
 
-    q = XMLQuery(data_type="Well").add_filter(opt_set["api"])
-    print(q.to_xml())
-    print(q)
+    current = datetime.now()
+    past = current - timedelta(days=10)
+
+    seconds = (current - past).total_seconds()
+    humanize_seconds(seconds)

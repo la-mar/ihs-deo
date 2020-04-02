@@ -1,10 +1,13 @@
+from __future__ import annotations
 import datetime
 import logging
-from typing import Optional, List
+from typing import Optional, List, Tuple
+import pytz
 
 from api.mixin import BaseMixin, ProductionMixin, WellMixin
 from ihs import db
-from mongoengine.document import Document as Model
+from mongoengine.document import Document as Model  # noqa
+
 
 loggger = logging.getLogger(__name__)
 
@@ -19,6 +22,9 @@ __all__ = [
     "ProductionHorizontal",
     "ProductionVertical",
 ]
+
+TWO_DAYS = 48
+ONE_WEEK = 168
 
 
 class ChangeDeleteLog(db.Document, BaseMixin):
@@ -56,6 +62,83 @@ class ChangeDeleteLog(db.Document, BaseMixin):
     @classmethod
     def unprocessed(cls) -> List:
         return cls.objects(processed=False)
+
+
+class County(db.Document, BaseMixin):
+    meta = {"collection": "counties", "ordering": ["name"]}
+    name = db.StringField(primary_key=True)
+    county_code = db.StringField()
+    state_code = db.StringField()
+    well_v_last_run = db.DateTimeField(null=True)
+    well_h_last_run = db.DateTimeField(null=True)
+    prod_v_last_run = db.DateTimeField(null=True)
+    prod_h_last_run = db.DateTimeField(null=True)
+
+    @staticmethod
+    def _is_ready(last_run: Optional[datetime.datetime], cooldown_hours: int):
+        if last_run:
+            threshold = datetime.datetime.utcnow() - datetime.timedelta(
+                hours=cooldown_hours
+            )
+            return last_run < threshold
+        else:
+            return True
+
+    @classmethod
+    def next_available(
+        cls, attr: str
+    ) -> Tuple[County, str, Optional[datetime.datetime], bool, int]:
+        "attr options: [well_h_last_run, well_v_last_run, prod_h_last_run, prod_v_last_run]"
+
+        valid_attrs = [
+            "well_h_last_run",
+            "well_v_last_run",
+            "prod_h_last_run",
+            "prod_v_last_run",
+        ]
+        if attr not in valid_attrs:
+            raise ValueError(f"invalid attribute: attr must be one of {valid_attrs}")
+
+        if attr in ["well_h_last_run", "prod_h_last_run"]:
+            cooldown = TWO_DAYS
+        else:
+            cooldown = ONE_WEEK
+
+        county_obj = County.objects.order_by(attr).first()
+        last_run: Optional[datetime.datetime] = county_obj[attr]
+        is_ready = cls._is_ready(last_run, cooldown)
+        last_run_aware: Optional[datetime.datetime] = None
+        if last_run:
+            last_run_aware = pytz.utc.localize(last_run)
+        return county_obj, attr, last_run_aware, is_ready, cooldown
+
+    @classmethod
+    def next_well_h(cls):
+        attr = "well_h_last_run"
+        county_obj = County.objects.order_by(attr).first()
+        last_run = county_obj.well_h_last_run
+        return county_obj, attr, last_run
+
+    @classmethod
+    def next_well_v(cls):
+        attr = "well_v_last_run"
+        county_obj = County.objects.order_byattr.first()
+        last_run = county_obj.well_v_last_run
+        return county_obj, attr, last_run
+
+    @classmethod
+    def next_prod_h(cls):
+        attr = "prod_h_last_run"
+        county_obj = County.objects.order_by(attr).first()
+        last_run = county_obj.prod_h_last_run
+        return county_obj, attr, last_run
+
+    @classmethod
+    def next_prod_v(cls):
+        attr = "prod_v_last_run"
+        county_obj = County.objects.order_by(attr).first()
+        last_run = county_obj.prod_v_last_run
+        return county_obj, attr, last_run
 
 
 class WellMasterHorizontal(db.Document, BaseMixin):
@@ -144,24 +227,33 @@ if __name__ == "__main__":
     app.app_context().push()
     conf = get_active_config()
 
-    model = ProductionMasterHorizontal
-    # api14 = "42461409160000"
-    # api14s = ["42461409160000", "42461009720100"]
-    # m = model.objects.get(api14=api14)  # pylint: disable=no-member
+#     model = ProductionMasterHorizontal
+# api14 = "42461409160000"
+# api14s = ["42461409160000", "42461009720100"]
+# m = model.objects.get(api14=api14)  # pylint: disable=no-member
 
-    # # vertical = "42383362060000"``
-    # x = model.get(api14=api14)[0]
-    # dir(x)
-    # x.production_header
-    m = model.get()
-    objs = model.objects.only()
-    [obj.id for obj in objs]
-    # m = model.get(api14__in=api14s, paginate=True, page=1, per_page=25)
-    # m = model.get(
-    #     ihs_last_update_date__gte="2019-12-01", paginate=True, page=1, per_page=25
-    # )
+# # vertical = "42383362060000"``
+# x = model.get(api14=api14)[0]
+# dir(x)
+# x.production_header
+# m = model.get()
+# objs = model.objects.only()
+# [obj.id for obj in objs]
+# m = model.get(api14__in=api14s, paginate=True, page=1, per_page=25)
+# m = model.get(
+#     ihs_last_update_date__gte="2019-12-01", paginate=True, page=1, per_page=25
+# )
 
-    # dir(m)
+# dir(m)
 
-    # s = schemas.WellHeaderSchema(many=True)
-    # s.dump(m.items)
+# s = schemas.WellHeaderSchema(many=True)
+# s.dump(m.items)
+
+# county = County.next_prod_h()
+# county._data
+# offset = datetime.datetime.utcnow() - datetime.timedelta(days=1)
+# county.prod_h_last_run = offset
+# county.save()
+
+# upton.prod_h_last_run = None
+# upton.save()

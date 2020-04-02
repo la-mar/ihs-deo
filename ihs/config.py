@@ -1,5 +1,3 @@
-# pylint: disable=invalid-envvar-default,missing-function-docstring
-
 
 from __future__ import annotations
 
@@ -209,7 +207,9 @@ class BaseConfig:
     CELERY_SEND_EVENTS = False  # required for sqs
     CELERY_DEFAULT_QUEUE = f"{project}-default"  # sqs queue name
     CELERY_ROUTES = ("celery_queue.routers.hole_direction_router",)
-    CELERY_TASK_CREATE_MISSING_QUEUES = False
+    CELERY_TASK_CREATE_MISSING_QUEUES = os.getenv(
+        "CELERY_TASK_CREATE_MISSING_QUEUES", False
+    )
 
     """ Celery Beat """
     CELERYBEAT_SCHEDULER = "redbeat.RedBeatScheduler"
@@ -235,7 +235,8 @@ class BaseConfig:
         "exportbuilder": abs_path(API_WSDL_DIR, "{version}/ExportBuilder.wsdl"),
     }
     API_DOMAIN = "US"
-    TASK_BATCH_SIZE = 50
+    TASK_BATCH_SIZE = os.getenv("IHS_TASK_BATCH_SIZE", 50)
+    SIMULATE_EXPENSIVE_TASKS = os.getenv("IHS_SIMULATE_EXPENSIVE_TASKS", False)
 
     @property
     def show(self):
