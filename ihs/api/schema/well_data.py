@@ -172,9 +172,9 @@ class WellHeaderSchema(WellBaseSchema):
         get = functools.partial(query_dict, data=header)
 
         output = super().transform(data)
-        output["county_name"] = get("geopolitical.county.name")
+        output["county"] = get("geopolitical.county.name")
         output["county_code"] = get("geopolitical.county.code")
-        output["state_name"] = get("geopolitical.province_state.name")
+        output["state"] = get("geopolitical.province_state.name")
         output["state_code"] = get("geopolitical.province_state.code")
         output["products"] = get("products.objective.code")
         output["region"] = get("geopolitical.region.name")
