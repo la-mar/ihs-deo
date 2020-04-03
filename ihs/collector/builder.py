@@ -3,6 +3,9 @@ from __future__ import annotations
 import logging
 from datetime import date, datetime
 from typing import Dict, List, Tuple, Union
+from urllib3.exceptions import ProtocolError
+
+from requests import ConnectionError
 
 import metrics
 from collector.export_parameter import ExportParameter
@@ -41,6 +44,7 @@ class ExportJob:
             "target_model",
             "source_name",
         ],
+        include_job_id: bool = False,
     ):
         job_dict = {}
         for key, value in self.to_dict().items():
@@ -140,16 +144,23 @@ class Builder(SoapRequestor):
 
         result = False
         tags: Dict = {}
-        if isinstance(job, ExportJob):
-            tags = job.limited_dict()
-            job = job.job_id
+        if not isinstance(job, ExportJob):
+            job = ExportJob(job_id=job)
+
+        tags = job.limited_dict()
+        job_id = job.job_id
 
         try:
-            result = self.service.DeleteExport(job)
-            logger.info("Deleted job: %s", job)
+            result = self.service.DeleteExport(job_id)
+            logger.info("Deleted job: %s", job_id)
             metrics.post("job.delete.success", 1, tags=tags)
         except Exception as e:
-            logger.exception("Encountered error when deleting job %s -- %s", job, e)
+            logger.exception(
+                "Encountered error when deleting job %s -- %s",
+                job_id,
+                e,
+                extra=job.limited_dict(include_job_id=True),
+            )
             metrics.post("job.delete.error", 1, tags=tags)
 
         return result
@@ -176,34 +187,30 @@ class ExportBuilder(Builder):
         super().__init__(client_type="exportbuilder", *args, **kwargs)
 
     def submit(
-        self, export_param: ExportParameter, metadata: dict = None
+        self, export_param: ExportParameter, metadata: dict
     ) -> Union[ExportJob, None]:
+
+        tags = {
+            k: v
+            for k, v in metadata.items()
+            if k in ["endpoint", "task", "hole_direction", "data_type"]
+        }
 
         try:
             job_id = self.build(export_param.params, export_param.target)
-            return ExportJob(
-                job_id=job_id, **{**(metadata or {}), **dict(export_param)}
-            )
+            return ExportJob(job_id=job_id, **{**metadata, **dict(export_param)})
+        except (ConnectionError, ProtocolError) as e:
+            msg = f"Encountered error when connecting to IHS remote service -- {e}"
+            logger.error(msg, extra=metadata)
+            metrics.post("job.submitted.error", 1, tags=tags)
+
         except Exception as e:
             msg = f"Error getting job id from service for data type {export_param.data_type} -- {e}"
-            # if e.args:
+
             if "No ids to export" in e.args[0]:
-                logger.info(msg)
+                logger.info(msg, extra=metadata)
             else:
-                logger.warning(
-                    msg,
-                    extra={
-                        k: v for k, v in (metadata or {}).items() if k not in ["name"]
-                    },
-                )
-                if metadata:
-                    tags = {
-                        k: v
-                        for k, v in metadata.items()
-                        if k in ["endpoint", "task", "hole_direction", "data_type"]
-                    }
-                else:
-                    tags = {}
+                logger.warning(msg, extra=metadata)
                 metrics.post("job.submitted.error", 1, tags=tags)
 
         return None

@@ -4,7 +4,7 @@ import logging
 
 from celery import Celery
 from celery.schedules import crontab
-from celery.signals import after_setup_logger  # after_setup_task_logger
+from celery.signals import after_setup_logger, after_setup_task_logger
 
 import celery_queue.tasks
 import loggers
@@ -70,28 +70,36 @@ def setup_periodic_tasks(sender, **kwargs):  # pylint: disable=unused-argument
         name="calc_remote_export_capacity",
     )
 
-    logger.info("Registering periodic task: %s", "cleanup_remote_exports")
-    sender.add_periodic_task(
-        crontab(
-            minute=0, hour=0
-        ),  # daily at midnight, ~3 hours before nightly jobs start
-        celery_queue.tasks.cleanup_remote_exports,
-        name="cleanup_remote_exports",
-    )
+    # logger.info("Registering periodic task: %s", "cleanup_remote_exports")
+
+    # sender.add_periodic_task(
+    #     crontab(
+    #         minute=0, hour=0
+    #     ),  # daily at midnight, ~3 hours before nightly jobs start
+    #     celery_queue.tasks.cleanup_remote_exports,
+    #     name="cleanup_remote_exports",
+    # )
 
     sender.add_periodic_task(
         crontab(minute=0, hour=15),
         celery_queue.tasks.download_changes_and_deletes,
         name="download_changes_and_deletes",
     )
+    logger.info("Registering periodic task: %s", "download_changes_and_deletes")
 
 
 @after_setup_logger.connect
 def setup_loggers(logger, *args, **kwargs):
-    """ Configure loggers on worker/beat startup """
+    """ Configure the root logger on worker/beat startup """
     loggers.config(
         logger=logger, level=conf.CELERY_LOG_LEVEL, formatter=conf.CELERY_LOG_FORMAT
     )
+
+
+@after_setup_task_logger.connect
+def setup_task_loggers(logger, *args, **kwargs):
+    """ Configure loggers on worker/beat startup """
+    loggers.config(logger=logger, level=conf.LOG_LEVEL, formatter=conf.LOG_FORMAT)
 
 
 # @after_setup_logger.connect

@@ -46,10 +46,10 @@ def run_endpoint_task(
             metadata={
                 "endpoint": endpoint_name,
                 "task": task_name,
-                "url": conf.API_BASE_URL,
                 "hole_direction": opts.get("criteria", {}).get("hole_direction"),
-                **opts,  # duplicate job options here to they travel with the job
-                # throughout its lifecycle
+                "data_type": opts.get("data_type"),
+                "target_model": opts.get("target_model"),
+                "source_name": opts.get("source_name"),
             },
         )
         yield job_config
@@ -162,11 +162,12 @@ def calc_remote_export_capacity() -> Dict[str, Union[float, int]]:
     mean_doc_size_bytes = (
         18000 * conf.TASK_BATCH_SIZE
     )  # average single entity document size
-    inflation_pct = 0.25  # over estimate the used capacity by this percentage
+    inflation_pct: float = 0.25  # over estimate the used capacity by this percentage
     doc_size_bytes = mean_doc_size_bytes + (inflation_pct * mean_doc_size_bytes)
-    remote_capacity_bytes = 1000000000  # 1 GB
+    remote_capacity_bytes: int = 1000000000  # 1 GB
     eb = ExportBuilder(None)
     njobs = len(eb.list_completed_jobs())
+
     return {
         "remote.capacity.used": njobs * doc_size_bytes,
         "remote.capacity.available": remote_capacity_bytes - (njobs * doc_size_bytes),

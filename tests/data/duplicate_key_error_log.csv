@@ -1,0 +1,33 @@
+date,message
+2020-04-02T17:16:21.475Z,"Message: 'Failed saving %s documents to %s -- %s'
+Arguments: (1, <class 'api.models.WellVertical'>, [NotUniqueError('Tried to save duplicate unique keys (E11000 duplicate key error collection: ihs.well_vertical index: _id_ dup key: { _id: ""42173331730000"" })')])"
+2020-04-02T17:15:10.194Z,"Message: 'Failed saving %s documents to %s -- %s'
+Arguments: (1, <class 'api.models.WellVertical'>, [NotUniqueError('Tried to save duplicate unique keys (E11000 duplicate key error collection: ihs.well_vertical index: _id_ dup key: { _id: ""42173329060000"" })')])"
+2020-04-02T16:15:58.696Z,"Message: 'Failed saving %s documents to %s -- %s'
+Arguments: (1, <class 'api.models.ProductionVertical'>, [NotUniqueError('Tried to save duplicate unique keys (E11000 duplicate key error collection: ihs.production_vertical index: _id_ dup key: { _id: ""14207C00514241"" })')])"
+2020-04-02T16:15:47.548Z,"Message: 'Failed saving %s documents to %s -- %s'
+Arguments: (1, <class 'api.models.ProductionVertical'>, [NotUniqueError('Tried to save duplicate unique keys (E11000 duplicate key error collection: ihs.production_vertical index: _id_ dup key: { _id: ""14207C0051426"" })')])"
+2020-04-02T16:15:35.391Z,"Message: 'Failed saving %s documents to %s -- %s'
+Arguments: (1, <class 'api.models.ProductionVertical'>, [NotUniqueError('Tried to save duplicate unique keys (E11000 duplicate key error collection: ihs.production_vertical index: _id_ dup key: { _id: ""14207C0051142"" })')])"
+2020-04-02T16:15:19.305Z,"Message: 'Failed saving %s documents to %s -- %s'
+Arguments: (1, <class 'api.models.WellVertical'>, [NotUniqueError('Tried to save duplicate unique keys (E11000 duplicate key error collection: ihs.well_vertical index: _id_ dup key: { _id: ""42329312490001"" })')])"
+2020-04-02T16:15:03.844Z,"Message: 'Failed saving %s documents to %s -- %s'
+Arguments: (1, <class 'api.models.WellVertical'>, [NotUniqueError('Tried to save duplicate unique keys (E11000 duplicate key error collection: ihs.well_vertical index: _id_ dup key: { _id: ""42329312090001"" })')])"
+2020-04-02T16:13:40.474Z,"Message: 'Failed saving %s documents to %s -- %s'
+Arguments: (1, <class 'api.models.WellVertical'>, [NotUniqueError('Tried to save duplicate unique keys (E11000 duplicate key error collection: ihs.well_vertical index: _id_ dup key: { _id: ""42329308280000"" })')])"
+2020-04-02T16:13:35.708Z,"Message: 'Failed saving %s documents to %s -- %s'
+Arguments: (1, <class 'api.models.WellVertical'>, [NotUniqueError('Tried to save duplicate unique keys (E11000 duplicate key error collection: ihs.well_vertical index: _id_ dup key: { _id: ""42329308050000"" })')])"
+2020-04-02T16:13:29.310Z,"Message: 'Failed saving %s documents to %s -- %s'
+Arguments: (1, <class 'api.models.WellVertical'>, [NotUniqueError('Tried to save duplicate unique keys (E11000 duplicate key error collection: ihs.well_vertical index: _id_ dup key: { _id: ""42329308120000"" })')])"
+2020-04-02T15:25:24.903Z,"Message: 'Failed saving %s documents to %s -- %s'
+Arguments: (1, <class 'api.models.WellVertical'>, [NotUniqueError('Tried to save duplicate unique keys (E11000 duplicate key error collection: ihs.well_vertical index: _id_ dup key: { _id: ""42383352050000"" })')])"
+2020-04-02T15:24:43.850Z,"Message: 'Failed saving %s documents to %s -- %s'
+Arguments: (1, <class 'api.models.WellVertical'>, [NotUniqueError('Tried to save duplicate unique keys (E11000 duplicate key error collection: ihs.well_vertical index: _id_ dup key: { _id: ""42383349160000"" })')])"
+2020-04-02T15:21:51.474Z,"Message: 'Failed saving %s documents to %s -- %s'
+Arguments: (1, <class 'api.models.WellVertical'>, [NotUniqueError('Tried to save duplicate unique keys (E11000 duplicate key error collection: ihs.well_vertical index: _id_ dup key: { _id: ""42383341140000"" })')])"
+2020-04-02T15:20:51.836Z,"Message: 'Failed saving %s documents to %s -- %s'
+Arguments: (1, <class 'api.models.WellVertical'>, [NotUniqueError('Tried to save duplicate unique keys (E11000 duplicate key error collection: ihs.well_vertical index: _id_ dup key: { _id: ""42383337170000"" })')])"
+2020-04-02T15:20:45.968Z,"Message: 'Failed saving %s documents to %s -- %s'
+Arguments: (1, <class 'api.models.WellVertical'>, [NotUniqueError('Tried to save duplicate unique keys (E11000 duplicate key error collection: ihs.well_vertical index: _id_ dup key: { _id: ""42383336710000"" })')])"
+2020-04-02T15:16:22.218Z,"Message: 'Failed saving %s documents to %s -- %s'
+Arguments: (1, <class 'api.models.WellVertical'>, [NotUniqueError('Tried to save duplicate unique keys (E11000 duplicate key error collection: ihs.well_vertical index: _id_ dup key: { _id: ""42383320190000"" })')])"

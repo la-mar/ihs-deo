@@ -124,14 +124,18 @@ class OptionMatrix:
             model_obj = model.objects(name=county_obj.name).first()
             if model_obj:
                 ids = model_obj.ids
-            county_obj[attr] = utcnow
-            county_obj.save()
+
+                county_obj[attr] = utcnow
+                county_obj.save()
+                logger.warning(
+                    f"updated county object ({county_obj.name}.{attr}): {last_run} -> {utcnow}"
+                )
         else:
-            last_run_seconds = (
-                utcnow - (utcnow - timedelta(hours=cooldown))
+            next_run_in_seconds = (
+                (last_run + timedelta(hours=cooldown)) - utcnow
             ).total_seconds()
             logger.warning(
-                f"({target_model}) Skipping {self.source_name} next run in {humanize_seconds(last_run_seconds)}"  # noqa
+                f"({target_model}) Skipping {self.source_name} next run in {humanize_seconds(next_run_in_seconds)}"  # noqa
             )  # noqa
 
         return self._to_batches(values=ids)
@@ -235,6 +239,7 @@ if __name__ == "__main__":
     from config import get_active_config
     from attrdict import AttrDict
     from ihs.config import get_active_config
+    from collector import Endpoint
     from ihs import create_app, db
     from collector.xml_query import XMLQuery
 
@@ -243,13 +248,13 @@ if __name__ == "__main__":
     app.app_context().push()
 
     conf = get_active_config()
-    # endpoints = Endpoint.from_yaml("tests/data/collector.yaml")
-    # task = endpoints["production_horizontal"].tasks["endpoint_check"]
+    endpoints = Endpoint.from_yaml("tests/data/collector.yaml")
+    task = endpoints["well_horizontal"].tasks["endpoint_check"]
 
-    # # tasks
-    # # task_def = tasks.endpoint_check
-    # # task = Task("production_horizontal", "endpoint_check", **task_def)
-    # to = task.options
+    # tasks
+    # task_def = tasks.endpoint_check
+    # task = Task("production_horizontal", "endpoint_check", **task_def)
+    to = task.options
     # # print(to)
     # # opts = OptionMatrix(**task.options[0])
 

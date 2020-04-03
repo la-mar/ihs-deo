@@ -12,6 +12,8 @@ import yaml
 from attrdict import AttrDict
 from dotenv import load_dotenv
 
+# TODO: change settings management to pydantic model
+
 """ Optional Pandas display settings"""
 pd.options.display.max_rows = None
 pd.set_option("display.float_format", lambda x: "%.2f" % x)
@@ -235,7 +237,7 @@ class BaseConfig:
         "exportbuilder": abs_path(API_WSDL_DIR, "{version}/ExportBuilder.wsdl"),
     }
     API_DOMAIN = "US"
-    TASK_BATCH_SIZE = os.getenv("IHS_TASK_BATCH_SIZE", 50)
+    TASK_BATCH_SIZE = int(os.getenv("IHS_TASK_BATCH_SIZE", 50))
     SIMULATE_EXPENSIVE_TASKS = os.getenv("IHS_SIMULATE_EXPENSIVE_TASKS", False)
 
     @property

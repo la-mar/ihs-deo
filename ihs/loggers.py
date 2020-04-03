@@ -93,6 +93,15 @@ class DatadogJSONFormatter(json_log_formatter.JSONFormatter):
     """JSON log formatter that includes Datadog standard attributes.
        Adapted from https://github.com/dailymuse/muselog"""
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        try:
+            from celery._state import get_current_task
+
+            self.get_current_task = get_current_task
+        except ImportError:
+            self.get_current_task = lambda: None
+
     def format(self, record: LogRecord) -> str:
         """Return the record in the format usable by Datadog."""
         json_record: Dict = self.json_record(record.getMessage(), record)
@@ -122,9 +131,14 @@ class DatadogJSONFormatter(json_log_formatter.JSONFormatter):
         }
 
         record_dict = {**additional, **conf.DATADOG_DEFAULT_TAGS, **record_dict}
-        exc_info = record.exc_info
 
-        # Handle exceptions, including those in our formatter
+        # handle celery task logging
+        task = self.get_current_task()
+        if task and task.request:
+            record_dict.update(task_id=task.request.id, task_name=task.name)
+
+        # Handle exceptions, including those in the formatter itself
+        exc_info = record.exc_info
         if exc_info:
             if "error.kind" not in record_dict:
                 record_dict["error.kind"] = exc_info[0].__name__  # type: ignore
@@ -134,26 +148,6 @@ class DatadogJSONFormatter(json_log_formatter.JSONFormatter):
                 record_dict["error.stack"] = self.formatException(exc_info)
 
         return record_dict
-
-
-class TaskFormatter(logging.Formatter):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        try:
-            from celery._state import get_current_task
-
-            self.get_current_task = get_current_task
-        except ImportError:
-            self.get_current_task = lambda: None
-
-    def format(self, record):
-        task = self.get_current_task()
-        if task and task.request:
-            record.__dict__.update(task_id=task.request.id, task_name=task.name)
-        else:
-            record.__dict__.setdefault("task_name", "")
-            record.__dict__.setdefault("task_id", "")
-        return super().format(record)
 
 
 def get_formatter(name: Union[str, None]) -> logging.Formatter:
@@ -226,3 +220,24 @@ if __name__ == "__main__":
     logger.info("test-info")
     logger.warning("test-warning")
     logger.error("test-error")
+
+    config(formatter="json")
+    logger = logging.getLogger()
+    logger.debug("test-debug")
+    logger.info("test-info")
+    logger.warning("test-warning")
+    logger.error("test-error")
+
+    # %pdef LogRecord
+    record = LogRecord(
+        name="record_name",
+        level=20,
+        pathname="",
+        lineno=10,
+        msg="hello world",
+        args=[],
+        exc_info=None,
+        extra={"test_key": "test_value"},
+    )
+
+    # dir(record)

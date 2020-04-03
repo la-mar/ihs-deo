@@ -147,18 +147,18 @@ endpoints:
       criteria:
         hole_direction: H
     tasks:
-      sync:
-        # seconds: 300
-        cron:
-          minute: 0
-          hour: 3
-          day_of_week: "mon,wed"
-        options:
-          query_path: well_by_api.xml
-          matrix:
-            next_county: true
-            # using: api.models.WellMasterHorizontal.ids
-            # batch_size: 50
+      # sync:
+      #   # seconds: 300
+      #   cron:
+      #     minute: 0
+      #     hour: 3
+      #     day_of_week: "mon,wed"
+      #   options:
+      #     query_path: well_by_api.xml
+      #     matrix:
+      #       next_county: true
+      # using: api.models.WellMasterHorizontal.ids
+      # batch_size: 50
       # driftwood:
       #   seconds: 300
       #   options:
@@ -184,24 +184,24 @@ endpoints:
       criteria:
         hole_direction: V
     tasks:
-      sync:
-        cron:
-          minute: 0
-          hour: 3
-          day_of_week: "fri"
-        options:
-          query_path: well_by_api.xml
-          matrix:
-            using: api.models.WellMasterVertical.ids
-            # label: api
-      driftwood:
-        cron:
-          minute: 0
-          hour: 2
-        options:
-          query_path: well_vertical_driftwood_all.xml
+      # sync:
+      #   cron:
+      #     minute: 0
+      #     hour: 3
+      #     day_of_week: "fri"
+      #   options:
+      #     query_path: well_by_api.xml
+      #     matrix:
+      #       next_county: true
+      #       # label: api
+      # driftwood:
+      #   cron:
+      #     minute: 0
+      #     hour: 2
+      #   options:
+      #     query_path: well_vertical_driftwood_all.xml
       endpoint_check:
-        seconds: 900
+        seconds: 60
         options:
           query_path: well_by_api.xml
           matrix:
@@ -210,83 +210,81 @@ endpoints:
                 - "42383362060000"
       # check_for_new:
       # TODO: Check for wells in master list that arent in database and download them
-
-  production_horizontal:
-    enabled: true
-    version: v10
-    model: api.models.ProductionHorizontal
-    exclude: []
-    normalize: false
-    options:
-      data_type: Production Allocated
-      template: EnerdeqML Production
-      criteria:
-        hole_direction: H
-    tasks:
-      sync:
-        seconds: 300
-        # cron:
-        #   minute: 0
-        #   hour: 3
-        #   day_of_week: "tue,thu"
-        options:
-          query_path: production_by_entity.xml
-          matrix:
-            next_county: true
-            # using: api.models.ProductionMasterHorizontal.ids
-            # label: producing_entity
-      driftwood:
-        cron:
-          minute: 0
-          hour: 2
-        options:
-          query_path: well_horizontal_driftwood_all.xml
-      endpoint_check:
-        enabled: true
-        seconds: 900
-        options:
-          query_path: production_by_api.xml
-          matrix:
-            check:
-              values:
-                - "42461409160000"
-                - "42383406370000"
-                - "42461412100000"
-
-  production_vertical:
-    enabled: true
-    version: v10
-    model: api.models.ProductionVertical
-    exclude: []
-    normalize: false
-    options:
-      data_type: Production Allocated
-      template: EnerdeqML Production
-      criteria:
-        hole_direction: V
-    tasks:
-      sync:
-        cron:
-          minute: 0
-          hour: 3
-          day_of_week: "sat"
-        options:
-          query_path: production_by_entity.xml
-          matrix:
-            using: api.models.ProductionMasterVertical.ids
-            # label: producing_entity
-      driftwood:
-        cron:
-          minute: 0
-          hour: 2
-        options:
-          query_path: well_vertical_driftwood_all.xml
-      endpoint_check:
-        enabled: true
-        seconds: 900
-        options:
-          query_path: production_by_api.xml
-          matrix:
-            check:
-              values:
-                - "42383362060000"
+  # production_horizontal:
+  #   enabled: true
+  #   version: v10
+  #   model: api.models.ProductionHorizontal
+  #   exclude: []
+  #   normalize: false
+  #   options:
+  #     data_type: Production Allocated
+  #     template: EnerdeqML Production
+  #     criteria:
+  #       hole_direction: H
+  #   tasks:
+  #     sync:
+  #       seconds: 300
+  #       # cron:
+  #       #   minute: 0
+  #       #   hour: 3
+  #       #   day_of_week: "tue,thu"
+  #       options:
+  #         query_path: production_by_entity.xml
+  #         matrix:
+  #           next_county: true
+  #           # using: api.models.ProductionMasterHorizontal.ids
+  #           # label: producing_entity
+  #     driftwood:
+  #       cron:
+  #         minute: 0
+  #         hour: 2
+  #       options:
+  #         query_path: well_horizontal_driftwood_all.xml
+  #     endpoint_check:
+  #       enabled: true
+  #       seconds: 900
+  #       options:
+  #         query_path: production_by_api.xml
+  #         matrix:
+  #           check:
+  #             values:
+  #               - "42461409160000"
+  #               - "42383406370000"
+  #               - "42461412100000"
+  # production_vertical:
+  #   enabled: true
+  #   version: v10
+  #   model: api.models.ProductionVertical
+  #   exclude: []
+  #   normalize: false
+  #   options:
+  #     data_type: Production Allocated
+  #     template: EnerdeqML Production
+  #     criteria:
+  #       hole_direction: V
+  #   tasks:
+  #     sync:
+  #       cron:
+  #         minute: 0
+  #         hour: 3
+  #         day_of_week: "sat"
+  #       options:
+  #         query_path: production_by_entity.xml
+  #         matrix:
+  #           using: api.models.ProductionMasterVertical.ids
+  #           # label: producing_entity
+  #     driftwood:
+  #       cron:
+  #         minute: 0
+  #         hour: 2
+  #       options:
+  #         query_path: well_vertical_driftwood_all.xml
+  #     endpoint_check:
+  #       enabled: true
+  #       seconds: 900
+  #       options:
+  #         query_path: production_by_api.xml
+  #         matrix:
+  #           check:
+  #             values:
+  #               - "42383362060000"

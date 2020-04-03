@@ -2,6 +2,8 @@ from typing import Union
 import math
 import uuid
 
+# import logging
+
 from celery.utils.log import get_task_logger
 
 import collector.tasks
@@ -12,6 +14,7 @@ from ihs import celery
 
 
 logger = get_task_logger(__name__)
+# logger = logging.getLogger(__name__)
 
 conf = get_active_config()
 endpoints = Endpoint.load_from_config(conf)

@@ -246,11 +246,11 @@ class WellboreTransformer(Transformer):
         converted_points = []
         for idx, point in enumerate(points):
             get = functools.partial(query_dict, data=point)
-            ns = get("north_south_coordinate")
-            ew = get("east_west_coordinate")
-            md = get("depths.measured.value")
-            tvd = get("depths.true_vertical.value")
-            dip = get("deviation.value")
+            ns: Dict = get("north_south_coordinate") or {}
+            ew: Dict = get("east_west_coordinate") or {}
+            md: int = get("depths.measured.value")
+            tvd: int = get("depths.true_vertical.value")
+            dip: float = get("deviation.value")
 
             # XPATH
             ew_value = ew.get("value")

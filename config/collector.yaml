@@ -446,7 +446,8 @@ endpoints:
         options:
           query_path: well_horizontal_driftwood_all.xml
       endpoint_check:
-        seconds: 900
+        cron:
+          minute: 30
         options:
           query_path: well_by_api.xml
           matrix:
@@ -471,12 +472,12 @@ endpoints:
       sync:
         cron:
           minute: 0
-          hour: "*/1"
+          hour: "*/2"
           # day_of_week: "fri"
         options:
           query_path: well_by_api.xml
           matrix:
-            next_county: True
+            next_county: true
             # using: api.models.WellMasterVertical.ids
             # label: api
       driftwood:
@@ -486,7 +487,8 @@ endpoints:
         options:
           query_path: well_vertical_driftwood_all.xml
       endpoint_check:
-        seconds: 900
+        cron:
+          minute: 30
         options:
           query_path: well_by_api.xml
           matrix:
@@ -529,7 +531,8 @@ endpoints:
           query_path: well_horizontal_driftwood_all.xml
       endpoint_check:
         enabled: true
-        seconds: 900
+        cron:
+          minute: 30
         options:
           query_path: production_by_api.xml
           matrix:
@@ -570,7 +573,8 @@ endpoints:
           query_path: well_vertical_driftwood_all.xml
       endpoint_check:
         enabled: true
-        seconds: 900
+        cron:
+          minute: 30
         options:
           query_path: production_by_api.xml
           matrix:
