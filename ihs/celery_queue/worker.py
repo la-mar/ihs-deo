@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+from typing import Optional, Dict
 import logging
 
 from celery import Celery
@@ -29,6 +29,7 @@ def create_celery(app):
 
     class ContextTask(TaskBase):  # noqa
         abstract = True
+        metadata: Optional[Dict] = None
 
         def __call__(self, *args, **kwargs):
             with app.app_context():
@@ -109,3 +110,5 @@ def setup_task_loggers(logger, *args, **kwargs):
 
 if __name__ == "__main__":
     print("test")
+
+    dir(celery.Task)

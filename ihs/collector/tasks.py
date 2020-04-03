@@ -46,6 +46,7 @@ def run_endpoint_task(
             metadata={
                 "endpoint": endpoint_name,
                 "task": task_name,
+                "url": conf.API_BASE_URL,
                 "hole_direction": opts.get("criteria", {}).get("hole_direction"),
                 "data_type": opts.get("data_type"),
                 "target_model": opts.get("target_model"),

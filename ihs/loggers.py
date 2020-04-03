@@ -95,6 +95,8 @@ class DatadogJSONFormatter(json_log_formatter.JSONFormatter):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        # if celery is detected, add a hook to the currently running task
         try:
             from celery._state import get_current_task
 
@@ -132,10 +134,12 @@ class DatadogJSONFormatter(json_log_formatter.JSONFormatter):
 
         record_dict = {**additional, **conf.DATADOG_DEFAULT_TAGS, **record_dict}
 
-        # handle celery task logging
+        # if running inside of a celery task, add the current task's identifiers
         task = self.get_current_task()
         if task and task.request:
-            record_dict.update(task_id=task.request.id, task_name=task.name)
+            record_dict.update(
+                task_id=task.request.id, task_name=task.name, task_meta=task.metadata
+            )
 
         # Handle exceptions, including those in the formatter itself
         exc_info = record.exc_info
@@ -163,7 +167,9 @@ def get_formatter(name: Union[str, None]) -> logging.Formatter:
         "simple": logging.Formatter(
             fmt="%(name)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
         ),
-        "layman": logging.Formatter(fmt="%(message)s", datefmt="%Y-%m-%d %H:%M:%S"),
+        "layman": logging.Formatter(
+            fmt="%(name)s: %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
+        ),
         "json": DatadogJSONFormatter(),
     }
     return formatters[name or "funcname"]  # type: ignore

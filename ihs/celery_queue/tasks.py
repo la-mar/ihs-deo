@@ -103,10 +103,11 @@ def sync_endpoint(endpoint_name: str, task_name: str, **kwargs) -> ExportJob:
 
 @celery.task(bind=True, rate_limit="25/s", max_retries=0, ignore_result=True)
 def submit_job(self, route_key: str, job_options: dict, metadata: dict = None):
+    self.metadata = metadata
     if conf.SIMULATE_EXPENSIVE_TASKS:
         opts = {**job_options, **(metadata or {})}
         job = ExportJob(job_id=uuid.uuid4().hex, **opts)
-        logger.warning(f"(***SIMULATED***) submitted job: {job}")
+        logger.warning(f"(***SIMULATED***) submitted job: {job} {self.metadata}")
         collect_job_result.apply_async((route_key,), {"job": job.to_dict()})
         return None
 
@@ -132,8 +133,9 @@ def submit_job(self, route_key: str, job_options: dict, metadata: dict = None):
 def collect_job_result(self, route_key: str, job: Union[dict, ExportJob]):
     if not isinstance(job, ExportJob):
         job = ExportJob(**job)
+    self.metadata = job.limited_dict()
     if conf.SIMULATE_EXPENSIVE_TASKS:
-        logger.warning(f"(***SIMULATED***) collected job: {job}")
+        logger.warning(f"(***SIMULATED***) collected job: {job} {self.metadata}")
         return None
 
     else:
