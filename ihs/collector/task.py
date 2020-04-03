@@ -135,7 +135,7 @@ class OptionMatrix:
                 (last_run + timedelta(hours=cooldown)) - utcnow
             ).total_seconds()
             logger.warning(
-                f"({target_model}) Skipping {self.source_name} next availabel for run in {humanize_seconds(next_run_in_seconds)}"  # noqa
+                f"({target_model}) Skipping {self.source_name} next available for run in {humanize_seconds(next_run_in_seconds)}"  # noqa
             )  # noqa
 
         return self._to_batches(values=ids)
