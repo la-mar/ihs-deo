@@ -142,15 +142,17 @@ deploy:
 
 redeploy-cron:
 	# Force a new deployment for the cron service through the aws cli
-	aws ecs update-service --cluster ${ECS_CLUSTER} --service ihs-cron --force-new-deployment --profile ${ENV}
+	aws ecs update-service --cluster ${ECS_COLLECTOR_CLUSTER} --service ihs-cron --force-new-deployment --profile ${ENV}
 
 redeploy-worker:
 	# Force a new deployment for the worker service through the aws cli
-	aws ecs update-service --cluster ${ECS_CLUSTER} --service ihs-worker --force-new-deployment --profile ${ENV}
+	aws ecs update-service --cluster ${ECS_COLLECTOR_CLUSTER} --service ihs-worker --force-new-deployment --profile ${ENV}
 
 redeploy-web:
 	# Force a new deployment for the web service through the aws cli
-	aws ecs update-service --cluster ${ECS_CLUSTER} --service ihs-web --force-new-deployment --profile ${ENV}
+	aws ecs update-service --cluster ${ECS_WEB_CLUSTER} --service ihs-web --force-new-deployment --profile ${ENV}
+
+redeploy: redeploy-cron redeploy-worker redeploy-web
 
 ssm-export:
 	# Export all SSM parameters associated with this service to json
