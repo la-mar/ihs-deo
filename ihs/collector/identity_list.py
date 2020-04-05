@@ -37,7 +37,7 @@ class IdentityList:
         if not self._ids:
             try:
                 self._ids = self.model.objects(name=self.key)[0].ids
-            except:  # pylint: disable=bare-except
+            except Exception:
                 self._ids = []
         return self._ids
 
@@ -53,7 +53,7 @@ class IdentityList:
             ids = [x for x in ids if x != ""]  # drop trailing empties
             self.collector.save({"name": self.key, "count": len(ids), "ids": ids})
             logger.info(
-                "Saved %s ids to %s/%s", len(ids), self.__class__.__name__, self.key
+                "Saved %s ids to %s/%s", len(ids), self.model.__name__, self.key
             )
 
     def _set_ids_from_bytes(self, ids: bytes, sep: str = "\n"):
@@ -72,7 +72,7 @@ class WellList(IdentityList):
             self.model = WellMasterVertical
         else:
             raise ValueError(
-                f"Invalid value for hole_direction ({hole_direction}) -- Valid options are {HoleDirection.member_names()}"
+                f"Invalid value for hole_direction ({hole_direction}) -- Valid options are {HoleDirection.member_names()}"  # noqa
             )
         super().__init__(self.model, key)
 
@@ -85,6 +85,6 @@ class ProductionList(IdentityList):
             self.model = ProductionMasterVertical
         else:
             raise ValueError(
-                f"Invalid value for hole_direction ({hole_direction}) -- Valid options are {HoleDirection.member_names()}"
+                f"Invalid value for hole_direction ({hole_direction}) -- Valid options are {HoleDirection.member_names()}"  # noqa
             )
         super().__init__(self.model, key)

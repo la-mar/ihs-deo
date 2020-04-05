@@ -99,7 +99,10 @@ class Endpoint(object):
             kwargs["options"] = {**self.options, **kwargs.get("options", {})}
 
         self.tasks[task_name] = Task(
-            model_name=self.model_name, task_name=task_name, **kwargs
+            model_name=self.model_name,
+            task_name=task_name,
+            endpoint_name=self.name,
+            **kwargs,
         )
 
     def add_tasks(self, task_defs: Union[ItemsView, List[Tuple[str, dict]]]):
@@ -163,30 +166,4 @@ if __name__ == "__main__":
     list(endpoints.items())[0]
     opts = list(endpoints["well_horizontal"].tasks["sync"].options)
     opts[0]
-    from api.models import County
-
-    County.next_well_h()._data
-    County.objects.order_by("well_h_last_run").first()._data
-#     from config import get_active_config
-
-#     conf = get_active_config()
-#     endpoints = conf.endpoints
-
-#     wells = Endpoint(name="wells", **endpoints.well_horizontal)
-
-#         class Conf:
-#             endpoints = {None: None}
-
-#     Endpoint.load_from_config(Conf())
-
-#     d = {
-#                 "endpoint_check": {
-#                     "seconds": 60,
-#                     "options": {
-#                         "query_path": "well_by_api.xml",
-#                         "matrix": {"sequoia": {"api": "42461409160000"}},
-#                     },
-#                 },
-#             }
-
-#     wells.add_tasks(d.items())
+    # from api.models import County

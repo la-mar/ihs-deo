@@ -40,20 +40,8 @@ def run_endpoint_task(
     metrics.post(
         "task.execution", 1, tags={"endpoint": endpoint_name, "task": task_name}
     )
-    for opts in task.options:
-        job_config = dict(
-            job_options=opts,
-            metadata={
-                "endpoint": endpoint_name,
-                "task": task_name,
-                "url": conf.API_BASE_URL,
-                "hole_direction": opts.get("criteria", {}).get("hole_direction"),
-                "data_type": opts.get("data_type"),
-                "target_model": opts.get("target_model"),
-                "source_name": opts.get("source_name"),
-            },
-        )
-        yield job_config
+    for config in task.configs:
+        yield config
 
 
 def submit_job(job_options: dict, metadata: dict) -> ExportJob:
@@ -68,10 +56,10 @@ def collect(job: Union[dict, ExportJob]):
     if isinstance(job, dict):
         job = ExportJob(**job)
 
-    isIdentityExport = IdentityTemplates.has_member(job.template)
+    is_identity_export = IdentityTemplates.has_member(job.template)
     data = get_job_results(job)
 
-    if isIdentityExport:
+    if is_identity_export:
         collect_identities(job, data)
     else:
         collect_data(job, data)
@@ -104,10 +92,10 @@ def collect_data(job: ExportJob, xml: bytes):
 def collect_identities(job: ExportJob, data: bytes) -> IdentityList:
     interface = None
     if job.data_type == ExportDataTypes.WELL.value:
-        interface = WellList(job.name, job.criteria.get("hole_direction"))
+        interface = WellList(job.name, job.hole_direction)
         interface.ids = data
     elif job.data_type == ExportDataTypes.PRODUCTION.value:
-        interface = ProductionList(job.name, job.criteria.get("hole_direction"))
+        interface = ProductionList(job.name, job.hole_direction)
         interface.ids = data
 
     return interface
@@ -262,48 +250,54 @@ def download_changes_and_deletes() -> int:
 if __name__ == "__main__":
 
     from time import sleep
+    from uuid import UUID
 
     logging.basicConfig(level=10)
     app = create_app()
     app.app_context().push()
 
-    endpoint_name = "well_horizontal"
+    # endpoint_name = "well_master_vertical"
+    endpoint_name = "production_master_vertical"
     task_name = "sync"
     endpoint = endpoints[endpoint_name]
     task = endpoint.tasks[task_name]
-    configs = []
-    for opts in task.options:
-        job_config = dict(
-            job_options=opts,
-            metadata={
-                "endpoint": endpoint_name,
-                "task": task_name,
-                "url": conf.API_BASE_URL,
-                "hole_direction": opts.get("criteria", {}).get("hole_direction"),
-                **opts,  # duplicate job options here to they travel with the job
-                # throughout its lifecycle
-            },
-        )
-        configs.append(job_config)
-
-    configs
+    configs = task.configs
     job_options, metadata = configs[0].values()
     ep = ExportParameter(**job_options)
     print(ep.params["Query"])
     requestor = ExportBuilder(endpoint)
 
     job = submit_job(job_options=job_options, metadata=metadata)
-    job.limited_dict()
+    job.to_dict()
+    {
+        "job_id": "exports/8e89d1bc-e83f-43d9-a91d-cc60a69bf2b2.txt",
+        "endpoint": "production_master_vertical",
+        "task": "sync",
+        "url": "http://www.ihsenergy.com",
+        "hole_direction": "V",
+        "data_type": "Production Allocated",
+        "target_model": "ProductionMasterVertical",
+        "source_name": "County",
+        "name": "tx-midland",
+        "domain": "US",
+        "template": "Production ID List",
+        "query": "<criterias>...</criterias>",
+        "overwrite": True,
+        "export_filename": UUID("8e89d1bc-e83f-43d9-a91d-cc60a69bf2b2"),
+    }
+
     sleep(3)
 
-    xml = get_job_results(job)
-    parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
-    document = parser.parse(xml)
-    model = endpoint.model
-    data = WellboreTransformer.extract_from_collection(document, model=model)
-    len(data)
-    [x["api14"] for x in data]
-    collector = Collector(model)
-    collector.save(data, replace=True)
+    collect(job)
 
-    calc_remote_export_capacity()["remote.capacity.used"] * 1e-6
+    # xml = get_job_results(job)
+    # parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
+    # document = parser.parse(xml)
+    # model = endpoint.model
+    # data = WellboreTransformer.extract_from_collection(document, model=model)
+    # len(data)
+    # [x["api14"] for x in data]
+    # collector = Collector(model)
+    # collector.save(data, replace=True)
+
+    # calc_remote_export_capacity()["remote.capacity.used"] * 1e-6

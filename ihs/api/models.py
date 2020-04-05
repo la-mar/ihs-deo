@@ -23,6 +23,7 @@ __all__ = [
     "ProductionVertical",
 ]
 
+SIX_HOURS = 6
 TWO_DAYS = 48
 ONE_WEEK = 168
 
@@ -73,6 +74,10 @@ class County(db.Document, BaseMixin):
     well_h_last_run = db.DateTimeField(null=True)
     prod_v_last_run = db.DateTimeField(null=True)
     prod_h_last_run = db.DateTimeField(null=True)
+    well_v_ids_last_run = db.DateTimeField(null=True)
+    well_h_ids_last_run = db.DateTimeField(null=True)
+    prod_v_ids_last_run = db.DateTimeField(null=True)
+    prod_h_ids_last_run = db.DateTimeField(null=True)
 
     @staticmethod
     def _is_ready(last_run: Optional[datetime.datetime], cooldown_hours: int):
@@ -88,19 +93,25 @@ class County(db.Document, BaseMixin):
     def next_available(
         cls, attr: str
     ) -> Tuple[County, str, Optional[datetime.datetime], bool, int]:
-        "attr options: [well_h_last_run, well_v_last_run, prod_h_last_run, prod_v_last_run]"
+        "Get the properties describing the next available execution time of the given attribute"
 
         valid_attrs = [
             "well_h_last_run",
             "well_v_last_run",
             "prod_h_last_run",
             "prod_v_last_run",
+            "well_v_ids_last_run",
+            "well_h_ids_last_run",
+            "prod_v_ids_last_run",
+            "prod_h_ids_last_run",
         ]
         if attr not in valid_attrs:
             raise ValueError(f"invalid attribute: attr must be one of {valid_attrs}")
 
         if attr in ["well_h_last_run", "prod_h_last_run"]:
             cooldown = TWO_DAYS
+        elif "_ids_" in attr:
+            cooldown = SIX_HOURS
         else:
             cooldown = ONE_WEEK
 
@@ -111,34 +122,6 @@ class County(db.Document, BaseMixin):
         if last_run:
             last_run_aware = pytz.utc.localize(last_run)
         return county_obj, attr, last_run_aware, is_ready, cooldown
-
-    @classmethod
-    def next_well_h(cls):
-        attr = "well_h_last_run"
-        county_obj = County.objects.order_by(attr).first()
-        last_run = county_obj.well_h_last_run
-        return county_obj, attr, last_run
-
-    @classmethod
-    def next_well_v(cls):
-        attr = "well_v_last_run"
-        county_obj = County.objects.order_byattr.first()
-        last_run = county_obj.well_v_last_run
-        return county_obj, attr, last_run
-
-    @classmethod
-    def next_prod_h(cls):
-        attr = "prod_h_last_run"
-        county_obj = County.objects.order_by(attr).first()
-        last_run = county_obj.prod_h_last_run
-        return county_obj, attr, last_run
-
-    @classmethod
-    def next_prod_v(cls):
-        attr = "prod_v_last_run"
-        county_obj = County.objects.order_by(attr).first()
-        last_run = county_obj.prod_v_last_run
-        return county_obj, attr, last_run
 
 
 class WellMasterHorizontal(db.Document, BaseMixin):
@@ -217,15 +200,15 @@ class ProductionVertical(db.DynamicDocument, ProductionMixin):
     ihs_last_update_date = db.DateTimeField()
 
 
-if __name__ == "__main__":
-    from ihs import create_app
-    from config import get_active_config
-    from api.helpers import paginate
-    import api.schema as schemas
+# if __name__ == "__main__":
+#     from ihs import create_app
+#     from config import get_active_config
+#     from api.helpers import paginate
+#     import api.schema as schemas
 
-    app = create_app()
-    app.app_context().push()
-    conf = get_active_config()
+#     app = create_app()
+#     app.app_context().push()
+#     conf = get_active_config()
 
 #     model = ProductionMasterHorizontal
 # api14 = "42461409160000"

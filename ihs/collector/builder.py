@@ -159,7 +159,7 @@ class Builder(SoapRequestor):
                 "Encountered error when deleting job %s -- %s",
                 job_id,
                 e,
-                extra=job.limited_dict(include_job_id=True),
+                # extra=job.limited_dict(include_job_id=True),
             )
             metrics.post("job.delete.error", 1, tags=tags)
 
@@ -201,16 +201,19 @@ class ExportBuilder(Builder):
             return ExportJob(job_id=job_id, **{**metadata, **dict(export_param)})
         except (ConnectionError, ProtocolError) as e:
             msg = f"Encountered error when connecting to IHS remote service -- {e}"
-            logger.error(msg, extra=metadata)
+            # logger.error(msg, extra=metadata)
+            logger.error(msg)
             metrics.post("job.submitted.error", 1, tags=tags)
 
         except Exception as e:
             msg = f"Error getting job id from service for data type {export_param.data_type} -- {e}"
 
             if "No ids to export" in e.args[0]:
-                logger.info(msg, extra=metadata)
+                # logger.info(msg, extra=metadata)
+                logger.info(msg)
             else:
-                logger.warning(msg, extra=metadata)
+                # logger.warning(msg, extra=metadata)
+                logger.warning(msg)
                 metrics.post("job.submitted.error", 1, tags=tags)
 
         return None
