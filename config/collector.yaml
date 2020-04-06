@@ -512,7 +512,7 @@ endpoints:
     tasks:
       sync:
         cron:
-          minute: "*/10"
+          minute: "*/15"
         # cron:
         #   minute: 0
         #   hour: 1

@@ -66,7 +66,7 @@ def setup_periodic_tasks(sender, **kwargs):  # pylint: disable=unused-argument
 
     logger.info("Registering periodic task: %s", "calc_remote_export_capacity")
     sender.add_periodic_task(
-        60,  # 1 minute
+        60,  # seconds
         celery_queue.tasks.post_remote_export_capacity,
         name="calc_remote_export_capacity",
     )

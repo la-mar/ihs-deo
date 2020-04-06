@@ -4,6 +4,7 @@ import logging
 from datetime import date, datetime
 from typing import Dict, List, Tuple, Union
 from urllib3.exceptions import ProtocolError
+import zeep
 
 from requests import ConnectionError
 
@@ -11,6 +12,7 @@ import metrics
 from collector.export_parameter import ExportParameter
 from collector.soap_requestor import SoapRequestor
 from collector.xmlparser import XMLParser
+from exc import CollectorError
 from config import get_active_config
 
 conf = get_active_config()
@@ -156,10 +158,7 @@ class Builder(SoapRequestor):
             metrics.post("job.delete.success", 1, tags=tags)
         except Exception as e:
             logger.exception(
-                "Encountered error when deleting job %s -- %s",
-                job_id,
-                e,
-                # extra=job.limited_dict(include_job_id=True),
+                "Encountered error when deleting job %s -- %s", job_id, e,
             )
             metrics.post("job.delete.error", 1, tags=tags)
 
@@ -171,7 +170,16 @@ class Builder(SoapRequestor):
         return self.service.Exists(job)
 
     def list_completed_jobs(self) -> List[str]:
-        return self.service.GetCompleteExports() or []
+        try:
+            return self.service.GetCompleteExports() or []
+        except ConnectionError as e:
+            msg = f"Error connecting to IHS service -- {e}"
+            logger.error(msg)
+            raise CollectorError(msg) from e
+        except (zeep.exceptions.TransportError, ProtocolError) as e:
+            msg = f"Bad response from IHS service -- {e}"
+            logger.error(msg)
+            raise CollectorError(msg) from e
 
     def delete_all_jobs(self):
         jobs = self.list_completed_jobs()

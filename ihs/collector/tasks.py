@@ -22,6 +22,7 @@ from collector import (
     CDExporter,
 )
 from collector.identity_list import IdentityList
+from exc import CollectorError
 from config import ExportDataTypes, IdentityTemplates, get_active_config
 from ihs import create_app
 
@@ -155,7 +156,11 @@ def calc_remote_export_capacity() -> Dict[str, Union[float, int]]:
     doc_size_bytes = mean_doc_size_bytes + (inflation_pct * mean_doc_size_bytes)
     remote_capacity_bytes: int = 1000000000  # 1 GB
     eb = ExportBuilder(None)
-    njobs = len(eb.list_completed_jobs())
+    try:
+        njobs = len(eb.list_completed_jobs())
+    except CollectorError as e:
+        logger.exception(f"Unable to calculate export capacity -- {e}", stack_info=True)
+        return {}
 
     return {
         "remote.capacity.used": njobs * doc_size_bytes,
@@ -247,57 +252,57 @@ def download_changes_and_deletes() -> int:
 #     #             document = WellVertical.objects(api14=obj.uwi).first()
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    from time import sleep
-    from uuid import UUID
+#     from time import sleep
+#     from uuid import UUID
 
-    logging.basicConfig(level=10)
-    app = create_app()
-    app.app_context().push()
+#     logging.basicConfig(level=10)
+#     app = create_app()
+#     app.app_context().push()
 
-    # endpoint_name = "well_master_vertical"
-    endpoint_name = "production_master_vertical"
-    task_name = "sync"
-    endpoint = endpoints[endpoint_name]
-    task = endpoint.tasks[task_name]
-    configs = task.configs
-    job_options, metadata = configs[0].values()
-    ep = ExportParameter(**job_options)
-    print(ep.params["Query"])
-    requestor = ExportBuilder(endpoint)
+#     # endpoint_name = "well_master_vertical"
+#     endpoint_name = "production_master_vertical"
+#     task_name = "sync"
+#     endpoint = endpoints[endpoint_name]
+#     task = endpoint.tasks[task_name]
+#     configs = task.configs
+#     job_options, metadata = configs[0].values()
+#     ep = ExportParameter(**job_options)
+#     print(ep.params["Query"])
+#     requestor = ExportBuilder(endpoint)
 
-    job = submit_job(job_options=job_options, metadata=metadata)
-    job.to_dict()
-    {
-        "job_id": "exports/8e89d1bc-e83f-43d9-a91d-cc60a69bf2b2.txt",
-        "endpoint": "production_master_vertical",
-        "task": "sync",
-        "url": "http://www.ihsenergy.com",
-        "hole_direction": "V",
-        "data_type": "Production Allocated",
-        "target_model": "ProductionMasterVertical",
-        "source_name": "County",
-        "name": "tx-midland",
-        "domain": "US",
-        "template": "Production ID List",
-        "query": "<criterias>...</criterias>",
-        "overwrite": True,
-        "export_filename": UUID("8e89d1bc-e83f-43d9-a91d-cc60a69bf2b2"),
-    }
+#     job = submit_job(job_options=job_options, metadata=metadata)
+#     job.to_dict()
+#     {
+#         "job_id": "exports/8e89d1bc-e83f-43d9-a91d-cc60a69bf2b2.txt",
+#         "endpoint": "production_master_vertical",
+#         "task": "sync",
+#         "url": "http://www.ihsenergy.com",
+#         "hole_direction": "V",
+#         "data_type": "Production Allocated",
+#         "target_model": "ProductionMasterVertical",
+#         "source_name": "County",
+#         "name": "tx-midland",
+#         "domain": "US",
+#         "template": "Production ID List",
+#         "query": "<criterias>...</criterias>",
+#         "overwrite": True,
+#         "export_filename": UUID("8e89d1bc-e83f-43d9-a91d-cc60a69bf2b2"),
+#     }
 
-    sleep(3)
+#     sleep(3)
 
-    collect(job)
+#     collect(job)
 
-    # xml = get_job_results(job)
-    # parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
-    # document = parser.parse(xml)
-    # model = endpoint.model
-    # data = WellboreTransformer.extract_from_collection(document, model=model)
-    # len(data)
-    # [x["api14"] for x in data]
-    # collector = Collector(model)
-    # collector.save(data, replace=True)
+# xml = get_job_results(job)
+# parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
+# document = parser.parse(xml)
+# model = endpoint.model
+# data = WellboreTransformer.extract_from_collection(document, model=model)
+# len(data)
+# [x["api14"] for x in data]
+# collector = Collector(model)
+# collector.save(data, replace=True)
 
-    # calc_remote_export_capacity()["remote.capacity.used"] * 1e-6
+# calc_remote_export_capacity()["remote.capacity.used"] * 1e-6

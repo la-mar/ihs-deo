@@ -94,7 +94,9 @@ def sync_endpoint(endpoint_name: str, task_name: str, **kwargs) -> ExportJob:
     configs = list(collector.tasks.run_endpoint_task(endpoint_name, task_name))
     for idx, job_config in enumerate(configs):
         if job_config:
-            logger.info(f"Running task {endpoint_name}.{task_name}")
+            logger.info(
+                f"Running task {endpoint_name}.{task_name}.{job_config.get('name')}"
+            )
             hole_dir = job_config.get("metadata").get("hole_direction")
             # countdown = 60 * (idx / count)
             countdown = math.log(idx + 1) * 30 + idx
@@ -114,7 +116,7 @@ def submit_job(self, route_key: str, job_options: dict, metadata: dict = None):
     else:
         try:
             job = collector.tasks.submit_job(job_options, metadata or {})
-            logger.info(f"submitted job: {job}")
+            logger.info(f"submitted job: {job} options={job_options}")
             if job:
                 collect_job_result.apply_async(
                     (route_key,), {"job": job.to_dict()}, countdown=120,
@@ -172,25 +174,25 @@ def process_changes_and_deletes():  # TODO: implement
     pass
 
 
-if __name__ == "__main__":
-    idx = list(range(1, 700 + 1))
-    idx = [1, 10, 100, 300, 500, 600, 700]
-    count = len(idx)
-    count
-    [(x, (x / count) ** 2) for x in idx]
-    [(x, 60 * (x / count)) for x in idx]
+# if __name__ == "__main__":
+#     idx = list(range(1, 700 + 1))
+#     idx = [1, 10, 100, 300, 500, 600, 700]
+#     count = len(idx)
+#     count
+#     [(x, (x / count) ** 2) for x in idx]
+#     [(x, 60 * (x / count)) for x in idx]
 
-    import pandas as pd
-    import numpy as np
+#     import pandas as pd
+#     import numpy as np
 
-    df = pd.DataFrame(data={"ct": range(0, 10000)})
-    df["log"] = df.ct.apply(np.log)
-    df["logx60"] = df.log.mul(60)
-    df["log+ctx60"] = df.log.mul(60).add(df.ct)
-    df["log+ctx30"] = df.log.mul(30).add(df.ct)
-    df = df.replace([-np.inf, np.inf], np.nan)
-    df.describe()
-    df["log+ctx30"].div(60).describe()
-    import math
+#     df = pd.DataFrame(data={"ct": range(0, 10000)})
+#     df["log"] = df.ct.apply(np.log)
+#     df["logx60"] = df.log.mul(60)
+#     df["log+ctx60"] = df.log.mul(60).add(df.ct)
+#     df["log+ctx30"] = df.log.mul(30).add(df.ct)
+#     df = df.replace([-np.inf, np.inf], np.nan)
+#     df.describe()
+#     df["log+ctx30"].div(60).describe()
+#     import math
 
-    math.log(10000)
+#     math.log(10000)

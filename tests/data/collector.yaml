@@ -59,7 +59,7 @@ endpoints:
         # operator: 278107
     tasks:
       sync:
-        seconds: 60
+        seconds: 300
         # cron:
         #   minute: 0
         #   hour: 12
@@ -148,7 +148,12 @@ endpoints:
       criteria:
         hole_direction: H
     tasks:
-      # sync:
+      sync:
+        seconds: 300
+        options:
+          query_path: well_by_api.xml
+          matrix:
+            next_county: true
       #   # seconds: 300
       #   cron:
       #     minute: 0
@@ -165,7 +170,7 @@ endpoints:
       #   options:
       #     query_path: well_horizontal_driftwood_all.xml
       endpoint_check:
-        seconds: 20
+        seconds: 300
         options:
           query_path: well_by_api.xml
           matrix:

@@ -168,7 +168,7 @@ def get_formatter(name: Union[str, None]) -> logging.Formatter:
             fmt="%(name)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
         ),
         "layman": logging.Formatter(
-            fmt="%(name)s: %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
+            fmt="%(name)s:%(levelname)s: %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
         ),
         "json": DatadogJSONFormatter(),
     }

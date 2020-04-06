@@ -111,7 +111,7 @@ class OptionMatrix:
         return self._cross_apply()
 
     def _matrix_for_identity_export(self) -> Dict[str, Dict]:
-
+        logger.info("Generating Identity Matrix")
         source_model = County
         target_model_name: str = self.target_model.split(".")[-1]
         criteria: Dict[str, Dict] = {}
@@ -166,6 +166,8 @@ class OptionMatrix:
         """ Generate a matrix using the values from model column referenced in the
             task's options.
         """
+        logger.info("Generating Matrix from Model")
+
         ids: List[str] = []
 
         if self.using:
@@ -179,6 +181,8 @@ class OptionMatrix:
         return self._to_batches(values=ids)
 
     def _matrix_from_county(self) -> Dict[str, Dict]:
+        logger.info("Generating Matrix from County")
+
         target_model: str = self.target_model.split(".")[-1]
         county_obj = None
         ids = []
