@@ -33,6 +33,7 @@ class OptionMatrix:
     def __init__(
         self,
         target_model: str,
+        task_name: str,
         matrix: dict = None,
         data_type: str = None,
         template: str = None,
@@ -40,9 +41,12 @@ class OptionMatrix:
         **kwargs,
     ):
         self.target_model: str = target_model
+        self.target_model_name: str = self.target_model.split(".")[-1]
+        self.task_name: str = task_name
         self.data_type = data_type
         self.template = template
         self.criteria = criteria or {}
+        # self.hole_direction = self.criteria.get("hole_direction")
         self.matrix: Dict = {k: v for k, v in (matrix or {}).items()}
         self.kwargs: Dict = kwargs
         self.using: Optional[str] = self.matrix.pop("using", None)
@@ -58,6 +62,12 @@ class OptionMatrix:
         for d in self.to_list():
             yield d
 
+    def make_option_set_name(self, name: str = None) -> str:
+        source_name = self.source_name or "yaml"
+        target_model_name = self.target_model_name or ""
+        name = name or ""
+        return f"{source_name} -> {target_model_name} ({name})"
+
     def generate(self) -> List[Dict]:
         """ Generate the option matrix from the instance's parameters """
 
@@ -72,22 +82,23 @@ class OptionMatrix:
             self.matrix = self._matrix_from_model()
         elif self.use_next_county:
             self.matrix = self._matrix_from_county()
+        else:
+            logger.info(f"({self.target_model_name}) No matrix to generate")
 
         optset = []
         if len(self.matrix):
             for key, value in self.matrix.items():
                 v = {
-                    "name": key,
+                    # "name": key,
+                    "name": self.make_option_set_name(key),
                     "source_name": self.source_name,
-                    "target_model": self.target_model.split(".")[-1],
+                    "target_model": self.target_model_name,
                     "data_type": self.data_type,
                     "template": self.template,
                     "criteria": self.criteria,
                     **self.kwargs,
                 }
 
-                # if self.is_identity_export:
-                #     v.update(**value[0]["values"])
                 if isinstance(value, dict):
                     v.update(**value)
                 else:
@@ -96,8 +107,9 @@ class OptionMatrix:
         else:
             optset = [
                 {
+                    "name": self.make_option_set_name(self.task_name),
                     "source_name": self.source_name,
-                    "target_model": self.target_model.split(".")[-1],
+                    "target_model": self.target_model_name,
                     "data_type": self.data_type,
                     "template": self.template,
                     "criteria": self.criteria,
@@ -111,28 +123,28 @@ class OptionMatrix:
         return self._cross_apply()
 
     def _matrix_for_identity_export(self) -> Dict[str, Dict]:
-        logger.info("Generating Identity Matrix")
+        logger.info(f"({self.target_model_name}) Generating Identity Matrix")
         source_model = County
-        target_model_name: str = self.target_model.split(".")[-1]
+        source_model_name = County.__name__
         criteria: Dict[str, Dict] = {}
         utcnow = pytz.utc.localize(datetime.utcnow())
 
         if not self.is_identity_export:
             raise ValueError(
-                f"Cant generate identity matrix for non-identity export tasks"
+                f"({self.target_model_name}) Cant generate identity matrix for non-identity export tasks"  # noqa
             )
 
-        if target_model_name == "WellMasterHorizontal":
+        if self.target_model_name == "WellMasterHorizontal":
             attr = "well_h_ids_last_run"
-        elif target_model_name == "WellMasterVertical":
+        elif self.target_model_name == "WellMasterVertical":
             attr = "well_v_ids_last_run"
-        elif target_model_name == "ProductionMasterHorizontal":
+        elif self.target_model_name == "ProductionMasterHorizontal":
             attr = "prod_h_ids_last_run"
-        elif target_model_name == "ProductionMasterVertical":
+        elif self.target_model_name == "ProductionMasterVertical":
             attr = "prod_v_ids_last_run"
         else:
             raise ValueError(
-                f"Unable to determine target model from {target_model_name}"
+                f"Unable to determine target model from {self.target_model_name}"
             )
 
         self.source_name = source_model.__name__
@@ -148,14 +160,14 @@ class OptionMatrix:
                 county_obj[attr] = utcnow
                 county_obj.save()
                 logger.warning(
-                    f"updated county object ({county_obj.name}.{attr}): {last_run} -> {utcnow}"
+                    f"({source_model_name}) updated {county_obj.name}.{attr}: {last_run} -> {utcnow}"
                 )
         else:
             next_run_in_seconds = (
                 (last_run + timedelta(hours=cooldown)) - utcnow
             ).total_seconds()
             logger.warning(
-                f"({target_model_name}) Skipping {self.source_name} next available for run in {humanize_seconds(next_run_in_seconds)}"  # noqa
+                f"({self.target_model_name}) Skipping {self.source_name}: next available for run in {humanize_seconds(next_run_in_seconds)}"  # noqa
             )
 
         # bypass _to_batches and return criteria dict directly so it is expanded into
@@ -166,7 +178,7 @@ class OptionMatrix:
         """ Generate a matrix using the values from model column referenced in the
             task's options.
         """
-        logger.info("Generating Matrix from Model")
+        logger.info(f"({self.target_model_name}) Generating Matrix from Model")
 
         ids: List[str] = []
 
@@ -181,23 +193,22 @@ class OptionMatrix:
         return self._to_batches(values=ids)
 
     def _matrix_from_county(self) -> Dict[str, Dict]:
-        logger.info("Generating Matrix from County")
+        logger.info(f"({self.target_model_name}) Generating Matrix from County")
 
-        target_model: str = self.target_model.split(".")[-1]
         county_obj = None
         ids = []
         utcnow = pytz.utc.localize(datetime.utcnow())
 
-        if target_model == "WellHorizontal":
+        if self.target_model_name == "WellHorizontal":
             attr = "well_h_last_run"
             model = WellMasterHorizontal
-        elif target_model == "WellVertical":
+        elif self.target_model_name == "WellVertical":
             attr = "well_v_last_run"
             model = WellMasterVertical
-        elif target_model == "ProductionHorizontal":
+        elif self.target_model_name == "ProductionHorizontal":
             attr = "prod_h_last_run"
             model = ProductionMasterHorizontal
-        elif target_model == "ProductionVertical":
+        elif self.target_model_name == "ProductionVertical":
             attr = "prod_v_last_run"
             model = ProductionMasterVertical
 
@@ -212,14 +223,14 @@ class OptionMatrix:
                 county_obj[attr] = utcnow
                 county_obj.save()
                 logger.warning(
-                    f"updated county object ({county_obj.name}.{attr}): {last_run} -> {utcnow}"
+                    f"({county_obj.name}.{attr}): updated county runtime {last_run} -> {utcnow}"
                 )
         else:
             next_run_in_seconds = (
                 (last_run + timedelta(hours=cooldown)) - utcnow
             ).total_seconds()
             logger.warning(
-                f"({target_model}) Skipping {self.source_name} next available for run in {humanize_seconds(next_run_in_seconds)}"  # noqa
+                f"({self.target_model_name}) Skipping {self.source_name} next available for run in {humanize_seconds(next_run_in_seconds)}"  # noqa
             )  # noqa
 
         return self._to_batches(values=ids)
@@ -227,7 +238,6 @@ class OptionMatrix:
     def _to_batches(self, values: List[Any], batch_size: int = None) -> Dict[str, Dict]:
         """ Chunk a list of values into smaller batches """
 
-        target_model: str = self.target_model.split(".")[-1]
         batch_size = batch_size or self.batch_size
 
         matrix = {}
@@ -240,7 +250,7 @@ class OptionMatrix:
 
         if len(values):
             logger.warning(
-                f"({target_model}) Compressed {len(values)} ids into {len(matrix)} option sets from {self.source_name}"  # noqa
+                f"({self.target_model_name}) Compressed {len(values)} ids into {len(matrix)} option sets from {self.source_name}"  # noqa
             )
 
         return matrix
@@ -259,7 +269,7 @@ class OptionMatrix:
                     f"No module named '{model_name}' found in project or global namespace"
                 )
         except Exception as e:
-            raise Exception(f"Unable to locate module {model_name} -- {e}")
+            raise Exception(f"({self.target_model_name}) Unable to locate model -- {e}")
 
         return model
 
@@ -283,7 +293,9 @@ class Task:
         self.endpoint_name = endpoint_name
         self.cron = self.parse_cron(cron or {})
         self.seconds = seconds
-        self.options = OptionMatrix(target_model=model_name, **(options or {}))
+        self.options = OptionMatrix(
+            target_model=model_name, task_name=task_name, **(options or {})
+        )
         self.enabled = enabled
 
         if not any([self.cron, self.seconds]):

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Dict, Generator, Union, List
+from typing import Dict, Generator, Union, List, Optional
 from datetime import date, timedelta, datetime
 
 import metrics
@@ -22,7 +22,7 @@ from collector import (
     CDExporter,
 )
 from collector.identity_list import IdentityList
-from exc import CollectorError
+from exc import CollectorError, NoIdsError
 from config import ExportDataTypes, IdentityTemplates, get_active_config
 from ihs import create_app
 
@@ -45,12 +45,24 @@ def run_endpoint_task(
         yield config
 
 
-def submit_job(job_options: dict, metadata: dict) -> ExportJob:
+def submit_job(job_options: dict, metadata: dict) -> Optional[ExportJob]:
     endpoint_name = metadata.get("endpoint")
     endpoint = endpoints[endpoint_name]
-    ep = ExportParameter(**job_options)
-    requestor = ExportBuilder(endpoint)
-    return requestor.submit(ep, metadata=metadata or {})
+    # name = metadata.get("name", None)
+    target_model = metadata.get("target_model", None)
+    task_name = metadata.get("task", None)
+    source_name = metadata.get("source_name", None)
+
+    try:
+        ep = ExportParameter(**job_options)
+        requestor = ExportBuilder(endpoint)
+        job = requestor.submit(ep, metadata=metadata or {})
+        return job
+    except CollectorError as e:
+        logger.warning(
+            f"({target_model}) Skipping job {task_name} -> {source_name}: {e}"
+        )
+        return None
 
 
 def collect(job: Union[dict, ExportJob]):
@@ -261,7 +273,8 @@ if __name__ == "__main__":
     logging.getLogger("collector.parser").setLevel(30)
     logging.getLogger("zeep").setLevel(30)
     from time import sleep
-    from uuid import UUID
+
+    # from uuid import UUID
 
     logging.basicConfig(level=10)
     app = create_app()
@@ -269,7 +282,7 @@ if __name__ == "__main__":
 
     # endpoint_name = "well_master_vertical"
     endpoint_name = "well_horizontal"
-    task_name = "driftwood"
+    task_name = "sync"
     endpoint = endpoints[endpoint_name]
     task = endpoint.tasks[task_name]
     configs = task.configs
@@ -283,35 +296,18 @@ if __name__ == "__main__":
 
     sleep(5)
 
-    collect(job)
+    if job:
+        collect(job)
 
-xml = get_job_results(job)
-parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
-document = parser.parse(xml)
-model = endpoint.model
-data = WellboreTransformer.extract_from_collection(document, model=model)
-len(data)
-[x["api14"] for x in data]
-collector = Collector(model)
-collector.save(data, replace=True)
+# xml = get_job_results(job)
+# parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
+# document = parser.parse(xml)
+# model = endpoint.model
+# data = WellboreTransformer.extract_from_collection(document, model=model)
+# len(data)
+# [x["api14"] for x in data]
+# collector = Collector(model)
+# collector.save(data, replace=True)
 
 
-data[7]
-
-# calc_remote_export_capacity()["remote.capacity.used"] * 1e-6
-# {
-#     "job_id": "exports/8e89d1bc-e83f-43d9-a91d-cc60a69bf2b2.txt",
-#     "endpoint": "production_master_vertical",
-#     "task": "sync",
-#     "url": "http://www.ihsenergy.com",
-#     "hole_direction": "V",
-#     "data_type": "Production Allocated",
-#     "target_model": "ProductionMasterVertical",
-#     "source_name": "County",
-#     "name": "tx-midland",
-#     "domain": "US",
-#     "template": "Production ID List",
-#     "query": "<criterias>...</criterias>",
-#     "overwrite": True,
-#     "export_filename": UUID("8e89d1bc-e83f-43d9-a91d-cc60a69bf2b2"),
-# }
+# data[7]

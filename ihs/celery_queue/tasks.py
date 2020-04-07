@@ -94,18 +94,22 @@ def sync_endpoint(endpoint_name: str, task_name: str, **kwargs) -> ExportJob:
     configs = list(collector.tasks.run_endpoint_task(endpoint_name, task_name))
     for idx, job_config in enumerate(configs):
         if job_config:
+            name = job_config["metadata"]["name"]
+            target_model = job_config["metadata"]["target_model"]
+            hole_dir = job_config["metadata"]["hole_direction"]
             logger.info(
-                f"Running task {endpoint_name}.{task_name}.{job_config.get('name')}"
+                f"({target_model}) running task {endpoint_name}.{task_name} ({name})"
             )
-            hole_dir = job_config.get("metadata").get("hole_direction")
             # countdown = 60 * (idx / count)
             countdown = math.log(idx + 1) * 30 + idx
             submit_job.apply_async((hole_dir,), job_config, countdown=countdown)
 
 
 @celery.task(bind=True, rate_limit="25/s", max_retries=0, ignore_result=True)
-def submit_job(self, route_key: str, job_options: dict, metadata: dict = None):
+def submit_job(self, route_key: str, job_options: dict, metadata: dict):
     self.metadata = metadata
+    target_model = metadata["target_model"]
+
     if conf.SIMULATE_EXPENSIVE_TASKS:
         opts = {**job_options, **(metadata or {})}
         job = ExportJob(job_id=uuid.uuid4().hex, **opts)
@@ -116,14 +120,15 @@ def submit_job(self, route_key: str, job_options: dict, metadata: dict = None):
     else:
         try:
             job = collector.tasks.submit_job(job_options, metadata or {})
-            logger.info(f"submitted job: {job} options={job_options}")
             if job:
+                job_dict = job.to_dict()
+                logger.info(f"({target_model}) submitted {job}")
                 collect_job_result.apply_async(
-                    (route_key,), {"job": job.to_dict()}, countdown=120,
+                    (route_key,), {"job": job_dict}, countdown=120,
                 )
         except Exception as exc:
             logger.error(
-                f"failed to submit job {job_options} (attempt: {self.request.retries}) -- {exc}",
+                f"({target_model}) failed to submit job {job_options} (attempt: {self.request.retries}) -- {exc}",  # noqa
                 extra={"attempt": self.request.retries},
             )
             raise self.retry(
@@ -133,21 +138,24 @@ def submit_job(self, route_key: str, job_options: dict, metadata: dict = None):
 
 @celery.task(bind=True, rate_limit="1000/s", max_retries=0, ignore_result=True)
 def collect_job_result(self, route_key: str, job: Union[dict, ExportJob]):
+
     if not isinstance(job, ExportJob):
         job = ExportJob(**job)
     self.metadata = job.limited_dict()
+    target_model = self.metadata["target_model"]
+
     if conf.SIMULATE_EXPENSIVE_TASKS:
         logger.warning(f"(***SIMULATED***) collected job: {job} {self.metadata}")
         return None
 
     else:
         try:
-            logger.info(f"collecting job: {job}")
             collector.tasks.collect(job)
+            logger.info(f"({target_model}) collected {job}")
 
         except Exception as exc:
             logger.error(
-                f"failed to collect job {job} (attempt: {self.request.retries}) -- {exc}",
+                f"({target_model}) failed to collect job {job} (attempt: {self.request.retries}) -- {exc}",
                 extra={"attempt": self.request.retries},
             )
             raise self.retry(

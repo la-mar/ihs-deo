@@ -31,7 +31,10 @@ class ExportJob:
             setattr(self, key, value)
 
     def __repr__(self):
-        return f"ExportJob: {self.job_id}"
+        d = self.to_dict()
+        truncated_job_id = str(self.job_id).split("-")[-1]
+        name = d.get("name")
+        return f"ExportJob({truncated_job_id}) {name}"
 
     def to_dict(self):
         return {"job_id": self.job_id, **self._kwargs}

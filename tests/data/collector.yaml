@@ -59,14 +59,14 @@ endpoints:
         # operator: 278107
     tasks:
       sync:
-        seconds: 300
+        seconds: 60
         # cron:
         #   minute: 0
         #   hour: 12
         options:
           query_path: well_horizontal_by_county.xml
           matrix:
-            <<: *counties
+            next_county: true
 
   well_master_vertical:
     enabled: true

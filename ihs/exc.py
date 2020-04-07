@@ -4,3 +4,7 @@ class RootException(Exception):
 
 class CollectorError(RootException):
     pass
+
+
+class NoIdsError(CollectorError):
+    pass

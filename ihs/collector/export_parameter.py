@@ -7,6 +7,7 @@ import util
 from config import get_active_config
 from collector.xml_query import XMLQuery
 import xmltodict
+from exc import NoIdsError
 
 logger = logging.getLogger(__name__)
 conf = get_active_config()
@@ -71,23 +72,38 @@ class ExportParameter:
         self, xml: str = None, filepath: str = None, values: List[str] = None, **kwargs
     ) -> str:
         query = None
+        value_kwargs = {}
+
         if xml:
             query = xml
         elif filepath:
             # inject dynamic value_list
-            value_list = xmltodict.unparse(
-                {"value_list": {"value": values}}, pretty=False, full_document=False
-            )
-            query = self.load_query(
-                filepath, **kwargs, data_type=self.data_type, value_list=value_list
-            )
-        elif values:
-            query = (
-                XMLQuery(data_type=self.data_type, domain=self.domain,).add_filter(
-                    values
+            try:
+                if values:
+                    value_kwargs["value_list"] = xmltodict.unparse(
+                        {"value_list": {"value": values}},
+                        pretty=False,
+                        full_document=False,
+                    )
+                query = self.load_query(
+                    filepath, **kwargs, data_type=self.data_type, **value_kwargs
                 )
-                # .to_xml()
-            )
+            except KeyError as ke:
+                if ke.args[0] == "value_list":
+                    raise NoIdsError("No ids to export") from ke
+                else:
+                    logger.debug(f"Missing parameters in query formatter: {ke.args}")
+
+        elif values:
+            if values:
+                query = (
+                    XMLQuery(data_type=self.data_type, domain=self.domain,).add_filter(
+                        values
+                    )
+                    # .to_xml()
+                )
+            else:
+                logger.info(f"No values found when generating query")
 
         if not query:
             raise ValueError(
@@ -136,8 +152,10 @@ class ExportParameter:
 
             try:
                 return util.load_xml(path).format(**kwargs)
+            except KeyError as ke:
+                raise
             except FileNotFoundError as fe:
-                logger.error("Failed to load xml file %s -- %s", path, fe)
+                logger.error(f"Failed to load xml file {path} -- {fe}")
                 raise
         else:
             return None
@@ -188,4 +206,7 @@ if __name__ == "__main__":
         query_path="production_by_api.xml",
         values=["42413001340100", "42413329660000", "42413005390100"],
     )
+    print(ep.query)
+
+    ep = ExportParameter("Production", query_path="production_by_api.xml", values=[],)
     print(ep.query)
