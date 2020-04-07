@@ -165,10 +165,10 @@ endpoints:
       #       next_county: true
       # using: api.models.WellMasterHorizontal.ids
       # batch_size: 50
-      # driftwood:
-      #   seconds: 300
-      #   options:
-      #     query_path: well_horizontal_driftwood_all.xml
+      driftwood:
+        seconds: 300
+        options:
+          query_path: well_horizontal_driftwood_all.xml
       endpoint_check:
         seconds: 300
         options:

@@ -25,8 +25,10 @@ class Collector(object):
         try:
             if replace:
                 succeeded = self.model.replace(documents)
+                logger.debug(f"({self.model_name}) replaced {succeeded} documents")
             else:
                 succeeded = self.model.persist(documents)
+                logger.debug(f"({self.model_name}) updated {succeeded} documents")
             # succeeded += 1
         except Exception as e:
             logger.debug("Failed saving document to %s", self.model)

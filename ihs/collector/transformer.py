@@ -200,13 +200,15 @@ class WellboreTransformer(Transformer):
 
     @classmethod
     def create_geometries(cls, data: OrderedDict, existing: Model) -> OrderedDict:
+        api14 = data.get("api14")
         locs = OrderedDict()  # type: ignore
         new_location_hash = data.get("hashes", {}).get("location")
         existing_location_hash = existing.hashes.get("location")
         if new_location_hash != existing_location_hash:
-            logger.warning(f"{data.get('api14')}: creating new locations")
+            logger.warning(f"{api14}: creating new locations")
             locs.update(cls._project_well_locations(data))
         else:
+            logger.info(f"{api14}: location hashes match. Reusing existing locations.")
             locs["shl"] = existing.geoms.get("shl")
             locs["bhl"] = existing.geoms.get("bhl")
             locs["pbhl"] = existing.geoms.get("pbhl")
@@ -215,10 +217,13 @@ class WellboreTransformer(Transformer):
             new_survey_hash = data.get("hashes", {}).get("survey")
             existing_survey_hash = existing.hashes.get("survey")
             if new_survey_hash != existing_survey_hash:
-                logger.warning(f"{data.get('api14')}: creating new survey")
+                logger.warning(f"{api14}: creating new survey")
                 locs.update(cls._build_survey(data))
             else:
                 if hasattr(existing, "geoms"):
+                    logger.info(
+                        f"{api14}: survey hashes match. Reusing existing surveys."
+                    )
                     locs["survey_points"] = existing.geoms.get("survey_points")
                     locs["survey_line"] = existing.geoms.get("survey_line")
 
@@ -438,9 +443,9 @@ if __name__ == "__main__":
     conf = get_active_config()
     endpoints = Endpoint.from_yaml("tests/data/collector.yaml")
     task_name, endpoint_name, transformer = (
-        "endpoint_check",
-        "production_horizontal",
-        ProductionTransformer,
+        "driftwood",
+        "well_horizontal",
+        WellboreTransformer,
     )
     # endpoint_name, transoformer = "production_horizontal", ProductionTransformer
 
@@ -459,9 +464,12 @@ if __name__ == "__main__":
 
     parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
     document = parser.parse(xml)
-    # data = document["well_set"]["wellbore"][0]
+
+    # data = document["well_set"]["wellbore"][7]
+
     # data_collection = ProductionTransformer.extract_from_collection(document, model)
     data_collection = transformer.extract_from_collection(document, model)
+    # data_collection[7]["api14"]
     # data = data_collection[0]
     # data_collection[0]["entity12"]
     # data_collection[0].keys()

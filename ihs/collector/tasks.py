@@ -252,57 +252,66 @@ def download_changes_and_deletes() -> int:
 #     #             document = WellVertical.objects(api14=obj.uwi).first()
 
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
 
-#     from time import sleep
-#     from uuid import UUID
+    import loggers
 
-#     logging.basicConfig(level=10)
-#     app = create_app()
-#     app.app_context().push()
+    loggers.config(10)
+    loggers.loggers()
+    logging.getLogger("collector.parser").setLevel(30)
+    logging.getLogger("zeep").setLevel(30)
+    from time import sleep
+    from uuid import UUID
 
-#     # endpoint_name = "well_master_vertical"
-#     endpoint_name = "production_master_vertical"
-#     task_name = "sync"
-#     endpoint = endpoints[endpoint_name]
-#     task = endpoint.tasks[task_name]
-#     configs = task.configs
-#     job_options, metadata = configs[0].values()
-#     ep = ExportParameter(**job_options)
-#     print(ep.params["Query"])
-#     requestor = ExportBuilder(endpoint)
+    logging.basicConfig(level=10)
+    app = create_app()
+    app.app_context().push()
 
-#     job = submit_job(job_options=job_options, metadata=metadata)
-#     job.to_dict()
-#     {
-#         "job_id": "exports/8e89d1bc-e83f-43d9-a91d-cc60a69bf2b2.txt",
-#         "endpoint": "production_master_vertical",
-#         "task": "sync",
-#         "url": "http://www.ihsenergy.com",
-#         "hole_direction": "V",
-#         "data_type": "Production Allocated",
-#         "target_model": "ProductionMasterVertical",
-#         "source_name": "County",
-#         "name": "tx-midland",
-#         "domain": "US",
-#         "template": "Production ID List",
-#         "query": "<criterias>...</criterias>",
-#         "overwrite": True,
-#         "export_filename": UUID("8e89d1bc-e83f-43d9-a91d-cc60a69bf2b2"),
-#     }
+    # endpoint_name = "well_master_vertical"
+    endpoint_name = "well_horizontal"
+    task_name = "driftwood"
+    endpoint = endpoints[endpoint_name]
+    task = endpoint.tasks[task_name]
+    configs = task.configs
+    job_options, metadata = configs[0].values()
+    ep = ExportParameter(**job_options)
+    print(ep.params["Query"])
+    requestor = ExportBuilder(endpoint)
 
-#     sleep(3)
+    job = submit_job(job_options=job_options, metadata=metadata)
+    # job.to_dict()
 
-#     collect(job)
+    sleep(5)
 
-# xml = get_job_results(job)
-# parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
-# document = parser.parse(xml)
-# model = endpoint.model
-# data = WellboreTransformer.extract_from_collection(document, model=model)
-# len(data)
-# [x["api14"] for x in data]
-# collector = Collector(model)
-# collector.save(data, replace=True)
+    collect(job)
+
+xml = get_job_results(job)
+parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
+document = parser.parse(xml)
+model = endpoint.model
+data = WellboreTransformer.extract_from_collection(document, model=model)
+len(data)
+[x["api14"] for x in data]
+collector = Collector(model)
+collector.save(data, replace=True)
+
+
+data[7]
 
 # calc_remote_export_capacity()["remote.capacity.used"] * 1e-6
+# {
+#     "job_id": "exports/8e89d1bc-e83f-43d9-a91d-cc60a69bf2b2.txt",
+#     "endpoint": "production_master_vertical",
+#     "task": "sync",
+#     "url": "http://www.ihsenergy.com",
+#     "hole_direction": "V",
+#     "data_type": "Production Allocated",
+#     "target_model": "ProductionMasterVertical",
+#     "source_name": "County",
+#     "name": "tx-midland",
+#     "domain": "US",
+#     "template": "Production ID List",
+#     "query": "<criterias>...</criterias>",
+#     "overwrite": True,
+#     "export_filename": UUID("8e89d1bc-e83f-43d9-a91d-cc60a69bf2b2"),
+# }
