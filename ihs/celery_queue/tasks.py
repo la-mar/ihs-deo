@@ -64,10 +64,14 @@ def post_heartbeat():
 @celery.task
 def post_remote_export_capacity():
     """ Send remote export capacity to metrics backend"""
-    calcs = collector.tasks.calc_remote_export_capacity()
-    logger.debug("Posting metrics", extra=calcs)
-    for key, value in calcs.items():
-        metrics.post(key, value, metric_type="gauge")
+
+    try:
+        calcs = collector.tasks.calc_remote_export_capacity()
+        logger.debug("Posting metrics", extra=calcs)
+        for key, value in calcs.items():
+            metrics.post(key, value, metric_type="gauge")
+    except Exception as e:
+        logger.error(f"Error calculating remote export capacity -- {e}")
 
 
 @celery.task
