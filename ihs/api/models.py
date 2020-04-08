@@ -1,13 +1,15 @@
 from __future__ import annotations
+
 import datetime
 import logging
-from typing import Optional, List, Tuple
+from typing import List, Optional, Tuple
+
+import pandas as pd
 import pytz
+from mongoengine.document import Document as Model  # noqa
 
 from api.mixin import BaseMixin, ProductionMixin, WellMixin
 from ihs import db
-from mongoengine.document import Document as Model  # noqa
-
 
 loggger = logging.getLogger(__name__)
 
@@ -123,23 +125,35 @@ class County(db.Document, BaseMixin):
             last_run_aware = pytz.utc.localize(last_run)
         return county_obj, attr, last_run_aware, is_ready, cooldown
 
+    @classmethod
+    def as_df(cls):
+        return pd.DataFrame([x._data for x in cls.objects.all()]).set_index("name")
+
 
 class WellMasterHorizontal(db.Document, BaseMixin):
     meta = {"collection": "well_master_horizontal", "ordering": ["-last_update_at"]}
     name = db.StringField(primary_key=True)
-    ids = db.ListField()
-    count = db.IntField()
+    ids = db.ListField(default=list)
+    count = db.IntField(required=True, default=0)
     last_update_at = db.DateTimeField(default=datetime.datetime.now)
-    ihs_last_update_date = db.DateTimeField()
+    ihs_last_update_date = db.DateTimeField(null=True)
+
+    @classmethod
+    def as_df(cls):
+        return pd.DataFrame([x._data for x in cls.objects.all()]).set_index("name")
 
 
 class WellMasterVertical(db.Document, BaseMixin):
     meta = {"collection": "well_master_vertical", "ordering": ["-last_update_at"]}
     name = db.StringField(primary_key=True)
-    ids = db.ListField()
-    count = db.IntField()
+    ids = db.ListField(default=list)
+    count = db.IntField(required=True, default=0)
     last_update_at = db.DateTimeField(default=datetime.datetime.now)
-    ihs_last_update_date = db.DateTimeField()
+    ihs_last_update_date = db.DateTimeField(null=True)
+
+    @classmethod
+    def as_df(cls):
+        return pd.DataFrame([x._data for x in cls.objects.all()]).set_index("name")
 
 
 class ProductionMasterHorizontal(db.Document, BaseMixin):
@@ -148,10 +162,14 @@ class ProductionMasterHorizontal(db.Document, BaseMixin):
         "ordering": ["-last_update_at"],
     }
     name = db.StringField(primary_key=True)
-    ids = db.ListField()
-    count = db.IntField()
+    ids = db.ListField(default=list)
+    count = db.IntField(required=True, default=0)
     last_update_at = db.DateTimeField(default=datetime.datetime.now)
-    ihs_last_update_date = db.DateTimeField()
+    ihs_last_update_date = db.DateTimeField(null=True)
+
+    @classmethod
+    def as_df(cls):
+        return pd.DataFrame([x._data for x in cls.objects.all()]).set_index("name")
 
 
 class ProductionMasterVertical(db.Document, BaseMixin):
@@ -160,10 +178,14 @@ class ProductionMasterVertical(db.Document, BaseMixin):
         "ordering": ["-last_update_at"],
     }
     name = db.StringField(primary_key=True)
-    ids = db.ListField()
-    count = db.IntField()
+    ids = db.ListField(default=list)
+    count = db.IntField(required=True, default=0)
     last_update_at = db.DateTimeField(default=datetime.datetime.now)
-    ihs_last_update_date = db.DateTimeField()
+    ihs_last_update_date = db.DateTimeField(null=True)
+
+    @classmethod
+    def as_df(cls):
+        return pd.DataFrame([x._data for x in cls.objects.all()]).set_index("name")
 
 
 class WellHorizontal(db.DynamicDocument, WellMixin):

@@ -116,7 +116,7 @@ class Transformer:
         for record in data:
             transformed.append(cls.transform(record, model))
 
-        logger.info(
+        logger.debug(
             f"Extracted {len(transformed)} {cls.entity_key} from {cls.collection_key}"
         )
         return transformed
@@ -208,7 +208,7 @@ class WellboreTransformer(Transformer):
             logger.warning(f"{api14}: creating new locations")
             locs.update(cls._project_well_locations(data))
         else:
-            logger.info(f"{api14}: location hashes match. Reusing existing locations.")
+            logger.debug(f"{api14}: location hashes match. Reusing existing locations.")
             locs["shl"] = existing.geoms.get("shl")
             locs["bhl"] = existing.geoms.get("bhl")
             locs["pbhl"] = existing.geoms.get("pbhl")
@@ -221,7 +221,7 @@ class WellboreTransformer(Transformer):
                 locs.update(cls._build_survey(data))
             else:
                 if hasattr(existing, "geoms"):
-                    logger.info(
+                    logger.debug(
                         f"{api14}: survey hashes match. Reusing existing surveys."
                     )
                     locs["survey_points"] = existing.geoms.get("survey_points")

@@ -1,14 +1,27 @@
 from __future__ import annotations
 
 import logging
-from typing import Dict, Generator, Union, List, Optional
-from datetime import date, timedelta, datetime
+from datetime import date, datetime, timedelta
+from typing import Dict, Generator, List, Optional, Union, Tuple
+
+import pandas as pd
 
 import metrics
-from api.models import *  # noqa
-from api.models import ChangeDeleteLog
+from api.models import (  # noqa
+    ChangeDeleteLog,
+    County,
+    ProductionHorizontal,
+    ProductionMasterHorizontal,
+    ProductionMasterVertical,
+    ProductionVertical,
+    WellHorizontal,
+    WellMasterHorizontal,
+    WellMasterVertical,
+    WellVertical,
+)
 from collector import ExportJob  # noqa
 from collector import (
+    CDExporter,
     Collector,
     Endpoint,
     ExportBuilder,
@@ -19,11 +32,11 @@ from collector import (
     WellboreTransformer,
     WellList,
     XMLParser,
-    CDExporter,
 )
 from collector.identity_list import IdentityList
-from exc import CollectorError, NoIdsError
+from collector.task import Task
 from config import ExportDataTypes, IdentityTemplates, get_active_config
+from exc import CollectorError, NoIdsError
 from ihs import create_app
 
 logger = logging.getLogger(__name__)
@@ -129,30 +142,6 @@ def purge_remote_exports() -> bool:
     return True
 
 
-# def calc_remote_export_capacity(njobs: int = None) -> Dict[str, Union[float, int]]:
-#     """Calculate the amount of storage space currently consumed by job exports on IHS' servers.
-
-#     Returns:
-#         dict -- {
-#                  capacity_used: space used in KB,
-#                  njobs: number of existing completed jobs
-#     """
-#     mean_doc_size_bytes = 18000 * conf.TASK_BATCH_SIZE
-#     inflation_pct = 0.1
-#     doc_size_bytes = mean_doc_size_bytes + (inflation_pct * mean_doc_size_bytes)
-#     remote_capacity_bytes = 1000000000  # 1 GB
-#     if not njobs:
-#         eb = ExportBuilder(None)
-#         njobs = len(eb.list_completed_jobs())
-
-#     return {
-#         "remote.capacity.used": njobs * doc_size_bytes,
-#         "remote.capacity.available": remote_capacity_bytes - (njobs * doc_size_bytes),
-#         "remote.capacity.total": remote_capacity_bytes,
-#         "remote.jobs": njobs,
-#     }
-
-
 def calc_remote_export_capacity() -> Dict[str, Union[float, int]]:
     """Calculate the amount of storage space currently consumed by job exports on IHS' servers.
 
@@ -228,40 +217,100 @@ def download_changes_and_deletes() -> int:
     collector = Collector(ChangeDeleteLog)
     return collector.save(records)
 
+    # def process_changes_and_deletes():
+    #     # reason_action_map = {
+    #     #     "no_action": [0, 6],
+    #     #     "update_to_new_uwi": [1, 5, 7, 8, 9],
+    #     #     "update_to_ref_uwi": [2],
+    #     #     "delete": [3, 4],
+    #     # }
+    #     reason_action_map = {
+    #         0: "no_action",
+    #         1: "update_to_new_uwi",
+    #         2: "update_to_ref_uwi",
+    #         3: "delete",
+    #         4: "delete",
+    #         5: "update_to_new_uwi",
+    #         6: "no_action",
+    #         7: "update_to_new_uwi",
+    #         8: "update_to_new_uwi",
+    #         9: "update_to_new_uwi",
+    #     }
 
-# def process_changes_and_deletes():
-#     # reason_action_map = {
-#     #     "no_action": [0, 6],
-#     #     "update_to_new_uwi": [1, 5, 7, 8, 9],
-#     #     "update_to_ref_uwi": [2],
-#     #     "delete": [3, 4],
-#     # }
-#     reason_action_map = {
-#         0: "no_action",
-#         1: "update_to_new_uwi",
-#         2: "update_to_ref_uwi",
-#         3: "delete",
-#         4: "delete",
-#         5: "update_to_new_uwi",
-#         6: "no_action",
-#         7: "update_to_new_uwi",
-#         8: "update_to_new_uwi",
-#         9: "update_to_new_uwi",
-#     }
+    #     objs = ChangeDeleteLog.objects(processed=False)
 
-#     objs = ChangeDeleteLog.objects(processed=False)
+    #     obj = objs[len(objs) - 80]
+    #     obj._data
+    #     #! unfinished
 
-#     obj = objs[len(objs) - 80]
-#     obj._data
-#     #! unfinished
+    #     # for obj in objs:
+    #     #     if obj.processed is False:
+    #     #         action = reason_action_map[obj.reason_code]
 
-#     # for obj in objs:
-#     #     if obj.processed is False:
-#     #         action = reason_action_map[obj.reason_code]
+    #     #         if action == "delete":
+    #     #             document = WellHorizontal.objects(api14=obj.uwi).first()
+    #     #             document = WellVertical.objects(api14=obj.uwi).first()
 
-#     #         if action == "delete":
-#     #             document = WellHorizontal.objects(api14=obj.uwi).first()
-#     #             document = WellVertical.objects(api14=obj.uwi).first()
+
+def synchronize_master_lists():
+    county_model_name = County.__name__.split(".")[-1]
+    master_counties = County.as_df().index.tolist()
+
+    for model in [
+        WellMasterHorizontal,
+        WellMasterVertical,
+        ProductionMasterHorizontal,
+        ProductionMasterVertical,
+    ]:
+        target_model_name = model.__name__.split(".")[-1]
+        model_counties = model.as_df().index.tolist()
+        missing_from_model = [x for x in master_counties if x not in model_counties]
+
+        # add missing counties to model
+        added = []
+        for county in missing_from_model:
+            i = model(name=county)
+            i.save()
+            added.append(county)
+
+        if added:
+            logger.info(
+                f"({target_model_name}) Added {len(added)} entries from {county_model_name} master: {added}"  # noqa
+            )
+        missing_from_master = [x for x in model_counties if x not in master_counties]
+        if missing_from_master:
+            logger.info(
+                f"({target_model_name}) has {len(missing_from_master)} entries missing from {county_model_name} master"  # noqa
+            )
+
+        logger.info(f"({target_model_name}) synchronized to {county_model_name} master")
+
+
+def refresh_master_lists() -> List[Tuple[List[Dict], str, str]]:
+    endpoints = Endpoint.from_yaml(conf.COLLECTOR_CONFIG_PATH)
+    endpoints = {
+        k: v for k, v in endpoints.items() if "master" in v.model.__name__.lower()
+    }
+
+    all_endpoint_configs: List[Tuple[List[Dict], str, str]] = []
+    for endpoint_name, endpoint in endpoints.items():
+        # endpoint_name, endpoint = list(endpoints.items())[0]
+        target_model_name = endpoint.model.__name__.split(".")[-1]
+
+        county_record_dict = (
+            County.as_df().loc[:, ["county_code", "state_code"]].to_dict(orient="index")
+        )
+
+        task = endpoint.tasks["sync"]
+        task.options.matrix = county_record_dict  # override the yaml defined matrix
+        configs = task.configs
+        logger.warning(f"({target_model_name}) refreshing {len(configs)} counties")
+        all_endpoint_configs.append((configs, endpoint_name, task.task_name))
+
+    return all_endpoint_configs
+    # job_options, metadata = task.configs[0].values()
+    # ep = ExportParameter(**job_options)
+    # print(ep.params["Query"])
 
 
 if __name__ == "__main__":
@@ -269,35 +318,38 @@ if __name__ == "__main__":
     import loggers
 
     loggers.config(10)
-    loggers.loggers()
     logging.getLogger("collector.parser").setLevel(30)
     logging.getLogger("zeep").setLevel(30)
     from time import sleep
 
     # from uuid import UUID
+    from ihs import create_app
 
     logging.basicConfig(level=10)
     app = create_app()
     app.app_context().push()
 
     # endpoint_name = "well_master_vertical"
-    endpoint_name = "well_horizontal"
-    task_name = "sync"
-    endpoint = endpoints[endpoint_name]
-    task = endpoint.tasks[task_name]
-    configs = task.configs
-    job_options, metadata = configs[0].values()
-    ep = ExportParameter(**job_options)
-    print(ep.params["Query"])
-    requestor = ExportBuilder(endpoint)
+    # endpoint_name = "well_master_vertical"
+    # task_name = "sync"
+    # endpoint = endpoints[endpoint_name]
+    # task = endpoint.tasks[task_name]
+    # # configs =
+    # job_options, metadata = task.configs[0].values()
 
-    job = submit_job(job_options=job_options, metadata=metadata)
-    # job.to_dict()
+    # for configs, endpoint_name, task_name in refresh_master_lists():
+    #     for job
+    #     ep = ExportParameter(**job_options)
+    #     print(ep.params["Query"])
+    #     requestor = ExportBuilder(endpoint)
 
-    sleep(5)
+    #     job = submit_job(job_options=job_options, metadata=metadata)
+    #     # job.to_dict()
 
-    if job:
-        collect(job)
+    #     sleep(5)
+
+    #     if job:
+    #         collect(job)
 
 # xml = get_job_results(job)
 # parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
@@ -308,6 +360,24 @@ if __name__ == "__main__":
 # [x["api14"] for x in data]
 # collector = Collector(model)
 # collector.save(data, replace=True)
+# from api.models import County, WellMasterHorizontal
+# import pandas as pd
+
+# df = pd.DataFrame([x._data for x in County.objects.all()]).set_index("name")
+# df.columns
+# df = df.drop(columns=["state_code", "county_code"]).sort_values("well_h_last_run")
+# df.shape
+
+# hz_ids = (
+#     pd.DataFrame([x._data for x in WellMasterHorizontal.objects.all()])
+#     .set_index("name")
+#     .sort_index()
+# )
+# hz_ids.loc[~hz_ids.index.str.contains("County")].shape
+
+# joined = df.join(hz_ids.ids)
+# joined[joined.ids.isna()]
 
 
-# data[7]
+# # data[7]
+# self = task.options

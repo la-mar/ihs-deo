@@ -38,6 +38,7 @@ class OptionMatrix:
         data_type: str = None,
         template: str = None,
         criteria: Dict = None,
+        force: bool = False,
         **kwargs,
     ):
         self.target_model: str = target_model
@@ -54,6 +55,7 @@ class OptionMatrix:
         self.use_next_county: bool = self.matrix.pop("next_county", None)
         self.batch_size: int = self.matrix.pop("batch_size", 10) or self.batch_size
         self.source_name: Optional[str] = None
+        self.force = force
 
     def __repr__(self):
         return str(self.to_list())
@@ -63,10 +65,13 @@ class OptionMatrix:
             yield d
 
     def make_option_set_name(self, name: str = None) -> str:
-        source_name = self.source_name or "yaml"
-        target_model_name = self.target_model_name or ""
-        name = name or ""
-        return f"{source_name} -> {target_model_name} ({name})"
+        if self.is_identity_export and name is not None:
+            return name
+        else:
+            source_name = self.source_name or "yaml"
+            target_model_name = self.target_model_name or ""
+            name = name or ""
+            return f"{source_name} -> {target_model_name} ({name})"
 
     def generate(self) -> List[Dict]:
         """ Generate the option matrix from the instance's parameters """
@@ -76,14 +81,17 @@ class OptionMatrix:
         return IdentityTemplates.has_member(self.template)
 
     def _cross_apply(self) -> List[Dict]:
+        # if self.matrix.get("values"):
+        #     pass
         if self.is_identity_export:
-            self.matrix = self._matrix_for_identity_export()
+            if not self.matrix:
+                self.matrix = self._matrix_for_identity_export()
         elif self.using:
             self.matrix = self._matrix_from_model()
         elif self.use_next_county:
             self.matrix = self._matrix_from_county()
         else:
-            logger.info(f"({self.target_model_name}) No matrix to generate")
+            logger.debug(f"({self.target_model_name}) No matrix to generate")
 
         optset = []
         if len(self.matrix):
@@ -123,7 +131,7 @@ class OptionMatrix:
         return self._cross_apply()
 
     def _matrix_for_identity_export(self) -> Dict[str, Dict]:
-        logger.info(f"({self.target_model_name}) Generating Identity Matrix")
+        logger.debug(f"({self.target_model_name}) Generating Identity Matrix")
         source_model = County
         source_model_name = County.__name__
         criteria: Dict[str, Dict] = {}
@@ -167,7 +175,7 @@ class OptionMatrix:
                 (last_run + timedelta(hours=cooldown)) - utcnow
             ).total_seconds()
             logger.warning(
-                f"({self.target_model_name}) Skipping {self.source_name}: next available for run in {humanize_seconds(next_run_in_seconds)}"  # noqa
+                f"({self.target_model_name}) skipping {county_obj.name}: next available for run in {humanize_seconds(next_run_in_seconds)}"  # noqa
             )
 
         # bypass _to_batches and return criteria dict directly so it is expanded into
@@ -178,7 +186,7 @@ class OptionMatrix:
         """ Generate a matrix using the values from model column referenced in the
             task's options.
         """
-        logger.info(f"({self.target_model_name}) Generating Matrix from Model")
+        logger.debug(f"({self.target_model_name}) Generating Matrix from Model")
 
         ids: List[str] = []
 
@@ -193,7 +201,7 @@ class OptionMatrix:
         return self._to_batches(values=ids)
 
     def _matrix_from_county(self) -> Dict[str, Dict]:
-        logger.info(f"({self.target_model_name}) Generating Matrix from County")
+        logger.debug(f"({self.target_model_name}) Generating Matrix from County")
 
         county_obj = None
         ids = []
@@ -215,7 +223,7 @@ class OptionMatrix:
         county_obj, attr, last_run, is_ready, cooldown = County.next_available(attr)
         self.source_name = county_obj.name
 
-        if is_ready:
+        if is_ready or self.force:
             model_obj = model.objects(name=county_obj.name).first()
             if model_obj:
                 ids = model_obj.ids
@@ -223,7 +231,7 @@ class OptionMatrix:
                 county_obj[attr] = utcnow
                 county_obj.save()
                 logger.warning(
-                    f"({county_obj.name}.{attr}): updated county runtime {last_run} -> {utcnow}"
+                    f"({county_obj.name}) updated {county_obj.name}.{attr}: {last_run} -> {utcnow}"
                 )
         else:
             next_run_in_seconds = (
@@ -389,18 +397,98 @@ if __name__ == "__main__":
         },
     )
 
-    task = Task(
-        model_name="api.models.WellMasterHorizontal",
-        task_name="sync",
-        endpoint_name="well_master_horizontal",
-        cron={"minute": 0, "hour": 12},
-        options={
-            "data_type": "Well",
-            "template": "Well ID List",
-            "criteria": {"hole_direction": "H"},
-        },
+    from api.models import County
+
+    matrix = (
+        County.as_df()
+        .reset_index()
+        .loc[:, ["name", "county_code", "state_code"]]
+        .to_dict(orient="records")
     )
+
+    # County.as_df().reset_index().loc[:, ["name", "county_code", "state_code"]].values
+
+    tasks: List[Task] = []
+    for county_params in matrix:
+        task = Task(
+            model_name="api.models.WellMasterHorizontal",
+            task_name="sync",
+            endpoint_name="well_master_horizontal",
+            cron={"minute": 0, "hour": 12},
+            options={
+                "matrix": county_params,  # {"values": matrix},
+                "data_type": "Well",
+                "template": "Well ID List",
+                "query_path": "well_by_county.xml",
+                "criteria": {"hole_direction": "H"},
+                "hole_direction": "H",
+                **county_params,
+            },
+        )
+        # tasks.append(task)
+
+        job_options, metadata = task.configs[0].values()
+        ep = ExportParameter(**job_options)
+
+        print(ep.params["Query"])
+        endpoint = endpoints["well_master_horizontal"]
+        task = endpoint.tasks["sync"]
+        requestor = ExportBuilder(endpoint)
+
+        job = submit_job(job_options=job_options, metadata=metadata)
+        # job.to_dict()
+
+        sleep(5)
+
+        if job:
+            collect(job)
+    # task = Task(
+    #     model_name="api.models.WellMasterHorizontal",
+    #     task_name="sync",
+    #     endpoint_name="well_master_horizontal",
+    #     cron={"minute": 0, "hour": 12},
+    #     options={
+    #         "data_type": "Well",
+    #         "template": "Well ID List",
+    #         "criteria": {"hole_direction": "H"},
+    #     },
+    # )
 
     # list(task.options)[0]
     c = list(task.configs)[0]
     c
+
+    api14s = [
+        "42461409160000",
+        "42383406370000",
+        "42461412100000",
+        "42461412090000",
+        "42461411750000",
+        "42461411740000",
+        "42461411730000",
+        "42461411720000",
+        "42461411600000",
+        "42461411280000",
+        "42461411270000",
+        "42461411260000",
+        "42383406650000",
+        "42383406640000",
+        "42383406400000",
+        "42383406390000",
+        "42383406380000",
+        "42461412110000",
+        "42383402790000",
+        "42461397940000",
+    ]
+
+    from api.models import County, WellMasterHorizontal
+
+    county = County.objects(name="tx-upton").get()
+    county.well_h_last_run = None
+    county.save()
+
+    id_master = WellMasterHorizontal.objects(name="tx-upton").get()
+    id_master.ids = api14s
+    id_master.count = len(api14s)
+    id_master.save()
+    id_master._data

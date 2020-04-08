@@ -212,6 +212,7 @@ class BaseConfig:
     CELERY_TASK_CREATE_MISSING_QUEUES = os.getenv(
         "CELERY_TASK_CREATE_MISSING_QUEUES", False
     )
+    CELERY_TASK_ALWAYS_EAGER = os.getenv("CELERY_TASK_ALWAYS_EAGER", False)
 
     """ Celery Beat """
     CELERYBEAT_SCHEDULER = "redbeat.RedBeatScheduler"

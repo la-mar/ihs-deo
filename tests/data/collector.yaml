@@ -59,7 +59,7 @@ endpoints:
         # operator: 278107
     tasks:
       sync:
-        seconds: 60
+        seconds: 300
         # cron:
         #   minute: 0
         #   hour: 12
@@ -166,11 +166,11 @@ endpoints:
       # using: api.models.WellMasterHorizontal.ids
       # batch_size: 50
       driftwood:
-        seconds: 300
+        seconds: 900
         options:
           query_path: well_horizontal_driftwood_all.xml
       endpoint_check:
-        seconds: 300
+        seconds: 900
         options:
           query_path: well_by_api.xml
           matrix:

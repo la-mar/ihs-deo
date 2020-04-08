@@ -154,14 +154,18 @@ class Builder(SoapRequestor):
 
         tags = job.limited_dict()
         job_id = job.job_id
+        job_dict = job.to_dict()
+        target_model = job_dict.get("target_model", None)
+        # task_name = job_dict.get("task", None)
+        # source_name = job_dict.get("source_name", None)
 
         try:
             result = self.service.DeleteExport(job_id)
-            logger.info("Deleted job: %s", job_id)
+            logger.info(f"({target_model}) deleted {job}")
             metrics.post("job.delete.success", 1, tags=tags)
         except Exception as e:
             logger.exception(
-                "Encountered error when deleting job %s -- %s", job_id, e,
+                f"({target_model}) Encountered error when deleting job {job} -- {e}"
             )
             metrics.post("job.delete.error", 1, tags=tags)
 

@@ -81,12 +81,26 @@ def setup_periodic_tasks(sender, **kwargs):  # pylint: disable=unused-argument
     #     name="cleanup_remote_exports",
     # )
 
+    logger.info("Registering periodic task: %s", "download_changes_and_deletes")
     sender.add_periodic_task(
         crontab(minute=0, hour=15),
         celery_queue.tasks.download_changes_and_deletes,
         name="download_changes_and_deletes",
     )
-    logger.info("Registering periodic task: %s", "download_changes_and_deletes")
+
+    # logger.info("Registering periodic task: %s", "refresh_master_lists")
+    # sender.add_periodic_task(
+    #     crontab(minute=50, hour=19),
+    #     celery_queue.tasks.refresh_master_lists,
+    #     name="refresh_master_lists",
+    # )
+
+    logger.info("Registering periodic task: %s", "synchronize_master_lists")
+    sender.add_periodic_task(
+        crontab(minute=50, hour="*/3"),
+        celery_queue.tasks.synchronize_master_lists,
+        name="synchronize_master_lists",
+    )
 
 
 @after_setup_logger.connect

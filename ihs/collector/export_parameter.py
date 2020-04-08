@@ -152,7 +152,7 @@ class ExportParameter:
 
             try:
                 return util.load_xml(path).format(**kwargs)
-            except KeyError as ke:
+            except KeyError:
                 raise
             except FileNotFoundError as fe:
                 logger.error(f"Failed to load xml file {path} -- {fe}")

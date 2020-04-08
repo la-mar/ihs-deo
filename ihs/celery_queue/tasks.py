@@ -1,8 +1,7 @@
-from typing import Union
+from typing import Union, List, Dict
 import math
 import uuid
-
-# import logging
+import logging
 
 from celery.utils.log import get_task_logger
 
@@ -13,13 +12,31 @@ from config import get_active_config
 from ihs import celery
 
 
-logger = get_task_logger(__name__)
-# logger = logging.getLogger(__name__)
+# logger = get_task_logger(__name__)
+logger = logging.getLogger(__name__)
 
 conf = get_active_config()
 endpoints = Endpoint.load_from_config(conf)
 
 RETRY_BASE_DELAY = 15
+
+
+def spread_countdown(n: int, multiplier: int = 30) -> float:
+    return math.log(n + 1) * multiplier + n
+
+
+def submit_jobs_from_task_configs(
+    configs: List[Dict], endpoint_name: str, task_name: str
+):
+
+    for idx, job_config in enumerate(configs):
+        if job_config:
+            # name = job_config["metadata"]["name"]
+            # target_model = job_config["metadata"]["target_model"]
+            hole_dir = job_config["metadata"]["hole_direction"]
+
+            countdown = spread_countdown(idx)
+            submit_job.apply_async((hole_dir,), job_config, countdown=countdown)
 
 
 @celery.task
@@ -89,20 +106,21 @@ def download_changes_and_deletes():
     metrics.post("changes_and_deletes.downloaded", download_count)
 
 
+@celery.task
+def synchronize_master_lists():
+    collector.tasks.synchronize_master_lists()
+
+
+@celery.task
+def refresh_master_lists():
+    for configs, endpoint_name, task_name in collector.tasks.refresh_master_lists():
+        submit_jobs_from_task_configs(configs, endpoint_name, task_name)
+
+
 @celery.task(rate_limit="10/s", ignore_result=True)
-def sync_endpoint(endpoint_name: str, task_name: str, **kwargs) -> ExportJob:
+def sync_endpoint(endpoint_name: str, task_name: str, **kwargs):
     configs = list(collector.tasks.run_endpoint_task(endpoint_name, task_name))
-    for idx, job_config in enumerate(configs):
-        if job_config:
-            name = job_config["metadata"]["name"]
-            target_model = job_config["metadata"]["target_model"]
-            hole_dir = job_config["metadata"]["hole_direction"]
-            logger.info(
-                f"({target_model}) running task {endpoint_name}.{task_name} ({name})"
-            )
-            # countdown = 60 * (idx / count)
-            countdown = math.log(idx + 1) * 30 + idx
-            submit_job.apply_async((hole_dir,), job_config, countdown=countdown)
+    submit_jobs_from_task_configs(configs, endpoint_name, task_name)
 
 
 @celery.task(bind=True, rate_limit="25/s", max_retries=0, ignore_result=True)
