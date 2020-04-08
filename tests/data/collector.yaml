@@ -59,7 +59,7 @@ endpoints:
         # operator: 278107
     tasks:
       sync:
-        seconds: 300
+        seconds: 60
         # cron:
         #   minute: 0
         #   hour: 12
@@ -82,13 +82,11 @@ endpoints:
         hole_direction: V
     tasks:
       sync:
-        cron:
-          minute: 0
-          hour: 12
+        seconds: 60
         options:
           query_path: well_vertical_by_county.xml
           matrix:
-            <<: *counties
+            next_county: true
 
   production_master_horizontal:
     enabled: true

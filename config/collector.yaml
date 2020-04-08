@@ -426,7 +426,7 @@ endpoints:
     tasks:
       sync:
         cron:
-          minute: "*/5"
+          minute: "*/15"
           # hour: 1
           # day_of_week: "mon,wed"
         options:
