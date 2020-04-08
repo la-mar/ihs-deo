@@ -30,6 +30,7 @@ cli = FlaskGroup(create_app=create_app, context_settings=CONTEXT_SETTINGS)
 run_cli = AppGroup("run")
 test_cli = AppGroup("test")
 delete_cli = AppGroup("delete")
+info_cli = AppGroup("info")
 
 
 def update_logger(level: int):
@@ -131,25 +132,56 @@ def exports():
     cleanup_remote_exports.run()
 
 
-# def schedules():
-#     import redis
-#     import redbeat
+@info_cli.command(context_settings=dict(ignore_unknown_options=True))
+def schedules():
+    # import redis
+    # import redbeat
 
-#     client = redis.Redis.from_url(conf.REDBEAT_REDIS_URL)
-#     # client0 = redis.Redis(host="0.0.0.0", port=6379, db=0)
-#     # client.hash("ihs")
-#     dir(client)
+    # client = redis.Redis.from_url(conf.REDBEAT_REDIS_URL)
+    # # client0 = redis.Redis(host="0.0.0.0", port=6379, db=0)
+    # # client.hash("ihs")
+    # dir(client)
 
-#     client.keys("*")
-#     client.type("ihs:heartbeat")
-#     client.hgetall("ihs:heartbeat")
-#     client.zrange("ihs::schedule", 0, -1)
-#     from celery_queue.worker import celery
+    # client.keys("*")
+    # client.type("ihs:heartbeat")
+    # client.hgetall("ihs:heartbeat")
+    # client.zrange("ihs::schedule", 0, -1)
 
-#     scheduler = redbeat.RedBeatScheduler(celery)
-#     scheduler.get_schedule()
-#     scheduler.schedule
-#     scheduler.schedule["heartbeat"]
+    # scheduler = redbeat.RedBeatScheduler(celery, lazy=True)
+
+    # scheduler.get_schedule()
+    # scheduler.schedule
+    # scheduler.schedule["heartbeat"]
+
+    from pprint import pprint
+    from redbeat import schedulers
+    import pytz
+    from datetime import datetime
+    from celery.utils.time import humanize_seconds
+    from celery_queue.worker import celery as app
+    import pandas as pd
+
+    redis = schedulers.get_redis(app)
+    conf = schedulers.RedBeatConfig(app)
+    keys = redis.zrange(conf.schedule_key, 0, -1)
+
+    utcnow = pytz.utc.localize(datetime.utcnow())
+
+    entries = [schedulers.RedBeatSchedulerEntry.from_key(key, app=app) for key in keys]
+    # pprint(entries)
+    entry_data = []
+    for entry in entries:
+        e = entry.__dict__
+        e["due_at"] = entry.due_at
+        e["due_in"] = humanize_seconds(
+            (entry.due_at - utcnow).total_seconds(), prefix="in "
+        )
+        entry_data.append(e)
+
+    df = pd.DataFrame(entry_data)
+
+    df = df.drop(columns=["app", "task", "args"])
+    print(df)
 
 
 @test_cli.command()
@@ -212,6 +244,7 @@ def main(argv=sys.argv):  # pylint: disable=unused-argument
 cli.add_command(run_cli)
 cli.add_command(test_cli)
 cli.add_command(delete_cli)
+cli.add_command(info_cli)
 
 
 if __name__ == "__main__":
