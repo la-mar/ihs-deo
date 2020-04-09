@@ -222,6 +222,21 @@ class ProductionVertical(db.DynamicDocument, ProductionMixin):
     ihs_last_update_date = db.DateTimeField()
 
 
+if __name__ == "__main__":
+    from ihs import create_app
+    import random
+
+    app = create_app()
+    app.app_context().push()
+
+    obj = WellMasterHorizontal.objects(name="tx-upton").get()
+
+    api14s = random.choices(obj.ids, k=100)
+
+    prod_obj = ProductionMasterHorizontal.objects(name="tx-upton").get()
+
+    prod_ids = random.choices(prod_obj.ids, k=100)
+
 # if __name__ == "__main__":
 #     from ihs import create_app
 #     from config import get_active_config
