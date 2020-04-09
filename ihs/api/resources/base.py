@@ -1,5 +1,6 @@
 import logging
-from typing import Dict, Tuple
+from typing import Dict, Tuple, List, Optional
+import random
 
 from flask import Blueprint, url_for
 from flask_mongoengine import Document as Model
@@ -57,6 +58,44 @@ class DataResource(Resource):
                 result["status"] = "not_found"
 
         return result
+
+
+class SampleResource(DataResource):
+    # hole_dir: HoleDirection = None
+    id_model: Model = None
+    primary_key_name: str = None  # type: ignore
+
+    def _get_ids(self, area: Optional[str] = None) -> List[str]:
+        if not area:
+            # get random area that has wells
+            areas = [x.name for x in self.id_model.objects(count__gt=0).all()]
+            area = random.choice(areas)
+        logger.debug(f"random area selection: {area}")
+        return self.id_model.objects(name=area).get().ids
+
+    def get(self) -> Tuple[Dict, int]:  # type: ignore
+        n = request.args.get("n")
+        frac = request.args.get("frac")
+        area = request.args.get("area")
+
+        ids = self._get_ids(area=area)
+
+        if frac:
+            n = int(float(frac) * len(ids))
+        elif n:
+            n = int(n)
+        else:
+            return {"status": "missing_argument"}, 400
+
+        # logger.warning(ids)
+        if ids:
+            n = n if n < len(ids) else len(ids)
+            ids = random.sample(ids, k=n)
+            query_kwargs = {f"{self.primary_key_name}__in": ids}
+            return self._get(**query_kwargs), 200
+
+        else:
+            return {"status": "no_ids_found"}, 400
 
 
 class IDResource(DataResource):

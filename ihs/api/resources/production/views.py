@@ -4,6 +4,7 @@ from flask_restful import Api
 import api.resources.production.horizontal as h
 import api.resources.production.vertical as v
 
+
 # from ihs import apispec
 from api.schema import IDListSchema
 
@@ -11,6 +12,7 @@ blueprint = Blueprint("prod", __name__, url_prefix="/prod")
 api = Api(blueprint)
 
 api.add_resource(h.HorizontalProductionList, "/h")
+api.add_resource(h.HorizontalProductionSample, "/h/sample")
 api.add_resource(h.HorizontalProduction, "/h/<identifier>")
 api.add_resource(h.HorizontalProductionHeader, "/h/<identifier>/header")
 api.add_resource(h.HorizontalProductionHeaderList, "/h/headers")
@@ -20,6 +22,7 @@ api.add_resource(h.HorizontalProductionIDList, "/h/ids")
 api.add_resource(h.HorizontalProductionIDs, "/h/ids/<area>")
 
 api.add_resource(v.VerticalProductionList, "/v")
+api.add_resource(v.VerticalProductionSample, "/v/sample")
 api.add_resource(v.VerticalProduction, "/v/<identifier>")
 api.add_resource(v.VerticalProductionHeader, "/v/<identifier>/header")
 api.add_resource(v.VerticalProductionHeaderList, "/v/headers")

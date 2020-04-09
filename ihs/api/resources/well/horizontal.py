@@ -1,9 +1,8 @@
-# pylint: disable=not-an-iterable, no-member, # pylint: disable=not-an-iterable, no-member, arguments-differ
 import logging
 
 import api.schema as schemas
 from api.models import WellHorizontal, WellMasterHorizontal
-from api.resources.base import IDListResource, IDResource
+from api.resources.base import IDListResource, IDResource, SampleResource
 from api.resources.well.base import WellListResource, WellResource
 
 logger = logging.getLogger(__name__)
@@ -21,6 +20,15 @@ class HorizontalWellList(WellListResource):
 
     model = WellHorizontal
     schema = schemas.WellFullSchema(many=True)
+
+
+class HorizontalWellSample(SampleResource):
+    """ All data for a list of wells """
+
+    model = WellHorizontal
+    schema = schemas.WellFullSchema(many=True)
+    id_model = WellMasterHorizontal
+    primary_key_name = "api14"
 
 
 class HorizontalWellHeader(WellResource):

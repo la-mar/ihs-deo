@@ -2,7 +2,7 @@ import logging
 
 import api.schema as schemas
 from api.models import ProductionHorizontal, ProductionMasterHorizontal
-from api.resources.base import IDListResource, IDResource
+from api.resources.base import IDListResource, IDResource, SampleResource
 from api.resources.production.base import ProductionListResource, ProductionResource
 
 logger = logging.getLogger(__name__)
@@ -20,6 +20,15 @@ class HorizontalProductionList(ProductionListResource):
 
     model = ProductionHorizontal
     schema = schemas.ProductionFullSchema(many=True)
+
+
+class HorizontalProductionSample(SampleResource):
+    """ All production data for a list of api10s or entity identifiers """
+
+    model = ProductionHorizontal
+    schema = schemas.ProductionFullSchema(many=True)
+    id_model = ProductionMasterHorizontal
+    primary_key_name = "identification"
 
 
 class HorizontalProductionHeader(ProductionResource):

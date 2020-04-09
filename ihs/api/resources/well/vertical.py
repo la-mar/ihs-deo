@@ -3,7 +3,7 @@ import logging
 
 import api.schema as schemas
 from api.models import WellMasterVertical, WellVertical
-from api.resources.base import IDListResource, IDResource
+from api.resources.base import IDListResource, IDResource, SampleResource
 from api.resources.well.base import WellListResource, WellResource
 
 logger = logging.getLogger(__name__)
@@ -21,6 +21,15 @@ class VerticalWellList(WellListResource):
 
     model = WellVertical
     schema = schemas.WellFullSchema(many=True)
+
+
+class VerticalWellSample(SampleResource):
+    """ All data for a list of wells """
+
+    model = WellVertical
+    schema = schemas.WellFullSchema(many=True)
+    id_model = WellMasterVertical
+    primary_key_name = "api14"
 
 
 class VerticalWellHeader(WellResource):

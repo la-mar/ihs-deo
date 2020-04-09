@@ -235,7 +235,10 @@ if __name__ == "__main__":
 
     prod_obj = ProductionMasterHorizontal.objects(name="tx-upton").get()
 
-    prod_ids = random.choices(prod_obj.ids, k=100)
+    # prod_ids = random.choices(prod_obj.ids, k=1000)
+
+    print(prod_obj.ids)
+    print(obj.ids)
 
 # if __name__ == "__main__":
 #     from ihs import create_app

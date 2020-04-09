@@ -8,6 +8,7 @@ blueprint = Blueprint("well", __name__, url_prefix="/well")
 api = Api(blueprint)
 
 api.add_resource(h.HorizontalWellList, "/h")
+api.add_resource(h.HorizontalWellSample, "/h/sample")
 api.add_resource(h.HorizontalWellIDList, "/h/ids")
 api.add_resource(h.HorizontalWellIDs, "/h/ids/<area>")
 api.add_resource(h.HorizontalWellHeaderList, "/h/headers")
@@ -22,6 +23,7 @@ api.add_resource(h.HorizontalWellFrac, "/h/<api14>/frac")
 
 
 api.add_resource(v.VerticalWellList, "/v")
+api.add_resource(v.VerticalWellSample, "/v/sample")
 api.add_resource(v.VerticalWellIDList, "/v/ids")
 api.add_resource(v.VerticalWellIDs, "/v/ids/<area>")
 api.add_resource(v.VerticalWellHeaderList, "/v/headers")
