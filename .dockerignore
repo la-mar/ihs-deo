@@ -135,3 +135,4 @@ celerybeat-schedule.db
 .vscode/settings.json
 .env.production
 .env*
+dump.rdb
