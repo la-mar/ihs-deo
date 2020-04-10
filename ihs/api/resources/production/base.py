@@ -31,6 +31,7 @@ class ProductionListResource(ProductionResource):
         entity12 = request.args.get("entity12")
         identifier = request.args.get("id")
         status = request.args.get("status")
+        related = request.args.get("related")
 
         kwargs: Dict[str, Any] = {}
 
@@ -51,6 +52,10 @@ class ProductionListResource(ProductionResource):
 
         if entity:
             kwargs["entity"] = entity
+
+        if related and not entity12:
+            objs = self.model.objects(**kwargs).only("entity12").all()
+            kwargs = {"entity12__in": list({x.entity12 for x in objs})}
 
         logger.debug(f"production get: {kwargs}")  # noqa
 
