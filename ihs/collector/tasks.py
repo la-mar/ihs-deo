@@ -153,7 +153,7 @@ def calc_remote_export_capacity() -> Dict[str, Union[float, int]]:
     mean_doc_size_bytes = (
         18000 * conf.TASK_BATCH_SIZE
     )  # average single entity document size
-    inflation_pct: float = 0.25  # over estimate the used capacity by this percentage
+    inflation_pct: float = 0.1  # over estimate the used capacity by this percentage
     doc_size_bytes = mean_doc_size_bytes + (inflation_pct * mean_doc_size_bytes)
     remote_capacity_bytes: int = 1000000000  # 1 GB
     eb = ExportBuilder(None)
