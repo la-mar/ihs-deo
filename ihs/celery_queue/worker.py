@@ -61,13 +61,13 @@ def setup_periodic_tasks(sender, **kwargs):  # pylint: disable=unused-argument
 
     logger.info("Registering periodic task: %s", "heartbeat")
     sender.add_periodic_task(
-        30, celery_queue.tasks.post_heartbeat, name="heartbeat",
+        30, celery_queue.tasks.post_heartbeat.s(), name="heartbeat",
     )
 
     logger.info("Registering periodic task: %s", "calc_remote_export_capacity")
     sender.add_periodic_task(
         60,  # seconds
-        celery_queue.tasks.post_remote_export_capacity,
+        celery_queue.tasks.post_remote_export_capacity.s(),
         name="calc_remote_export_capacity",
     )
 
@@ -84,7 +84,7 @@ def setup_periodic_tasks(sender, **kwargs):  # pylint: disable=unused-argument
     logger.info("Registering periodic task: %s", "download_changes_and_deletes")
     sender.add_periodic_task(
         crontab(minute=0, hour=15),
-        celery_queue.tasks.download_changes_and_deletes,
+        celery_queue.tasks.download_changes_and_deletes.s(),
         name="download_changes_and_deletes",
     )
 
@@ -98,7 +98,7 @@ def setup_periodic_tasks(sender, **kwargs):  # pylint: disable=unused-argument
     logger.info("Registering periodic task: %s", "synchronize_master_lists")
     sender.add_periodic_task(
         crontab(minute=50, hour="*/3"),
-        celery_queue.tasks.synchronize_master_lists,
+        celery_queue.tasks.synchronize_master_lists.s(),
         name="synchronize_master_lists",
     )
 
