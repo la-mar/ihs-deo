@@ -30,15 +30,12 @@ Available on <a href="https://hub.docker.com/r/driftwood/ihs">DockerHub</a>!
 
 # Todo
 
+- Improve API error logging
 - Add API endpoints for CLI
 - Unit Testing
 - Documentation
 - Process changes and deletes (nightly)
-- query production in a date range for a specific api
-- hash the json record and compare to existing hashs
-- Distribute counties to update across the week instead of all at once
-- Add example using Redis w/docker-compose
-- Add Dockerfile without chamber to builds
+- query production in a date range for a specific api?
 
 ### MongoDB Collections
 
@@ -63,10 +60,3 @@ Available on <a href="https://hub.docker.com/r/driftwood/ihs">DockerHub</a>!
   ```bash
   docker run --entrypoint=ihs driftwood/ihs
   ```
-
-# Issues
-
-- Export capacity gets too full and propagates errors on collection
-  - potential solutions:
-    - stricter rate limits on submission tasks
-    - group exports into larger chunks rather than per well
