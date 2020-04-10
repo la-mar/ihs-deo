@@ -12,7 +12,8 @@ QUEUE_MAP = {
 
 
 def hole_direction_router(name, args, kwargs, options, task=None, **kw):
-    """ Route tasks based on name and the hole_direction (H or V) given as the first arg in the task signature.
+    """ Route tasks based on name and the hole_direction (H or V) given
+        as the first arg in the task signature.
 
     Results in 6 routable queues:
 
