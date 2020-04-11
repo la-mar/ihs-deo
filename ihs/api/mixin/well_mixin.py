@@ -167,75 +167,77 @@ class WellMixin(BaseMixin):
             if data:
                 for test in data:
                     try:
-                        get = functools.partial(query_dict, data=test)
-                        out = {}
-                        out["type_code"] = get("type_code")
-                        out["test_number"] = get("header.number")
-                        out["test_date"] = get("header.dates.test.standard")
-                        out["test_method"] = get("header.methods.test.name")
-                        out["completion"] = get("header.completion")
-                        out["oil"] = get("header.flows.oil.value")
-                        out["oil_uom"] = get("header.flows.oil.uom")
-                        out["gas"] = get("header.flows.gas.value")
-                        out["gas_uom"] = get("header.flows.gas.uom")
-                        out["water"] = get("header.flows.water.value")
-                        out["water_uom"] = get("header.flows.water.uom")
-                        choke = get("header.chokes.top.description")
-                        choke_uom = get("header.chokes.top.description")
-                        out["choke"] = (
-                            f"{choke} {choke_uom}" if choke and choke_uom else None
-                        )
-                        out["depth_top"] = get("header.depths.top.value")
-                        out["depth_top_uom"] = get("header.depths.top.uom")
-                        out["depth_base"] = get("header.depths.base.value")
-                        out["depth_base_uom"] = get("header.depths.base.uom")
-                        out["sulfur"] = get("header.sulfur.indicator.code")
-                        out["oil_gravity"] = get("header.gravities.oil.value")
-                        out["oil_gravity_uom"] = get("header.gravities.oil.uom")
-                        out["gor"] = get("header.ratios.gas_oil.value")
-                        out["gor_uom"] = get("header.ratios.gas_oil.uom")
-                        out["oil_gravity_uom"] = get("header.ratios.gas_oil.uom")
-                        try:
-                            out["perf_upper"] = get(
-                                "perforation.header.depths.top.value"
-                            )
-                            out["perf_upper_uom"] = get(
-                                "perforation.header.depths.top.uom"
-                            )
-                            out["perf_lower"] = get(
-                                "perforation.header.depths.base.value"
-                            )
-                            out["perf_lower_uom"] = get(
-                                "perforation.header.depths.base.uom"
-                            )
-                            out["perfll"] = get(
-                                "perforation.header.lengths.lateral_gross_perf.value"
-                            )
-                            out["perfll_uom"] = get(
-                                "perforation.header.lengths.lateral_gross_perf.uom"
-                            )
-                        except ValueError as ve:
-                            logger.warning(f"{self.well_header['api14']} -- {ve}")
-                            out["perf_upper"] = get(
-                                "perforation.1.header.depths.top.value"
-                            )
-                            out["perf_upper_uom"] = get(
-                                "perforation.1.header.depths.top.uom"
-                            )
-                            out["perf_lower"] = get(
-                                "perforation.-1.header.depths.base.value"
-                            )
-                            out["perf_lower_uom"] = get(
-                                "perforation.-1.header.depths.base.uom"
-                            )
-                            out["perfll"] = get(
-                                "perforation.-1.header.lengths.lateral_gross_perf.value"
-                            )
-                            out["perfll_uom"] = get(
-                                "perforation.-1.header.lengths.lateral_gross_perf.uom"
-                            )
 
-                        output.append(out)
+                        get = functools.partial(query_dict, data=test)
+                        if get("type_code") == "IP":
+                            out = {}
+                            out["type_code"] = get("type_code")
+                            out["test_number"] = get("header.number")
+                            out["test_date"] = get("header.dates.test.standard")
+                            out["test_method"] = get("header.methods.test.name")
+                            out["completion"] = get("header.completion")
+                            out["oil"] = get("header.flows.oil.value")
+                            out["oil_uom"] = get("header.flows.oil.uom")
+                            out["gas"] = get("header.flows.gas.value")
+                            out["gas_uom"] = get("header.flows.gas.uom")
+                            out["water"] = get("header.flows.water.value")
+                            out["water_uom"] = get("header.flows.water.uom")
+                            choke = get("header.chokes.top.description")
+                            choke_uom = get("header.chokes.top.description")
+                            out["choke"] = (
+                                f"{choke} {choke_uom}" if choke and choke_uom else None
+                            )
+                            out["depth_top"] = get("header.depths.top.value")
+                            out["depth_top_uom"] = get("header.depths.top.uom")
+                            out["depth_base"] = get("header.depths.base.value")
+                            out["depth_base_uom"] = get("header.depths.base.uom")
+                            out["sulfur"] = get("header.sulfur.indicator.code")
+                            out["oil_gravity"] = get("header.gravities.oil.value")
+                            out["oil_gravity_uom"] = get("header.gravities.oil.uom")
+                            out["gor"] = get("header.ratios.gas_oil.value")
+                            out["gor_uom"] = get("header.ratios.gas_oil.uom")
+                            out["oil_gravity_uom"] = get("header.ratios.gas_oil.uom")
+                            try:
+                                out["perf_upper"] = get(
+                                    "perforation.header.depths.top.value"
+                                )
+                                out["perf_upper_uom"] = get(
+                                    "perforation.header.depths.top.uom"
+                                )
+                                out["perf_lower"] = get(
+                                    "perforation.header.depths.base.value"
+                                )
+                                out["perf_lower_uom"] = get(
+                                    "perforation.header.depths.base.uom"
+                                )
+                                out["perfll"] = get(
+                                    "perforation.header.lengths.lateral_gross_perf.value"
+                                )
+                                out["perfll_uom"] = get(
+                                    "perforation.header.lengths.lateral_gross_perf.uom"
+                                )
+                            except ValueError as ve:
+                                logger.warning(f"{self.well_header['api14']} -- {ve}")
+                                out["perf_upper"] = get(
+                                    "perforation.1.header.depths.top.value"
+                                )
+                                out["perf_upper_uom"] = get(
+                                    "perforation.1.header.depths.top.uom"
+                                )
+                                out["perf_lower"] = get(
+                                    "perforation.-1.header.depths.base.value"
+                                )
+                                out["perf_lower_uom"] = get(
+                                    "perforation.-1.header.depths.base.uom"
+                                )
+                                out["perfll"] = get(
+                                    "perforation.-1.header.lengths.lateral_gross_perf.value"
+                                )
+                                out["perfll_uom"] = get(
+                                    "perforation.-1.header.lengths.lateral_gross_perf.uom"
+                                )
+
+                            output.append(out)
                     except Exception as e:
                         logger.error(f"{self.well_header['api14']} -- {e}")
         return output
