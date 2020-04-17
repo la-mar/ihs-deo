@@ -30,6 +30,7 @@ Available on <a href="https://hub.docker.com/r/driftwood/ihs">DockerHub</a>!
 
 # Todo
 
+- Pagination mixin is broken. It doesnt seem to respect the passed query string
 - Improve API error logging
 - Add API endpoints for CLI
 - Unit Testing
