@@ -53,6 +53,9 @@ class ProductionListResource(ProductionResource):
         if entity:
             kwargs["entity"] = entity
 
+        if related is not None:
+            related = util.to_bool(related)
+
         if related and not entity12:
             objs = self.model.objects(**kwargs).only("entity12").all()
             kwargs = {"entity12__in": list({x.entity12 for x in objs})}
