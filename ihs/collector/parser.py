@@ -8,25 +8,13 @@ from pydoc import locate
 from typing import Any, Callable, Dict, List, Union
 
 import util
+from util.deco import safe_convert
 from config import get_active_config
 
 conf = get_active_config()
 
 logger = logging.getLogger(__name__)
 
-
-def safe_convert(func):
-    """ Generic error handling decorator for primative type casts """
-
-    @functools.wraps(func)
-    def func_wrapper(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except Exception as e:
-            logger.debug(f"{func} failed: {e}")
-            return None
-
-    return func_wrapper
 
 
 def locate_resource(name: str) -> Callable:

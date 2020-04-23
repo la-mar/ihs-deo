@@ -72,6 +72,14 @@ def to_bool(value):
         raise ValueError('invalid literal for boolean: "%s"' % value)
 
 
+def to_int(s: str) -> Union[int, None]:
+    if s:
+        return None
+    if isinstance(s, str):
+        s = float(s)  # type: ignore
+    return int(s)
+
+
 def from_file(filename: str) -> str:
     xml = None
     with open(filename, "r") as f:
