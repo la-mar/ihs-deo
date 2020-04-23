@@ -1,8 +1,8 @@
-from typing import Dict
+from typing import Any, Dict, List, Union
+from pathlib import Path
 
 import json
 from datetime import date, datetime, timedelta
-from typing import Any
 
 
 class DateTimeEncoder(json.JSONEncoder):
@@ -36,6 +36,30 @@ class ObjectEncoder(json.JSONEncoder):
             return result
 
 
-def to_string(data: Dict[Any, Any], pretty: bool = True) -> str:
+class UniversalEncoder(DateTimeEncoder, ObjectEncoder):
+    pass
+
+
+def to_string(data: Union[List, Dict], pretty: bool = True) -> str:
     indent = 4 if pretty else 0
-    return json.dumps(data, indent=indent, cls=ObjectEncoder)
+    return json.dumps(data, indent=indent, cls=UniversalEncoder)
+
+
+def dumps(data: Union[List, Dict], pretty: bool = True) -> str:
+    """ placeholder: alias for jsontools.to_string """
+    return to_string(data, pretty)
+
+
+def to_json(d: dict, path: Union[Path, str], cls=DateTimeEncoder):
+    with open(path, "w") as f:
+        json.dump(d, f, cls=cls, indent=4)
+
+
+def load_json(path: Union[Path, str]):
+    with open(path, "r") as f:
+        return json.load(f)
+
+
+def make_repr(data: Union[List, Dict], pretty: bool = True) -> str:
+    """wraps to_string to encapsulate repr specific edge cases """
+    return dumps(data=data, pretty=pretty)

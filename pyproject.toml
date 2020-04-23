@@ -42,6 +42,7 @@ tomlkit = "^0.5.8"
 shapely = "^1.7.0"
 redis = "^3.4.1"
 celery-redbeat = "^0.13.0"
+shortuuid = "^1.0.1"
 
 
 [tool.poetry.dev-dependencies]

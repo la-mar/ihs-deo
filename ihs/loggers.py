@@ -107,6 +107,15 @@ class DatadogJSONFormatter(json_log_formatter.JSONFormatter):
         except ImportError:
             self.get_current_task = lambda: None
 
+        # try:
+        #     from flask import has_request_context, request
+
+        #     self.has_request_context = has_request_context
+        #     self.get_current_request = lambda: request
+        # except ImportError:
+        #     self.has_request_context = lambda: False
+        #     self.get_current_request = lambda: None
+
     def format(self, record: LogRecord) -> str:
         """Return the record in the format usable by Datadog."""
         json_record: Dict = self.json_record(record.getMessage(), record)
@@ -143,6 +152,16 @@ class DatadogJSONFormatter(json_log_formatter.JSONFormatter):
             record_dict.update(
                 task_id=task.request.id, task_name=task.name, task_meta=task.metadata
             )
+
+        # if running inside flask request, add request info
+        # if self.has_request_context():
+        #     request = self.get_current_request()
+        #     if request:
+        #         record_dict["url"] = request.url
+        #         record_dict["remote_addr"] = request.remote_addr
+        # else:
+        #     record_dict["url"] = None
+        #     record_dict["remote_addr"] = None
 
         # Handle exceptions, including those in the formatter itself
         exc_info = record.exc_info

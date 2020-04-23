@@ -179,6 +179,9 @@ class BaseConfig:
     """ Logging """
     LOG_LEVEL = os.getenv("LOG_LEVEL", 20)
     LOG_FORMAT = os.getenv("LOG_FORMAT", "funcname")
+    WEB_LOG_REQUESTS = to_bool(os.getenv("WEB_LOG_REQUESTS", True))
+    WEB_LOG_RESPONSES = to_bool(os.getenv("WEB_LOG_RESPONSES", True))
+    WEB_LOG_SAMPLE_FRAC = float(os.getenv("WEB_LOG_SAMPLE_FRAC", 0.5))
     CELERY_LOG_LEVEL = os.getenv("CELERY_LOG_LEVEL", LOG_LEVEL)
     CELERY_LOG_FORMAT = os.getenv("CELERY_LOG_FORMAT", LOG_FORMAT)
 

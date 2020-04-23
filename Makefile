@@ -184,17 +184,8 @@ compose:
 	# run docker-compose using aws-vault session credentials
 	aws-vault exec ${ENV} -- docker-compose up
 
-add-to-secret-scanner:
-	git secrets --install
-	git secrets --register-aws
 
-scan-git-secrets:
-	git secrets --scan-history
-
-scan-trufflehog:
-	trufflehog --regex --entropy=False --max_depth=1000 ./.git
-
-scan-gitleaks:
-	gitleaks --repo=./.git --verbose --pretty
-
-
+sent-request:
+	http :5001/well/h/42461409160000
+	http :5001/well/h/42383406370000
+	http :5001/well/h/42461412100000

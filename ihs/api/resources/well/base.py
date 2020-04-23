@@ -33,16 +33,7 @@ class WellListResource(WellResource):
         if since:
             kwargs["ihs_last_update_date__gte"] = since
 
-        logger.debug(f"well get: {kwargs}")  # noqa
-
-        # if api14:
-        #     return self._get(api14__in=api14.split(",")), 200
-        # elif since:
-        #     return (
-        #         self._get(paginate=True, ihs_last_update_date__gte=since),
-        #         200,
-        #     )
-        #     return self._get(paginate=True, ihs_last_update_date__gte=since)
+        logger.debug(f"({self.__class__.__name__}): {kwargs}")  # noqa
 
         if kwargs:
             return self._get(**kwargs), 200
