@@ -103,18 +103,11 @@ def get_task_definition(
             "containerDefinitions": [
                 {
                     "name": "ihs-web",
-                    "command": [
-                        "ihs",
-                        "run",
-                        "web",
-                        "-b 0.0.0.0:80",
-                        # "--statsd-host=localhost:8125",
-                    ],
+                    "command": ["ihs", "run", "web", "-b 0.0.0.0:80",],
                     "memoryReservation": 256,
                     "cpu": 256,
                     "image": image,
                     "essential": True,
-                    "environment": transform_envs(envs),
                     "portMappings": [
                         {"hostPort": 80, "containerPort": 80, "protocol": "tcp"}
                     ],
@@ -135,8 +128,6 @@ def get_task_definition(
                         "ihs",
                         "run",
                         "worker",
-                        "-c",
-                        "10",
                         "-Q",
                         "ihs-submissions-h,ihs-submissions-v",
                         # "--loglevel",
@@ -146,7 +137,7 @@ def get_task_definition(
                     "cpu": 256,
                     "image": image,
                     "essential": True,
-                    "environment": transform_envs(envs),
+                    "user": "celeryuser",
                 },
             ],
             "executionRoleArn": "ecsTaskExecutionRole",
@@ -164,8 +155,6 @@ def get_task_definition(
                         "ihs",
                         "run",
                         "worker",
-                        "-c",
-                        "10",
                         "-Q",
                         "ihs-collections-h,ihs-collections-v",
                         # "--loglevel",
@@ -175,7 +164,7 @@ def get_task_definition(
                     "cpu": 512,
                     "image": image,
                     "essential": True,
-                    "environment": transform_envs(envs),
+                    "user": "celeryuser",
                 },
             ],
             "executionRoleArn": "ecsTaskExecutionRole",
@@ -185,35 +174,6 @@ def get_task_definition(
             "tags": tags,
             # "cpu": "256",  # from 128 CPU units (0.125 vCPUs) and 10240 CPU units (10 vCPUs)
         },
-        # "ihs-worker-deleter": {
-        #     "containerDefinitions": [
-        #         {
-        #             "name": "ihs-worker",
-        #             "command": [
-        #                 "ihs",
-        #                 "run",
-        #                 "worker",
-        #                 "-c",
-        #                 "10",
-        #                 "-Q",
-        #                 "ihs-deletions-h,ihs-deletions-v",
-        #                 # "--loglevel",
-        #                 # "warn",
-        #             ],
-        #             "memoryReservation": 128,
-        #             "cpu": 256,
-        #             "image": image,
-        #             "essential": True,
-        #             "environment": transform_envs(envs),
-        #         },
-        #     ],
-        #     "executionRoleArn": "ecsTaskExecutionRole",
-        #     "family": f"{service_name}",
-        #     "networkMode": "bridge",
-        #     "taskRoleArn": task_iam_role_arn,
-        #     "tags": tags,
-        #     # "cpu": "256",  # from 128 CPU units (0.125 vCPUs) and 10240 CPU units (10 vCPUs)
-        # },
         "ihs-worker-default": {
             "containerDefinitions": [
                 {
@@ -222,8 +182,6 @@ def get_task_definition(
                         "ihs",
                         "run",
                         "worker",
-                        "-c",
-                        "10",
                         "-Q",
                         "ihs-default",
                         # "--loglevel",
@@ -233,7 +191,7 @@ def get_task_definition(
                     "cpu": 256,
                     "image": image,
                     "essential": True,
-                    "environment": transform_envs(envs),
+                    "user": "celeryuser",
                 },
             ],
             "executionRoleArn": "ecsTaskExecutionRole",
@@ -252,7 +210,7 @@ def get_task_definition(
                     "cpu": 256,
                     "image": image,
                     "essential": True,
-                    "environment": transform_envs(envs),
+                    "user": "celeryuser",
                 },
             ],
             "executionRoleArn": "ecsTaskExecutionRole",

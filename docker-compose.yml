@@ -28,6 +28,8 @@ services:
     command: ihs run worker -Q ihs-default,ihs-submissions-h,ihs-collections-h,ihs-deletions-h,ihs-submissions-v,ihs-collections-v,ihs-deletions-v
   cron:
     <<: *defaults
+    container_name: ihs_cron
+    user: celeryuser
     command: ihs run cron --pidfile=
   redis:
     container_name: ihs_redis
