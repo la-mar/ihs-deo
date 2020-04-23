@@ -11,6 +11,8 @@ import tomlkit
 import yaml
 from attrdict import AttrDict
 from dotenv import load_dotenv
+from util import to_int, to_bool
+
 
 # TODO: change settings management to pydantic model
 
@@ -196,23 +198,21 @@ class BaseConfig:
     """ Celery """
     BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://localhost:6379/0")
     CELERY_TASK_LIST = ["celery_queue.tasks"]
-    CELERYD_TASK_TIME_LIMIT = os.getenv(
+    CELERYD_TASK_TIME_LIMIT = to_int(os.getenv(
         "CELERYD_TASK_TIME_LIMIT", 60 * 60 * 12
-    )  # 12 hours
+    ))  # 12 hours
     CELERY_TASK_SERIALIZER = "json"
     CELERY_ACCEPT_CONTENT = ["json"]
-    CELERYD_MAX_TASKS_PER_CHILD = os.getenv("CELERYD_MAX_TASKS_PER_CHILD", 1000)
-    # CELERYD_MAX_MEMORY_PER_CHILD = os.getenv(
-    #     "CELERYD_MAX_MEMORY_PER_CHILD", 24000
-    # )  # 24MB
+    CELERYD_MAX_TASKS_PER_CHILD = to_int(os.getenv("CELERYD_MAX_TASKS_PER_CHILD", 1000))
+    CELERYD_MAX_MEMORY_PER_CHILD = to_int(os.getenv("CELERYD_MAX_MEMORY_PER_CHILD", 250000))  # 250MB # noqa
     CELERY_ENABLE_REMOTE_CONTROL = False  # required for sqs
     CELERY_SEND_EVENTS = False  # required for sqs
     CELERY_DEFAULT_QUEUE = f"{project}-default"  # sqs queue name
     CELERY_ROUTES = ("celery_queue.routers.hole_direction_router",)
-    CELERY_TASK_CREATE_MISSING_QUEUES = os.getenv(
+    CELERY_TASK_CREATE_MISSING_QUEUES = to_bool(os.getenv(
         "CELERY_TASK_CREATE_MISSING_QUEUES", False
-    )
-    CELERY_TASK_ALWAYS_EAGER = os.getenv("CELERY_TASK_ALWAYS_EAGER", False)
+    ))
+    CELERY_TASK_ALWAYS_EAGER = to_bool(os.getenv("CELERY_TASK_ALWAYS_EAGER", False))
 
     """ Celery Beat """
     CELERYBEAT_SCHEDULER = "redbeat.RedBeatScheduler"
@@ -238,8 +238,8 @@ class BaseConfig:
         "exportbuilder": abs_path(API_WSDL_DIR, "{version}/ExportBuilder.wsdl"),
     }
     API_DOMAIN = "US"
-    TASK_BATCH_SIZE = int(os.getenv("IHS_TASK_BATCH_SIZE", 50))
-    SIMULATE_EXPENSIVE_TASKS = os.getenv("IHS_SIMULATE_EXPENSIVE_TASKS", False)
+    TASK_BATCH_SIZE = to_int(os.getenv("IHS_TASK_BATCH_SIZE", 50))
+    SIMULATE_EXPENSIVE_TASKS = to_bool(os.getenv("IHS_SIMULATE_EXPENSIVE_TASKS", False))
 
     @property
     def show(self):
