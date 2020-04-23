@@ -78,7 +78,7 @@ def create_app(script_info=None):
 
             if request.should_log:
                 logger.info(
-                    f"[{request.id}] {request.method} - {request.scheme}:{request.path} {request.arg_count_str}",  # noqa
+                    f"[{request.id}] {request.method} - {request.scheme}:{request.path}{request.arg_count_str}",  # noqa
                     extra=attrs,
                 )
 
@@ -114,7 +114,7 @@ def create_app(script_info=None):
 
         if request.should_log:
             logger.info(
-                f"[{request.id}] RESPONSE - {request.scheme}:{request.path} {request.arg_count_str} -> {response.status} ({duration}s)",  # noqa
+                f"[{request.id}] RESPONSE - {request.scheme}:{request.path}{request.arg_count_str} -> {response.status} ({duration}s)",  # noqa
                 extra=attrs,
             )
 

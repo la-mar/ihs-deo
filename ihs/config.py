@@ -150,7 +150,7 @@ class BaseConfig:
     DEFAULT_PROJECTION = "wgs84"
 
     """ Sentry """
-    SENTRY_ENABLED = bool(os.getenv("SENTRY_ENABLED"))
+    SENTRY_ENABLED = to_bool(os.getenv("SENTRY_ENABLED"))
     SENTRY_DSN = os.getenv("SENTRY_DSN", None)
     SENTRY_LEVEL = os.getenv("SENTRY_LEVEL", 40)
     SENTRY_EVENT_LEVEL = os.getenv("SENTRY_EVENT_LEVEL", 40)
@@ -158,7 +158,7 @@ class BaseConfig:
     SENTRY_RELEASE = f"{project}-{version}"
 
     """ Datadog """
-    DATADOG_ENABLED = bool(os.getenv("DATADOG_ENABLED"))
+    DATADOG_ENABLED = to_bool(os.getenv("DATADOG_ENABLED"))
     DATADOG_API_KEY = os.getenv("DATADOG_API_KEY", os.getenv("DD_API_KEY", None))
     DATADOG_APP_KEY = os.getenv("DATADOG_APP_KEY", os.getenv("DD_APP_KEY", None))
     DATADOG_DEFAULT_TAGS = {
