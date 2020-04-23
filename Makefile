@@ -185,7 +185,7 @@ compose:
 	aws-vault exec ${ENV} -- docker-compose up
 
 
-sent-request:
+send-request:
 	http :5001/well/h/42461409160000
 	http :5001/well/h/42383406370000
 	http :5001/well/h/42461412100000

@@ -5,8 +5,7 @@ from datetime import datetime
 import time
 import random
 
-from flask import Flask, current_app, request, g
-from flask.logging import default_handler
+from flask import Flask, request, g
 import sentry
 
 import loggers
@@ -43,7 +42,6 @@ def create_app(script_info=None):
     celery.config_from_object(app.config)
 
     configure_blueprints(app)
-    # app.logger.removeHandler(default_handler)
 
     # shell context for flask cli
     @app.shell_context_processor
@@ -59,7 +57,7 @@ def create_app(script_info=None):
             k: len(ensure_list(v)) for k, v in (request.args or {}).items()
         }
         request.arg_count_str = " ".join(
-            [f"{k}s={v}" for k, v in request.arg_counts.items()]
+            [f" {k}s={v}" for k, v in request.arg_counts.items()]
         )
 
         if conf.WEB_LOG_REQUESTS:
@@ -80,7 +78,7 @@ def create_app(script_info=None):
 
             if request.should_log:
                 logger.info(
-                    f"[{request.id}] {request.method} - {request.path} {request.scheme} {request.arg_count_str}",  # noqa
+                    f"[{request.id}] {request.method} - {request.scheme}:{request.path} {request.arg_count_str}",  # noqa
                     extra=attrs,
                 )
 
@@ -116,7 +114,7 @@ def create_app(script_info=None):
 
         if request.should_log:
             logger.info(
-                f"[{request.id}] RESPONSE - {request.path} {request.scheme} {request.arg_count_str} -> {response.status} ({duration}s)",  # noqa
+                f"[{request.id}] RESPONSE - {request.scheme}:{request.path} {request.arg_count_str} -> {response.status} ({duration}s)",  # noqa
                 extra=attrs,
             )
 
