@@ -289,6 +289,9 @@ data "aws_iam_policy_document" "task_policy" {
     ]
     resources = [
       "arn:aws:ssm:*:*:parameter/${var.service_name}/*",
+      "arn:aws:ssm:*:*:parameter/${var.service_name}-web/*",
+      "arn:aws:ssm:*:*:parameter/${var.service_name}-cron/*",
+      "arn:aws:ssm:*:*:parameter/${var.service_name}-worker/*",
       "arn:aws:ssm:*:*:parameter/datadog/*"
     ]
   }
