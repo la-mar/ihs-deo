@@ -89,30 +89,30 @@ login:
 build:
 	@echo "Building docker image: ${IMAGE_NAME}"
 	docker build  -f Dockerfile . -t ${IMAGE_NAME}
-	docker tag ${IMAGE_NAME} ${IMAGE_NAME}:${COMMIT_HASH}
+	# docker tag ${IMAGE_NAME} ${IMAGE_NAME}:${COMMIT_HASH}
 	docker tag ${IMAGE_NAME} ${IMAGE_NAME}:${APP_VERSION}
-	docker tag ${IMAGE_NAME} ${IMAGE_NAME}:dev
+	# docker tag ${IMAGE_NAME} ${IMAGE_NAME}:dev
 	docker tag ${IMAGE_NAME} ${IMAGE_NAME}:latest
 
 
 build-with-chamber:
 	@echo "Building docker image: ${IMAGE_NAME} (with chamber)"
 	docker build  -f Dockerfile.chamber . -t ${IMAGE_NAME}
-	docker tag ${IMAGE_NAME} ${IMAGE_NAME}:chamber-${COMMIT_HASH}
+	# docker tag ${IMAGE_NAME} ${IMAGE_NAME}:chamber-${COMMIT_HASH}
 	docker tag ${IMAGE_NAME} ${IMAGE_NAME}:chamber-${APP_VERSION}
-	docker tag ${IMAGE_NAME} ${IMAGE_NAME}:chamber-dev
+	# docker tag ${IMAGE_NAME} ${IMAGE_NAME}:chamber-dev
 	docker tag ${IMAGE_NAME} ${IMAGE_NAME}:chamber-latest
 
 build-all: build-with-chamber build
 
 push: login
-	docker push ${IMAGE_NAME}:dev
-	docker push ${IMAGE_NAME}:${COMMIT_HASH}
+	# docker push ${IMAGE_NAME}:dev
+	# docker push ${IMAGE_NAME}:${COMMIT_HASH}
 	docker push ${IMAGE_NAME}:latest
 
 push-all: login push
-	docker push ${IMAGE_NAME}:chamber-dev
-	docker push ${IMAGE_NAME}:chamber-${COMMIT_HASH}
+	# docker push ${IMAGE_NAME}:chamber-dev
+	# docker push ${IMAGE_NAME}:chamber-${COMMIT_HASH}
 	docker push ${IMAGE_NAME}:chamber-latest
 
 push-version:
@@ -121,7 +121,7 @@ push-version:
 	docker push ${IMAGE_NAME}:${APP_VERSION}
 	docker push ${IMAGE_NAME}:chamber-${APP_VERSION}
 
-all: build-all push-all
+all: build push
 
 cc-expand:
 	# show expanded configuration

@@ -206,8 +206,8 @@ class BaseConfig:
     ))  # 12 hours
     CELERY_TASK_SERIALIZER = "json"
     CELERY_ACCEPT_CONTENT = ["json"]
-    CELERYD_MAX_TASKS_PER_CHILD = to_int(os.getenv("CELERYD_MAX_TASKS_PER_CHILD", 1000))
-    CELERYD_MAX_MEMORY_PER_CHILD = to_int(os.getenv("CELERYD_MAX_MEMORY_PER_CHILD", 250000))  # 250MB # noqa
+    # CELERYD_MAX_TASKS_PER_CHILD = to_int(os.getenv("CELERYD_MAX_TASKS_PER_CHILD", 1000))
+    # CELERYD_MAX_MEMORY_PER_CHILD = to_int(os.getenv("CELERYD_MAX_MEMORY_PER_CHILD", 250000))  # 250MB # noqa
     CELERY_ENABLE_REMOTE_CONTROL = False  # required for sqs
     CELERY_SEND_EVENTS = False  # required for sqs
     CELERY_DEFAULT_QUEUE = f"{project}-default"  # sqs queue name

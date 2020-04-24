@@ -103,7 +103,18 @@ def get_task_definition(
             "containerDefinitions": [
                 {
                     "name": "ihs-web",
-                    "command": ["ihs", "run", "web", "-b 0.0.0.0:80",],
+                    "command": [
+                        "chamber",
+                        "exec",
+                        "ihs",
+                        "ihs-web",
+                        "datadog",
+                        "--",
+                        "ihs",
+                        "run",
+                        "web",
+                        "-b 0.0.0.0:80",
+                    ],
                     "memoryReservation": 256,
                     "cpu": 256,
                     "image": image,
@@ -125,6 +136,11 @@ def get_task_definition(
                 {
                     "name": "ihs-worker",
                     "command": [
+                        "chamber",
+                        "exec",
+                        "ihs",
+                        "datadog",
+                        "--",
                         "ihs",
                         "run",
                         "worker",
@@ -152,6 +168,11 @@ def get_task_definition(
                 {
                     "name": "ihs-worker",
                     "command": [
+                        "chamber",
+                        "exec",
+                        "ihs",
+                        "datadog",
+                        "--",
                         "ihs",
                         "run",
                         "worker",
@@ -179,6 +200,11 @@ def get_task_definition(
                 {
                     "name": "ihs-worker",
                     "command": [
+                        "chamber",
+                        "exec",
+                        "ihs",
+                        "datadog",
+                        "--",
                         "ihs",
                         "run",
                         "worker",
@@ -205,7 +231,17 @@ def get_task_definition(
             "containerDefinitions": [
                 {
                     "name": "ihs-cron",
-                    "command": ["ihs", "run", "cron", "--loglevel", "debug"],
+                    "command": [
+                        "chamber",
+                        "exec",
+                        "ihs",
+                        "ihs-cron",
+                        "datadog",
+                        "--",
+                        "ihs",
+                        "run",
+                        "cron",
+                    ],
                     "memoryReservation": 256,
                     "cpu": 256,
                     "image": image,
