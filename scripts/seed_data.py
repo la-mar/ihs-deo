@@ -18,9 +18,12 @@ app = create_app()
 app.app_context().push()
 
 counties = load_json("data/counties.json")
+
+# * seed counties model
 coll = Collector(County)
 coll.save(counties, replace=False)
 
+# * replicate county definitions to well/prod master lists where missing
 county_name_only = [{"name": d["name"]} for d in counties]
 for model in [
     WellMasterHorizontal,
@@ -28,23 +31,13 @@ for model in [
     ProductionMasterHorizontal,
     ProductionMasterVertical,
 ]:
+    existing = [x._data["name"] for x in model.objects()]
     for county in county_name_only:
-        # print(county)
-        i = model(**county)  # .save()
-        i.save()
-    # coll = Collector(model)
-    # coll.save(county_name_only, replace=False)
+
+        if county["name"] not in existing:
+            i = model(**county)
+            i.save()
+            print(f"({model.__name__}) added {county['name']}")
+
 
 print("")
-
-
-for model in [
-    WellMasterHorizontal,
-    WellMasterVertical,
-    ProductionMasterHorizontal,
-    ProductionMasterVertical,
-]:
-    for county in model.objects.all():
-        if "County" in county.name:
-            print(county.name)
-            county.delete()

@@ -1,185 +1,286 @@
 [{
-    "name": "tx-upton",
-    "county_code": "461",
-    "state_code": "42"
-}, {
-    "name": "tx-reagan",
-    "county_code": "383",
-    "state_code": "42"
-}, {
-    "name": "tx-midland",
-    "county_code": "329",
-    "state_code": "42"
-}, {
-    "name": "tx-glasscock",
-    "county_code": "173",
-    "state_code": "42"
-}, {
-    "name": "tx-ector",
-    "county_code": "135",
-    "state_code": "42"
-}, {
-    "name": "tx-crane",
-    "county_code": "103",
-    "state_code": "42"
-}, {
-    "name": "tx-andrews",
-    "county_code": "003",
-    "state_code": "42"
-}, {
-    "name": "tx-martin",
-    "county_code": "317",
-    "state_code": "42"
-}, {
-    "name": "tx-howard",
-    "county_code": "227",
-    "state_code": "42"
-}, {
-    "name": "tx-gaines",
-    "county_code": "165",
-    "state_code": "42"
-}, {
-    "name": "tx-dawson",
-    "county_code": "115",
-    "state_code": "42"
-}, {
-    "name": "tx-borden",
-    "county_code": "033",
-    "state_code": "42"
-}, {
-    "name": "tx-crockett",
-    "county_code": "105",
-    "state_code": "42"
-}, {
-    "name": "tx-irion",
-    "county_code": "235",
-    "state_code": "42"
-}, {
-    "name": "tx-sterling",
-    "county_code": "431",
-    "state_code": "42"
-}, {
-    "name": "tx-tomgreen",
-    "county_code": "451",
-    "state_code": "42"
-}, {
-    "name": "tx-bailey",
-    "county_code": "017",
-    "state_code": "42"
-}, {
-    "name": "tx-crosby",
-    "county_code": "107",
-    "state_code": "42"
-}, {
-    "name": "tx-brown",
-    "county_code": "049",
-    "state_code": "42"
-}, {
-    "name": "tx-cochran",
-    "county_code": "079",
-    "state_code": "42"
-}, {
-    "name": "tx-coke",
-    "county_code": "081",
-    "state_code": "42"
-}, {
-    "name": "tx-concho",
-    "county_code": "095",
-    "state_code": "42"
-}, {
-    "name": "tx-cottle",
-    "county_code": "101",
-    "state_code": "42"
-}, {
-    "name": "tx-dickens",
-    "county_code": "125",
-    "state_code": "42"
-}, {
-    "name": "tx-garza",
-    "county_code": "169",
-    "state_code": "42"
-}, {
-    "name": "tx-floyd",
-    "county_code": "153",
-    "state_code": "42"
-}, {
-    "name": "tx-hale",
-    "county_code": "189",
-    "state_code": "42"
-}, {
-    "name": "tx-hockley",
-    "county_code": "219",
-    "state_code": "42"
-}, {
-    "name": "tx-taylor",
-    "county_code": "441",
-    "state_code": "42"
-}, {
-    "name": "tx-kent",
-    "county_code": "263",
-    "state_code": "42"
-}, {
-    "name": "tx-kimble",
-    "county_code": "267",
-    "state_code": "42"
-}, {
-    "name": "tx-king",
-    "county_code": "269",
-    "state_code": "42"
-}, {
-    "name": "tx-lamb",
-    "county_code": "279",
-    "state_code": "42"
-}, {
-    "name": "tx-lubbock",
-    "county_code": "303",
-    "state_code": "42"
-}, {
-    "name": "tx-lynn",
-    "county_code": "305",
-    "state_code": "42"
-}, {
-    "name": "tx-mcculloch",
-    "county_code": "307",
-    "state_code": "42"
-}, {
-    "name": "tx-menard",
-    "county_code": "327",
-    "state_code": "42"
-}, {
-    "name": "tx-mitchell",
-    "county_code": "335",
-    "state_code": "42"
-}, {
-    "name": "tx-motley",
-    "county_code": "345",
-    "state_code": "42"
-}, {
-    "name": "tx-runnels",
-    "county_code": "399",
-    "state_code": "42"
-}, {
-    "name": "tx-schleicher",
-    "county_code": "413",
-    "state_code": "42"
-}, {
-    "name": "tx-scurry",
-    "county_code": "415",
-    "state_code": "42"
-}, {
-    "name": "tx-stonewall",
-    "county_code": "433",
-    "state_code": "42"
-}, {
-    "name": "tx-sutton",
-    "county_code": "435",
-    "state_code": "42"
-}, {
-    "name": "tx-terry",
-    "county_code": "445",
-    "state_code": "42"
-}, {
-    "name": "tx-yoakum",
-    "county_code": "501",
-    "state_code": "42"
-}]
+        "name": "tx-upton",
+        "county_code": "461",
+        "state_code": "42"
+    }, {
+        "name": "tx-reagan",
+        "county_code": "383",
+        "state_code": "42"
+    }, {
+        "name": "tx-midland",
+        "county_code": "329",
+        "state_code": "42"
+    }, {
+        "name": "tx-glasscock",
+        "county_code": "173",
+        "state_code": "42"
+    }, {
+        "name": "tx-ector",
+        "county_code": "135",
+        "state_code": "42"
+    }, {
+        "name": "tx-crane",
+        "county_code": "103",
+        "state_code": "42"
+    }, {
+        "name": "tx-andrews",
+        "county_code": "003",
+        "state_code": "42"
+    }, {
+        "name": "tx-martin",
+        "county_code": "317",
+        "state_code": "42"
+    }, {
+        "name": "tx-howard",
+        "county_code": "227",
+        "state_code": "42"
+    }, {
+        "name": "tx-gaines",
+        "county_code": "165",
+        "state_code": "42"
+    }, {
+        "name": "tx-dawson",
+        "county_code": "115",
+        "state_code": "42"
+    }, {
+        "name": "tx-borden",
+        "county_code": "033",
+        "state_code": "42"
+    }, {
+        "name": "tx-crockett",
+        "county_code": "105",
+        "state_code": "42"
+    }, {
+        "name": "tx-irion",
+        "county_code": "235",
+        "state_code": "42"
+    }, {
+        "name": "tx-sterling",
+        "county_code": "431",
+        "state_code": "42"
+    }, {
+        "name": "tx-tomgreen",
+        "county_code": "451",
+        "state_code": "42"
+    }, {
+        "name": "tx-bailey",
+        "county_code": "017",
+        "state_code": "42"
+    }, {
+        "name": "tx-crosby",
+        "county_code": "107",
+        "state_code": "42"
+    }, {
+        "name": "tx-brown",
+        "county_code": "049",
+        "state_code": "42"
+    }, {
+        "name": "tx-cochran",
+        "county_code": "079",
+        "state_code": "42"
+    }, {
+        "name": "tx-coke",
+        "county_code": "081",
+        "state_code": "42"
+    }, {
+        "name": "tx-concho",
+        "county_code": "095",
+        "state_code": "42"
+    }, {
+        "name": "tx-cottle",
+        "county_code": "101",
+        "state_code": "42"
+    }, {
+        "name": "tx-dickens",
+        "county_code": "125",
+        "state_code": "42"
+    }, {
+        "name": "tx-garza",
+        "county_code": "169",
+        "state_code": "42"
+    }, {
+        "name": "tx-floyd",
+        "county_code": "153",
+        "state_code": "42"
+    }, {
+        "name": "tx-hale",
+        "county_code": "189",
+        "state_code": "42"
+    }, {
+        "name": "tx-hockley",
+        "county_code": "219",
+        "state_code": "42"
+    }, {
+        "name": "tx-taylor",
+        "county_code": "441",
+        "state_code": "42"
+    }, {
+        "name": "tx-kent",
+        "county_code": "263",
+        "state_code": "42"
+    }, {
+        "name": "tx-kimble",
+        "county_code": "267",
+        "state_code": "42"
+    }, {
+        "name": "tx-king",
+        "county_code": "269",
+        "state_code": "42"
+    }, {
+        "name": "tx-lamb",
+        "county_code": "279",
+        "state_code": "42"
+    }, {
+        "name": "tx-lubbock",
+        "county_code": "303",
+        "state_code": "42"
+    }, {
+        "name": "tx-lynn",
+        "county_code": "305",
+        "state_code": "42"
+    }, {
+        "name": "tx-mcculloch",
+        "county_code": "307",
+        "state_code": "42"
+    }, {
+        "name": "tx-menard",
+        "county_code": "327",
+        "state_code": "42"
+    }, {
+        "name": "tx-mitchell",
+        "county_code": "335",
+        "state_code": "42"
+    }, {
+        "name": "tx-motley",
+        "county_code": "345",
+        "state_code": "42"
+    }, {
+        "name": "tx-runnels",
+        "county_code": "399",
+        "state_code": "42"
+    }, {
+        "name": "tx-schleicher",
+        "county_code": "413",
+        "state_code": "42"
+    }, {
+        "name": "tx-scurry",
+        "county_code": "415",
+        "state_code": "42"
+    }, {
+        "name": "tx-stonewall",
+        "county_code": "433",
+        "state_code": "42"
+    }, {
+        "name": "tx-sutton",
+        "county_code": "435",
+        "state_code": "42"
+    }, {
+        "name": "tx-terry",
+        "county_code": "445",
+        "state_code": "42"
+    }, {
+        "name": "tx-yoakum",
+        "county_code": "501",
+        "state_code": "42"
+    },
+    {
+        "name": "tx-winkler",
+        "county_code": "495",
+        "state_code": "42"
+    },
+    {
+        "name": "tx-ward",
+        "county_code": "475",
+        "state_code": "42"
+    },
+    {
+        "name": "tx-terrell",
+        "county_code": "443",
+        "state_code": "42"
+    },
+    {
+        "name": "tx-swisher",
+        "county_code": "437",
+        "state_code": "42"
+    },
+    {
+        "name": "nm-roosevelt",
+        "county_code": "041",
+        "state_code": "30"
+    },
+    {
+        "name": "tx-reeves",
+        "county_code": "389",
+        "state_code": "42"
+    },
+    {
+        "name": "tx-presidio",
+        "county_code": "377",
+        "state_code": "42"
+    },
+    {
+        "name": "tx-pecos",
+        "county_code": "371",
+        "state_code": "42"
+    },
+    {
+        "name": "tx-parmer",
+        "county_code": "369",
+        "state_code": "42"
+    },
+    {
+        "name": "tx-loving",
+        "county_code": "301",
+        "state_code": "42"
+    },
+    {
+        "name": "nm-lea",
+        "county_code": "025",
+        "state_code": "30"
+    },
+    {
+        "name": "tx-jeffdavis",
+        "county_code": "243",
+        "state_code": "42"
+    },
+    {
+        "name": "tx-hudspeth",
+        "county_code": "229",
+        "state_code": "42"
+    },
+    {
+        "name": "tx-elpaso",
+        "county_code": "141",
+        "state_code": "42"
+    },
+    {
+        "name": "nm-eddy",
+        "county_code": "015",
+        "state_code": "30"
+    },
+    {
+        "name": "nm-donaana",
+        "county_code": "013",
+        "state_code": "30"
+    },
+    {
+        "name": "tx-culberson",
+        "county_code": "109",
+        "state_code": "42"
+    },
+    {
+        "name": "nm-chaves",
+        "county_code": "005",
+        "state_code": "30"
+    },
+    {
+        "name": "tx-castro",
+        "county_code": "069",
+        "state_code": "42"
+    },
+    {
+        "name": "tx-brewster",
+        "county_code": "043",
+        "state_code": "42"
+    }
+]

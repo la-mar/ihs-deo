@@ -20,44 +20,39 @@ Project to automate data sourcing and validation from IHS Energy's Energy Web Se
 
 Features include:
 
-- customizable download schedules
-- configurable well/production sets per job
-- flexible and extensible parsers for common data types
-- Save data to a MongoDB backend
-- Built in REST API to interact data stored in MongoDB and/or download directly from IHS
+- Keep your local dataset in sync with IHS
+- Scheduled well & production downloads from IHS data services
+- Highly configurable scheduled tasks:
+
+  - download by county, API list, or by producing entity ID
+  - download using your existing queries stored on the IHS website
+
+- Parses and normalizes IHS data
+- Backed by MongoDB
+- Built in REST API
 
 Available on <a href="https://hub.docker.com/r/driftwood/ihs">DockerHub</a>!
 
-# Todo
+# Issues
 
 - Pagination mixin is broken. It doesnt seem to respect the passed query string
+
+# Todo
+
+- Documentation
 - Improve API error logging
 - Add API endpoints for CLI
 - Unit Testing
 - Documentation
 - Process changes and deletes (nightly)
 - query production in a date range for a specific api?
-
-### MongoDB Collections
-
-- well_master_horizontal
-- well_master_vertical
-- well_horizontal
-- well_vertical
-- production_master_horizontal
-- production_master_vertical
-- production_horizontal
-- production_vertical
+- add endpoint: add/remove county definition (name, state_code, county_code)
+- scheduled task: cleanup stale wells
 
 # Usage
 
-- Launch a worker container:
+- Launch application services:
 
   ```bash
-  docker run driftwood/ihs ihs run worker
-  ```
-
-- Bypass Chamber when launching container:
-  ```bash
-  docker run --entrypoint=ihs driftwood/ihs
+  docker-compose up
   ```

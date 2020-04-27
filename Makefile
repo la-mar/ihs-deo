@@ -89,9 +89,7 @@ login:
 build:
 	@echo "Building docker image: ${IMAGE_NAME}"
 	docker build  -f Dockerfile . -t ${IMAGE_NAME}
-	# docker tag ${IMAGE_NAME} ${IMAGE_NAME}:${COMMIT_HASH}
 	docker tag ${IMAGE_NAME} ${IMAGE_NAME}:${APP_VERSION}
-	# docker tag ${IMAGE_NAME} ${IMAGE_NAME}:dev
 	docker tag ${IMAGE_NAME} ${IMAGE_NAME}:latest
 
 
