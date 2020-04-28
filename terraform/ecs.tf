@@ -61,7 +61,7 @@ resource "aws_ecs_service" "ihs_web" {
     type  = "spread"
     field = "instanceId"
   }
-  desired_count           = 2
+  desired_count           = var.web_desired_count
   enable_ecs_managed_tags = true
   propagate_tags          = "TASK_DEFINITION"
   tags                    = local.tags
@@ -228,7 +228,7 @@ resource "aws_ecs_service" "ihs_cron" {
   task_definition = data.aws_ecs_task_definition.ihs_cron.family
 
   scheduling_strategy     = "REPLICA"
-  desired_count           = 1
+  desired_count           = var.cron_desired_count
   enable_ecs_managed_tags = true
   propagate_tags          = "TASK_DEFINITION"
   tags                    = local.tags
