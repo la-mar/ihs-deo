@@ -195,6 +195,7 @@ class BaseConfig:
     DATABASE_NAME = os.getenv("DATABASE_NAME", "default")
     DATABASE_AUTHENTICATION_SOURCE = "admin"
     DATABASE_URI = os.getenv("DATABASE_URI", None)
+    REPLICA_SET = os.getenv("REPLICA_SET", None)
     # DATABASE_UUID_REPRESENTATION = "standard"
     # DATABASE_CONNECT = os.getenv("DATABASE_CONNECT", False)
 
@@ -297,6 +298,14 @@ class BaseConfig:
             if include_auth_source
             else ""
         )
+        if self.REPLICA_SET:
+            replica_set = (
+                f"?replicaSet={self.REPLICA_SET}"
+                if not auth_source
+                else f"&replicaSet={self.REPLICA_SET}"
+            )
+        else:
+            replica_set = ""
 
         driver = db.get("driver", "")
         host = db.get("host", "")
@@ -306,7 +315,7 @@ class BaseConfig:
         colon = ":" if username is not None else ""
         username = username or ""
         password = password or ""
-        return f"{driver}://{username}{colon}{password}{at}{host}:{port}/{dbname}{auth_source}"
+        return f"{driver}://{username}{colon}{password}{at}{host}:{port}/{dbname}{auth_source}{replica_set}"  # noqa
 
     def __repr__(self):
         """ Print configuration summary """

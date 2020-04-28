@@ -7,6 +7,8 @@ import random
 
 from flask import Flask, request, g
 import sentry
+from pymongo.read_preferences import Nearest
+
 
 import loggers
 import shortuuid
@@ -27,13 +29,14 @@ logger = logging.getLogger("app.access")
 def create_app(script_info=None):
     app = Flask(__name__)
 
-
     # set config
     app.config.from_object(APP_SETTINGS)
     app.config["MONGODB_SETTINGS"] = {
         "db": conf.DATABASE_NAME,
         "host": conf.database_uri() if not conf.DATABASE_URI else conf.DATABASE_URI,
         "connect": False,  # prevents prefork connection
+        "replicaset": conf.REPLICA_SET,
+        "read_preference": Nearest()
     }
 
     # set up extensions
