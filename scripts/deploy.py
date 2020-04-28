@@ -115,7 +115,7 @@ def get_task_definition(
                         "web",
                         "-b 0.0.0.0:80",
                     ],
-                    "memoryReservation": 256,
+                    "memoryReservation": 512,
                     "cpu": 256,
                     "image": image,
                     "essential": True,
