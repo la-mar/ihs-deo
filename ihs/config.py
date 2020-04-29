@@ -5,6 +5,7 @@ import enum
 import os
 import shutil
 import socket
+from datetime import timedelta
 
 import pandas as pd
 import tomlkit
@@ -169,6 +170,8 @@ class BaseConfig:
 
     """ Config """
     CONFIG_BASEPATH = "./config"
+    COLLECTOR_CONFIG_PATH = abs_path(*os.getenv('COLLECTOR_CONFIG_PATH', CONFIG_BASEPATH+"/collector.yaml").rsplit("/", 1))  # type: ignore # noqa
+
     COLLECTOR_CONFIG_PATH = abs_path(CONFIG_BASEPATH, "collector.yaml")
     COLLECTOR_CONFIG = load_config(COLLECTOR_CONFIG_PATH)
     PARSER_CONFIG_PATH = abs_path(CONFIG_BASEPATH, "parsers.yaml")
@@ -222,6 +225,9 @@ class BaseConfig:
     CELERYBEAT_SCHEDULER = "redbeat.RedBeatScheduler"
     REDBEAT_REDIS_URL = os.getenv("IHS_CRON_URL")
     REDBEAT_KEY_PREFIX = f"{project}:"
+    CELERYBEAT_LOAD_ENDPOINTS: bool = to_bool(os.getenv("CELERYBEAT_LOAD_ENDPOINTS", True))
+
+
 
     """ API """
     API_CLIENT_TYPE = os.getenv("IHS_CLIENT_TYPE", "legacy")
@@ -340,9 +346,19 @@ class DevelopmentConfig(BaseConfig):
 
     # load_dotenv(".env.development")
 
-    DEBUG_TB_ENABLED = True
+    # DEBUG_TB_ENABLED = True
     SECRET_KEY = os.getenv("SECRET_KEY", "test")
-    CELERY_TASK_CREATE_MISSING_QUEUES = True
+    CELERYBEAT_SCHEDULE = {
+        'post_heartbeat': {
+            'task': 'celery_queue.tasks.post_heartbeat',
+            'schedule': timedelta(seconds=30),
+            # 'args': (16, 16)
+        },
+    }
+
+
+
+
 
 
 class TestingConfig(BaseConfig):
