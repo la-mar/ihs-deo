@@ -58,7 +58,16 @@ class ProductionListResource(ProductionResource):
 
         if related and not entity12:
             objs = self.model.objects(**kwargs).only("entity12").all()
-            kwargs = {"entity12__in": list({x.entity12 for x in objs})}
+            # kwargs = {"entity12__in": list({x.entity12 for x in objs})}
+            entity12 = util.reduce(list({x.entity12 for x in objs}))
+
+            if isinstance(entity12, (list, set)):
+                key = "entity12__in"
+            else:
+                key = "entity12"
+
+            if entity12:
+                kwargs = {key: entity12}
 
         logger.debug(f"production get: {kwargs}")  # noqa
 
@@ -71,3 +80,7 @@ class ProductionListResource(ProductionResource):
             return self._get(paginate=True, api10__in=api10.split(","))
         else:
             return {"status": "missing_argument"}, 400
+
+
+# ? SLOW
+# http :5001/prod/v entity12==14208A019308
