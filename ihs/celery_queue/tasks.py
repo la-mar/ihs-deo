@@ -55,7 +55,7 @@ def smoke_test():
     return "verified"
 
 
-@celery.task
+@celery.task(is_eager=True)
 def post_heartbeat():
     """ Send heartbeat to metrics backend"""
     return metrics.post_heartbeat()
