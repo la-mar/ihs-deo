@@ -36,6 +36,8 @@ Available on <a href="https://hub.docker.com/r/driftwood/ihs">DockerHub</a>!
 # Issues
 
 - Pagination mixin is broken. It doesnt seem to respect the passed query string
+- Indexes are currently managed external to the app. These need to be ported into
+  the model definitions now that they are somewhat stable.
 
 # Todo
 
