@@ -215,9 +215,15 @@ class ProductionHorizontal(db.DynamicDocument, ProductionMixin):
 
 
 class ProductionVertical(db.DynamicDocument, ProductionMixin):
-    meta = {"collection": "production_vertical", "ordering": ["-last_update_at"]}
+    meta = {
+        "collection": "production_vertical",
+        # "ordering": ["-last_update_at"],
+        "auto_create_index": False,
+        "indexes": ["entity12"],
+    }
     identification = db.StringField(primary_key=True)
     api10 = db.StringField()
+    entity12 = db.StringField()
     last_update_at = db.DateTimeField(default=datetime.datetime.now)
     ihs_last_update_date = db.DateTimeField()
 
@@ -229,54 +235,13 @@ if __name__ == "__main__":
     app = create_app()
     app.app_context().push()
 
-    obj = WellMasterHorizontal.objects(name="tx-upton").get()
+    model = ProductionVertical
+    dir(model)
 
-    api14s = random.choices(obj.ids, k=100)
+    model.list_indexes()
+    x = model.objects(entity12="14208A019308")
+    x.all()
+    # x = model.objects(entity12="14207C013258").first()
 
-    prod_obj = ProductionMasterHorizontal.objects(name="tx-upton").get()
-
-    # prod_ids = random.choices(prod_obj.ids, k=1000)
-
-    print(prod_obj.ids)
-    print(obj.ids)
-
-# if __name__ == "__main__":
-#     from ihs import create_app
-#     from config import get_active_config
-#     from api.helpers import paginate
-#     import api.schema as schemas
-
-#     app = create_app()
-#     app.app_context().push()
-#     conf = get_active_config()
-
-#     model = ProductionMasterHorizontal
-# api14 = "42461409160000"
-# api14s = ["42461409160000", "42461009720100"]
-# m = model.objects.get(api14=api14)  # pylint: disable=no-member
-
-# # vertical = "42383362060000"``
-# x = model.get(api14=api14)[0]
-# dir(x)
-# x.production_header
-# m = model.get()
-# objs = model.objects.only()
-# [obj.id for obj in objs]
-# m = model.get(api14__in=api14s, paginate=True, page=1, per_page=25)
-# m = model.get(
-#     ihs_last_update_date__gte="2019-12-01", paginate=True, page=1, per_page=25
-# )
-
-# dir(m)
-
-# s = schemas.WellHeaderSchema(many=True)
-# s.dump(m.items)
-
-# county = County.next_prod_h()
-# county._data
-# offset = datetime.datetime.utcnow() - datetime.timedelta(days=1)
-# county.prod_h_last_run = offset
-# county.save()
-
-# upton.prod_h_last_run = None
-# upton.save()
+    x.explain()
+    # x.as_pymongo()
