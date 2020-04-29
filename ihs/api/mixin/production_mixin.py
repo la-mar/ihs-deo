@@ -123,20 +123,20 @@ class ProductionMixin(BaseMixin):
     def production_monthly(self) -> List:
         output: List = []
         years: Dict = {}
-        logger.debug(
-            f"{self.production_header.get('api14')} -- processing production records"
-        )
+        # logger.debug(
+        #     f"{self.production_header.get('api14')} -- processing production records"
+        # )
 
         if hasattr(self, "production"):
             years = self.production.get("year")
 
         if years:
-            logger.debug(f"years: {[x.get('number') for x in ensure_list(years)]}")
+            # logger.debug(f"years: {[x.get('number') for x in ensure_list(years)]}")
             for year in ensure_list(years):
                 yr = year.get("number")
-                logger.debug(
-                    f"{self.production_header.get('api14')} -- processing prod year {yr}"
-                )
+                # logger.debug(
+                #     f"{self.production_header.get('api14')} -- processing prod year {yr}"
+                # )
 
                 for month in ensure_list(year.get("month", {})):
 
