@@ -46,23 +46,28 @@ celery = create_celery(flask_app)
 @celery.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):  # pylint: disable=unused-argument
     """ Schedules a periodic task for each configured endpoint task """
-    for endpoint_name, endpoint in endpoints.items():
-        for task_name, task in endpoint.tasks.items():
-            name = f"{endpoint_name}:{task_name}"
-            if task.enabled:
-                logger.info("Registering periodic task: %s", name)
-                sender.add_periodic_task(
-                    task.schedule,
-                    celery_queue.tasks.sync_endpoint.s(endpoint_name, task_name),
-                    name=name,
-                )
-            else:
-                logger.warning("Task %s is DISABLED -- skipping", name)
+    if conf.CELERYBEAT_LOAD_ENDPOINTS:
+        for endpoint_name, endpoint in endpoints.items():
+            for task_name, task in endpoint.tasks.items():
+                name = f"{endpoint_name}:{task_name}"
+                if task.enabled:
+                    logger.info("Registering periodic task: %s", name)
+                    sender.add_periodic_task(
+                        task.schedule,
+                        celery_queue.tasks.sync_endpoint.s(endpoint_name, task_name),
+                        name=name,
+                    )
+                else:
+                    logger.warning("Task %s is DISABLED -- skipping", name)
+    else:
+        logger.warning(
+            "Endpoint tasks are DISABLED. Set CELERYBEAT_LOAD_ENDPOINTS=True to enable."
+        )
 
-    logger.info("Registering periodic task: %s", "heartbeat")
-    sender.add_periodic_task(
-        30, celery_queue.tasks.post_heartbeat.s(), name="heartbeat",
-    )
+    # logger.info("Registering periodic task: %s", "heartbeat")
+    # sender.add_periodic_task(
+    #     30, celery_queue.tasks.post_heartbeat.s(), name="heartbeat",
+    # )
 
     logger.info("Registering periodic task: %s", "calc_remote_export_capacity")
     sender.add_periodic_task(
