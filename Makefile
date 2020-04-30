@@ -30,58 +30,8 @@ export-deps:
 	# Export dependencies from poetry to requirements.txt in the project root
 	poetry export -f requirements.txt > requirements.txt --without-hashes
 
-redis-start:
-	# start a local redis container
-	docker run -d --rm --name redis -p 6379:6379 redis
-
-init-db:
-	# shortcut to initialize the database
-	poetry run ihs db init
-
-migrate:
-	# shortcut for database migrations
-	# poetry run ihs db stamp head
-	poetry run ihs db migrate
-
-revision:
-	# Generate a new database revision file
-	poetry run ihs db revision
-
-upgrade:
-	# Upgrade database version using current revisions
-	poetry run ihs db upgrade
-
-celery-worker:
-	# Launch a worker process that reads from all configured queues
-	chamberprod exec ihs datadog -- ihs run worker -Q ihs-default,ihs-submissions-h,ihs-collections-h,ihs-deletions-h,ihs-submissions-v,ihs-collections-v,ihs-deletions-v --loglevel DEBUG
-	# Alternatively:
-	# celery -E -A ihs.celery_queue.worker:celery worker --loglevel=INFO --purge
-
 profile-submitter:
 	mprof aws-vault exec prod -- ihs run worker -Q ihs-submissions-h,ihs-submissions-v --loglevel DEBUG
-
-celery-beat:
-	# Launch a cron process
-	ihs run cron --loglevel=DEBUG
-	# Alternatively
-	# celery -A ihs.celery_queue.worker:celery beat --loglevel=DEBUG
-
-
-celery-flower:
-	# Launch a celery monitoring process using flower
-	celery -A ihs.celery_queue.worker:celery flower --loglevel=DEBUG --purge
-
-kubectl-proxy:
-	# open a proxy to the configured kubernetes cluster
-	kubectl proxy --port=8080
-
-
-login-ecr:
-	# Authenticate to ECR
-	${eval export ENV_UPPER=$(shell echo ${ENV} | tr '[:lower:]' '[:upper:]')}
-	@eval echo ${ENV_UPPER}
-	@echo account: ${AWS_ACCOUNT_ID}
-	@eval $$(aws-vault exec ${ENV} -- aws ecr get-login --no-include-email)
 
 login:
 	docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
@@ -173,6 +123,12 @@ env-to-json:
 ssm-update:
 	# Update SSM environment variables using a local dotenv file (.env.production by default)
 	python3 -c 'import json, os, dotenv; values={k.lower():v for k,v in dotenv.dotenv_values(".env.production").items()}; print(json.dumps(values))' | jq | aws-vault exec ${ENV} -- chamber import ${SERVICE_NAME} -
+
+ssm:
+	chamber export ${SERVICE_NAME} | jq
+	chamber export ${SERVICE_NAME}-worker | jq
+	chamber export ${SERVICE_NAME}-cron | jq
+	chamber export ${SERVICE_NAME}-web | jq
 
 view-credentials:
 	# print the current temporary credentials from aws-vault
