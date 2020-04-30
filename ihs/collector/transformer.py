@@ -205,7 +205,7 @@ class WellboreTransformer(Transformer):
         new_location_hash = data.get("hashes", {}).get("location")
         existing_location_hash = existing.hashes.get("location")
         if new_location_hash != existing_location_hash:
-            logger.warning(f"{api14}: creating new locations")
+            logger.info(f"{api14}: creating new locations")
             locs.update(cls._project_well_locations(data))
         else:
             logger.debug(f"{api14}: location hashes match. Reusing existing locations.")
@@ -217,7 +217,7 @@ class WellboreTransformer(Transformer):
             new_survey_hash = data.get("hashes", {}).get("survey")
             existing_survey_hash = existing.hashes.get("survey")
             if new_survey_hash != existing_survey_hash:
-                logger.warning(f"{api14}: creating new survey")
+                logger.info(f"{api14}: creating new survey")
                 locs.update(cls._build_survey(data))
             else:
                 if hasattr(existing, "geoms"):
