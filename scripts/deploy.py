@@ -113,7 +113,7 @@ def get_task_definition(
                         "ihs",
                         "run",
                         "web",
-                        "-b 0.0.0.0:80",
+                        # "-b 0.0.0.0:80",
                     ],
                     "memoryReservation": 512,
                     "cpu": 256,

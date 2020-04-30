@@ -58,3 +58,18 @@ Available on <a href="https://hub.docker.com/r/driftwood/ihs">DockerHub</a>!
   ```bash
   docker-compose up
   ```
+
+# Example environment variables
+
+```env
+
+IHS_URL=http://www.ihsenergy.com
+IHS_USERNAME=<your_ihs_password>
+IHS_PASSWORD=<your_ihs_username>
+IHS_APP_KEY=<provided_by_ihs>
+
+DATABASE_URI=mongodb://docker.for.mac.host.internal:27017
+CELERY_BROKER_URL=redis://redis:6390/1
+IHS_CRON_URL=redis://redis:6390/0
+GUNICORN_CMD_ARGS="--bind=0.0.0.0:80 --log-level=info --name=gunicorn-ihs --timeout=120 --graceful-timeout=120 --worker-class=gevent --workers=3"
+```
