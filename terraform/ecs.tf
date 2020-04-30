@@ -293,6 +293,7 @@ data "aws_iam_policy_document" "task_policy" {
       "arn:aws:ssm:*:*:parameter/${var.service_name}-cron/*",
       "arn:aws:ssm:*:*:parameter/${var.service_name}-worker/*",
       "arn:aws:ssm:*:*:parameter/datadog/*"
+      "arn:aws:ssm:*:*:parameter/datadog-agent/*"
     ]
   }
 
