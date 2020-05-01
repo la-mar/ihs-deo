@@ -90,6 +90,16 @@ def transform_envs(d: dict):
     return [{"name": k, "value": v} for k, v in d.items()]
 
 
+# DOCKER_CONTENT_TRUST=1 \
+# docker run -d -v /var/run/docker.sock:/var/run/docker.sock:ro \
+#               -v /proc/:/host/proc/:ro \
+#               -v /sys/fs/cgroup/:/host/sys/fs/cgroup:ro \
+#               -e DD_API_KEY="<DATADOG_API_KEY>" \
+#               -e DD_DOGSTATSD_NON_LOCAL_TRAFFIC="true" \
+#               -p 8125:8125/udp \
+#               datadog/agent:latest
+
+
 def get_task_definition(
     name: str,
     envs: dict,
@@ -113,7 +123,6 @@ def get_task_definition(
                         "ihs",
                         "run",
                         "web",
-                        # "-b 0.0.0.0:80",
                     ],
                     "memoryReservation": 512,
                     "cpu": 256,
@@ -123,6 +132,20 @@ def get_task_definition(
                         {"hostPort": 80, "containerPort": 80, "protocol": "tcp"}
                     ],
                 },
+                # {
+                #     "name": "dogstatsd",
+                #     "image": "driftwood/dogstatsd-chamber",
+                #     "cpu": 64,
+                #     "memoryReservation": 64,
+                #     "essential": False,
+                #     "environment": [
+                #         {"name": "DD_ENABLE_METADATA_COLLECTION", "value": "false"},
+                #     ],
+                #     "portMappings": [
+                #         {"hostPort": 8125, "containerPort": 8125, "protocol": "udp"}
+                #     ],
+                #     # "mountPoints": [
+                # },
             ],
             "executionRoleArn": "ecsTaskExecutionRole",
             "family": f"{service_name}",
@@ -182,7 +205,7 @@ def get_task_definition(
                         # "warn",
                     ],
                     "memoryReservation": 384,
-                    "cpu": 128,
+                    "cpu": 384,
                     "image": image,
                     "essential": True,
                     "user": "celeryuser",
