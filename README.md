@@ -50,6 +50,7 @@ Available on <a href="https://hub.docker.com/r/driftwood/ihs">DockerHub</a>!
 - query production in a date range for a specific api?
 - add endpoint: add/remove county definition (name, state_code, county_code)
 - scheduled task: cleanup stale wells
+- mechanism to stop submitting exports if remote capacity is full
 
 # Usage
 
