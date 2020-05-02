@@ -90,7 +90,8 @@ def create_app(script_info=None):
         """ Logging after every request. """
 
         now = time.time()
-        duration = round(now - g.start, 2)
+        duration = round(now - g.start, 2)  # seconds
+        is_slow_response = duration >= conf.WEB_LOG_SLOW_RESPONSE_THRESHOLD
 
         if conf.WEB_LOG_RESPONSES:
             attrs = {
@@ -115,11 +116,11 @@ def create_app(script_info=None):
                 },
             }
 
-        if request.should_log:
-            logger.info(
-                f"[{request.id}] RESPONSE - {request.scheme}:{request.path}{request.arg_count_str} -> {response.status} ({duration}s)",  # noqa
-                extra=attrs,
-            )
+            if request.should_log or is_slow_response:  # always log slow responses
+                logger.info(
+                    f"[{request.id}] RESPONSE - {request.scheme}:{request.path}{request.arg_count_str} -> {response.status} ({duration}s)",  # noqa
+                    extra=attrs,
+                )
 
         return response
 

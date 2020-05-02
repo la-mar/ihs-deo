@@ -185,6 +185,8 @@ class BaseConfig:
     WEB_LOG_REQUESTS = to_bool(os.getenv("WEB_LOG_REQUESTS", True))
     WEB_LOG_RESPONSES = to_bool(os.getenv("WEB_LOG_RESPONSES", True))
     WEB_LOG_SAMPLE_FRAC = float(os.getenv("WEB_LOG_SAMPLE_FRAC", 0.5))
+    WEB_LOG_SLOW_RESPONSE_THRESHOLD = float(os.getenv("WEB_LOG_SLOW_RESPONSE_THRESHOLD", 3))  # seconds # noqa
+
     CELERY_LOG_LEVEL = os.getenv("CELERY_LOG_LEVEL", LOG_LEVEL)
     CELERY_LOG_FORMAT = os.getenv("CELERY_LOG_FORMAT", LOG_FORMAT)
 
