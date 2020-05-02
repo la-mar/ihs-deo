@@ -164,9 +164,10 @@ class DatadogJSONFormatter(json_log_formatter.JSONFormatter):
         #     record_dict["remote_addr"] = None
 
         # Handle exceptions, including those in the formatter itself
+
         exc_info = record.exc_info
         if exc_info:
-            if "error.kind" not in record_dict:
+            if "error.kind" not in record_dict and exc_info[0]:
                 record_dict["error.kind"] = exc_info[0].__name__  # type: ignore
             if "error.message" not in record_dict:
                 record_dict["error.message"] = str(exc_info[1])
@@ -242,12 +243,23 @@ def config(
 
 if __name__ == "__main__":
 
-    config(formatter="layman")
-    logger = logging.getLogger()
-    logger.debug("test-debug")
-    logger.info("test-info")
-    logger.warning("test-warning")
-    logger.error("test-error")
+    # config(formatter="layman")
+    # logger = logging.getLogger()
+    # logger.debug("test-debug")
+    # logger.info("test-info")
+    # logger.warning("test-warning")
+    # logger.error("test-error")
+    # logger.exception("test-exception")
+
+    def test_exception():
+        try:
+
+            def pretend_method():
+                raise Exception
+
+            pretend_method()
+        except:  # noqa
+            logger.exception("test-exception")
 
     config(formatter="json")
     logger = logging.getLogger()
@@ -255,17 +267,26 @@ if __name__ == "__main__":
     logger.info("test-info")
     logger.warning("test-warning")
     logger.error("test-error")
+    logger.exception("test-exception")
+    test_exception()
+
+    logger.error("test-error", stack_info=True, exc_info=True)
+    logger.exception("test-exception")
+
+    # e = Exception()
+
+    # dir(e)
 
     # %pdef LogRecord
-    record = LogRecord(
-        name="record_name",
-        level=20,
-        pathname="",
-        lineno=10,
-        msg="hello world",
-        args=[],
-        exc_info=None,
-        extra={"test_key": "test_value"},
-    )
+    # record = LogRecord(
+    #     name="record_name",
+    #     level=20,
+    #     pathname="",
+    #     lineno=10,
+    #     msg="hello world",
+    #     args=[],
+    #     exc_info=None,
+    #     extra={"test_key": "test_value"},
+    # )
 
     # dir(record)

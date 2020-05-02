@@ -211,7 +211,7 @@ endpoints:
           matrix:
             check:
               values:
-                - "42383362060000"
+                - "42003442490000"
       # check_for_new:
       # TODO: Check for wells in master list that arent in database and download them
   # production_horizontal:

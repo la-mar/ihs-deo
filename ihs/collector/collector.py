@@ -5,6 +5,7 @@ from collections import OrderedDict
 from typing import Dict, List, Union
 
 import metrics
+from util import query_dict
 
 logger = logging.getLogger(__name__)
 
@@ -35,16 +36,15 @@ class Collector(object):
             failed.append(e)
 
         if len(failed) > 0:
+            meta_keys = ["identification", "api14", "api10", "ihs_last_update_date"]
+            failed_meta = [
+                {k: v for k, v in doc.items() if k in meta_keys} for doc in documents
+            ]
             logger.error(
-                "Failed saving %s documents to %s -- %s",
-                len(failed),
-                self.model,
-                failed,
-                extra={"faiure_messages": failed},
+                f"Failed saving {len(failed)} documents to {self.model.__name__} -- {failed}",
+                extra={"error.messages": failed, "error.meta": failed_meta},
             )
         return succeeded
-        # metrics.post(f"persistance.failed.{self.model_name}", len(failed))
-        # metrics.post(f"persistance.success.{self.model_name}", succeeded)
 
 
 if __name__ == "__main__":
@@ -53,12 +53,7 @@ if __name__ == "__main__":
     from ihs import create_app
 
     from config import get_active_config
-    from collector import XMLParser, Endpoint
-    from collector.tasks import run_endpoint_task, get_job_results, submit_job, collect
-    from util import to_json
-    from time import sleep
-    from collector.transformer import WellboreTransformer
-    from api.models import WellHorizontal
+    from api.models import WellHorizontal, WellVertical
 
     app = create_app()
     app.app_context().push()
@@ -66,29 +61,19 @@ if __name__ == "__main__":
     logging.basicConfig(level=20)
 
     conf = get_active_config()
-    endpoints = Endpoint.load_from_config(conf)
 
-    endpoint_name = "well_master_horizontal"
-    task_name = "sync"
-    job_config = [
-        x for x in run_endpoint_task(endpoint_name, task_name) if x is not None
-    ][0]
+    collector = Collector(WellVertical)
 
-    job = submit_job(**job_config)
-    xml = get_job_results(job)
+    # collector.save([{"identification": "123", "api14": "456"}], replace=True)
 
-    parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
-    document = parser.parse(xml)
-    new = WellboreTransformer.extract_from_collection(document)
-    new = new[0]
-    existing = WellHorizontal.objects.get(api14="42461409160000")
-
-    new["date_creation"] = existing.date_creation
-    new["date_creation"]
-
-    existing.md5 == WellboreTransformer.add_document_hash(new)["md5"]
-
-    import json
-
-    to_json(json.loads(existing.to_json()), "test/data/existing_example.json")
-    to_json(new, "test/data/incomming_example.json")
+    # import loggers
+    # loggers.config(formatter='json')
+    # collector.save(
+    #     [
+    #         {"identification": "789", "api14": "457"},
+    #         {"identification": "789", "api14": "456"},
+    #         {"identification": "789", "api14": "456"},
+    #         {"identification": "789", "api14": "456"},
+    #     ],
+    #     replace=True,
+    # )

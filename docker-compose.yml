@@ -11,26 +11,26 @@ x-defaults: &defaults
     - redis
 
 services:
-  web:
-    <<: *defaults
-    command: ihs run web
-    ports:
-      - 5000
-  ihs_worker_1:
-    <<: *defaults
-    container_name: ihs_worker_1
-    user: celeryuser
-    command: ihs run worker -Q ihs-default,ihs-submissions-h,ihs-collections-h,ihs-deletions-h,ihs-submissions-v,ihs-collections-v,ihs-deletions-v
-  ihs_worker_2:
-    <<: *defaults
-    container_name: ihs_worker_2
-    user: celeryuser
-    command: ihs run worker -Q ihs-default,ihs-submissions-h,ihs-collections-h,ihs-deletions-h,ihs-submissions-v,ihs-collections-v,ihs-deletions-v
+  # web:
+  #   <<: *defaults
+  #   command: ihs run web
+  #   ports:
+  #     - 5000:5000
+  # ihs_worker_1:
+  #   <<: *defaults
+  #   container_name: ihs_worker_1
+  #   user: celeryuser
+  #   command: ihs run worker -Q ihs-default,ihs-submissions-h,ihs-collections-h,ihs-deletions-h,ihs-submissions-v,ihs-collections-v,ihs-deletions-v --quiet
+  # ihs_worker_2:
+  #   <<: *defaults
+  #   container_name: ihs_worker_2
+  #   user: celeryuser
+  #   command: ihs run worker -Q ihs-default,ihs-submissions-h,ihs-collections-h,ihs-deletions-h,ihs-submissions-v,ihs-collections-v,ihs-deletions-v
   cron:
     <<: *defaults
     container_name: ihs_cron
     user: celeryuser
-    command: ihs run cron --pidfile=
+    command: ihs run cron --quiet --pidfile=
   redis:
     container_name: ihs_redis
     image: redis

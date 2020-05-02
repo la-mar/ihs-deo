@@ -17,9 +17,9 @@ class ObjectEncoder(json.JSONEncoder):
 
     def default(self, obj: Any):
         """Convert `obj` to JSON."""
-        if hasattr(obj, "to_json"):
-            return self.default(obj.to_json())
-        elif hasattr(obj, "__dict__"):
+        # if hasattr(obj, "to_json"):
+        #     return self.default(obj.to_json())
+        if hasattr(obj, "__dict__"):
             return obj.__class__.__name__
         elif hasattr(obj, "tb_frame"):
             return "traceback"

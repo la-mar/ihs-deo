@@ -4,7 +4,7 @@ import logging
 
 from celery import Celery
 from celery.schedules import crontab
-from celery.signals import after_setup_logger, after_setup_task_logger
+from celery.signals import after_setup_logger, after_setup_task_logger, beat_init
 
 import celery_queue.tasks
 import loggers
@@ -64,10 +64,10 @@ def setup_periodic_tasks(sender, **kwargs):  # pylint: disable=unused-argument
             "Endpoint tasks are DISABLED. Set CELERYBEAT_LOAD_ENDPOINTS=True to enable."
         )
 
-    # logger.info("Registering periodic task: %s", "heartbeat")
-    # sender.add_periodic_task(
-    #     30, celery_queue.tasks.post_heartbeat.s(), name="heartbeat",
-    # )
+    logger.info("Registering periodic task: %s", "heartbeat")
+    sender.add_periodic_task(
+        30, celery_queue.tasks.post_heartbeat.s(), name="heartbeat",
+    )
 
     logger.info("Registering periodic task: %s", "calc_remote_export_capacity")
     sender.add_periodic_task(
@@ -93,12 +93,12 @@ def setup_periodic_tasks(sender, **kwargs):  # pylint: disable=unused-argument
         name="download_changes_and_deletes",
     )
 
-    # logger.info("Registering periodic task: %s", "refresh_master_lists")
-    # sender.add_periodic_task(
-    #     crontab(minute=50, hour=19),
-    #     celery_queue.tasks.refresh_master_lists,
-    #     name="refresh_master_lists",
-    # )
+    logger.info("Registering periodic task: %s", "refresh_master_lists")
+    sender.add_periodic_task(
+        crontab(minute=50, hour=19),
+        celery_queue.tasks.refresh_master_lists.s(),
+        name="refresh_master_lists",
+    )
 
     logger.info("Registering periodic task: %s", "synchronize_master_lists")
     sender.add_periodic_task(
@@ -109,22 +109,19 @@ def setup_periodic_tasks(sender, **kwargs):  # pylint: disable=unused-argument
 
 
 @after_setup_logger.connect
-def setup_loggers(logger, *args, **kwargs):
-    """ Configure the root logger on worker/beat startup """
+def setup_logger(logger, *args, **kwargs):
+    """ Configure loggers on worker/beat startup """
     loggers.config(
         logger=logger, level=conf.CELERY_LOG_LEVEL, formatter=conf.CELERY_LOG_FORMAT
     )
 
 
 @after_setup_task_logger.connect
-def setup_task_loggers(logger, *args, **kwargs):
+def setup_task_logger(logger, *args, **kwargs):
     """ Configure loggers on worker/beat startup """
-    loggers.config(logger=logger, level=conf.LOG_LEVEL, formatter=conf.LOG_FORMAT)
-
-
-# @after_setup_logger.connect
-# def setup_loggers(logger, *args, **kwargs):  # pylint: disable=unused-argument
-#     loggers.config(logger=logger)
+    loggers.config(
+        logger=logger, level=conf.CELERY_LOG_LEVEL, formatter=conf.CELERY_LOG_FORMAT
+    )
 
 
 if __name__ == "__main__":

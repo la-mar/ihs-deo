@@ -196,7 +196,8 @@ endpoints:
     tasks:
       sync:
         cron:
-          minute: "*/15"
+          minute: 15
+          hour: "*/4"
         options:
           query_path: well_horizontal_by_county.xml
           matrix:
@@ -217,7 +218,8 @@ endpoints:
     tasks:
       sync:
         cron:
-          minute: "*/15"
+          minute: 15
+          hour: "*/4"
         options:
           query_path: well_vertical_by_county.xml
           matrix:
@@ -238,7 +240,8 @@ endpoints:
     tasks:
       sync:
         cron:
-          minute: "*/15"
+          minute: 15
+          hour: "*/4"
         options:
           query_path: production_horizontal_by_county.xml
           matrix:
@@ -261,7 +264,8 @@ endpoints:
     tasks:
       sync:
         cron:
-          minute: "*/15"
+          minute: 15
+          hour: "*/4"
         options:
           query_path: production_vertical_by_county.xml
           matrix:
@@ -282,7 +286,7 @@ endpoints:
       sync:
         cron:
           minute: 0
-          # hour: "*/1"
+          hour: "*/2"
           # hour: 1
           # day_of_week: "mon,wed"
         options:
@@ -324,7 +328,7 @@ endpoints:
       sync:
         cron:
           minute: 15
-          hour: "*/2"
+          hour: "*/4"
           # day_of_week: "fri"
         options:
           query_path: well_by_api.xml
@@ -365,7 +369,7 @@ endpoints:
       sync:
         cron:
           minute: 30
-          # hour: "*/1"
+          hour: "*/2"
         # cron:
         #   minute: 0
         #   hour: 1
@@ -410,7 +414,7 @@ endpoints:
       sync:
         cron:
           minute: 45
-          hour: "*/2"
+          hour: "*/4"
           # day_of_week: "sat"
         options:
           query_path: production_by_entity.xml

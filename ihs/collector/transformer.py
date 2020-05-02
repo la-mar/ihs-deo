@@ -443,8 +443,8 @@ if __name__ == "__main__":
     conf = get_active_config()
     endpoints = Endpoint.from_yaml("tests/data/collector.yaml")
     task_name, endpoint_name, transformer = (
-        "driftwood",
-        "well_horizontal",
+        "endpoint_check",
+        "well_vertical",
         WellboreTransformer,
     )
     # endpoint_name, transoformer = "production_horizontal", ProductionTransformer
@@ -465,36 +465,10 @@ if __name__ == "__main__":
     parser = XMLParser.load_from_config(conf.PARSER_CONFIG)
     document = parser.parse(xml)
 
-    # data = document["well_set"]["wellbore"][7]
-
-    # data_collection = ProductionTransformer.extract_from_collection(document, model)
     data_collection = transformer.extract_from_collection(document, model)
-    # data_collection[7]["api14"]
-    # data = data_collection[0]
-    # data_collection[0]["entity12"]
-    # data_collection[0].keys()
-    # document["production_set"]["producing_entity"]["hashes"]
+
     collector = Collector(endpoints[endpoint_name].model)
-    collector.save(data_collection, replace=True)
-    # obj = model.objects(api14="42461409160000").first()
-    # [x["api14"] for x in results]
 
-    # model.objects.update(unset__hashes__survey=1) # delete a key from all documents
-
-    # for idx, obj in enumerate(model.objects):
-    #     obj["hashes"]["survey"]
-
-    # for idx, obj in enumerate(model.objects):
-    #     try:
-    #         data_for_hash = [obj.wellbore, obj.production]
-
-    #         if data_for_hash is not None:
-    #             obj["hashes"]["production"] = make_hash(data_for_hash)
-    #         obj.save()
-    #         print(f"updated {obj.api14} (count={idx})")
-
-    #     except (KeyError, AttributeError):
-    #         print(f"failed {obj.api14} (count={idx})")
-
-    # missing_status = model.objects(entity12__exists=False)[0]
-    # missing_status.id
+    collector.save([{"identification": "123", "api14": "456"}], replace=True)
+    collector.save([{"identification": "789", "api14": "456"}], replace=True)
+    collector.save(data_collection[0], replace=True)
