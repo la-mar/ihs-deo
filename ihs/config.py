@@ -225,10 +225,11 @@ class BaseConfig:
 
     """ Celery Beat """
     CELERYBEAT_SCHEDULER = "redbeat.RedBeatScheduler"
-    REDBEAT_REDIS_URL = os.getenv("IHS_CRON_URL")
-    REDBEAT_KEY_PREFIX = f"{project}:"
     CELERYBEAT_LOAD_ENDPOINTS: bool = to_bool(os.getenv("CELERYBEAT_LOAD_ENDPOINTS", True))
     CELERYBEAT_MAX_LOOP_INTERVAL: int = to_int(os.getenv("CELERYBEAT_MAX_LOOP_INTERVAL", 30))
+    REDBEAT_REDIS_URL = os.getenv("IHS_CRON_URL")
+    REDBEAT_KEY_PREFIX = f"{project}:"
+    REDBEAT_LOCK_TIMEOUT = CELERYBEAT_MAX_LOOP_INTERVAL * 5
 
     """ API """
     API_CLIENT_TYPE = os.getenv("IHS_CLIENT_TYPE", "legacy")
