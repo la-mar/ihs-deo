@@ -55,7 +55,7 @@ def create_app(script_info=None):
     def before_request():
         g.start = time.time()
         request.id = shortuuid.uuid()
-        request.should_log = random.random() > conf.WEB_LOG_SAMPLE_FRAC  # pairs request/response logs # noqa
+        request.should_log = random.random() < conf.WEB_LOG_SAMPLE_FRAC  # pairs request/response logs # noqa
         request.arg_counts = {
             k: len(ensure_list(v)) for k, v in (request.args or {}).items()
         }
