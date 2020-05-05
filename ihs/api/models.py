@@ -235,12 +235,12 @@ if __name__ == "__main__":
     app = create_app()
     app.app_context().push()
 
-    model = ProductionVertical
-    dir(model)
+    # dir(model)
 
-    model.list_indexes()
-    x = model.objects(entity12="14208A019308")
-    x.all()
+    # model.list_indexes()
+    model = WellVertical
+    x = model.objects(api14="42103007770002")
+    # x.all()
     # x = model.objects(entity12="14207C013258").first()
 
     x.explain()

@@ -108,11 +108,14 @@ def create_app(script_info=None):
                     "args": request.args,
                     "arg_counts": request.arg_counts,
                     "duration": duration,
+                    "should_log": request.should_log,
+
                 },
                 "response": {
                     "status": response.status,
                     "status_code": response.status_code,
                     "content_length": response.content_length,
+                    "is_slow": is_slow_response
                 },
             }
 
